@@ -36,14 +36,13 @@ jobs:
           cache-dependency-path: Wedding_App/package-lock.json
 
       - name: Install dependencies
+        run: npm install
         working-directory: Wedding_App
-        run: npm ci || npm install
 
       - name: Build project
+        run: npx vite build --base /Matrimonio_test/
         working-directory: Wedding_App
-        run: npm run build
         env:
-          VITE_BASE_URL: /Matrimonio_test/
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Setup GitHub Pages
