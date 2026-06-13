@@ -25,6 +25,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      VITE_BASE_URL: /Sito_Wedding/
 
     steps:
       - name: Checkout code
@@ -44,8 +46,6 @@ jobs:
 
       - name: Build frontend
         run: npm run build
-        env:
-          VITE_BASE_URL: /Sito_Wedding/
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
