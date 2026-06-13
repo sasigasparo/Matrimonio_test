@@ -1,5 +1,4 @@
 name: Deploy to GitHub Pages
-# Automatic deployment to GitHub Pages
 
 on:
   push:
@@ -19,13 +18,9 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
-    env:
-      VITE_BASE_URL: /Sito_Wedding/
 
     steps:
       - name: Checkout code
@@ -38,6 +33,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
+          cache-dependency-path: Wedding_App/package-lock.json
 
       - name: Install dependencies
         working-directory: Wedding_App
@@ -46,6 +42,9 @@ jobs:
       - name: Build project
         working-directory: Wedding_App
         run: npm run build
+        env:
+          VITE_BASE_URL: /Matrimonio_test/
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
