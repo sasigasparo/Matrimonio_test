@@ -2,9 +2,9 @@
   "name": "wedding-app-workspace",
   "private": true,
   "scripts": {
-    "dev": "npm --prefix Wedding_App run dev",
-    "build": "npm --prefix Wedding_App run build",
-    "preview": "npm --prefix Wedding_App run preview",
-    "install:frontend": "npm --prefix Wedding_App install"
+    "dev": "cd Wedding_App && npm run dev",
+    "build": "cd Wedding_App && npm run build",
+    "preview": "cd Wedding_App && npm run preview",
+    "install:frontend": "cd Wedding_App && npm install"
   }
 }
