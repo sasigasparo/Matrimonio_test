@@ -32,6 +32,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -40,10 +43,10 @@ jobs:
           cache: 'npm'
 
       - name: Install root dependencies
-        run: npm install
+        run: npm ci || npm install
 
       - name: Install frontend dependencies
-        run: npm install --prefix Wedding_App
+        run: npm ci --prefix Wedding_App || npm install --prefix Wedding_App
 
       - name: Build frontend
         run: npm run build
