@@ -1,5 +1,8 @@
 // ── API base ──────────────────────────────────────────────────────────────────
-const BASE = 'http://localhost:8000/api'
+// const BASE = 'http://localhost:8000/api'
+
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com'
+
 
 function token() {
   return localStorage.getItem('wedding_token')
