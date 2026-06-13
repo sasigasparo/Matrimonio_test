@@ -32,16 +32,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: npm
-          cache-dependency-path: Wedding_App/package-lock.json
 
-      - name: Install dependencies
+      - name: Install and build
         working-directory: Wedding_App
-        run: npm install
-
-      - name: Build project
-        working-directory: Wedding_App
-        run: ./node_modules/.bin/vite build --base /Matrimonio_test/
+        run: |
+          npm install
+          npm install vite @vitejs/plugin-react --save-dev
+          ./node_modules/.bin/vite build --base /Matrimonio_test/
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
