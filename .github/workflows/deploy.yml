@@ -1,12 +1,7 @@
 name: Deploy to GitHub Pages
-# Triggered on push to main or master
 
 on:
   push:
-    branches:
-      - main
-      - master
-  pull_request:
     branches:
       - main
       - master
@@ -23,9 +18,11 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     env:
       VITE_BASE_URL: /Sito_Wedding/
 
@@ -33,22 +30,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          submodules: 'recursive'
+          submodules: recursive
           fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: npm
 
-      - name: Install root dependencies
+      - name: Install dependencies
+        working-directory: Wedding_App
         run: npm ci || npm install
 
-      - name: Install frontend dependencies
-        run: npm ci --prefix Wedding_App || npm install --prefix Wedding_App
-
-      - name: Build frontend
+      - name: Build project
+        working-directory: Wedding_App
         run: npm run build
 
       - name: Setup GitHub Pages
@@ -57,7 +53,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './Wedding_App/dist'
+          path: Wedding_App/dist
 
       - name: Deploy to GitHub Pages
         id: deployment
