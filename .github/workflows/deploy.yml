@@ -1,5 +1,5 @@
 name: Deploy to GitHub Pages
-# Automatic deployment to GitHub Pages with proper submodule handling
+# Automatic deployment to GitHub Pages
 
 on:
   push:
