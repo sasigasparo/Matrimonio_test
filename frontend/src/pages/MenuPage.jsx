@@ -5,7 +5,8 @@ import { useToast, ToastContainer } from '../hooks/useToast'
 
 /* ── Wedding date ─────────────────────────────────────────────────── */
 const WEDDING_TIME = new Date('2026-06-14T15:00:00')
-const UNLOCK_PASSWORD = 'BIANCA'
+const UNLOCK_PASSWORD = 'menu'
+const SESSION_KEY = 'wedding_menu_auth'
 
 function useCountdown() {
   const calc = () => {
@@ -35,7 +36,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
   const [open, setOpen]   = useState(false)
 
   const tryUnlock = () => {
-    if (pwd.trim().toUpperCase() === UNLOCK_PASSWORD) {
+    if (pwd === UNLOCK_PASSWORD) {
       onUnlock()
     } else {
       setError(true)
@@ -217,7 +218,8 @@ export default function MenuPage() {
 
   // Admin bypasses the gate entirely
   const isAdmin = !!user?.is_admin
-  const [unlocked, setUnlocked] = useState(false)
+  const checkSession = () => sessionStorage.getItem('wedding_menu_auth') === '1'
+  const [unlocked, setUnlocked] = useState(checkSession)
   const menuLocked = !isAdmin && !countdown.past && !unlocked
 
   const [menu, setMenu]     = useState({ courses: {}, items: [] })
@@ -240,7 +242,10 @@ export default function MenuPage() {
     <div className="page-enter" style={{ paddingBottom: 100 }}>
       {/* Gate overlay */}
       {menuLocked && (
-        <MenuCountdownGate diff={countdown} onUnlock={() => setUnlocked(true)} />
+        <MenuCountdownGate diff={countdown} onUnlock={() => {
+          sessionStorage.setItem('wedding_menu_auth', '1')
+          setUnlocked(true)
+        }} />
       )}
 
       {/* Hero */}

@@ -80,26 +80,34 @@ function TableCircle({ table, guests, onSeatClick, onTableClick, selected }) {
               strokeWidth={1.2}
             />
             {occupied ? (
-              /* omino + numero posto */
+              /* omino */
               <g transform={`translate(${cx + pos.x},${cy + pos.y})`} style={{ pointerEvents: 'none' }}>
                 <circle cy={-4} r={4} fill="rgba(255,255,255,0.85)" />
                 <path d="M-4,4 Q0,12 4,4" fill="rgba(255,255,255,0.85)" />
-                {/* numero posto sovrapposto all'omino */}
-                <text
-                  x={0} y={14}
-                  textAnchor="middle"
-                  fontSize={7}
-                  fontWeight={700}
-                  fill="rgba(255,255,255,0.95)"
-                  fontFamily="Georgia, serif"
-                >
-                  {i + 1}
-                </text>
               </g>
             ) : (
               <text x={cx + pos.x} y={cy + pos.y} textAnchor="middle" dominantBaseline="central"
                 fontSize={13} fill="rgba(180,140,120,0.6)" style={{ pointerEvents: 'none' }}>+</text>
             )}
+
+            {/* numero posto — badge esterno sempre visibile */}
+            <g style={{ pointerEvents: 'none' }}>
+              <circle
+                cx={cx + pos.x + 9} cy={cy + pos.y - 9} r={7}
+                fill={occupied ? '#fff' : 'rgba(180,140,120,0.55)'}
+                stroke={occupied ? rsvpColor(guest?.rsvp_status) : 'rgba(180,140,120,0.3)'}
+                strokeWidth={1.5}
+              />
+              <text
+                x={cx + pos.x + 9} y={cy + pos.y - 9}
+                textAnchor="middle" dominantBaseline="central"
+                fontSize={7} fontWeight={800}
+                fill={occupied ? rsvpColor(guest?.rsvp_status) : 'rgba(255,255,255,0.9)'}
+                fontFamily="Arial, sans-serif"
+              >
+                {i + 1}
+              </text>
+            </g>
 
           </g>
         )
