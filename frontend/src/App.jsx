@@ -9,6 +9,7 @@ import Admin    from './pages/Admin'
 import Login    from './pages/Login'
 import Luoghi   from './pages/Luoghi'
 import FAQ      from './pages/FAQ'
+import Tables   from './pages/Tables'   // ← nuovo
 
 /* ── Redirect al login se non autenticato ───────────────────────── */
 function RequireAuth({ children }) {
@@ -143,6 +144,19 @@ function NavBar() {
               ⚙ Admin
             </button>
           )}
+          {user.is_admin && (
+            <button
+              onClick={() => navigate('/tables')}
+              style={{
+                padding: '4px 10px', borderRadius: 99,
+                background: 'rgba(200,162,168,0.12)', border: '1px solid rgba(200,162,168,0.3)',
+                color: '#9a6070', fontSize: 10, fontWeight: 600, cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              🪑 Tavoli
+            </button>
+          )}
           <img
             src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=e8c4a8&color=2c2420`}
             style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--blush)' }}
@@ -182,6 +196,7 @@ function AppShell() {
         <Route path="/luoghi"  element={<RequireAuth><Luoghi /></RequireAuth>} />
         <Route path="/faq"     element={<RequireAuth><FAQ /></RequireAuth>} />
         <Route path="/admin"   element={<AdminRoute><Admin /></AdminRoute>} />
+        <Route path="/tables"  element={<AdminRoute><Tables /></AdminRoute>} />  {/* ← nuovo */}
         <Route path="/messages" element={<RequireAuth><Chat /></RequireAuth>} />
       </Routes>
     </>
