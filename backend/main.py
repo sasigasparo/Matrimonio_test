@@ -28,7 +28,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import init_db
-from routers import auth, guests, messages, photos, menu, admin
+from routers import auth, guests, messages, photos, menu, admin, tables
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 LOG_DIR = BASE_DIR / "logs"
@@ -91,6 +91,8 @@ app.include_router(messages.router, prefix="/api/messages", tags=["Messages"])
 app.include_router(photos.router,   prefix="/api/photos",   tags=["Photos"])
 app.include_router(menu.router,     prefix="/api/menu",     tags=["Menu"])
 app.include_router(admin.router,    prefix="/api/admin",    tags=["Admin"])
+
+app.include_router(tables.router,  prefix="/api/tables",  tags=["Tables"])
 
 @app.get("/api/health")
 async def health():

@@ -303,7 +303,7 @@ export default function Tables() {
     try {
       const [t, g] = await Promise.all([
         apiFetch('/api/tables'),
-        apiFetch('/api/guests'),
+        apiFetch('/api/guests/all-guests'),
       ])
       setTables(t)
       setGuests(g)
