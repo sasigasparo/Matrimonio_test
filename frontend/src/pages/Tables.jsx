@@ -80,10 +80,21 @@ function TableCircle({ table, guests, onSeatClick, onTableClick, selected }) {
               strokeWidth={1.2}
             />
             {occupied ? (
-              /* omino */
+              /* omino + numero posto */
               <g transform={`translate(${cx + pos.x},${cy + pos.y})`} style={{ pointerEvents: 'none' }}>
                 <circle cy={-4} r={4} fill="rgba(255,255,255,0.85)" />
                 <path d="M-4,4 Q0,12 4,4" fill="rgba(255,255,255,0.85)" />
+                {/* numero posto sovrapposto all'omino */}
+                <text
+                  x={0} y={14}
+                  textAnchor="middle"
+                  fontSize={7}
+                  fontWeight={700}
+                  fill="rgba(255,255,255,0.95)"
+                  fontFamily="Georgia, serif"
+                >
+                  {i + 1}
+                </text>
               </g>
             ) : (
               <text x={cx + pos.x} y={cy + pos.y} textAnchor="middle" dominantBaseline="central"

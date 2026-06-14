@@ -72,7 +72,7 @@ const FAQS = [
         a: 'Puoi farlo direttamente nella sezione Inviti: seleziona il tuo nome, conferma la presenza e troverai la sezione "Esigenze alimentari" dove indicare vegetariano, vegano, senza glutine, senza lattosio o allergie specifiche.',
         link: {
           label: '🍽️ Consulta il menù e segnala le tue esigenze',
-          href: 'https://sasigasparo.github.io/Matrimonio_test/menu'
+          href: 'https://sasigasparo.github.io/Matrimonio_test/rsvp'
         }
       },
       {
