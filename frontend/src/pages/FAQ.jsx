@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const FAQS = [
   {
@@ -68,6 +69,11 @@ const FAQS = [
         a: 'Sì, la cucina della villa è attrezzata per gestire celiachia e le allergie più comuni. Indicate le vostre esigenze specifiche nell\'RSVP o scriveteci direttamente: faremo il possibile per accontentarvi.',
       },
       {
+        q: 'Come segnalo le mie esigenze alimentari?',
+        a: 'Puoi farlo direttamente nella sezione Inviti: seleziona il tuo nome, conferma la presenza e troverai la sezione "Esigenze alimentari" dove indicare vegetariano, vegano, senza glutine, senza lattosio o allergie specifiche.',
+        link: { label: '✉️ Segnala le tue esigenze', href: '/rsvp#dietary' },
+      },
+      {
         q: 'È previsto un open bar?',
         a: 'Sì! Dall\'aperitivo fino alla fine della serata avrete a disposizione un open bar con vini toscani, cocktail e bevande analcoliche. I vini selezionati provengono direttamente dalle cantine del Chianti.',
       },
@@ -89,7 +95,7 @@ const FAQS = [
   },
 ]
 
-function FaqItem({ domanda, risposta }) {
+function FaqItem({ domanda, risposta, link }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -131,13 +137,24 @@ function FaqItem({ domanda, risposta }) {
       }}>
         <p style={{
           margin: 0,
-          padding: '0 20px 20px',
+          padding: link ? '0 20px 12px' : '0 20px 20px',
           color: 'var(--warm-gray)',
           lineHeight: 1.75,
           fontSize: '.92rem',
         }}>
           {risposta}
         </p>
+        {link && (
+          <div style={{ padding: '0 20px 20px' }}>
+            <a
+              href={link.href}
+              className="btn btn-primary btn-sm"
+              style={{ display: 'inline-flex' }}
+            >
+              {link.label}
+            </a>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -212,7 +229,7 @@ export default function FAQ() {
 
               {/* Domande */}
               {cat.domande.map((faq, i) => (
-                <FaqItem key={i} domanda={faq.q} risposta={faq.a} />
+                <FaqItem key={i} domanda={faq.q} risposta={faq.a} link={faq.link} />
               ))}
             </div>
           ))}

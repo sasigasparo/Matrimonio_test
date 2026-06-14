@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { api } from '../utils/api'
 import { useToast, ToastContainer } from '../hooks/useToast'
 
@@ -11,6 +11,7 @@ export default function Rsvp() {
   const [saving, setSaving] = useState(false)
   const [rsvpStatus, setRsvpStatus] = useState('confirmed')
   const [dietary, setDietary] = useState('')
+  const dietaryRef = useRef(null)
 
   useEffect(() => {
     api.allGuests()
@@ -18,6 +19,15 @@ export default function Rsvp() {
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
+
+  // Scroll to dietary section if arriving from FAQ link
+  useEffect(() => {
+    if (window.location.hash === '#dietary' && dietaryRef.current) {
+      setTimeout(() => {
+        dietaryRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 600)
+    }
+  }, [loading])
 
   const handleGuestSelect = (e) => {
     const id = e.target.value
@@ -140,7 +150,7 @@ export default function Rsvp() {
 
               {/* Step 3 — Dietary (only when confirmed) */}
               {rsvpStatus === 'confirmed' && (
-                <div style={{ marginBottom: 28 }}>
+                <div id="dietary" ref={dietaryRef} style={{ marginBottom: 28 }}>
                   <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
                     3 · Esigenze alimentari
                   </label>
