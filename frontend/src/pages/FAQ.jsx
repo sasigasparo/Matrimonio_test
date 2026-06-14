@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 const FAQS = [
   {
@@ -71,7 +70,10 @@ const FAQS = [
       {
         q: 'Come segnalo le mie esigenze alimentari?',
         a: 'Puoi farlo direttamente nella sezione Inviti: seleziona il tuo nome, conferma la presenza e troverai la sezione "Esigenze alimentari" dove indicare vegetariano, vegano, senza glutine, senza lattosio o allergie specifiche.',
-        link: { label: '✉️ Segnala le tue esigenze', href: '/rsvp' },
+        link: {
+          label: '🍽️ Consulta il menù e segnala le tue esigenze',
+          href: 'https://sasigasparo.github.io/Matrimonio_test/menu'
+        }
       },
       {
         q: 'È previsto un open bar?',
@@ -99,57 +101,55 @@ function FaqItem({ domanda, risposta, link }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <div
-      style={{
-        borderBottom: '1px solid var(--cream)',
-        transition: 'background .2s',
-      }}
-    >
+    <div style={{ borderBottom: '1px solid var(--cream)' }}>
       <button
         onClick={() => setOpen(o => !o)}
         style={{
-          width: '100%', textAlign: 'left',
+          width: '100%',
+          textAlign: 'left',
           padding: '18px 20px',
-          background: 'none', border: 'none', cursor: 'pointer',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           gap: 16,
         }}
       >
-        <span style={{
-          fontWeight: 600, color: 'var(--charcoal)', fontSize: '.97rem', lineHeight: 1.4,
-        }}>
+        <span style={{ fontWeight: 600, color: 'var(--charcoal)' }}>
           {domanda}
         </span>
-        <span style={{
-          fontSize: '1.1rem', color: 'var(--rose)', flexShrink: 0,
-          transform: open ? 'rotate(45deg)' : 'rotate(0)',
-          transition: 'transform .25s',
-          display: 'inline-block',
-        }}>
+        <span
+          style={{
+            transform: open ? 'rotate(45deg)' : 'rotate(0)',
+            transition: 'transform .25s',
+            color: 'var(--rose)',
+            fontSize: '1.2rem',
+          }}
+        >
           ＋
         </span>
       </button>
 
-      <div style={{
-        overflow: 'hidden',
-        maxHeight: open ? 400 : 0,
-        transition: 'max-height .3s ease',
-      }}>
-        <p style={{
-          margin: 0,
-          padding: link ? '0 20px 12px' : '0 20px 20px',
-          color: 'var(--warm-gray)',
-          lineHeight: 1.75,
-          fontSize: '.92rem',
-        }}>
+      <div
+        style={{
+          maxHeight: open ? 400 : 0,
+          overflow: 'hidden',
+          transition: 'max-height .3s ease',
+        }}
+      >
+        <p style={{ padding: '0 20px 10px', color: 'var(--warm-gray)' }}>
           {risposta}
         </p>
+
         {link && (
           <div style={{ padding: '0 20px 20px' }}>
             <a
               href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn btn-primary btn-sm"
-              style={{ display: 'inline-flex' }}
             >
               {link.label}
             </a>
@@ -168,94 +168,38 @@ export default function FAQ() {
     : FAQS
 
   return (
-    <div className="page-enter" style={{ padding: '60px 20px 120px' }}>
-      <div style={{ maxWidth: 700, margin: '0 auto' }}>
+    <div style={{ padding: '60px 20px 120px', maxWidth: 700, margin: '0 auto' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: 30 }}>
+        Domande frequenti
+      </h1>
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <div style={{ fontSize: '3rem', marginBottom: 14 }}>🙋</div>
-          <h1 style={{
-            fontFamily: 'var(--font-serif)', fontSize: '2.5rem',
-            color: 'var(--charcoal)', marginBottom: 10,
-          }}>
-            Domande frequenti
-          </h1>
-          <p style={{ color: 'var(--warm-gray)', maxWidth: 460, margin: '0 auto', lineHeight: 1.7 }}>
-            Abbiamo raccolto le domande più comuni. Se non trovi la risposta che cerchi, scrivici nella sezione Chat.
-          </p>
-        </div>
-
-        {/* Filtri categoria */}
-        <div style={{
-          display: 'flex', gap: 8, flexWrap: 'wrap',
-          justifyContent: 'center', marginBottom: 36,
-        }}>
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 30 }}>
+        <button onClick={() => setCategoriaAttiva(null)}>Tutte</button>
+        {FAQS.map(c => (
           <button
-            className={`btn btn-sm ${!categoriaAttiva ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setCategoriaAttiva(null)}
+            key={c.categoria}
+            onClick={() =>
+              setCategoriaAttiva(prev => prev === c.categoria ? null : c.categoria)
+            }
           >
-            Tutte
+            {c.icon} {c.categoria}
           </button>
-          {FAQS.map(c => (
-            <button
-              key={c.categoria}
-              className={`btn btn-sm ${categoriaAttiva === c.categoria ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => setCategoriaAttiva(prev => prev === c.categoria ? null : c.categoria)}
-            >
-              {c.icon} {c.categoria}
-            </button>
-          ))}
-        </div>
-
-        {/* Accordion per categoria */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {categorieVisibili.map(cat => (
-            <div key={cat.categoria} className="card" style={{ overflow: 'hidden', padding: 0 }}>
-              {/* Header categoria */}
-              <div style={{
-                padding: '16px 20px',
-                background: 'var(--cream)',
-                display: 'flex', alignItems: 'center', gap: 10,
-                borderBottom: '1px solid rgba(200,162,168,.2)',
-              }}>
-                <span style={{ fontSize: '1.3rem' }}>{cat.icon}</span>
-                <h2 style={{
-                  fontFamily: 'var(--font-serif)', fontSize: '1.15rem',
-                  color: 'var(--charcoal)', margin: 0,
-                }}>
-                  {cat.categoria}
-                </h2>
-              </div>
-
-              {/* Domande */}
-              {cat.domande.map((faq, i) => (
-                <FaqItem key={i} domanda={faq.q} risposta={faq.a} link={faq.link} />
-              ))}
-            </div>
-          ))}
-        </div>
-
-        {/* CTA finale */}
-        <div style={{
-          marginTop: 48, textAlign: 'center',
-          background: 'rgba(200,130,106,.07)',
-          borderRadius: 'var(--radius-lg)',
-          border: '1.5px solid rgba(200,162,168,.25)',
-          padding: '32px 24px',
-        }}>
-          <div style={{ fontSize: '2rem', marginBottom: 10 }}>💬</div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', color: 'var(--charcoal)', marginBottom: 8 }}>
-            Hai un'altra domanda?
-          </h3>
-          <p style={{ color: 'var(--warm-gray)', fontSize: '.93rem', marginBottom: 20 }}>
-            Scrivici direttamente nella chat del sito, ti risponderemo il prima possibile.
-          </p>
-          <a href="/chat" className="btn btn-primary">
-            💌 Vai alla Chat
-          </a>
-        </div>
-
+        ))}
       </div>
+
+      {categorieVisibili.map(cat => (
+        <div key={cat.categoria} style={{ marginBottom: 20 }}>
+          <h2>{cat.icon} {cat.categoria}</h2>
+          {cat.domande.map((faq, i) => (
+            <FaqItem
+              key={i}
+              domanda={faq.q}
+              risposta={faq.a}
+              link={faq.link}
+            />
+          ))}
+        </div>
+      ))}
     </div>
   )
 }

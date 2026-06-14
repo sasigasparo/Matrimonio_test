@@ -90,21 +90,6 @@ function TableCircle({ table, guests, onSeatClick, onTableClick, selected }) {
                 fontSize={13} fill="rgba(180,140,120,0.6)" style={{ pointerEvents: 'none' }}>+</text>
             )}
 
-            {/* Name label outside the seat */}
-            {occupied && (
-              <text
-                x={lx} y={ly}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize={8.5}
-                fontWeight={600}
-                fill="#5a4030"
-                fontFamily="Georgia, serif"
-                style={{ pointerEvents: 'none' }}
-              >
-                {shortName}
-              </text>
-            )}
           </g>
         )
       })}
