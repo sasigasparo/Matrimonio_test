@@ -17,7 +17,7 @@ async function apiFetch(path, opts = {}) {
 }
 
 // ─── seat positions around a round table ────────────────────────────────────
-function seatPositions(count, r = 68) {
+function seatPositions(count, r = 62) {
   return Array.from({ length: count }, (_, i) => {
     const angle = (2 * Math.PI * i) / count - Math.PI / 2
     return { x: Math.cos(angle) * r, y: Math.sin(angle) * r }
@@ -36,7 +36,11 @@ function rsvpColor(status) {
 // ════════════════════════════════════════════════════════════════════════════
 function TableCircle({ table, guests, onSeatClick, onTableClick, selected }) {
   const seats = seatPositions(table.seats)
-  const cx = 110, cy = 110
+  const cx = 130, cy = 130
+  // Angle each seat is at (for rotating the name label outward)
+  const angles = Array.from({ length: table.seats }, (_, i) =>
+    (2 * Math.PI * i) / table.seats - Math.PI / 2
+  )
 
   return (
     <g
@@ -60,39 +64,58 @@ function TableCircle({ table, guests, onSeatClick, onTableClick, selected }) {
       </text>
       <text x={cx} y={cy + 10} textAnchor="middle" fontSize={9} fill="#9a8070"
         fontFamily="Georgia, serif" style={{ pointerEvents: 'none' }}>
-        {table.assigned?.length || 0}/{table.seats} posti
+        {table.assigned?.filter(Boolean).length || 0}/{table.seats}
       </text>
 
       {/* seats */}
       {seats.map((pos, i) => {
         const guest = table.assigned?.[i]
         const occupied = !!guest
+        const angle = angles[i]
+        // Name label sits further out from the seat circle
+        const labelR = 90
+        const lx = cx + Math.cos(angle) * labelR
+        const ly = cy + Math.sin(angle) * labelR
+        // Shorten name to fit: first name only
+        const shortName = occupied ? guest.name.split(' ')[0] : ''
+
         return (
           <g key={i}
-            transform={`translate(${cx + pos.x},${cy + pos.y})`}
             onClick={e => { e.stopPropagation(); onSeatClick(table, i, guest) }}
             style={{ cursor: 'pointer' }}
           >
             {/* seat circle */}
-            <circle r={13}
+            <circle
+              cx={cx + pos.x} cy={cy + pos.y} r={13}
               fill={occupied ? rsvpColor(guest.rsvp_status) : 'rgba(255,255,255,0.7)'}
               stroke={occupied ? 'rgba(0,0,0,0.12)' : 'rgba(180,140,120,0.35)'}
               strokeWidth={1.2}
             />
             {occupied ? (
               /* omino */
-              <>
+              <g transform={`translate(${cx + pos.x},${cy + pos.y})`} style={{ pointerEvents: 'none' }}>
                 <circle cy={-4} r={4} fill="rgba(255,255,255,0.85)" />
                 <path d="M-4,4 Q0,12 4,4" fill="rgba(255,255,255,0.85)" />
-              </>
+              </g>
             ) : (
-              /* empty: plus sign */
-              <text textAnchor="middle" dominantBaseline="central" fontSize={13} fill="rgba(180,140,120,0.6)"
-                style={{ pointerEvents: 'none' }}>+</text>
+              <text x={cx + pos.x} y={cy + pos.y} textAnchor="middle" dominantBaseline="central"
+                fontSize={13} fill="rgba(180,140,120,0.6)" style={{ pointerEvents: 'none' }}>+</text>
             )}
-            {/* tooltip name on hover — just show initials */}
+
+            {/* Name label outside the seat */}
             {occupied && (
-              <title>{guest.name}</title>
+              <text
+                x={lx} y={ly}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fontSize={8.5}
+                fontWeight={600}
+                fill="#5a4030"
+                fontFamily="Georgia, serif"
+                style={{ pointerEvents: 'none' }}
+              >
+                {shortName}
+              </text>
             )}
           </g>
         )
@@ -369,7 +392,7 @@ export default function Tables() {
 
   // ── columns layout ──────────────────────────────────────────────────────
   // Each table needs a 220×220 SVG cell
-  const CELL = 220
+  const CELL = 260
 
   // ── Auth gate (must be after all hooks) ────────────────────────────────
   if (!authed) return <TableAuth onSuccess={() => setAuthed(true)} />
@@ -469,7 +492,7 @@ export default function Tables() {
               boxShadow: selectedTable?.id === table.id ? '0 4px 20px rgba(200,130,100,0.12)' : '0 2px 8px rgba(0,0,0,0.04)',
             }}
           >
-            <svg viewBox={`0 0 ${CELL} ${CELL}`} width="100%" style={{ display: 'block' }}>
+            <svg viewBox="0 0 260 260" width="100%" style={{ display: 'block' }}>
               <TableCircle
                 table={table}
                 guests={guests}
