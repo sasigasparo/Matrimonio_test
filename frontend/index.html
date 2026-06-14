@@ -4,6 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wedding App</title>
+    <script>
+      // GitHub Pages SPA fix: ripristina il path salvato da 404.html
+      (function () {
+        var redirect = sessionStorage.getItem('redirect')
+        if (redirect) {
+          sessionStorage.removeItem('redirect')
+          var url = new URL(redirect, location.origin)
+          if (url.pathname !== location.pathname) {
+            history.replaceState(null, '', redirect)
+          }
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
