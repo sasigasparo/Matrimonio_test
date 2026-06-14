@@ -3,7 +3,8 @@ import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { api } from '../utils/api'
 
-const API = 'http://localhost:8000/api'
+const API = `${(import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')}/api`
+
 
 function getToken() {
   return localStorage.getItem('wedding_token') || ''

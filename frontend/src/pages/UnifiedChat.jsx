@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
+const API = `${(import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')}/api`
 
-const API = 'http://localhost:8000/api'
 const SUPABASE_PROJECT_ID = 'wzwtwbnjcxrwxgiurgqa'
 const SUPABASE_BUCKET = 'wedding-photos'
 
