@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import TableAuth, { useTableAuth } from './TableAuth'
 
 const API_URL = (import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')
 
@@ -283,6 +284,9 @@ function TableEditor({ table, onSave, onDelete, onClose }) {
 // ════════════════════════════════════════════════════════════════════════════
 export default function Tables() {
   const navigate = useNavigate()
+  const { isGranted } = useTableAuth()
+  const [authed, setAuthed] = useState(isGranted())
+
   const [tables,  setTables]  = useState([])
   const [guests,  setGuests]  = useState([])
   const [loading, setLoading] = useState(true)
@@ -292,6 +296,9 @@ export default function Tables() {
   const [selectedTable, setSelectedTable] = useState(null)
   const [seatPicker, setSeatPicker] = useState(null)   // { table, seatIndex, currentGuest }
   const [tableEditor, setTableEditor] = useState(null) // null | table object | {}
+
+  // ── Auth gate ─────────────────────────────────────────────────────────
+  if (!authed) return <TableAuth onSuccess={() => setAuthed(true)} />
 
   // ── fetch ──────────────────────────────────────────────────────────────
   const load = useCallback(async () => {
