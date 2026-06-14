@@ -17,7 +17,7 @@ async function apiFetch(path, opts = {}) {
 }
 
 // ─── seat positions around a round table ────────────────────────────────────
-function seatPositions(count, r = 62) {
+function seatPositions(count, r = 52) {
   return Array.from({ length: count }, (_, i) => {
     const angle = (2 * Math.PI * i) / count - Math.PI / 2
     return { x: Math.cos(angle) * r, y: Math.sin(angle) * r }
@@ -37,11 +37,6 @@ function rsvpColor(status) {
 function TableCircle({ table, guests, onSeatClick, onTableClick, selected }) {
   const seats = seatPositions(table.seats)
   const cx = 130, cy = 130
-  // Angle each seat is at (for rotating the name label outward)
-  const angles = Array.from({ length: table.seats }, (_, i) =>
-    (2 * Math.PI * i) / table.seats - Math.PI / 2
-  )
-
   return (
     <g
       onClick={() => onTableClick(table)}
@@ -71,13 +66,6 @@ function TableCircle({ table, guests, onSeatClick, onTableClick, selected }) {
       {seats.map((pos, i) => {
         const guest = table.assigned?.[i]
         const occupied = !!guest
-        const angle = angles[i]
-        // Name label sits further out from the seat circle
-        const labelR = 90
-        const lx = cx + Math.cos(angle) * labelR
-        const ly = cy + Math.sin(angle) * labelR
-        // Shorten name to fit: first name only
-        const shortName = occupied ? guest.name.split(' ')[0] : ''
 
         return (
           <g key={i}
@@ -392,7 +380,7 @@ export default function Tables() {
 
   // ── columns layout ──────────────────────────────────────────────────────
   // Each table needs a 220×220 SVG cell
-  const CELL = 260
+  const CELL = 220
 
   // ── Auth gate (must be after all hooks) ────────────────────────────────
   if (!authed) return <TableAuth onSuccess={() => setAuthed(true)} />
@@ -501,6 +489,48 @@ export default function Tables() {
                 selected={selectedTable?.id === table.id}
               />
             </svg>
+
+            {/* ── Guest list verticale dentro la card ── */}
+            <div style={{ padding: '0 6px 4px' }}>
+              {Array.from({ length: table.seats }, (_, i) => {
+                const guest = table.assigned?.[i]
+                return (
+                  <div
+                    key={i}
+                    onClick={() => handleSeatClick(table, i, guest || null)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 7,
+                      padding: '4px 6px', borderRadius: 6, cursor: 'pointer',
+                      transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(200,162,168,0.1)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    {/* pallino stato */}
+                    <span style={{
+                      width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+                      background: guest ? rsvpColor(guest.rsvp_status) : 'rgba(180,140,120,0.25)',
+                      border: guest ? 'none' : '1.5px dashed rgba(180,140,120,0.5)',
+                    }} />
+                    {/* numero posto */}
+                    <span style={{ fontSize: '0.7rem', color: '#b0a090', flexShrink: 0, width: 14, textAlign: 'right' }}>
+                      {i + 1}
+                    </span>
+                    {/* nome */}
+                    <span style={{
+                      fontSize: '0.8rem',
+                      color: guest ? '#2c2420' : '#c8b8a8',
+                      fontStyle: guest ? 'normal' : 'italic',
+                      flex: 1,
+                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                    }}>
+                      {guest ? guest.name : 'posto libero'}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+
             {/* Edit button below table */}
             <button
               onClick={() => setTableEditor(table)}
