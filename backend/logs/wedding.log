@@ -690,3 +690,10 @@
 2026-06-13 16:47:34,782 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
 2026-06-13 16:47:34,992 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
 2026-06-14 00:31:32,706 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-14 21:14:12,381 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-14 21:14:12,381 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-14 21:14:13,275 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-14 21:14:13,293 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-14 21:14:13,387 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-14 21:14:13,399 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-14 21:30:44,912 | INFO     | wedding | 🌸 Wedding App spenta
