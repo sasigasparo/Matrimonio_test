@@ -705,3 +705,16 @@
 2026-06-14 21:30:50,725 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
 2026-06-14 21:31:14,461 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
 2026-06-14 21:31:14,558 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-14 21:48:58,400 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-14 21:48:59,570 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-14 21:48:59,571 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-14 21:49:00,321 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-14 21:49:00,325 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-14 21:49:00,454 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-14 21:49:00,478 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-14 21:49:01,699 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-14 21:49:01,699 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-14 21:49:01,977 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-14 21:49:01,994 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-14 21:49:02,062 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-14 21:49:02,078 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)

@@ -34,7 +34,7 @@ jobs:
           node-version: 24
 
       - name: Install and build
-        working-directory: Wedding_App
+        working-directory: frontend
         run: |
           npm install
           npm install vite @vitejs/plugin-react --save-dev
@@ -48,7 +48,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: Wedding_App/dist
+          path: frontend/dist
 
       - name: Deploy to GitHub Pages
         id: deployment
