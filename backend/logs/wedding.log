@@ -697,3 +697,11 @@
 2026-06-14 21:14:13,387 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
 2026-06-14 21:14:13,399 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
 2026-06-14 21:30:44,912 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-14 21:30:49,849 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-14 21:30:49,849 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-14 21:30:50,617 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-14 21:30:50,630 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-14 21:30:50,710 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-14 21:30:50,725 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-14 21:31:14,461 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-14 21:31:14,558 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
