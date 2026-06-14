@@ -71,7 +71,7 @@ const FAQS = [
       {
         q: 'Come segnalo le mie esigenze alimentari?',
         a: 'Puoi farlo direttamente nella sezione Inviti: seleziona il tuo nome, conferma la presenza e troverai la sezione "Esigenze alimentari" dove indicare vegetariano, vegano, senza glutine, senza lattosio o allergie specifiche.',
-        link: { label: '✉️ Segnala le tue esigenze', href: '/rsvp#dietary' },
+        link: { label: '✉️ Segnala le tue esigenze', href: '/rsvp' },
       },
       {
         q: 'È previsto un open bar?',
