@@ -297,9 +297,6 @@ export default function Tables() {
   const [seatPicker, setSeatPicker] = useState(null)   // { table, seatIndex, currentGuest }
   const [tableEditor, setTableEditor] = useState(null) // null | table object | {}
 
-  // ── Auth gate ─────────────────────────────────────────────────────────
-  if (!authed) return <TableAuth onSuccess={() => setAuthed(true)} />
-
   // ── fetch ──────────────────────────────────────────────────────────────
   const load = useCallback(async () => {
     setLoading(true)
@@ -373,6 +370,9 @@ export default function Tables() {
   // ── columns layout ──────────────────────────────────────────────────────
   // Each table needs a 220×220 SVG cell
   const CELL = 220
+
+  // ── Auth gate (must be after all hooks) ────────────────────────────────
+  if (!authed) return <TableAuth onSuccess={() => setAuthed(true)} />
 
   if (loading) return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
