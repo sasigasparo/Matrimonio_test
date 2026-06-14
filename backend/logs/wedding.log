@@ -1,0 +1,692 @@
+2026-05-24 22:35:18,711 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 22:35:18,712 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 22:35:18,713 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 22:35:18,713 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 22:35:18,729 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 22:35:18,729 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 22:35:19,926 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-05-24 22:35:19,933 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 22:35:19,933 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 22:35:19,933 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 22:35:20,062 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 22:35:20,077 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 22:35:20,079 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 22:35:20,079 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 22:35:20,079 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 22:35:20,087 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 22:37:16,480 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 22:37:16,480 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 22:37:16,834 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-05-24 22:37:16,849 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 22:37:16,991 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 22:37:16,991 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 22:37:19,907 | INFO     | wedding | 🌸 Wedding App spenta
+2026-05-24 22:37:19,907 | INFO     | wedding | 🌸 Wedding App spenta
+2026-05-24 22:37:19,907 | INFO     | wedding | 🌸 Wedding App spenta
+2026-05-24 22:37:19,946 | INFO     | wedding | 🌸 Wedding App spenta
+2026-05-24 22:37:21,410 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 22:37:21,410 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 22:37:21,417 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 22:37:21,417 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 22:37:21,421 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 22:37:21,422 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 22:37:21,483 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 22:37:21,483 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 22:37:21,823 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-05-24 22:37:21,827 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 22:37:21,835 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-05-24 22:37:21,839 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 22:37:21,911 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-05-24 22:37:21,915 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 22:37:21,920 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-05-24 22:37:21,923 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 22:37:21,957 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 22:37:21,957 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 22:37:21,975 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 22:37:21,975 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 22:37:22,033 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 22:37:22,034 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 22:37:22,040 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 22:37:22,058 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 22:37:36,050 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-05-24 22:37:36,156 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-05-24 22:37:37,819 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-05-24 22:37:42,913 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 22:37:43,024 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 22:37:53,818 | INFO     | wedding.messages | 📨 MSG_IN | ip=127.0.0.1 | auth=False | guest_name='sasi' | content_len=4 | has_audio=False | has_file=False | file=None | file_ct=None
+2026-05-24 22:37:53,819 | INFO     | wedding.messages | 👤 IDENTITY | tipo=anon | name='sasi'
+2026-05-24 22:37:53,820 | INFO     | wedding.messages | 📊 MESSAGE_CLASSIFY | guest='sasi' | has_text=True | has_audio=False | has_photo=False
+2026-05-24 22:37:53,820 | INFO     | wedding.messages | 📝 MESSAGE_READY | type=text | text_len=4 | text='test' | has_photo=False | has_audio=False | guest='sasi'
+2026-05-24 22:37:53,821 | INFO     | wedding.messages | 💾 DB_INSERT | type=text | guest='sasi' | guest_id=None | has_photo=False | has_audio=False | has_text=True
+2026-05-24 22:37:54,181 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages "HTTP/2 201 Created"
+2026-05-24 22:37:54,183 | INFO     | wedding.messages | ✅ MSG_SAVED | id=24 | type=text | guest='sasi'
+2026-05-24 22:37:54,298 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-05-24 22:37:54,298 | INFO     | wedding.messages | 🎉 MSG_DONE | id=24 | type=text | guest='sasi' | photo=False | audio=False | text=True
+2026-05-24 22:38:04,233 | INFO     | wedding.messages | 📨 MSG_IN | ip=127.0.0.1 | auth=False | guest_name='sasi' | content_len=0 | has_audio=False | has_file=True | file='foto-1779655082742.jpg' | file_ct='image/jpeg'
+2026-05-24 22:38:04,234 | INFO     | wedding.messages | 👤 IDENTITY | tipo=anon | name='sasi'
+2026-05-24 22:38:04,234 | INFO     | wedding.messages | 🖼️  FOTO_CHAT | INIZIO | filename='foto-1779655082742.jpg' | content_type='image/jpeg' | user=sasi
+2026-05-24 22:38:04,234 | INFO     | wedding.messages | 🖼️  FOTO_CHAT | LETTURA_FILE | filename='foto-1779655082742.jpg' | ext=.jpg | size=0.10 MB | guest='sasi'
+2026-05-24 22:38:04,239 | INFO     | wedding.messages | 🖼️  FOTO_CHAT | UPLOAD_SUPABASE | nome_interno=83511935-1406-410f-bbf2-3479844b5fe9.jpg | mime_type=image/jpeg | path=photos/83511935-1406-410f-bbf2-3479844b5fe9.jpg
+2026-05-24 22:38:04,240 | INFO     | wedding.messages | Supabase upload | path=photos/83511935-1406-410f-bbf2-3479844b5fe9.jpg | size=0.10 MB | mime=image/jpeg
+2026-05-24 22:38:05,341 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/storage/v1/object/wedding-photos/photos/83511935-1406-410f-bbf2-3479844b5fe9.jpg "HTTP/2 200 OK"
+2026-05-24 22:38:05,342 | INFO     | wedding.messages | Supabase OK | path=photos/83511935-1406-410f-bbf2-3479844b5fe9.jpg | 1102ms | url=https://wzwtwbnjcxrwxgiurgqa.supabase.co/storage/v1/object/public/wedding-photos/photos/83511935-1406-410f-bbf2-3479844b5fe9.jpg?
+2026-05-24 22:38:05,342 | INFO     | wedding.messages | ✅ FOTO_CHAT | UPLOAD_OK | url=https://wzwtwbnjcxrwxgiurgqa.supabase.co/storage/v1/object/public/wedding-photos/photos/83511935-1406-410f-bbf2-3479844b5fe9.jpg? | guest=sasi | size=0.10 MB
+2026-05-24 22:38:05,342 | INFO     | wedding.messages | 📊 MESSAGE_CLASSIFY | guest='sasi' | has_text=False | has_audio=False | has_photo=True
+2026-05-24 22:38:05,342 | INFO     | wedding.messages | 📝 MESSAGE_READY | type=photo | text_len=0 | text='' | has_photo=True | has_audio=False | guest='sasi'
+2026-05-24 22:38:05,342 | INFO     | wedding.messages | 💾 DB_INSERT | type=photo | guest='sasi' | guest_id=None | has_photo=True | has_audio=False | has_text=False
+2026-05-24 22:38:05,956 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages "HTTP/2 201 Created"
+2026-05-24 22:38:05,957 | INFO     | wedding.messages | ✅ MSG_SAVED | id=25 | type=photo | guest='sasi'
+2026-05-24 22:38:06,085 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-05-24 22:38:06,087 | INFO     | wedding.messages | 🎉 MSG_DONE | id=25 | type=photo | guest='sasi' | photo=True | audio=False | text=False
+2026-05-24 22:46:21,116 | INFO     | wedding.messages | 📨 MSG_IN | ip=127.0.0.1 | auth=False | guest_name='sasi' | content_len=0 | has_audio=True | has_file=False | file=None | file_ct=None
+2026-05-24 22:46:21,117 | INFO     | wedding.messages | 👤 IDENTITY | tipo=anon | name='sasi'
+2026-05-24 22:46:21,117 | INFO     | wedding.messages | 🎙️  AUDIO_UPLOAD | ext=.webm | size=0.03 MB | guest='sasi'
+2026-05-24 22:46:21,117 | INFO     | wedding.messages | Supabase upload | path=audio/df4dc55b-6eea-4a51-bb48-06cb1e81c54f.webm | size=0.03 MB | mime=audio/webm;codecs=opus
+2026-05-24 22:46:22,043 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/storage/v1/object/wedding-photos/audio/df4dc55b-6eea-4a51-bb48-06cb1e81c54f.webm "HTTP/2 200 OK"
+2026-05-24 22:46:22,044 | INFO     | wedding.messages | Supabase OK | path=audio/df4dc55b-6eea-4a51-bb48-06cb1e81c54f.webm | 927ms | url=https://wzwtwbnjcxrwxgiurgqa.supabase.co/storage/v1/object/public/wedding-photos/audio/df4dc55b-6eea-4a51-bb48-06cb1e81c54f.webm?
+2026-05-24 22:46:22,044 | INFO     | wedding.messages | ✅ AUDIO_OK | path=audio/df4dc55b-6eea-4a51-bb48-06cb1e81c54f.webm | guest='sasi'
+2026-05-24 22:46:22,044 | INFO     | wedding.messages | 📊 MESSAGE_CLASSIFY | guest='sasi' | has_text=False | has_audio=True | has_photo=False
+2026-05-24 22:46:22,044 | INFO     | wedding.messages | 📝 MESSAGE_READY | type=audio | text_len=0 | text='' | has_photo=False | has_audio=True | guest='sasi'
+2026-05-24 22:46:22,045 | INFO     | wedding.messages | 💾 DB_INSERT | type=audio | guest='sasi' | guest_id=None | has_photo=False | has_audio=True | has_text=False
+2026-05-24 22:46:22,900 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages "HTTP/2 201 Created"
+2026-05-24 22:46:22,903 | INFO     | wedding.messages | ✅ MSG_SAVED | id=26 | type=audio | guest='sasi'
+2026-05-24 22:46:23,203 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-05-24 22:46:23,204 | INFO     | wedding.messages | 🎉 MSG_DONE | id=26 | type=audio | guest='sasi' | photo=False | audio=True | text=False
+2026-05-24 22:52:00,012 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 22:52:00,220 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 22:54:05,880 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.sgasparorippa%40gmail.com "HTTP/2 200 OK"
+2026-05-24 22:54:19,803 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.sgasparorippa%40gmail.com "HTTP/2 200 OK"
+2026-05-24 22:54:24,916 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.sgasparorippa%40gmail.com "HTTP/2 200 OK"
+2026-05-24 22:54:55,753 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.sasi%40gmail.com "HTTP/2 200 OK"
+2026-05-24 22:54:56,244 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests "HTTP/2 201 Created"
+2026-05-24 22:54:56,449 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-05-24 22:54:56,450 | INFO     | wedding.auth | User registered: sasi@gmail.com (admin=False)
+2026-05-24 22:54:58,497 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 22:54:58,700 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 22:55:06,189 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-05-24 22:55:06,388 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.3 "HTTP/2 200 OK"
+2026-05-24 22:55:06,587 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-05-24 22:55:07,303 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.3 "HTTP/2 200 OK"
+2026-05-24 22:55:13,465 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 22:55:13,572 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 22:55:14,574 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 22:55:14,696 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:04:38,537 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 23:04:38,537 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 23:04:40,000 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-05-24 23:04:40,000 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 23:04:40,144 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 23:04:40,150 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 23:04:49,174 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:04:49,569 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:04:50,152 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:04:50,352 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:17:05,389 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:17:05,590 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:17:05,789 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:17:06,443 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:17:11,022 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:17:11,339 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:17:20,270 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:17:20,373 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:17:20,554 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:17:20,686 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:17:37,285 | INFO     | wedding | 🌸 Wedding App spenta
+2026-05-24 23:17:40,983 | INFO     | wedding | 🌸 Wedding App avviata
+2026-05-24 23:17:40,983 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-05-24 23:17:42,038 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-05-24 23:17:42,038 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-05-24 23:17:42,186 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-05-24 23:17:42,187 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-05-24 23:17:53,039 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:17:53,564 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:17:54,763 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:17:54,980 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:17:57,833 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:17:59,513 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.3 "HTTP/2 200 OK"
+2026-05-24 23:18:03,446 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-05-24 23:18:03,587 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-01 13:25:58,962 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-01 13:25:58,962 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-01 13:25:59,002 | ERROR    | wedding.db | ❌ Supabase initialization error: [Errno 11001] getaddrinfo failed
+2026-06-01 14:12:00,384 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-01 14:12:00,384 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-01 14:12:01,064 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-01 14:12:01,064 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-01 14:12:01,156 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-01 14:12:01,156 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 10:47:15,657 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 10:47:15,675 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 10:47:16,725 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 10:47:16,749 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 10:47:16,876 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 10:47:16,876 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 10:48:54,785 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 10:48:54,866 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 10:49:04,306 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 10:49:06,341 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 10:49:06,426 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 10:49:13,013 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 10:49:13,102 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 10:53:26,035 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 10:53:26,108 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 13:06:28,224 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:39:57,212 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 15:39:57,212 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 15:39:58,054 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 15:39:58,060 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 15:39:58,264 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 15:39:58,264 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 15:40:03,807 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:40:04,006 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:40:19,574 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:40:19,786 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:40:33,486 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:40:33,723 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:40:41,466 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:40:41,688 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:40:43,849 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:40:43,954 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:42:10,574 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:42:10,718 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:42:13,043 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:42:13,224 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:42:19,579 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:42:19,811 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:42:23,414 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-02 15:42:27,325 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 15:42:27,325 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 15:42:27,898 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 15:42:27,910 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 15:42:27,999 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 15:42:28,011 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 15:42:58,091 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:42:58,298 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:43:38,892 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:44:03,338 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:44:10,681 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:44:10,910 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:44:25,018 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:44:25,837 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:44:26,062 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:44:27,361 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:44:27,584 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:45:21,636 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:45:21,956 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:45:54,733 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:52:18,311 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:52:24,277 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:52:24,481 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:52:26,513 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:52:26,625 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:52:52,034 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:52:52,238 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:52:52,417 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:52:54,887 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:53:02,888 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:53:03,093 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:53:13,697 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 15:53:14,251 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:53:14,433 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:55:55,842 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:55:56,041 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:57:13,524 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:57:13,651 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:57:18,284 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 15:57:18,476 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:00:00,677 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:00:00,881 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:02:20,838 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:02:20,956 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:02:24,037 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:02:24,228 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:02:29,286 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-02 16:02:30,421 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 16:02:30,421 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 16:02:30,970 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 16:02:30,970 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 16:02:31,172 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 16:02:31,173 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 16:02:32,285 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 16:02:32,285 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 16:02:32,700 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 16:02:32,703 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 16:02:32,942 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 16:02:32,944 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 16:03:26,426 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:03:26,609 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:04:49,228 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:04:49,513 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:04:54,357 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:04:54,549 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:07:31,546 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-02 16:07:32,550 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 16:07:32,550 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 16:07:33,091 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 16:07:33,101 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 16:07:33,275 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 16:07:33,275 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 16:08:26,323 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:08:26,639 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:08:27,567 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:08:27,760 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:08:32,789 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:08:37,790 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-02 16:08:38,823 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 16:08:38,823 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 16:08:39,612 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 16:08:39,612 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 16:08:39,814 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 16:08:39,814 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 16:08:40,005 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:20:35,629 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:20:35,832 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:20:48,310 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:20:48,506 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:20:56,687 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:20:56,892 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:22:47,425 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:22:47,530 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:51:35,672 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 16:51:35,672 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 16:51:36,694 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 16:51:36,698 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 16:51:36,774 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 16:51:36,774 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 16:51:42,704 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:51:42,904 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:51:47,684 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:51:47,916 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:51:48,098 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:51:48,403 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:12,689 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:12,979 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:13,115 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:13,295 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:22,612 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:52:22,826 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:52:24,572 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:52:25,743 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:25,994 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:27,768 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:27,947 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:28,158 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:52:28,482 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:53:28,525 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:53:28,681 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:53:28,881 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:53:37,026 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:53:37,183 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:53:37,482 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:53:54,803 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:53:54,986 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:53:55,162 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:10,137 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:10,368 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:10,570 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:13,214 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:13,346 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:13,512 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:13,730 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:13,912 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:14,449 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:23,512 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:23,760 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:55:31,742 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:55:31,955 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:56:24,384 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:56:24,608 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:56:27,790 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:56:28,676 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:56:28,918 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:58:02,373 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:58:02,591 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:58:03,384 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:58:03,599 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:59:08,339 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:59:08,520 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:59:09,410 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:59:11,306 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 16:59:16,838 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:59:16,995 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 16:59:22,018 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-02 16:59:23,031 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 16:59:23,031 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 16:59:23,521 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 16:59:23,525 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 16:59:23,664 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 16:59:23,665 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 16:59:24,684 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-02 16:59:24,686 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-02 16:59:25,141 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-02 16:59:25,143 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-02 16:59:25,331 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-02 16:59:25,331 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-02 16:59:25,574 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-02 17:00:46,841 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 17:02:41,236 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 17:02:43,380 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-02 17:02:43,602 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-06 22:07:31,186 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-06 22:07:31,318 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 20:44:47,773 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 20:44:47,777 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 20:44:47,867 | ERROR    | wedding.db | ❌ Supabase initialization error: [Errno 11001] getaddrinfo failed
+2026-06-10 20:44:53,849 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 20:44:53,849 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 20:44:53,923 | ERROR    | wedding.db | ❌ Supabase initialization error: [Errno 11001] getaddrinfo failed
+2026-06-10 21:07:56,906 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 21:07:56,906 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 21:07:58,180 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 21:07:58,202 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 21:07:58,289 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 21:07:58,291 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 21:16:58,335 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:16:58,417 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:17:04,606 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:17:04,702 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:22:02,448 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:22:02,640 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:22:30,976 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:22:31,207 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:22:34,199 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:22:34,309 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:22:35,021 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:22:35,409 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:22:35,559 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:22:35,690 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:22:41,587 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:22:41,732 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:23:10,832 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:28:11,966 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-10 21:28:13,530 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 21:28:13,530 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 21:28:14,252 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 21:28:14,261 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 21:28:14,375 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 21:28:14,375 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 21:28:43,829 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-10 21:28:44,981 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 21:28:44,981 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 21:28:46,128 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 21:28:46,128 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 21:28:46,312 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 21:28:46,312 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 21:28:46,529 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:28:46,743 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:28:47,473 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:28:47,745 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:28:47,881 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:28:48,029 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:28:48,133 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:28:48,461 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:28:55,910 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:28:56,164 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:29:05,103 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.guest%40wedding.local "HTTP/2 200 OK"
+2026-06-10 21:29:05,246 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests "HTTP/2 201 Created"
+2026-06-10 21:29:05,373 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-06-10 21:29:05,373 | INFO     | wedding.auth | Guest logged in via simple login (guest:4)
+2026-06-10 21:29:07,693 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:29:07,808 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:34:48,769 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:34:49,017 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:34:49,413 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:34:49,582 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:34:50,065 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:34:50,232 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:34:50,770 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:34:51,518 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:34:52,190 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:34:52,332 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:34:52,932 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 21:34:53,526 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:26,281 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:36:26,448 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:36:26,698 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:27,231 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:27,445 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:32,462 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-10 21:36:34,278 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 21:36:34,280 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 21:36:35,697 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 21:36:35,697 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 21:36:35,897 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 21:36:35,897 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 21:36:37,614 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:37,730 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:36:37,847 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 21:36:42,910 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-10 21:36:44,294 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 21:36:44,295 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 21:36:44,764 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 21:36:44,764 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 21:36:44,895 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 21:36:44,895 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 21:36:45,029 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:45,130 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:45,325 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:45,445 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:45,545 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:57,126 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:57,426 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 21:36:57,549 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:36:57,743 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 21:58:30,201 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:58:30,306 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 21:58:30,465 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 21:58:30,577 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:04:28,402 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:04:28,506 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:04:43,660 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:04:43,737 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:11:16,034 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:12:13,140 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-10 22:12:14,310 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 22:12:14,310 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 22:12:14,939 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 22:12:14,939 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 22:12:15,354 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 22:12:15,370 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 22:12:16,528 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 22:12:16,528 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 22:12:18,385 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 22:12:18,387 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 22:12:18,720 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 22:12:18,722 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 22:12:25,490 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:12:25,639 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:12:25,771 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:12:25,938 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:12:35,839 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:12:36,003 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:12:36,146 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:12:36,305 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:20:58,331 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:20:58,594 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.4 "HTTP/2 200 OK"
+2026-06-10 22:21:03,542 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.guest%40wedding.local "HTTP/2 200 OK"
+2026-06-10 22:21:03,663 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests "HTTP/2 201 Created"
+2026-06-10 22:21:03,797 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-06-10 22:21:03,797 | INFO     | wedding.auth | Guest logged in via simple login (guest:55)
+2026-06-10 22:21:06,982 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:21:07,097 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:24:17,963 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-10 22:24:19,163 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 22:24:19,163 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 22:24:19,813 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 22:24:19,813 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 22:24:19,947 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 22:24:19,947 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 22:24:26,630 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-10 22:24:26,746 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-10 22:24:27,111 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:24:27,228 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 22:24:32,011 | INFO     | httpx | HTTP Request: PATCH https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?id=eq.43 "HTTP/2 200 OK"
+2026-06-10 22:24:32,288 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-06-10 22:24:32,288 | INFO     | wedding.guests | rsvp updated: guest 43 → declined
+2026-06-10 22:28:35,908 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 22:28:36,029 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-10 22:28:36,130 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 22:28:36,251 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-10 22:28:49,066 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 22:28:49,224 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 22:28:49,420 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 22:28:49,551 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 22:28:49,732 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 22:28:50,282 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 22:28:50,548 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 22:28:50,666 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 22:28:50,832 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 22:28:51,929 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 23:07:46,049 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-10 23:07:47,733 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 23:07:47,733 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 23:07:48,722 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 23:07:48,726 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 23:07:48,850 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 23:07:48,851 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 23:09:03,512 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-10 23:09:04,684 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-10 23:09:04,684 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-10 23:09:05,053 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-10 23:09:05,056 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-10 23:09:05,165 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-10 23:09:05,165 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-10 23:26:41,620 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.guest%40wedding.local "HTTP/2 200 OK"
+2026-06-10 23:26:41,723 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-06-10 23:26:41,739 | INFO     | wedding.auth | Guest logged in via simple login (guest:55)
+2026-06-10 23:26:43,875 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 23:26:43,971 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 23:26:46,310 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:26:46,426 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:26:46,542 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:26:46,642 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:26:46,726 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:26:46,821 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:26:48,586 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 23:26:48,676 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-10 23:26:48,759 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 23:26:48,858 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-10 23:26:53,125 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 23:28:39,489 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.guest%40wedding.local "HTTP/2 200 OK"
+2026-06-10 23:28:39,655 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-06-10 23:28:39,655 | INFO     | wedding.auth | Guest logged in via simple login (guest:55)
+2026-06-10 23:28:43,357 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 23:28:43,558 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-10 23:28:48,149 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.guest%40wedding.local "HTTP/2 200 OK"
+2026-06-10 23:28:48,231 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-06-10 23:28:48,238 | INFO     | wedding.auth | Guest logged in via simple login (guest:55)
+2026-06-10 23:28:56,986 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:28:57,087 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:29:00,406 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 23:29:00,586 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-10 23:29:00,677 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-10 23:29:00,768 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-10 23:29:01,294 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:29:01,504 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:29:01,602 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:29:02,085 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:29:02,185 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-10 23:29:02,301 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 14:58:27,599 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-13 14:58:27,600 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-13 14:58:28,627 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-13 14:58:28,627 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-13 14:58:28,837 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-13 14:58:28,838 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-13 14:58:57,178 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 14:58:57,270 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 14:59:14,636 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.guest%40wedding.local "HTTP/2 200 OK"
+2026-06-13 14:59:14,762 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-06-13 14:59:14,763 | INFO     | wedding.auth | Guest logged in via simple login (guest:55)
+2026-06-13 14:59:17,368 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-13 14:59:17,452 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-13 14:59:19,077 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-13 14:59:19,202 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-13 14:59:19,278 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-13 14:59:19,419 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-13 14:59:27,887 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 14:59:28,020 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 14:59:28,112 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 14:59:28,305 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 14:59:28,421 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 14:59:28,502 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 14:59:30,229 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-13 14:59:30,308 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=id%2C%20name%2C%20rsvp_status&order=name "HTTP/2 200 OK"
+2026-06-13 14:59:31,790 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 14:59:31,903 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 14:59:44,601 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.guest%40wedding.local "HTTP/2 200 OK"
+2026-06-13 14:59:44,686 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-06-13 14:59:44,686 | INFO     | wedding.auth | Guest logged in via simple login (guest:55)
+2026-06-13 15:08:27,308 | INFO     | wedding | 🌸 Wedding App spenta
+2026-06-13 15:08:34,558 | INFO     | wedding | 🌸 Wedding App avviata
+2026-06-13 15:08:34,558 | INFO     | wedding.db | 🌍 Initialising Supabase database at https://wzwtwbnjcxrwxgiurgqa.supabase.co
+2026-06-13 15:08:35,306 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&limit=1 "HTTP/2 200 OK"
+2026-06-13 15:08:35,306 | INFO     | wedding.db | ✅ Supabase connection successful!
+2026-06-13 15:08:35,517 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
+2026-06-13 15:08:35,517 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-13 15:11:50,357 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 15:11:50,478 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 15:12:14,793 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:14,874 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:16,500 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:16,634 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:16,718 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:16,805 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:16,867 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:16,952 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:17,368 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:17,450 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:17,516 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:17,606 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:21,339 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:21,417 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:21,532 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:21,616 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:21,699 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:21,794 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:24,247 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:24,415 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:24,498 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:24,593 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:32,747 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:32,840 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:58,085 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:58,209 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:58,285 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:12:58,414 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:03,192 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:03,324 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:03,392 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:03,525 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:03,608 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:03,740 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:10,229 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:10,302 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:10,373 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/photos?select=%2A%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:13:10,440 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:16:02,490 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&email=eq.guest%40wedding.local "HTTP/2 200 OK"
+2026-06-13 15:16:02,593 | INFO     | httpx | HTTP Request: POST https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/audit_log "HTTP/2 201 Created"
+2026-06-13 15:16:02,593 | INFO     | wedding.auth | Guest logged in via simple login (guest:55)
+2026-06-13 15:16:06,205 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:16:06,280 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:22:30,260 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:22:30,348 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:24:56,399 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 15:24:56,484 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 15:24:56,577 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:24:56,667 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:52:15,981 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 15:52:16,053 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 15:53:08,204 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:53:08,280 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/messages?select=id%2C%20guest_id%2C%20content%2C%20audio_path%2C%20photo_url%2C%20type%2C%20created_at%2C%20guest_name%2C%20guests%28name%2C%20avatar_url%29&order=created_at.desc "HTTP/2 200 OK"
+2026-06-13 15:55:19,502 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-13 15:55:19,691 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-13 15:55:19,762 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A&order=sort_order%2Ccourse%2Cname "HTTP/2 200 OK"
+2026-06-13 15:55:19,889 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_choices?select=item_id&guest_id=eq.55 "HTTP/2 200 OK"
+2026-06-13 15:57:15,873 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 15:57:16,013 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 16:46:47,418 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 16:46:47,542 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 16:47:34,782 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-13 16:47:34,992 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/guests?select=%2A&id=eq.55 "HTTP/2 200 OK"
+2026-06-14 00:31:32,706 | INFO     | wedding | 🌸 Wedding App spenta

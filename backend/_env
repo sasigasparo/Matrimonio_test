@@ -1,0 +1,13 @@
+# ── Supabase ──────────────────────────────────────────────────────────────────
+SUPABASE_URL=https://wzwtwbnjcxrwxgiurgqa.supabase.co
+SUPABASE_KEY=your-supabase-anon-key-here
+
+# ── Auth ──────────────────────────────────────────────────────────────────────
+SECRET_KEY=change-me-to-a-random-string-in-production
+ADMIN_EMAILS=tua@email.com
+
+# ── Frontend (locale) ─────────────────────────────────────────────────────────
+VITE_API_URL=http://localhost:8000
+
+# ── Frontend (produzione - impostare su Render) ───────────────────────────────
+# FRONTEND_URL=https://sasigasparo.github.io/Matrimonio_test

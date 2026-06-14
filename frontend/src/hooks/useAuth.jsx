@@ -25,14 +25,10 @@ export function AuthProvider({ children }) {
 
   useEffect(() => { loadUser() }, [loadUser])
 
-  const login = (userData = null) => {
-    if (userData) {
-      // Direct login from email/registration (userData provided)
-      setUser(userData)
-      return Promise.resolve()
-    }
-    // Google OAuth redirect
-    window.location.href = '/api/auth/login'
+  // Password-only login: caller passes the guest object returned by the API.
+  const login = (userData) => {
+    setUser(userData)
+    return Promise.resolve()
   }
 
   const logout = () => {
@@ -40,13 +36,8 @@ export function AuthProvider({ children }) {
     setUser(null)
   }
 
-  const handleCallback = (token) => {
-    saveToken(token)
-    return loadUser()
-  }
-
   return (
-    <AuthCtx.Provider value={{ user, loading, login, logout, handleCallback, reload: loadUser }}>
+    <AuthCtx.Provider value={{ user, loading, login, logout, reload: loadUser }}>
       {children}
     </AuthCtx.Provider>
   )

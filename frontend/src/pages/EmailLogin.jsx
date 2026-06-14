@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 export default function EmailLogin() {
   const navigate = useNavigate()
   const { login } = useAuth()
@@ -21,10 +23,10 @@ export default function EmailLogin() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/simple-login', {
+      const response = await fetch(`${API_URL}/api/auth/simple-login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ password }),
       })
 
       if (!response.ok) {
@@ -68,14 +70,11 @@ export default function EmailLogin() {
           <input
             type="password"
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value)
-              setError('')
-            }}
+            onChange={(e) => { setPassword(e.target.value); setError('') }}
             placeholder="Inserisci la password"
             style={{
               padding: 12,
-              border: '1px solid var(--border-light)',
+              border: `1px solid ${error ? '#fcc' : 'rgba(200,162,168,0.3)'}`,
               borderRadius: 8,
               fontSize: '1rem',
               fontFamily: 'inherit',

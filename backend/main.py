@@ -3,6 +3,7 @@ import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 from dotenv import load_dotenv
+import os
 
 BASE_DIR = Path(__file__).resolve().parent
 UPLOADS_DIR = BASE_DIR / "uploads"
@@ -13,36 +14,35 @@ AUDIO_DIR = UPLOADS_DIR / "audio"
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-# ⚠️ Carica le variabili d'ambiente PRIMA di tutto il resto
+# Carica le variabili d'ambiente PRIMA di tutto il resto
 load_dotenv(BASE_DIR / ".env")
 
+# Crea le cartelle uploads solo se il filesystem è scrivibile (non su Render read-only)
 for folder in [UPLOADS_DIR, PHOTOS_DIR, AUDIO_DIR]:
-    folder.mkdir(parents=True, exist_ok=True)
+    try:
+        folder.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        pass  # Su Render il filesystem è read-only, le foto vanno su Supabase Storage
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
 from database import init_db
-
-from routers import auth
-from routers import guests
-from routers import messages
-from routers import photos
-from routers import menu
-from routers import admin
+from routers import auth, guests, messages, photos, menu, admin
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(exist_ok=True)
+try:
+    LOG_DIR.mkdir(exist_ok=True)
+    file_handler = logging.FileHandler(LOG_DIR / "wedding.log", encoding="utf-8")
+    handlers = [logging.StreamHandler(sys.stdout), file_handler]
+except OSError:
+    handlers = [logging.StreamHandler(sys.stdout)]  # Solo stdout su Render
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler(LOG_DIR / "wedding.log", encoding="utf-8"),
-    ],
+    handlers=handlers,
     force=True,
 )
 logger = logging.getLogger("wedding")
@@ -63,8 +63,6 @@ app = FastAPI(
 )
 
 # ── CORS ──────────────────────────────────────────────────────────────────────
-import os
-
 FRONTEND_URL = os.getenv("FRONTEND_URL", "")
 
 origins = [
@@ -72,7 +70,6 @@ origins = [
     "http://localhost:5174",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
-    # GitHub Pages
     "https://sasigasparo.github.io",
 ]
 
@@ -86,9 +83,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# ── Static files ──────────────────────────────────────────────────────────────
-app.mount("/uploads", StaticFiles(directory=UPLOADS_DIR), name="uploads")
 
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(auth.router,     prefix="/api/auth",     tags=["Auth"])
