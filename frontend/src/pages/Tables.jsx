@@ -522,7 +522,7 @@ export default function Tables() {
                       color: guest ? '#2c2420' : '#c8b8a8',
                       fontStyle: guest ? 'normal' : 'italic',
                       flex: 1,
-                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                      lineHeight: 1.3,
                     }}>
                       {guest ? guest.name : 'posto libero'}
                     </span>
