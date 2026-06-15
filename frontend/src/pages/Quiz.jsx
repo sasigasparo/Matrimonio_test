@@ -51,13 +51,12 @@ const CRUCIVERBA_DATA = {
   color: '#8a9e8c',
   bg: 'rgba(138,158,140,0.1)',
   parole: [
-    { parola: 'SIENA',      indizio: '→ La città del loro matrimonio',           riga: 0, col: 2, dir: 'h' },
-    { parola: 'AMORE',      indizio: '→ Quello che li unisce',                   riga: 2, col: 0, dir: 'h' },
-    { parola: 'SOFIA',      indizio: '→ La sposa',                               riga: 4, col: 1, dir: 'h' },
-    { parola: 'MARCO',      indizio: '→ Lo sposo',                               riga: 6, col: 3, dir: 'h' },
-    { parola: 'TOSCA',      indizio: '↓ La regione del matrimonio (prime 5 lettere)', riga: 0, col: 3, dir: 'v' },
-    { parola: 'SOLE',       indizio: '↓ Illumina la loro vita',                  riga: 1, col: 6, dir: 'v' },
-    { parola: 'MARTE',      indizio: '↓ Pianeta del coraggio — anagramma dello sposo', riga: 2, col: 0, dir: 'v' },
+    { numero: 1, parola: 'MENGONI', indizio: 'Il cognome del cantante preferito di Marco',  riga: 0, col: 1, dir: 'h' },
+    { numero: 5, parola: 'SOFIA',   indizio: 'Il nome della sposa',                          riga: 3, col: 2, dir: 'h' },
+    { numero: 6, parola: 'CRUISE',  indizio: 'Il cognome dell\'attore preferito da Sofia',   riga: 5, col: 0, dir: 'h' },
+    { numero: 2, parola: 'NAPOLI',  indizio: 'La città dove si sono conosciuti',             riga: 0, col: 3, dir: 'v' },
+    { numero: 3, parola: 'NINA',    indizio: 'La loro cagnolina',                            riga: 0, col: 6, dir: 'v' },
+    { numero: 4, parola: 'MARCO',   indizio: 'Il nome dello sposo',                          riga: 2, col: 0, dir: 'v' },
   ],
 }
 
@@ -231,19 +230,30 @@ function buildGrid(parole) {
     else               { rows = Math.max(rows, p.riga + p.parola.length); cols = Math.max(cols, p.col + 1) }
   })
   const grid = Array.from({ length: rows }, () => Array(cols).fill(null))
+  const numbers = Array.from({ length: rows }, () => Array(cols).fill(null))
   parole.forEach(p => {
     for (let k = 0; k < p.parola.length; k++) {
       const r = p.dir === 'h' ? p.riga : p.riga + k
       const c = p.dir === 'h' ? p.col + k : p.col
       grid[r][c] = p.parola[k]
+      if (k === 0) numbers[r][c] = p.numero
     }
   })
-  return grid
+  return { grid, numbers }
+}
+
+function isWordCorrect(p, inputs) {
+  for (let k = 0; k < p.parola.length; k++) {
+    const r = p.dir === 'h' ? p.riga : p.riga + k
+    const c = p.dir === 'h' ? p.col + k : p.col
+    if (inputs[r][c] !== p.parola[k]) return false
+  }
+  return true
 }
 
 function CruciverbGame({ playerName, onFinish }) {
   const { parole } = CRUCIVERBA_DATA
-  const grid = buildGrid(parole)
+  const { grid, numbers } = buildGrid(parole)
   const ROWS = grid.length
   const COLS = grid[0].length
 
@@ -265,13 +275,7 @@ function CruciverbGame({ playerName, onFinish }) {
   const check = () => {
     let correct = 0
     parole.forEach(p => {
-      let ok = true
-      for (let k = 0; k < p.parola.length; k++) {
-        const r = p.dir === 'h' ? p.riga : p.riga + k
-        const c = p.dir === 'h' ? p.col + k : p.col
-        if (inputs[r][c] !== p.parola[k]) ok = false
-      }
-      if (ok) correct++
+      if (isWordCorrect(p, inputs)) correct++
     })
     setScore(correct)
     setChecked(true)
@@ -286,7 +290,7 @@ function CruciverbGame({ playerName, onFinish }) {
   const cellStyle = (r, c) => {
     const s = cellState(r, c)
     const base = {
-      width: 34, height: 34, border: 'none', outline: 'none',
+      width: '100%', height: '100%', border: 'none', outline: 'none',
       textAlign: 'center', fontSize: '.9rem', fontWeight: 700,
       fontFamily: 'var(--font-serif)', textTransform: 'uppercase',
       borderRadius: 4, cursor: 'text', transition: 'background 0.2s',
@@ -296,6 +300,11 @@ function CruciverbGame({ playerName, onFinish }) {
     return { ...base, background: 'rgba(200,162,168,0.12)', color: 'var(--charcoal)', border: '1.5px solid rgba(200,162,168,0.3)' }
   }
 
+  const orizzontali = parole.filter(p => p.dir === 'h').sort((a, b) => a.numero - b.numero)
+  const verticali   = parole.filter(p => p.dir === 'v').sort((a, b) => a.numero - b.numero)
+
+  const CLUE_CELL = 36
+
   return (
     <div>
       <div style={{ marginBottom: 24 }}>
@@ -303,7 +312,7 @@ function CruciverbGame({ playerName, onFinish }) {
           📝 Cruciverba della Coppia
         </h3>
         <p style={{ color: 'var(--warm-gray)', fontSize: '.88rem' }}>
-          Riempi le caselle basandoti sugli indizi. Premi Controlla quando hai finito.
+          Riempi le caselle basandoti sugli indizi numerati. Premi Controlla quando hai finito.
         </p>
       </div>
 
@@ -314,25 +323,36 @@ function CruciverbGame({ playerName, onFinish }) {
             <div key={r} style={{ display: 'flex' }}>
               {row.map((cell, c) => (
                 cell !== null ? (
-                  <input
-                    key={c}
-                    maxLength={1}
-                    value={inputs[r][c]}
-                    onChange={e => setCell(r, c, e.target.value)}
-                    onKeyDown={e => {
-                      if (e.key === 'Backspace' && !inputs[r][c] && refs.current[r]?.[c - 1]?.cell)
-                        refs.current[r][c - 1].cell.focus()
-                    }}
-                    ref={el => {
-                      if (!refs.current[r]) refs.current[r] = []
-                      if (!refs.current[r][c]) refs.current[r][c] = {}
-                      refs.current[r][c].cell = el
-                    }}
-                    disabled={checked}
-                    style={cellStyle(r, c)}
-                  />
+                  <div key={c} style={{ position: 'relative', width: CLUE_CELL, height: CLUE_CELL }}>
+                    {numbers[r][c] != null && (
+                      <span style={{
+                        position: 'absolute', top: 1, left: 3,
+                        fontSize: '.55rem', fontWeight: 700,
+                        color: CRUCIVERBA_DATA.color, lineHeight: 1,
+                        zIndex: 2, pointerEvents: 'none',
+                      }}>
+                        {numbers[r][c]}
+                      </span>
+                    )}
+                    <input
+                      maxLength={1}
+                      value={inputs[r][c]}
+                      onChange={e => setCell(r, c, e.target.value)}
+                      onKeyDown={e => {
+                        if (e.key === 'Backspace' && !inputs[r][c] && refs.current[r]?.[c - 1]?.cell)
+                          refs.current[r][c - 1].cell.focus()
+                      }}
+                      ref={el => {
+                        if (!refs.current[r]) refs.current[r] = []
+                        if (!refs.current[r][c]) refs.current[r][c] = {}
+                        refs.current[r][c].cell = el
+                      }}
+                      disabled={checked}
+                      style={cellStyle(r, c)}
+                    />
+                  </div>
                 ) : (
-                  <div key={c} style={{ width: 34, height: 34, background: 'transparent' }} />
+                  <div key={c} style={{ width: CLUE_CELL, height: CLUE_CELL, background: 'transparent' }} />
                 )
               ))}
             </div>
@@ -341,26 +361,54 @@ function CruciverbGame({ playerName, onFinish }) {
       </div>
 
       {/* Indizi */}
-      <div style={{ display: 'grid', gap: 8, marginBottom: 24 }}>
-        {parole.map((p, i) => (
-          <div key={i} style={{
-            display: 'flex', gap: 10, alignItems: 'flex-start',
-            padding: '10px 14px', background: 'var(--ivory)',
-            borderRadius: 8, fontSize: '.85rem',
-          }}>
-            <span style={{ color: CRUCIVERBA_DATA.color, fontWeight: 700, flexShrink: 0 }}>{i + 1}.</span>
-            <span style={{ color: 'var(--charcoal)' }}>{p.indizio}</span>
-            {checked && (() => {
-              let ok = true
-              for (let k = 0; k < p.parola.length; k++) {
-                const r = p.dir === 'h' ? p.riga : p.riga + k
-                const c = p.dir === 'h' ? p.col + k : p.col
-                if (inputs[r][c] !== p.parola[k]) ok = false
-              }
-              return <span style={{ marginLeft: 'auto', color: ok ? '#8a9e8c' : '#c8826a' }}>{ok ? '✓' : '✕'}</span>
-            })()}
-          </div>
-        ))}
+      <div style={{ marginBottom: 24 }}>
+        <h4 style={{
+          fontFamily: 'var(--font-serif)', color: CRUCIVERBA_DATA.color,
+          fontSize: '.95rem', margin: '0 0 10px',
+        }}>
+          ➡️ Orizzontali
+        </h4>
+        <div style={{ display: 'grid', gap: 8, marginBottom: 18 }}>
+          {orizzontali.map(p => (
+            <div key={`h-${p.numero}`} style={{
+              display: 'flex', gap: 10, alignItems: 'flex-start',
+              padding: '10px 14px', background: 'var(--ivory)',
+              borderRadius: 8, fontSize: '.85rem',
+            }}>
+              <span style={{ color: CRUCIVERBA_DATA.color, fontWeight: 700, flexShrink: 0 }}>{p.numero}.</span>
+              <span style={{ color: 'var(--charcoal)' }}>{p.indizio}</span>
+              {checked && (
+                <span style={{ marginLeft: 'auto', color: isWordCorrect(p, inputs) ? '#8a9e8c' : '#c8826a' }}>
+                  {isWordCorrect(p, inputs) ? '✓' : '✕'}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <h4 style={{
+          fontFamily: 'var(--font-serif)', color: CRUCIVERBA_DATA.color,
+          fontSize: '.95rem', margin: '0 0 10px',
+        }}>
+          ⬇️ Verticali
+        </h4>
+        <div style={{ display: 'grid', gap: 8 }}>
+          {verticali.map(p => (
+            <div key={`v-${p.numero}`} style={{
+              display: 'flex', gap: 10, alignItems: 'flex-start',
+              padding: '10px 14px', background: 'var(--ivory)',
+              borderRadius: 8, fontSize: '.85rem',
+            }}>
+              <span style={{ color: CRUCIVERBA_DATA.color, fontWeight: 700, flexShrink: 0 }}>{p.numero}.</span>
+              <span style={{ color: 'var(--charcoal)' }}>{p.indizio}</span>
+              {checked && (
+                <span style={{ marginLeft: 'auto', color: isWordCorrect(p, inputs) ? '#8a9e8c' : '#c8826a' }}>
+                  {isWordCorrect(p, inputs) ? '✓' : '✕'}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
       {!checked ? (
