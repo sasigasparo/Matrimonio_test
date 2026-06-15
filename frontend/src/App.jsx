@@ -10,7 +10,7 @@ import Admin    from './pages/Admin'
 import Login    from './pages/Login'
 import Luoghi   from './pages/Luoghi'
 import FAQ      from './pages/FAQ'
-
+import Tables   from './pages/Tables'   
 /* ── Redirect al login se non autenticato ───────────────────────── */
 function RequireAuth({ children }) {
   const { user, loading } = useAuth()
@@ -52,6 +52,7 @@ const NAV = [
   { to:'/luoghi',  icon:'📍', label:'Luoghi' },
   { to:'/faq',     icon:'🙋', label:'FAQ'    },
   { to:'/rsvp',    icon:'✉️',  label:'Inviti' },
+  { to:'/tables',  icon:'🍽️', label:'Tavoli' },
 ]
 
 /* ── Drawer (mobile) ────────────────────────────────────────────── */
@@ -348,6 +349,7 @@ function AppShell() {
         <Route path="/luoghi"   element={<RequireAuth><Luoghi /></RequireAuth>} />
         <Route path="/faq"      element={<RequireAuth><FAQ /></RequireAuth>} />
         <Route path="/admin"    element={<AdminRoute><Admin /></AdminRoute>} />
+        <Route path="/tables"  element={<RequireAuth><Tables /></RequireAuth>} />  {/* ← tavoli con password propria */}
         <Route path="/messages" element={<RequireAuth><Chat /></RequireAuth>} />
       </Routes>
     </>
