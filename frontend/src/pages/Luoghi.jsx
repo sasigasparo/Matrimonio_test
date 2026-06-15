@@ -1,43 +1,44 @@
 import { useState } from 'react'
 
 const CERIMONIA = {
-  nome: 'Duomo di Napoli',
-  indirizzo: 'Via Duomo – 80138 Napoli (NA)',
+  nome: 'Chiesa di San Lorenzo',
+  indirizzo: 'Piazza San Lorenzo, 1 – Greve in Chianti (FI)',
   orario: 'Sabato 14 Giugno 2025 · ore 15:00',
   note: 'Vi preghiamo di essere presenti almeno 15 minuti prima.',
-  coords: { lat: 40.8529, lng: 14.2616 },
+  coords: { lat: 43.5842, lng: 11.3168 },
 }
 
 const RICEVIMENTO = {
-  nome: 'Villa Doria d’Angri',
-  indirizzo: 'Via Francesco Petrarca, 80 – Posillipo, Napoli (NA)',
+  nome: 'Villa Belvedere',
+  indirizzo: 'Via del Poggio 12 – Siena (SI) 53100',
   orario: 'A seguire · ore 17:00',
-  note: 'Il ricevimento si terrà nei giardini con vista sul Golfo di Napoli. In caso di pioggia, ci sposteremo nelle sale interne della villa.',
-  coords: { lat: 40.8296, lng: 14.2156 },
-  mapSrc: 'https://www.openstreetmap.org/export/embed.html',
+  note: 'Il ricevimento si terrà nei giardini della villa. In caso di pioggia, tutto si sposta nell\'elegante salone interno.',
+  coords: { lat: 43.3188, lng: 11.3308 },
+  // OpenStreetMap embed – completamente gratuito, nessuna API key
+  mapSrc: 'https://www.openstreetmap.org/export/embed.html?bbox=11.3108%2C43.3138%2C43.3408%2C11.3508&layer=mapnik&marker=43.3188%2C11.3308',
 }
 
 const PARCHEGGI = [
-  { icon: '🅿️', titolo: 'Parcheggi consigliati', desc: 'Parcheggi a pagamento nelle zone di Posillipo e Mergellina. Consigliata arrivo anticipato.' },
-  { icon: '🚇', titolo: 'Metro + Funicolare', desc: 'Linea 1 fino a Toledo/Dante, poi autobus o taxi verso Posillipo.' },
-  { icon: '🚕', titolo: 'Taxi / NCC', desc: 'Consigliamo prenotazione: Radio Taxi Napoli +39 081 8888.' },
+  { icon: '🅿️', titolo: 'Parcheggio Villa', desc: 'Ampio parcheggio gratuito all\'interno della proprietà, segnalato all\'ingresso.' },
+  { icon: '🚌', titolo: 'Bus navetta',       desc: 'Navetta gratuita dal centro di Siena (Piazza del Campo) ogni 30 minuti dalle 16:00.' },
+  { icon: '🚕', titolo: 'Taxi / NCC',        desc: 'Consigliamo di prenotare in anticipo: Radio Taxi Siena +39 0577 49222.' },
 ]
 
 const FUORI_CITTA = [
   {
     icon: '🚂',
     titolo: 'In treno',
-    desc: 'Stazione Napoli Centrale (Piazza Garibaldi). Collegamenti veloci con Roma, Salerno e tutta Italia. Poi metro Linea 1 o taxi.',
+    desc: 'Stazione più vicina: Siena FS (20 min). Trenitalia collega Firenze SMN a Siena in circa 1h30. Da Siena prendete la navetta o un taxi.',
   },
   {
     icon: '✈️',
     titolo: 'In aereo',
-    desc: 'Aeroporto di Napoli Capodichino (NAP) – 15/20 min dal centro città. Taxi o Alibus per Napoli Centrale.',
+    desc: 'Aeroporto di Firenze (FLR) – 70 km. Aeroporto di Pisa (PSA) – 110 km. Da entrambi consigliamo il noleggio auto o un transfer privato.',
   },
   {
     icon: '🏨',
     titolo: 'Dove dormire',
-    desc: 'Consigliamo zona Chiaia, Mergellina o Centro Storico. Hotel e B&B disponibili a breve distanza dalla villa.',
+    desc: 'Abbiamo riservato un blocco di camere all\'Agriturismo Il Colombaio (5 min dalla villa). Contattateci per il codice sconto. In alternativa: Hotel Campo Regio Relais a Siena centro.',
   },
 ]
 
@@ -69,7 +70,6 @@ function LuogoCard({ luogo, showMap }) {
         }}>
           {luogo.nome}
         </h3>
-
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             <span>📍</span>
@@ -80,7 +80,6 @@ function LuogoCard({ luogo, showMap }) {
             <span style={{ color: 'var(--warm-gray)', fontSize: '.95rem' }}>{luogo.orario}</span>
           </div>
         </div>
-
         {luogo.note && (
           <p style={{
             fontSize: '.88rem', color: 'var(--warm-gray)',
@@ -91,7 +90,6 @@ function LuogoCard({ luogo, showMap }) {
             {luogo.note}
           </p>
         )}
-
         <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(luogo.indirizzo)}`}
@@ -100,7 +98,6 @@ function LuogoCard({ luogo, showMap }) {
           >
             🗺️ Apri in Google Maps
           </a>
-
           <a
             href={`https://www.waze.com/ul?q=${encodeURIComponent(luogo.indirizzo)}`}
             target="_blank" rel="noopener noreferrer"
@@ -111,16 +108,26 @@ function LuogoCard({ luogo, showMap }) {
         </div>
       </div>
 
+      {/* Mappa OpenStreetMap embed (solo per villa ricevimento) */}
       {showMap && (
         <div style={{ borderTop: '1px solid var(--cream)' }}>
           <iframe
-            title="Mappa Ricevimento"
+            title="Mappa Villa Belvedere"
             src={`https://www.openstreetmap.org/export/embed.html?bbox=${luogo.coords.lng - 0.02}%2C${luogo.coords.lat - 0.015}%2C${luogo.coords.lng + 0.02}%2C${luogo.coords.lat + 0.015}&layer=mapnik&marker=${luogo.coords.lat}%2C${luogo.coords.lng}`}
             width="100%"
             height="300"
             style={{ display: 'block', border: 'none' }}
             loading="lazy"
           />
+          <div style={{ padding: '8px 16px', background: 'var(--cream)', textAlign: 'center' }}>
+            <a
+              href={`https://www.openstreetmap.org/?mlat=${luogo.coords.lat}&mlon=${luogo.coords.lng}#map=15/${luogo.coords.lat}/${luogo.coords.lng}`}
+              target="_blank" rel="noopener noreferrer"
+              style={{ fontSize: '.78rem', color: 'var(--warm-gray)', textDecoration: 'none' }}
+            >
+              Visualizza mappa ingrandita ↗
+            </a>
+          </div>
         </div>
       )}
     </div>
@@ -139,30 +146,55 @@ export default function Luoghi() {
             fontFamily: 'var(--font-serif)', fontSize: '2.5rem',
             color: 'var(--charcoal)', marginBottom: 10,
           }}>
-            Luoghi & Indicazioni – Napoli
+            Luoghi & Indicazioni
           </h1>
           <p style={{ color: 'var(--warm-gray)', maxWidth: 480, margin: '0 auto', lineHeight: 1.7 }}>
             Tutto quello che ti serve per arrivare senza pensieri al grande giorno.
           </p>
         </div>
 
-        {/* Cerimonia */}
-        <div style={{ marginBottom: 30 }}>
-          <div style={{ fontSize: '.75rem', color: 'var(--rose)', fontWeight: 700 }}>
-            Cerimonia · ore 15:00
+        {/* Timeline cerimonia → ricevimento */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 48 }}>
+
+          {/* Cerimonia */}
+          <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: '50%',
+                background: 'rgba(200,130,106,.15)', border: '2px solid var(--rose)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '1.2rem',
+              }}>⛪</div>
+              <div style={{ width: 2, height: 32, background: 'var(--blush)', margin: '6px 0' }} />
+            </div>
+            <div style={{ flex: 1, paddingTop: 4 }}>
+              <div style={{ fontSize: '.75rem', color: 'var(--rose)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 6 }}>
+                Cerimonia · ore 15:00
+              </div>
+              <LuogoCard luogo={CERIMONIA} showMap={false} />
+            </div>
           </div>
-          <LuogoCard luogo={CERIMONIA} showMap={false} />
+
+          {/* Ricevimento */}
+          <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: '50%',
+                background: 'rgba(138,158,140,.15)', border: '2px solid var(--sage)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '1.2rem',
+              }}>🥂</div>
+            </div>
+            <div style={{ flex: 1, paddingTop: 4 }}>
+              <div style={{ fontSize: '.75rem', color: 'var(--sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 6 }}>
+                Ricevimento · ore 17:00
+              </div>
+              <LuogoCard luogo={RICEVIMENTO} showMap={true} />
+            </div>
+          </div>
         </div>
 
-        {/* Ricevimento */}
-        <div style={{ marginBottom: 48 }}>
-          <div style={{ fontSize: '.75rem', color: 'var(--sage)', fontWeight: 700 }}>
-            Ricevimento · ore 17:00
-          </div>
-          <LuogoCard luogo={RICEVIMENTO} showMap={true} />
-        </div>
-
-        {/* Trasporti */}
+        {/* Parcheggi & trasporti */}
         <section style={{ marginBottom: 44 }}>
           <h2 style={{
             fontFamily: 'var(--font-serif)', fontSize: '1.6rem',
