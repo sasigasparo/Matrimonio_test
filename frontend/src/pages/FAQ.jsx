@@ -99,3 +99,112 @@ const FAQS = [
     ],
   },
 ]
+
+
+
+function FaqItem({ domanda, risposta, link }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div style={{ borderBottom: '1px solid var(--cream)' }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          width: '100%',
+          textAlign: 'left',
+          padding: '18px 20px',
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 16,
+        }}
+      >
+        <span style={{ fontWeight: 600, color: 'var(--charcoal)' }}>
+          {domanda}
+        </span>
+        <span
+          style={{
+            transform: open ? 'rotate(45deg)' : 'rotate(0)',
+            transition: 'transform .25s',
+            color: 'var(--rose)',
+            fontSize: '1.2rem',
+          }}
+        >
+          ＋
+        </span>
+      </button>
+
+      <div
+        style={{
+          maxHeight: open ? 400 : 0,
+          overflow: 'hidden',
+          transition: 'max-height .3s ease',
+        }}
+      >
+        <p style={{ padding: '0 20px 10px', color: 'var(--warm-gray)' }}>
+          {risposta}
+        </p>
+
+        {link && (
+          <div style={{ padding: '0 20px 20px' }}>
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary btn-sm"
+            >
+              {link.label}
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default function FAQ() {
+  const [categoriaAttiva, setCategoriaAttiva] = useState(null)
+
+  const categorieVisibili = categoriaAttiva
+    ? FAQS.filter(c => c.categoria === categoriaAttiva)
+    : FAQS
+
+  return (
+    <div style={{ padding: '60px 20px 120px', maxWidth: 700, margin: '0 auto' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: 30 }}>
+        Domande frequenti
+      </h1>
+
+      <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginBottom: 30 }}>
+        <button onClick={() => setCategoriaAttiva(null)}>Tutte</button>
+        {FAQS.map(c => (
+          <button
+            key={c.categoria}
+            onClick={() =>
+              setCategoriaAttiva(prev => prev === c.categoria ? null : c.categoria)
+            }
+          >
+            {c.icon} {c.categoria}
+          </button>
+        ))}
+      </div>
+
+      {categorieVisibili.map(cat => (
+        <div key={cat.categoria} style={{ marginBottom: 20 }}>
+          <h2>{cat.icon} {cat.categoria}</h2>
+          {cat.domande.map((faq, i) => (
+            <FaqItem
+              key={i}
+              domanda={faq.q}
+              risposta={faq.a}
+              link={faq.link}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
