@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 
 /* ── Wedding date ─────────────────────────────────────────────────── */
-const WEDDING_TIME = new Date('2026-06-14T15:00:00')
+const WEDDING_TIME = new Date('2026-06-19T15:00:00')
 const UNLOCK_PASSWORD = 'menu'
 const SESSION_KEY = 'wedding_menu_auth'
 
