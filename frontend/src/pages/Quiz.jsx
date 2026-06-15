@@ -51,11 +51,11 @@ const CRUCIVERBA_DATA = {
   color: '#8a9e8c',
   bg: 'rgba(138,158,140,0.1)',
   parole: [
-    { numero: 1, parola: 'MENGONI', indizio: 'Il cognome del cantante preferito di Marco',  riga: 0, col: 1, dir: 'h' },
+    { numero: 1, parola: 'DANIELE', indizio: 'Il cognome del cantante preferito di Marco',  riga: 0, col: 1, dir: 'h' },
     { numero: 5, parola: 'SOFIA',   indizio: 'Il nome della sposa',                          riga: 3, col: 2, dir: 'h' },
     { numero: 6, parola: 'CRUISE',  indizio: 'Il cognome dell\'attore preferito da Sofia',   riga: 5, col: 0, dir: 'h' },
     { numero: 2, parola: 'NAPOLI',  indizio: 'La città dove si sono conosciuti',             riga: 0, col: 3, dir: 'v' },
-    { numero: 3, parola: 'NINA',    indizio: 'La loro cagnolina',                            riga: 0, col: 6, dir: 'v' },
+    { numero: 3, parola: 'LARA',    indizio: 'La loro cagnolina',                            riga: 0, col: 6, dir: 'v' },
     { numero: 4, parola: 'MARCO',   indizio: 'Il nome dello sposo',                          riga: 2, col: 0, dir: 'v' },
   ],
 }
