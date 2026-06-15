@@ -90,19 +90,20 @@ function TableCircle({ table, guests, onSeatClick, onTableClick, selected }) {
                 fontSize={13} fill="rgba(180,140,120,0.6)" style={{ pointerEvents: 'none' }}>+</text>
             )}
 
-            {/* numero posto — badge esterno sempre visibile */}
+            {/* numero posto — badge grande fuori dal cerchio del posto */}
             <g style={{ pointerEvents: 'none' }}>
+              {/* sfondo bianco con bordo scuro per massima leggibilità */}
               <circle
-                cx={cx + pos.x + 9} cy={cy + pos.y - 9} r={7}
-                fill={occupied ? '#fff' : 'rgba(180,140,120,0.55)'}
-                stroke={occupied ? rsvpColor(guest?.rsvp_status) : 'rgba(180,140,120,0.3)'}
-                strokeWidth={1.5}
+                cx={cx + pos.x} cy={cy + pos.y - 22} r={9}
+                fill="#fff"
+                stroke={occupied ? rsvpColor(guest?.rsvp_status) : '#b0a090'}
+                strokeWidth={1.8}
               />
               <text
-                x={cx + pos.x + 9} y={cy + pos.y - 9}
+                x={cx + pos.x} y={cy + pos.y - 22}
                 textAnchor="middle" dominantBaseline="central"
-                fontSize={7} fontWeight={800}
-                fill={occupied ? rsvpColor(guest?.rsvp_status) : 'rgba(255,255,255,0.9)'}
+                fontSize={9} fontWeight={900}
+                fill={occupied ? rsvpColor(guest?.rsvp_status) : '#7a6a5a'}
                 fontFamily="Arial, sans-serif"
               >
                 {i + 1}

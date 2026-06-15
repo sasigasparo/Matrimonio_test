@@ -421,7 +421,16 @@ label {
 
 @media (max-width: 640px) {
   .hide-mobile {
-    display: none;
+    display: none !important;
+  }
+  .hide-desktop {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 641px) {
+  .hide-desktop {
+    display: none !important;
   }
 
   .btn-lg {
