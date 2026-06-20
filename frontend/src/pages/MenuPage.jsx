@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { useLanguage } from '../hooks/useLanguage'
 import LanguageSwitch from '../components/LanguageSwitch'
-
+import { $ } from '../utils/config'
 /* ── Wedding date ─────────────────────────────────────────────────── */
 const WEDDING_TIME = new Date('2027-06-19T15:00:00')
 const WEDDING_DATE_LABEL = { it: 'WEDDING_DATE', en: 'WEDDING_DATE' }
@@ -101,7 +101,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
           color: 'rgba(200,130,106,0.7)', fontFamily: 'Georgia, serif',
           fontStyle: 'italic', fontSize: '.95rem', marginBottom: 48,
         }}>
-          {t('menu.dateLocation', { date: 'WEDDING_DATE' })}
+          {t('menu.dateLocation', { date: WEDDING_CONFIG.date })}
         </p>
 
         {/* Countdown */}
