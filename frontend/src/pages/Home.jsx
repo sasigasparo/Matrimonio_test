@@ -339,20 +339,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── MealDB: curiosità sui piatti ── */}
-      <section style={{ padding: '60px 20px', background: 'var(--cream)' }}>
-        <div className="container-sm">
-          <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--charcoal)', marginBottom: 8 }}>
-              🍕 I sapori del nostro giorno
-            </h2>
-            <p style={{ color: 'var(--warm-gray)', fontSize: '.9rem' }}>
-              Clicca su un piatto per scoprirne la storia
-            </p>
-          </div>
-          <MealDBWidget />
-        </div>
-      </section>
 
       {/* ── Storia ── */}
       <section style={{ padding: '80px 20px', background: 'var(--white)' }}>
