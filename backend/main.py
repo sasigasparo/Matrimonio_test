@@ -50,10 +50,10 @@ logger = logging.getLogger("wedding")
 # ── Lifespan ──────────────────────────────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("🌸 Wedding App avviata")
+    logger.info("💍 Wedding App avviata")
     init_db()
     yield
-    logger.info("🌸 Wedding App spenta")
+    logger.info("💍 Wedding App spenta")
 
 # ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(

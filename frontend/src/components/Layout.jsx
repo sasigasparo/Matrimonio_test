@@ -88,7 +88,7 @@ export default function Layout() {
                 onClick={() => navigate('/login')}
                 style={{ marginLeft: 8 }}
               >
-                Accedi 🌸
+                Accedi 💍
               </button>
             )}
           </nav>

@@ -164,7 +164,7 @@ function Countdown() {
 
   if (diff.past) return (
 <p style={{ color: 'white', fontFamily: 'var(--font-serif)', fontSize: '1.2rem' }}>
-  VI ASPETTIAMO 🌸
+  VI ASPETTIAMO 💍
 </p>
   )
 

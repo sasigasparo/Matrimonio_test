@@ -266,7 +266,7 @@ function NameModal({ onDone }) {
         maxWidth: 360, width: '100%', textAlign: 'center',
         boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
       }}>
-        <div style={{ fontSize: '3rem', marginBottom: 12 }}>🌸</div>
+        <div style={{ fontSize: '3rem', marginBottom: 12 }}>💍</div>
         <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '1.6rem', marginBottom: 8, color: 'var(--charcoal)' }}>
           Come ti chiami?
         </h2>

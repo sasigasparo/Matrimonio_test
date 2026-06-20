@@ -138,5 +138,5 @@ if __name__ == "__main__":
     if args.clear:
         clear_guests()
 
-    print(f"\n🌸  Inserimento 50 ospiti fittizi…\n")
+    print(f"\n💍  Inserimento 50 ospiti fittizi…\n")
     seed()

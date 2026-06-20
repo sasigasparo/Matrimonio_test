@@ -130,7 +130,7 @@ export default function Login() {
           border: '1px solid rgba(200,130,106,.3)',
           marginBottom: 8,
         }}>
-          🌸
+          💍
         </div>
 
         <div style={{
@@ -238,7 +238,7 @@ export default function Login() {
                 Accesso in corso...
               </>
             ) : (
-              <>Entra 🌸</>
+              <>Entra 💍</>
             )}
           </button>
         </form>

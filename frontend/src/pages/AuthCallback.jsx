@@ -43,7 +43,7 @@ export default function AuthCallback() {
     }}>
       <div className="spinner" style={{ width: 50, height: 50 }} />
       <p style={{ color: 'var(--warm-gray)', fontFamily: 'var(--font-serif)', fontSize: '1.1rem' }}>
-        Accesso in corso... 🌸
+        Accesso in corso... 💍
       </p>
     </div>
   )
