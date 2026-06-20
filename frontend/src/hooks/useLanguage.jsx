@@ -17,6 +17,23 @@ function resolve(obj, path) {
   return path.split('.').reduce((acc, key) => (acc == null ? acc : acc[key]), obj)
 }
 
+// Converte "14-06-2027" (DD-MM-YYYY) in "14 Giugno 2027" / "14 June 2027".
+// Se il valore non è in questo formato, lo lascia invariato.
+const MONTHS = {
+  it: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+  en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+}
+
+function formatDate(value, lang) {
+  if (typeof value !== 'string') return value
+  const match = value.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/)
+  if (!match) return value
+  const [, day, month, year] = match
+  const monthName = MONTHS[lang]?.[Number(month) - 1]
+  if (!monthName) return value
+  return `${Number(day)} ${monthName} ${year}`
+}
+
 function interpolate(value, vars) {
   if (!vars) return value
 
@@ -59,12 +76,17 @@ export function LanguageProvider({ children }) {
    * and finally to the raw key if missing everywhere.
    */
   const t = useCallback((key, vars) => {
+    // Formatta automaticamente eventuali campi `date` (es. "14-06-2027" → "14 Giugno 2027")
+    const formattedVars = vars?.date
+      ? { ...vars, date: formatDate(vars.date, lang) }
+      : vars
+
     const value = resolve(translations[lang], key)
     if (value === undefined) {
       const fallback = resolve(translations.it, key)
-      return fallback !== undefined ? interpolate(fallback, vars) : key
+      return fallback !== undefined ? interpolate(fallback, formattedVars) : key
     }
-    return interpolate(value, vars)
+    return interpolate(value, formattedVars)
   }, [lang])
 
   return (
