@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import Home     from './pages/Home'
@@ -60,13 +60,78 @@ const NAV = [
   { to:'/quiz', icon:'🎮', label:'Quiz' },
 ]
 
+/* ── Stili globali: loader iniziale + transizione tra pagine ──────── */
+function GlobalTransitionStyles() {
+  return (
+    <style>{`
+      .wedding-loader {
+        position: fixed;
+        inset: 0;
+        background: #fdf7f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        color: var(--charcoal, #2c2420);
+        text-align: center;
+        padding: 20px;
+      }
+      .wedding-loader h2 {
+        font-family: var(--font-serif, Georgia, serif);
+        font-size: 1.4rem;
+        margin: 4px 0 6px;
+        letter-spacing: .02em;
+      }
+      .wedding-loader p {
+        font-size: .9rem;
+        color: var(--warm-gray, #8a7a72);
+        margin: 0;
+      }
+      .ring {
+        font-size: 56px;
+        line-height: 1;
+        animation: ring-spin 2s linear infinite;
+        margin-bottom: 14px;
+      }
+      @keyframes ring-spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+      .transition-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(253,247,242,0.96);
+        backdrop-filter: blur(2px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-serif, Georgia, serif);
+        font-size: 1.05rem;
+        color: var(--charcoal, #2c2420);
+        z-index: 9999;
+        animation: overlay-fade .2s ease;
+        pointer-events: none;
+      }
+      @keyframes overlay-fade {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .ring { animation: none; }
+        .transition-overlay { animation: none; }
+      }
+    `}</style>
+  )
+}
+
 /* ── Drawer (mobile) ────────────────────────────────────────────── */
-function Drawer({ open, onClose }) {
+function Drawer({ open, onClose, onNavigate }) {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, logout } = useAuth()
 
-  const go = (to) => { navigate(to); onClose() }
+  const go = (to) => { onNavigate(to, navigate); onClose() }
 
   return (
     <>
@@ -212,7 +277,7 @@ function Drawer({ open, onClose }) {
 }
 
 /* ── Top nav bar ────────────────────────────────────────────────── */
-function NavBar({ onMenuOpen }) {
+function NavBar({ onMenuOpen, onNavigate }) {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, logout } = useAuth()
@@ -244,7 +309,7 @@ function NavBar({ onMenuOpen }) {
 
       {/* Logo */}
       <button
-        onClick={() => navigate('/')}
+        onClick={() => onNavigate('/', navigate)}
         style={{
           background:'none', border:'none', cursor:'pointer',
           fontFamily:'var(--font-serif)', fontSize:'1.1rem',
@@ -270,7 +335,7 @@ function NavBar({ onMenuOpen }) {
           return (
             <button
               key={item.to}
-              onClick={() => navigate(item.to)}
+              onClick={() => onNavigate(item.to, navigate)}
               style={{
                 display:'flex', flexDirection:'column', alignItems:'center',
                 gap:2, padding:'6px 10px', border:'none',
@@ -301,7 +366,7 @@ function NavBar({ onMenuOpen }) {
         }}>
           {user.is_admin && (
             <button
-              onClick={() => navigate('/admin')}
+              onClick={() => onNavigate('/admin', navigate)}
               className="hide-mobile"
               style={{
                 padding:'4px 10px', borderRadius:99,
@@ -337,12 +402,50 @@ function NavBar({ onMenuOpen }) {
 function AppShell() {
   const location = useLocation()
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [appLoading, setAppLoading] = useState(true)
+  const [transitioning, setTransitioning] = useState(false)
+
+  // Loader iniziale: si mostra una sola volta al primo avvio dell'app
+  useEffect(() => {
+    const timer = setTimeout(() => setAppLoading(false), 1800)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Naviga con una breve dissolvenza invece dello scatto istantaneo
+  const navigateWithTransition = (to, navigate) => {
+    if (to === location.pathname) return
+    setTransitioning(true)
+    setTimeout(() => {
+      navigate(to)
+      setTransitioning(false)
+    }, 350)
+  }
+
+  if (appLoading) {
+    return (
+      <>
+        <GlobalTransitionStyles />
+        <div className="wedding-loader">
+          <div className="ring">💍</div>
+          <h2>Sofia &amp; Marco</h2>
+          <p>Prepariamo un giorno speciale...</p>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
-      <NavBar onMenuOpen={() => setDrawerOpen(true)} />
-      <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <GlobalTransitionStyles />
+      <NavBar onMenuOpen={() => setDrawerOpen(true)} onNavigate={navigateWithTransition} />
+      <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onNavigate={navigateWithTransition} />
       {location.pathname !== '/login' && <div style={{ height:56 }} />}
+
+      {transitioning && (
+        <div className="transition-overlay">
+          💐 Prepariamo il prossimo momento...
+        </div>
+      )}
 
       <Routes>
         <Route path="/login" element={<Login />} />
