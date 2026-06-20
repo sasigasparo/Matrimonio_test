@@ -357,9 +357,9 @@ function NavBar({ onMenuOpen, onNavigate }) {
       {/* Spacer on mobile */}
       <div className="hide-desktop" style={{ flex:1 }} />
 
-      {/* User area */}
+      {/* User area — visibile solo da desktop: su mobile l'identità si vede nel Drawer */}
       {user && (
-        <div style={{
+        <div className="hide-mobile" style={{
           display:'flex', alignItems:'center', gap:8,
           flexShrink:0, marginLeft:8, paddingLeft:8,
           borderLeft:'1px solid rgba(200,162,168,0.25)',
