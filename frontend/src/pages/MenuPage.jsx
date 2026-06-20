@@ -4,7 +4,9 @@ import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { useLanguage } from '../hooks/useLanguage'
 import LanguageSwitch from '../components/LanguageSwitch'
-import { $ } from '../utils/config'
+import { WEDDING_CONFIG } from '../config'
+
+
 /* ── Wedding date ─────────────────────────────────────────────────── */
 const WEDDING_TIME = new Date('2027-06-19T15:00:00')
 const WEDDING_DATE_LABEL = { it: 'WEDDING_DATE', en: 'WEDDING_DATE' }
