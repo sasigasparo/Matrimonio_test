@@ -1,64 +1,25 @@
 import { useState, useEffect, useRef } from 'react'
+import { useLanguage } from '../hooks/useLanguage'
 
 /* ═══════════════════════════════════════════════════════════════════
-   DATI — modifica qui le domande reali
+   DATI STRUTTURALI — testi e domande vengono da translations.js,
+   qui restano solo i dati "di forma" (colori, griglia cruciverba, ecc.)
    ═══════════════════════════════════════════════════════════════════ */
 
-const QUIZ_SPOSO = {
-  id: 'sposo',
-  title: 'Quanto conosci Marco?',
-  emoji: '🤵',
-  color: '#5a7a9c',
-  bg: 'rgba(90,122,156,0.1)',
-  domande: [
-    { testo: 'Qual è il piatto preferito di Marco?', opzioni: ['Carbonara', 'Pizza margherita', 'Lasagne', 'Sushi'], corretta: 0 },
-    { testo: 'Dove ha studiato Marco?', opzioni: ['Bologna', 'Milano', 'Roma', 'Torino'], corretta: 1 },
-    { testo: 'Qual è il suo sport preferito?', opzioni: ['Calcio', 'Tennis', 'Nuoto', 'Ciclismo'], corretta: 0 },
-    { testo: 'Come si chiama il suo migliore amico di infanzia?', opzioni: ['Luca', 'Andrea', 'Matteo', 'Davide'], corretta: 2 },
-    { testo: 'Qual è il film preferito di Marco?', opzioni: ['Il Padrino', 'Interstellar', 'Forrest Gump', 'Titanic'], corretta: 1 },
-    { testo: 'In che anno ha conosciuto Sofia?', opzioni: ['2018', '2019', '2020', '2021'], corretta: 1 },
-    { testo: 'Qual è il suo gruppo musicale preferito?', opzioni: ['Coldplay', 'Radiohead', 'Muse', 'U2'], corretta: 0 },
-    { testo: 'Qual è stata la sua prima macchina?', opzioni: ['Fiat 500', 'Volkswagen Golf', 'Ford Fiesta', 'Renault Clio'], corretta: 3 },
-    { testo: 'Dove vorrebbe andare in viaggio di nozze?', opzioni: ['Giappone', 'Maldive', 'New York', 'Islanda'], corretta: 0 },
-    { testo: 'Qual è il suo hobby segreto?', opzioni: ['Cucina', 'Fotografia', 'Chitarra', 'Pittura'], corretta: 2 },
-  ],
-}
+const META_SPOSO  = { id: 'sposo',  emoji: '🤵', color: '#5a7a9c', bg: 'rgba(90,122,156,0.1)' }
+const META_SPOSA  = { id: 'sposa',  emoji: '👰', color: '#c8826a', bg: 'rgba(200,130,106,0.1)' }
+const META_CRUCIV = { id: 'cruciv', emoji: '📝', color: '#8a9e8c', bg: 'rgba(138,158,140,0.1)' }
 
-const QUIZ_SPOSA = {
-  id: 'sposa',
-  title: 'Quanto conosci Sofia?',
-  emoji: '👰',
-  color: '#c8826a',
-  bg: 'rgba(200,130,106,0.1)',
-  domande: [
-    { testo: 'Qual è il fiore preferito di Sofia?', opzioni: ['Rosa', 'Peonia', 'Orchidea', 'Girasole'], corretta: 1 },
-    { testo: 'Qual è la sua serie TV preferita?', opzioni: ['Friends', 'Fleabag', 'Breaking Bad', 'The Crown'], corretta: 3 },
-    { testo: 'Dove è nata Sofia?', opzioni: ['Firenze', 'Siena', 'Napoli', 'Venezia'], corretta: 0 },
-    { testo: 'Qual è la sua materia preferita al liceo?', opzioni: ['Matematica', 'Storia dell\'arte', 'Letteratura', 'Filosofia'], corretta: 2 },
-    { testo: 'Come si chiama la sua migliore amica?', opzioni: ['Giulia', 'Chiara', 'Valentina', 'Sara'], corretta: 1 },
-    { testo: 'Qual è il suo dolce preferito?', opzioni: ['Tiramisù', 'Panna cotta', 'Cannolo', 'Crostata'], corretta: 0 },
-    { testo: 'Qual è la sua destinazione da sogno?', opzioni: ['Parigi', 'Tokyo', 'Bali', 'Santorini'], corretta: 3 },
-    { testo: 'Quanti anni aveva quando ha iniziato a ballare?', opzioni: ['4', '6', '8', '10'], corretta: 1 },
-    { testo: 'Quale artista vorrebbe incontrare?', opzioni: ['Beyoncé', 'Taylor Swift', 'Adele', 'Lady Gaga'], corretta: 2 },
-    { testo: 'Qual è il suo libro preferito?', opzioni: ['Jane Eyre', 'Orgoglio e Pregiudizio', 'Anna Karenina', 'Cime Tempestose'], corretta: 1 },
-  ],
-}
-
-const CRUCIVERBA_DATA = {
-  id: 'cruciv',
-  title: 'Cruciverba della Coppia',
-  emoji: '📝',
-  color: '#8a9e8c',
-  bg: 'rgba(138,158,140,0.1)',
-  parole: [
-    { numero: 1, parola: 'DANIELE', indizio: 'Il cognome del cantante preferito di Marco',  riga: 0, col: 1, dir: 'h' },
-    { numero: 5, parola: 'SOFIA',   indizio: 'Il nome della sposa',                          riga: 3, col: 2, dir: 'h' },
-    { numero: 6, parola: 'CRUISE',  indizio: 'Il cognome dell\'attore preferito da Sofia',   riga: 5, col: 0, dir: 'h' },
-    { numero: 2, parola: 'NAPOLI',  indizio: 'La città dove si sono conosciuti',             riga: 0, col: 3, dir: 'v' },
-    { numero: 3, parola: 'LARA',    indizio: 'La loro cagnolina',                            riga: 0, col: 6, dir: 'v' },
-    { numero: 4, parola: 'MARCO',   indizio: 'Il nome dello sposo',                          riga: 2, col: 0, dir: 'v' },
-  ],
-}
+// Le parole del cruciverba sono nomi propri (Marco, Sofia, Napoli, Lara, Daniele, Cruise):
+// restano identiche in entrambe le lingue, cambia solo il testo dell'indizio (tradotto).
+const CRUCIVERBA_PAROLE = [
+  { numero: 1, parola: 'DANIELE', riga: 0, col: 1, dir: 'h' },
+  { numero: 5, parola: 'SOFIA',   riga: 3, col: 2, dir: 'h' },
+  { numero: 6, parola: 'CRUISE',  riga: 5, col: 0, dir: 'h' },
+  { numero: 2, parola: 'NAPOLI',  riga: 0, col: 3, dir: 'v' },
+  { numero: 3, parola: 'LARA',    riga: 0, col: 6, dir: 'v' },
+  { numero: 4, parola: 'MARCO',   riga: 2, col: 0, dir: 'v' },
+]
 
 /* ═══════════════════════════════════════════════════════════════════
    LEADERBOARD (localStorage)
@@ -104,14 +65,15 @@ function ProgressBar({ current, total, color }) {
    GIOCO 1 & 2 — Quiz a risposta multipla
    ═══════════════════════════════════════════════════════════════════ */
 
-function QuizGame({ quiz, playerName, onFinish }) {
+function QuizGame({ meta, domande, playerName, onFinish }) {
+  const { t } = useLanguage()
   const [idx, setIdx]       = useState(0)
   const [selected, setSelected] = useState(null)
   const [score, setScore]   = useState(0)
   const [answered, setAnswered] = useState(false)
 
-  const q = quiz.domande[idx]
-  const isLast = idx === quiz.domande.length - 1
+  const q = domande[idx]
+  const isLast = idx === domande.length - 1
 
   const choose = (i) => {
     if (answered) return
@@ -121,11 +83,10 @@ function QuizGame({ quiz, playerName, onFinish }) {
   }
 
   const next = () => {
-    const newScore = selected === q.corretta ? score : score
     if (isLast) {
       const finalScore = selected === q.corretta ? score + 1 : score
-      addScore(quiz.id, playerName, finalScore, quiz.domande.length)
-      onFinish(finalScore, quiz.domande.length)
+      addScore(meta.id, playerName, finalScore, domande.length)
+      onFinish(finalScore, domande.length)
     } else {
       setIdx(i => i + 1)
       setSelected(null)
@@ -145,14 +106,14 @@ function QuizGame({ quiz, playerName, onFinish }) {
 
   return (
     <div>
-      <ProgressBar current={idx + 1} total={quiz.domande.length} color={quiz.color} />
+      <ProgressBar current={idx + 1} total={domande.length} color={meta.color} />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <span style={{ fontSize: '.8rem', color: 'var(--warm-gray)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.06em' }}>
-          {idx + 1} / {quiz.domande.length}
+          {idx + 1} / {domande.length}
         </span>
         <span style={{
-          background: quiz.bg, color: quiz.color,
+          background: meta.bg, color: meta.color,
           padding: '3px 12px', borderRadius: 99, fontSize: '.8rem', fontWeight: 700,
         }}>
           ✓ {score}
@@ -160,10 +121,10 @@ function QuizGame({ quiz, playerName, onFinish }) {
       </div>
 
       <div style={{
-        background: quiz.bg, border: `1.5px solid ${quiz.color}30`,
+        background: meta.bg, border: `1.5px solid ${meta.color}30`,
         borderRadius: 'var(--radius-lg)', padding: '24px 20px', marginBottom: 20,
       }}>
-        <div style={{ fontSize: '2rem', marginBottom: 10 }}>{quiz.emoji}</div>
+        <div style={{ fontSize: '2rem', marginBottom: 10 }}>{meta.emoji}</div>
         <p style={{
           fontFamily: 'var(--font-serif)', fontSize: '1.15rem',
           color: 'var(--charcoal)', lineHeight: 1.5, margin: 0,
@@ -212,7 +173,7 @@ function QuizGame({ quiz, playerName, onFinish }) {
           onClick={next}
           style={{ width: '100%', justifyContent: 'center' }}
         >
-          {isLast ? '🏆 Vedi risultato' : 'Prossima →'}
+          {isLast ? t('quiz.seeResult') : t('quiz.nextQuestion')}
         </button>
       )}
     </div>
@@ -252,7 +213,8 @@ function isWordCorrect(p, inputs) {
 }
 
 function CruciverbGame({ playerName, onFinish }) {
-  const { parole } = CRUCIVERBA_DATA
+  const { t } = useLanguage()
+  const parole = CRUCIVERBA_PAROLE
   const { grid, numbers } = buildGrid(parole)
   const ROWS = grid.length
   const COLS = grid[0].length
@@ -279,7 +241,7 @@ function CruciverbGame({ playerName, onFinish }) {
     })
     setScore(correct)
     setChecked(true)
-    addScore(CRUCIVERBA_DATA.id, playerName, correct, parole.length)
+    addScore(META_CRUCIV.id, playerName, correct, parole.length)
   }
 
   const cellState = (r, c) => {
@@ -309,10 +271,10 @@ function CruciverbGame({ playerName, onFinish }) {
     <div>
       <div style={{ marginBottom: 24 }}>
         <h3 style={{ fontFamily: 'var(--font-serif)', color: 'var(--charcoal)', marginBottom: 6 }}>
-          📝 Cruciverba della Coppia
+          📝 {t('quiz.cruciverba.title')}
         </h3>
         <p style={{ color: 'var(--warm-gray)', fontSize: '.88rem' }}>
-          Riempi le caselle basandoti sugli indizi numerati. Premi Controlla quando hai finito.
+          {t('quiz.crosswordInstructions')}
         </p>
       </div>
 
@@ -328,7 +290,7 @@ function CruciverbGame({ playerName, onFinish }) {
                       <span style={{
                         position: 'absolute', top: 1, left: 3,
                         fontSize: '.55rem', fontWeight: 700,
-                        color: CRUCIVERBA_DATA.color, lineHeight: 1,
+                        color: META_CRUCIV.color, lineHeight: 1,
                         zIndex: 2, pointerEvents: 'none',
                       }}>
                         {numbers[r][c]}
@@ -363,10 +325,10 @@ function CruciverbGame({ playerName, onFinish }) {
       {/* Indizi */}
       <div style={{ marginBottom: 24 }}>
         <h4 style={{
-          fontFamily: 'var(--font-serif)', color: CRUCIVERBA_DATA.color,
+          fontFamily: 'var(--font-serif)', color: META_CRUCIV.color,
           fontSize: '.95rem', margin: '0 0 10px',
         }}>
-          ➡️ Orizzontali
+          {t('quiz.across')}
         </h4>
         <div style={{ display: 'grid', gap: 8, marginBottom: 18 }}>
           {orizzontali.map(p => (
@@ -375,8 +337,8 @@ function CruciverbGame({ playerName, onFinish }) {
               padding: '10px 14px', background: 'var(--ivory)',
               borderRadius: 8, fontSize: '.85rem',
             }}>
-              <span style={{ color: CRUCIVERBA_DATA.color, fontWeight: 700, flexShrink: 0 }}>{p.numero}.</span>
-              <span style={{ color: 'var(--charcoal)' }}>{p.indizio}</span>
+              <span style={{ color: META_CRUCIV.color, fontWeight: 700, flexShrink: 0 }}>{p.numero}.</span>
+              <span style={{ color: 'var(--charcoal)' }}>{t(`quiz.cruciverba.clues.${p.numero}`)}</span>
               {checked && (
                 <span style={{ marginLeft: 'auto', color: isWordCorrect(p, inputs) ? '#8a9e8c' : '#c8826a' }}>
                   {isWordCorrect(p, inputs) ? '✓' : '✕'}
@@ -387,10 +349,10 @@ function CruciverbGame({ playerName, onFinish }) {
         </div>
 
         <h4 style={{
-          fontFamily: 'var(--font-serif)', color: CRUCIVERBA_DATA.color,
+          fontFamily: 'var(--font-serif)', color: META_CRUCIV.color,
           fontSize: '.95rem', margin: '0 0 10px',
         }}>
-          ⬇️ Verticali
+          {t('quiz.down')}
         </h4>
         <div style={{ display: 'grid', gap: 8 }}>
           {verticali.map(p => (
@@ -399,8 +361,8 @@ function CruciverbGame({ playerName, onFinish }) {
               padding: '10px 14px', background: 'var(--ivory)',
               borderRadius: 8, fontSize: '.85rem',
             }}>
-              <span style={{ color: CRUCIVERBA_DATA.color, fontWeight: 700, flexShrink: 0 }}>{p.numero}.</span>
-              <span style={{ color: 'var(--charcoal)' }}>{p.indizio}</span>
+              <span style={{ color: META_CRUCIV.color, fontWeight: 700, flexShrink: 0 }}>{p.numero}.</span>
+              <span style={{ color: 'var(--charcoal)' }}>{t(`quiz.cruciverba.clues.${p.numero}`)}</span>
               {checked && (
                 <span style={{ marginLeft: 'auto', color: isWordCorrect(p, inputs) ? '#8a9e8c' : '#c8826a' }}>
                   {isWordCorrect(p, inputs) ? '✓' : '✕'}
@@ -413,7 +375,7 @@ function CruciverbGame({ playerName, onFinish }) {
 
       {!checked ? (
         <button className="btn btn-primary" onClick={check} style={{ width: '100%', justifyContent: 'center' }}>
-          🔍 Controlla
+          {t('quiz.checkButton')}
         </button>
       ) : (
         <div style={{ textAlign: 'center' }}>
@@ -425,11 +387,11 @@ function CruciverbGame({ playerName, onFinish }) {
               {score === parole.length ? '🏆' : score > parole.length / 2 ? '🌟' : '💪'}
             </div>
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', color: 'var(--charcoal)' }}>
-              {score} / {parole.length} parole corrette
+              {t('quiz.wordsCorrect', { score, total: parole.length })}
             </div>
           </div>
           <button className="btn btn-primary" onClick={() => onFinish(score, parole.length)} style={{ justifyContent: 'center' }}>
-            🏆 Vedi classifica
+            {t('quiz.seeLeaderboard')}
           </button>
         </div>
       )}
@@ -441,12 +403,14 @@ function CruciverbGame({ playerName, onFinish }) {
    SCHERMATA RISULTATO
    ═══════════════════════════════════════════════════════════════════ */
 
-function ResultScreen({ score, total, gameId, gameName, gameEmoji, gameColor, gameBg, playerName, onLeaderboard, onBack }) {
+function ResultScreen({ score, total, gameColor, gameBg, onLeaderboard, onBack }) {
+  const { t } = useLanguage()
   const pct = Math.round((score / total) * 100)
-  const msg = pct === 100 ? ['🏆', 'Perfetto!', 'Conosci ogni segreto!'] :
-              pct >= 70   ? ['🌟', 'Ottimo!', 'Li conosci proprio bene!'] :
-              pct >= 40   ? ['👍', 'Non male!', 'Ma c\'è ancora qualcosa da scoprire…'] :
-                            ['💪', 'Ci vuole più allenamento!', 'Ma l\'importante è esserci!']
+  const rm = t('quiz.resultMessages')
+  const msg = pct === 100 ? rm.perfect :
+              pct >= 70   ? rm.great :
+              pct >= 40   ? rm.good :
+                            rm.low
 
   return (
     <div style={{ textAlign: 'center', padding: '20px 0' }}>
@@ -464,7 +428,7 @@ function ResultScreen({ score, total, gameId, gameName, gameEmoji, gameColor, ga
         <div style={{ fontSize: '3.5rem', fontFamily: 'var(--font-serif)', color: gameColor, lineHeight: 1 }}>
           {score}<span style={{ fontSize: '1.5rem', color: 'var(--warm-gray)' }}>/{total}</span>
         </div>
-        <div style={{ color: 'var(--warm-gray)', fontSize: '.85rem', marginTop: 6 }}>risposte corrette</div>
+        <div style={{ color: 'var(--warm-gray)', fontSize: '.85rem', marginTop: 6 }}>{t('quiz.correctAnswers')}</div>
         <div style={{
           height: 6, background: 'rgba(0,0,0,0.08)', borderRadius: 99,
           marginTop: 16, overflow: 'hidden',
@@ -474,8 +438,8 @@ function ResultScreen({ score, total, gameId, gameName, gameEmoji, gameColor, ga
       </div>
 
       <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-        <button className="btn btn-primary" onClick={onLeaderboard}>🏆 Classifica</button>
-        <button className="btn btn-outline" onClick={onBack}>← Torna ai giochi</button>
+        <button className="btn btn-primary" onClick={onLeaderboard}>{t('quiz.leaderboardButton')}</button>
+        <button className="btn btn-outline" onClick={onBack}>{t('quiz.backToGames')}</button>
       </div>
     </div>
   )
@@ -485,13 +449,8 @@ function ResultScreen({ score, total, gameId, gameName, gameEmoji, gameColor, ga
    LEADERBOARD
    ═══════════════════════════════════════════════════════════════════ */
 
-const GAMES_META = {
-  sposo:  { name: 'Marco Quiz',             emoji: '🤵', color: '#5a7a9c' },
-  sposa:  { name: 'Sofia Quiz',             emoji: '👰', color: '#c8826a' },
-  cruciv: { name: 'Cruciverba della Coppia',emoji: '📝', color: '#8a9e8c' },
-}
-
-function Leaderboard({ activeId, onClose }) {
+function Leaderboard({ activeId, gamesMeta, onClose }) {
+  const { t } = useLanguage()
   const lb = loadLB()
   const [tab, setTab] = useState(activeId || 'sposo')
   const entries = lb[tab] || []
@@ -499,7 +458,7 @@ function Leaderboard({ activeId, onClose }) {
   return (
     <div>
       <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-        {Object.entries(GAMES_META).map(([id, g]) => (
+        {Object.entries(gamesMeta).map(([id, g]) => (
           <button
             key={id}
             onClick={() => setTab(id)}
@@ -513,7 +472,7 @@ function Leaderboard({ activeId, onClose }) {
       {entries.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '48px 20px', color: 'var(--warm-gray)' }}>
           <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>🎮</div>
-          <p>Ancora nessun punteggio per questo gioco.</p>
+          <p>{t('quiz.noScoresYet')}</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -538,7 +497,7 @@ function Leaderboard({ activeId, onClose }) {
               </div>
               <div style={{
                 fontFamily: 'var(--font-serif)', fontSize: '1.1rem',
-                color: GAMES_META[tab].color, fontWeight: 700,
+                color: gamesMeta[tab].color, fontWeight: 700,
               }}>
                 {e.score}<span style={{ fontSize: '.75rem', color: 'var(--warm-gray)', fontWeight: 400 }}>/{e.total}</span>
               </div>
@@ -548,7 +507,7 @@ function Leaderboard({ activeId, onClose }) {
       )}
 
       <button className="btn btn-outline" onClick={onClose} style={{ marginTop: 24, width: '100%', justifyContent: 'center' }}>
-        ← Torna ai giochi
+        {t('quiz.backToGames')}
       </button>
     </div>
   )
@@ -558,12 +517,13 @@ function Leaderboard({ activeId, onClose }) {
    HUB — scelta del gioco
    ═══════════════════════════════════════════════════════════════════ */
 
-function Hub({ playerName, onSelect, onLeaderboard }) {
+function Hub({ playerName, gamesMeta, onSelect, onLeaderboard }) {
+  const { t } = useLanguage()
   const lb = loadLB()
   const games = [
-    { ...QUIZ_SPOSO,        id: 'sposo',  total: QUIZ_SPOSO.domande.length },
-    { ...QUIZ_SPOSA,        id: 'sposa',  total: QUIZ_SPOSA.domande.length },
-    { ...CRUCIVERBA_DATA,   id: 'cruciv', total: CRUCIVERBA_DATA.parole.length },
+    { ...META_SPOSO,  title: gamesMeta.sposo.name,  total: t('quiz.sposo.domande').length },
+    { ...META_SPOSA,  title: gamesMeta.sposa.name,  total: t('quiz.sposa.domande').length },
+    { ...META_CRUCIV, title: gamesMeta.cruciv.name, total: CRUCIVERBA_PAROLE.length },
   ]
 
   return (
@@ -571,10 +531,14 @@ function Hub({ playerName, onSelect, onLeaderboard }) {
       <div style={{ textAlign: 'center', marginBottom: 36 }}>
         <div style={{ fontSize: '3rem', marginBottom: 12 }}>🎮</div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.2rem', color: 'var(--charcoal)', marginBottom: 8 }}>
-          Quanto ci conosci?
+          {t('quiz.pageTitle')}
         </h1>
         <p style={{ color: 'var(--warm-gray)' }}>
-          Ciao <strong>{playerName}</strong>! Scegli un gioco 👇
+          {t('quiz.hubGreeting', { name: playerName }).split(playerName).map((part, i, arr) => (
+            <span key={i}>
+              {part}{i < arr.length - 1 && <strong>{playerName}</strong>}
+            </span>
+          ))}
         </p>
       </div>
 
@@ -608,11 +572,11 @@ function Hub({ playerName, onSelect, onLeaderboard }) {
                   {g.title}
                 </div>
                 <div style={{ fontSize: '.82rem', color: 'var(--warm-gray)' }}>
-                  {g.total} {g.id === 'cruciv' ? 'parole' : 'domande'}
+                  {g.total} {g.id === 'cruciv' ? t('quiz.wordsUnit') : t('quiz.questionsUnit')}
                 </div>
                 {best && (
                   <div style={{ fontSize: '.78rem', color: g.color, marginTop: 4, fontWeight: 600 }}>
-                    Il tuo record: {best.score}/{best.total}
+                    {t('quiz.yourRecord', { score: best.score, total: best.total })}
                   </div>
                 )}
               </div>
@@ -627,7 +591,7 @@ function Hub({ playerName, onSelect, onLeaderboard }) {
         onClick={onLeaderboard}
         style={{ width: '100%', justifyContent: 'center' }}
       >
-        🏆 Classifica generale
+        {t('quiz.generalLeaderboard')}
       </button>
     </div>
   )
@@ -638,6 +602,7 @@ function Hub({ playerName, onSelect, onLeaderboard }) {
    ═══════════════════════════════════════════════════════════════════ */
 
 function NameScreen({ onStart }) {
+  const { t } = useLanguage()
   const [name, setName] = useState('')
 
   return (
@@ -648,19 +613,19 @@ function NameScreen({ onStart }) {
     }}>
       <div style={{ fontSize: '4rem', marginBottom: 16 }}>💍</div>
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', color: 'var(--charcoal)', marginBottom: 8 }}>
-        Quanto ci conosci?
+        {t('quiz.pageTitle')}
       </h1>
       <p style={{ color: 'var(--warm-gray)', maxWidth: 380, marginBottom: 40, lineHeight: 1.6 }}>
-        3 minigiochi su Sofia &amp; Marco. Sfida gli altri invitati e scala la classifica!
+        {t('quiz.nameIntro')}
       </p>
 
       <div style={{ width: '100%', maxWidth: 340, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <label style={{ textAlign: 'left', fontWeight: 600, fontSize: '.9rem', color: 'var(--charcoal)' }}>
-          Come ti chiami?
+          {t('quiz.nameLabel')}
         </label>
         <input
           className="input"
-          placeholder="Il tuo nome"
+          placeholder={t('quiz.namePlaceholder')}
           value={name}
           onChange={e => setName(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && name.trim() && onStart(name.trim())}
@@ -673,7 +638,7 @@ function NameScreen({ onStart }) {
           onClick={() => onStart(name.trim())}
           style={{ justifyContent: 'center', opacity: name.trim() ? 1 : 0.5 }}
         >
-          Inizia a giocare →
+          {t('quiz.startButton')}
         </button>
       </div>
     </div>
@@ -685,6 +650,7 @@ function NameScreen({ onStart }) {
    ═══════════════════════════════════════════════════════════════════ */
 
 export default function Quiz() {
+  const { t } = useLanguage()
   const [screen, setScreen]       = useState('name')   // name | hub | game | result | board
   const [playerName, setPlayerName] = useState('')
   const [activeGame, setActiveGame] = useState(null)
@@ -697,7 +663,12 @@ export default function Quiz() {
     setScreen('result')
   }
 
-  const gameMeta = activeGame ? GAMES_META[activeGame] : null
+  const gamesMeta = {
+    sposo:  { ...META_SPOSO,  name: t('quiz.gamesMeta.sposo.name') },
+    sposa:  { ...META_SPOSA,  name: t('quiz.gamesMeta.sposa.name') },
+    cruciv: { ...META_CRUCIV, name: t('quiz.gamesMeta.cruciv.name') },
+  }
+  const gameMeta = activeGame ? gamesMeta[activeGame] : null
 
   return (
     <div className="page-enter" style={{ padding: '60px 0 120px' }}>
@@ -708,6 +679,7 @@ export default function Quiz() {
         {screen === 'hub' && (
           <Hub
             playerName={playerName}
+            gamesMeta={gamesMeta}
             onSelect={selectGame}
             onLeaderboard={() => setScreen('board')}
           />
@@ -720,7 +692,7 @@ export default function Quiz() {
                 className="btn btn-ghost btn-sm"
                 onClick={() => setScreen('hub')}
                 style={{ padding: '6px 10px' }}
-              >← Giochi</button>
+              >{t('quiz.backToGamesShort')}</button>
               <h2 style={{
                 fontFamily: 'var(--font-serif)', fontSize: '1.2rem',
                 color: 'var(--charcoal)', margin: 0,
@@ -730,10 +702,10 @@ export default function Quiz() {
             </div>
 
             {activeGame === 'sposo' && (
-              <QuizGame quiz={QUIZ_SPOSO} playerName={playerName} onFinish={finishGame} />
+              <QuizGame meta={gamesMeta.sposo} domande={t('quiz.sposo.domande')} playerName={playerName} onFinish={finishGame} />
             )}
             {activeGame === 'sposa' && (
-              <QuizGame quiz={QUIZ_SPOSA} playerName={playerName} onFinish={finishGame} />
+              <QuizGame meta={gamesMeta.sposa} domande={t('quiz.sposa.domande')} playerName={playerName} onFinish={finishGame} />
             )}
             {activeGame === 'cruciv' && (
               <CruciverbGame playerName={playerName} onFinish={finishGame} />
@@ -745,12 +717,8 @@ export default function Quiz() {
           <ResultScreen
             score={lastResult.score}
             total={lastResult.total}
-            gameId={lastResult.gameId}
-            gameName={gameMeta.name}
-            gameEmoji={gameMeta.emoji}
             gameColor={gameMeta.color}
-            gameBg={activeGame ? (activeGame === 'sposo' ? QUIZ_SPOSO.bg : activeGame === 'sposa' ? QUIZ_SPOSA.bg : CRUCIVERBA_DATA.bg) : ''}
-            playerName={playerName}
+            gameBg={gameMeta.bg}
             onLeaderboard={() => setScreen('board')}
             onBack={() => setScreen('hub')}
           />
@@ -759,10 +727,11 @@ export default function Quiz() {
         {screen === 'board' && (
           <div>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--charcoal)', marginBottom: 24 }}>
-              🏆 Classifica
+              {t('quiz.leaderboardTitle')}
             </h2>
             <Leaderboard
               activeId={lastResult?.gameId || 'sposo'}
+              gamesMeta={gamesMeta}
               onClose={() => setScreen('hub')}
             />
           </div>

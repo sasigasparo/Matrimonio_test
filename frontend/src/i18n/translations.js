@@ -26,6 +26,112 @@ export const translations = {
       adminBadge: '⚙ Admin',
     },
 
+    faq: {
+      pageTitle: 'Domande frequenti',
+      allFilter: 'Tutte',
+      categories: [
+        {
+          key: 'guests',
+          categoria: 'Ospiti',
+          icon: '👥',
+          domande: [
+            {
+              q: 'Posso portare un accompagnatore non invitato?',
+              a: 'Per motivi organizzativi il numero di posti è limitato e la lista degli invitati è stata definita con grande cura. Se hai una richiesta particolare, contattaci e faremo il possibile per aiutarti.',
+            },
+            {
+              q: 'I bambini sono invitati?',
+              a: 'Assolutamente sì, i più piccoli sono i benvenuti! Abbiamo previsto un menù dedicato e alcuni spazi dove potranno divertirsi in serenità. Ti chiediamo di indicare la loro presenza durante la conferma dell’invito.',
+            },
+            {
+              q: 'Posso portare il mio animale domestico?',
+              a: 'Ci dispiace, ma per ragioni organizzative e nel rispetto della struttura che ci ospita, non sarà possibile portare animali domestici.',
+            },
+          ],
+        },
+        {
+          key: 'dresscode',
+          categoria: 'Dress code',
+          icon: '👗',
+          domande: [
+            {
+              q: 'Qual è il dress code del matrimonio?',
+              a: 'L’abbigliamento richiesto è elegante. Per gli uomini suggeriamo abito o completo con giacca; per le donne un abito elegante o un tailleur. Vi chiediamo gentilmente di evitare il bianco, riservato alla sposa.',
+            },
+            {
+              q: 'Che scarpe consigliate?',
+              a: 'La cerimonia si svolgerà in una basilica nel centro storico di Napoli, mentre il ricevimento sarà in una villa con spazi esterni panoramici. Consigliamo scarpe eleganti ma comode, soprattutto per chi desidera godersi la festa fino a tarda notte.',
+            },
+          ],
+        },
+        {
+          key: 'logistics',
+          categoria: 'Logistica',
+          icon: '🚗',
+          domande: [
+            {
+              q: 'A che ora iniziano la cerimonia e il ricevimento?',
+              a: 'La cerimonia inizierà alle ore 15:00. A seguire ci sposteremo per il ricevimento, che avrà inizio intorno alle 17:00 con aperitivo, cena e festa fino a tarda sera.',
+            },
+            {
+              q: 'Dove posso parcheggiare?',
+              a: 'La location del ricevimento dispone di un parcheggio riservato agli invitati. Sono inoltre disponibili servizi di taxi e navetta dalle principali zone del centro di Napoli.',
+            },
+            {
+              q: 'È previsto un servizio navetta?',
+              a: 'Sì, sarà disponibile un servizio navetta da e verso il centro di Napoli in orari prestabiliti. Ti consigliamo di prenotare il posto durante la conferma della presenza.',
+            },
+            {
+              q: 'Cosa succede in caso di maltempo?',
+              a: 'Nessuna preoccupazione: la location dispone di splendidi spazi interni che permetteranno di vivere la giornata senza alcuna modifica al programma.',
+            },
+          ],
+        },
+        {
+          key: 'food',
+          categoria: 'Cibo & bevande',
+          icon: '🍽️',
+          domande: [
+            {
+              q: 'Sono disponibili menù vegetariani o vegani?',
+              a: 'Certamente. Abbiamo previsto alternative vegetariane e vegane per permettere a tutti gli ospiti di godersi il pranzo o la cena al meglio.',
+            },
+            {
+              q: 'Ci sono opzioni per allergie, intolleranze o esigenze particolari?',
+              a: 'Sì. La cucina della struttura è preparata a gestire allergie, intolleranze alimentari e altre esigenze specifiche. Ti chiediamo di comunicarcele in anticipo.',
+            },
+            {
+              q: 'Come posso comunicare le mie esigenze alimentari?',
+              a: 'Durante la conferma della presenza troverai una sezione dedicata alle esigenze alimentari, dove potrai indicare allergie, intolleranze o preferenze come menù vegetariano, vegano o senza glutine.',
+              link: {
+                label: '🍽️ Conferma presenza e indica le tue preferenze',
+                href: 'https://sasigasparo.github.io/Matrimonio_test/rsvp',
+              },
+            },
+            {
+              q: 'È previsto un open bar?',
+              a: 'Sì! Dopo il ricevimento e fino al termine della serata sarà disponibile un open bar con cocktail, vini selezionati, bollicine e bevande analcoliche.',
+            },
+          ],
+        },
+        {
+          key: 'gift',
+          categoria: 'Regalo',
+          icon: '🎁',
+          domande: [
+            {
+              q: 'Cosa possiamo regalare agli sposi?',
+              a: 'La vostra presenza nel nostro giorno speciale è già il regalo più bello. Per chi desiderasse farci un pensiero, abbiamo organizzato una lista nozze e altre informazioni saranno comunicate direttamente agli invitati.',
+            },
+            {
+              q: 'È possibile fare un regalo in denaro?',
+              a: 'Sì, sarà molto gradito e contribuirà a realizzare il viaggio di nozze dei nostri sogni. Grazie di cuore per il vostro affetto.',
+            },
+          ],
+        },
+      ],
+    },
+
     login: {
       eyebrow: 'Sofia & Marco · {{date}}',
       title: 'Benvenuto',
@@ -43,12 +149,12 @@ export const translations = {
       pageTitle: 'Luoghi & Indicazioni – Napoli',
       ceremony: {
         nome: 'Duomo di Napoli',
-        orario: 'Sabato {{date}} · ore 15:00',
+        orario: 'Sabato {{date}} · ore {{time}}',
         note: 'Vi preghiamo di essere presenti almeno 15 minuti prima.',
       },
       reception: {
         nome: 'Villa Doria d’Angri',
-        orario: 'A seguire · ore 17:00',
+        orario: 'A seguire · ore {{time}}',
         note: 'Il ricevimento si terrà nei giardini con vista sul Golfo di Napoli. In caso di pioggia, ci sposteremo nelle sale interne.',
       },
       comeArrivare: '🚗 Come arrivare',
@@ -69,7 +175,7 @@ export const translations = {
 
     menu: {
       revealNotice: 'il menù sarà svelato il giorno del matrimonio',
-      dateLocation: '{{date}} · Villa Belvedere, Toscana',
+      dateLocation: '{{date}} · Villa Doria d’Angri, Napoli',
       days: 'Giorni',
       hours: 'Ore',
       minutes: 'Minuti',
@@ -141,9 +247,9 @@ export const translations = {
       saving: 'Salvataggio…',
       confirm: 'Conferma risposta',
       infoDate: 'Data',
-      infoDateVal: 'Sabato 14 Giugno 2025, ore 15:00',
+      infoDateVal: 'Sabato 14 Giugno 2027, ore 15:00',
       infoLocation: 'Luogo',
-      infoLocationVal: 'Villa Belvedere, Via del Poggio 12, Siena (SI)',
+      infoLocationVal: 'Villa Doria d’Angri, Via Francesco Petrarca, 80, Posillipo, Napoli (NA)',
       infoParking: 'Parcheggio',
       infoParkingVal: 'Disponibile parcheggio gratuito in loco',
       infoDressCode: 'Dress code',
@@ -191,7 +297,7 @@ export const translations = {
       countdownSeconds: 'Secondi',
       weddingPast: 'VI ASPETTIAMO 💍',
       heroEyebrow: 'Vi invitano a condividere la loro gioia',
-      heroTime: '{{date}} · ore 15:00',
+      heroTime: '{{date}} · ore {{time}}',
       heroLocation: '📍 Napoli, con vista sul Vesuvio',
       heroCtaRsvp: 'Conferma la tua presenza ✉️',
       heroCtaMenu: 'Scopri il menù',
@@ -213,8 +319,87 @@ export const translations = {
         { year: '2019', event: 'Il primo incontro' },
         { year: '2021', event: 'La prima estate insieme' },
         { year: '2023', event: 'La proposta' },
-        { year: '2025', event: 'Il grande giorno 💍' },
+        { year: '2027', event: 'Il grande giorno 💍' },
       ],
+    },
+  
+    quiz: {
+      pageTitle: 'Quanto ci conosci?',
+      nameIntro: '3 minigiochi su Sofia & Marco. Sfida gli altri invitati e scala la classifica!',
+      nameLabel: 'Come ti chiami?',
+      namePlaceholder: 'Il tuo nome',
+      startButton: 'Inizia a giocare →',
+      hubGreeting: 'Ciao {{name}}! Scegli un gioco 👇',
+      wordsUnit: 'parole',
+      questionsUnit: 'domande',
+      yourRecord: 'Il tuo record: {{score}}/{{total}}',
+      generalLeaderboard: '🏆 Classifica generale',
+      backToGamesShort: '← Giochi',
+      backToGames: '← Torna ai giochi',
+      nextQuestion: 'Prossima →',
+      seeResult: '🏆 Vedi risultato',
+      seeLeaderboard: '🏆 Vedi classifica',
+      checkButton: '🔍 Controlla',
+      wordsCorrect: '{{score}} / {{total}} parole corrette',
+      correctAnswers: 'risposte corrette',
+      leaderboardButton: '🏆 Classifica',
+      leaderboardTitle: '🏆 Classifica',
+      noScoresYet: 'Ancora nessun punteggio per questo gioco.',
+      crosswordInstructions: 'Riempi le caselle basandoti sugli indizi numerati. Premi Controlla quando hai finito.',
+      across: '➡️ Orizzontali',
+      down: '⬇️ Verticali',
+      resultMessages: {
+        perfect: ['🏆', 'Perfetto!', 'Conosci ogni segreto!'],
+        great:   ['🌟', 'Ottimo!', 'Li conosci proprio bene!'],
+        good:    ['👍', 'Non male!', "Ma c'è ancora qualcosa da scoprire…"],
+        low:     ['💪', 'Ci vuole più allenamento!', "Ma l'importante è esserci!"],
+      },
+      gamesMeta: {
+        sposo:  { name: 'Marco Quiz' },
+        sposa:  { name: 'Sofia Quiz' },
+        cruciv: { name: 'Cruciverba della Coppia' },
+      },
+      sposo: {
+        title: 'Quanto conosci Marco?',
+        domande: [
+          { testo: 'Qual è il piatto preferito di Marco?', opzioni: ['Carbonara', 'Pizza margherita', 'Lasagne', 'Sushi'], corretta: 0 },
+          { testo: 'Dove ha studiato Marco?', opzioni: ['Bologna', 'Milano', 'Roma', 'Torino'], corretta: 1 },
+          { testo: 'Qual è il suo sport preferito?', opzioni: ['Calcio', 'Tennis', 'Nuoto', 'Ciclismo'], corretta: 0 },
+          { testo: 'Come si chiama il suo migliore amico di infanzia?', opzioni: ['Luca', 'Andrea', 'Matteo', 'Davide'], corretta: 2 },
+          { testo: 'Qual è il film preferito di Marco?', opzioni: ['Il Padrino', 'Interstellar', 'Forrest Gump', 'Titanic'], corretta: 1 },
+          { testo: 'In che anno ha conosciuto Sofia?', opzioni: ['2018', '2019', '2020', '2021'], corretta: 1 },
+          { testo: 'Qual è il suo gruppo musicale preferito?', opzioni: ['Coldplay', 'Radiohead', 'Muse', 'U2'], corretta: 0 },
+          { testo: 'Qual è stata la sua prima macchina?', opzioni: ['Fiat 500', 'Volkswagen Golf', 'Ford Fiesta', 'Renault Clio'], corretta: 3 },
+          { testo: 'Dove vorrebbe andare in viaggio di nozze?', opzioni: ['Giappone', 'Maldive', 'New York', 'Islanda'], corretta: 0 },
+          { testo: 'Qual è il suo hobby segreto?', opzioni: ['Cucina', 'Fotografia', 'Chitarra', 'Pittura'], corretta: 2 },
+        ],
+      },
+      sposa: {
+        title: 'Quanto conosci Sofia?',
+        domande: [
+          { testo: 'Qual è il fiore preferito di Sofia?', opzioni: ['Rosa', 'Peonia', 'Orchidea', 'Girasole'], corretta: 1 },
+          { testo: 'Qual è la sua serie TV preferita?', opzioni: ['Friends', 'Fleabag', 'Breaking Bad', 'The Crown'], corretta: 3 },
+          { testo: 'Dove è nata Sofia?', opzioni: ['Firenze', 'Siena', 'Napoli', 'Venezia'], corretta: 0 },
+          { testo: 'Qual è la sua materia preferita al liceo?', opzioni: ['Matematica', "Storia dell'arte", 'Letteratura', 'Filosofia'], corretta: 2 },
+          { testo: 'Come si chiama la sua migliore amica?', opzioni: ['Giulia', 'Chiara', 'Valentina', 'Sara'], corretta: 1 },
+          { testo: 'Qual è il suo dolce preferito?', opzioni: ['Tiramisù', 'Panna cotta', 'Cannolo', 'Crostata'], corretta: 0 },
+          { testo: 'Qual è la sua destinazione da sogno?', opzioni: ['Parigi', 'Tokyo', 'Bali', 'Santorini'], corretta: 3 },
+          { testo: 'Quanti anni aveva quando ha iniziato a ballare?', opzioni: ['4', '6', '8', '10'], corretta: 1 },
+          { testo: 'Quale artista vorrebbe incontrare?', opzioni: ['Beyoncé', 'Taylor Swift', 'Adele', 'Lady Gaga'], corretta: 2 },
+          { testo: 'Qual è il suo libro preferito?', opzioni: ['Jane Eyre', 'Orgoglio e Pregiudizio', 'Anna Karenina', 'Cime Tempestose'], corretta: 1 },
+        ],
+      },
+      cruciverba: {
+        title: 'Cruciverba della Coppia',
+        clues: {
+          1: 'Il cognome del cantante preferito di Marco',
+          5: 'Il nome della sposa',
+          6: "Il cognome dell'attore preferito da Sofia",
+          2: 'La città dove si sono conosciuti',
+          3: 'La loro cagnolina',
+          4: 'Il nome dello sposo',
+        },
+      },
     },
   },
 
@@ -245,6 +430,112 @@ export const translations = {
       adminBadge: '⚙ Admin',
     },
 
+    faq: {
+      pageTitle: 'Frequently Asked Questions',
+      allFilter: 'All',
+      categories: [
+        {
+          key: 'guests',
+          categoria: 'Guests',
+          icon: '👥',
+          domande: [
+            {
+              q: "Can I bring a plus-one who wasn't invited?",
+              a: "For organizational reasons, the number of seats is limited and the guest list was put together with great care. If you have a special request, please get in touch and we'll do our best to help.",
+            },
+            {
+              q: 'Are children invited?',
+              a: "Absolutely, little ones are very welcome! We've arranged a dedicated menu and some spaces where they can play safely. Please let us know about their attendance when you confirm your RSVP.",
+            },
+            {
+              q: 'Can I bring my pet?',
+              a: "We're sorry, but for organizational reasons and out of respect for the venue, pets won't be allowed.",
+            },
+          ],
+        },
+        {
+          key: 'dresscode',
+          categoria: 'Dress code',
+          icon: '👗',
+          domande: [
+            {
+              q: "What's the wedding dress code?",
+              a: 'The dress code is formal. For men, we suggest a suit or jacket; for women, an elegant dress or pantsuit. We kindly ask you to avoid white, which is reserved for the bride.',
+            },
+            {
+              q: 'What shoes do you recommend?',
+              a: 'The ceremony will take place in a basilica in the historic centre of Naples, while the reception will be at a villa with scenic outdoor spaces. We recommend elegant but comfortable shoes, especially if you plan to dance the night away.',
+            },
+          ],
+        },
+        {
+          key: 'logistics',
+          categoria: 'Logistics',
+          icon: '🚗',
+          domande: [
+            {
+              q: 'What time do the ceremony and reception start?',
+              a: "The ceremony will begin at 3:00 PM. Afterwards, we'll move to the reception, which will start around 5:00 PM with drinks, dinner, and dancing into the night.",
+            },
+            {
+              q: 'Where can I park?',
+              a: 'The reception venue has parking reserved for guests. Taxi and shuttle services are also available from the main areas of central Naples.',
+            },
+            {
+              q: 'Will there be a shuttle service?',
+              a: 'Yes, a shuttle service to and from central Naples will be available at set times. We recommend reserving your spot when you confirm your attendance.',
+            },
+            {
+              q: 'What happens if the weather is bad?',
+              a: 'No need to worry: the venue has beautiful indoor spaces, so the day will go ahead exactly as planned, rain or shine.',
+            },
+          ],
+        },
+        {
+          key: 'food',
+          categoria: 'Food & drink',
+          icon: '🍽️',
+          domande: [
+            {
+              q: 'Are vegetarian or vegan menus available?',
+              a: "Of course. We've arranged vegetarian and vegan alternatives so every guest can fully enjoy the meal.",
+            },
+            {
+              q: 'Are there options for allergies, intolerances, or special dietary needs?',
+              a: "Yes. The venue's kitchen is well equipped to handle allergies, food intolerances, and other specific needs. Please let us know about them in advance.",
+            },
+            {
+              q: 'How can I let you know about my dietary needs?',
+              a: "When you confirm your attendance, you'll find a section dedicated to dietary needs, where you can indicate allergies, intolerances, or preferences such as vegetarian, vegan, or gluten-free.",
+              link: {
+                label: '🍽️ Confirm attendance and share your preferences',
+                href: 'https://sasigasparo.github.io/Matrimonio_test/rsvp',
+              },
+            },
+            {
+              q: 'Will there be an open bar?',
+              a: 'Yes! After the reception and until the end of the night, there will be an open bar with cocktails, selected wines, sparkling wine, and non-alcoholic drinks.',
+            },
+          ],
+        },
+        {
+          key: 'gift',
+          categoria: 'Gift',
+          icon: '🎁',
+          domande: [
+            {
+              q: 'What can we give the couple as a gift?',
+              a: "Having you with us on our special day is already the most beautiful gift. For anyone who'd like to give us something, we've put together a wedding registry, and further details will be shared directly with guests.",
+            },
+            {
+              q: 'Can we give a monetary gift instead?',
+              a: 'Yes, it would be very welcome and will help us make our dream honeymoon a reality. Thank you so much for your love and support.',
+            },
+          ],
+        },
+      ],
+    },
+
     login: {
       eyebrow: 'Sofia & Marco · {{date}}',
       title: 'Welcome',
@@ -262,12 +553,12 @@ export const translations = {
       pageTitle: 'Venues & Directions – Naples',
       ceremony: {
         nome: 'Naples Cathedral (Duomo)',
-        orario: 'Saturday {{date}} · 3:00 PM',
+        orario: 'Saturday {{date}} · {{time}}',
         note: 'Please arrive at least 15 minutes early.',
       },
       reception: {
         nome: 'Villa Doria d’Angri',
-        orario: 'Following the ceremony · 5:00 PM',
+        orario: 'Following the ceremony · {{time}}',
         note: 'The reception will be held in the gardens overlooking the Gulf of Naples. In case of rain, we’ll move indoors.',
       },
       comeArrivare: '🚗 Getting there',
@@ -288,7 +579,7 @@ export const translations = {
 
     menu: {
       revealNotice: 'the menu will be revealed on the wedding day',
-      dateLocation: '{{date}} · Villa Belvedere, Tuscany',
+      dateLocation: '{{date}} · Villa Doria d’Angri, Naples',
       days: 'Days',
       hours: 'Hours',
       minutes: 'Minutes',
@@ -360,9 +651,9 @@ export const translations = {
       saving: 'Saving…',
       confirm: 'Confirm response',
       infoDate: 'Date',
-      infoDateVal: 'Saturday June 14, 2025, 3:00 PM',
+      infoDateVal: 'Saturday June 14, 2027, 3:00 PM',
       infoLocation: 'Venue',
-      infoLocationVal: 'Villa Belvedere, Via del Poggio 12, Siena (SI)',
+      infoLocationVal: 'Villa Doria d’Angri, Via Francesco Petrarca, 80, Posillipo, Naples (NA)',
       infoParking: 'Parking',
       infoParkingVal: 'Free on-site parking available',
       infoDressCode: 'Dress code',
@@ -410,7 +701,7 @@ export const translations = {
       countdownSeconds: 'Seconds',
       weddingPast: 'WE CAN’T WAIT TO SEE YOU 💍',
       heroEyebrow: 'Invite you to share in their joy',
-      heroTime: '{{date}} · 3:00 PM',
+      heroTime: '{{date}} · {{time}}',
       heroLocation: '📍 Naples, with a view of Mount Vesuvius',
       heroCtaRsvp: 'Confirm your attendance ✉️',
       heroCtaMenu: 'Discover the menu',
@@ -432,8 +723,90 @@ export const translations = {
         { year: '2019', event: 'We first met' },
         { year: '2021', event: 'Our first summer together' },
         { year: '2023', event: 'The proposal' },
-        { year: '2025', event: 'The big day 💍' },
+        { year: '2027', event: 'The big day 💍' },
       ],
+    },
+  quiz: {
+      pageTitle: 'How well do you know us?',
+      nameIntro: '3 mini-games about Sofia & Marco. Challenge the other guests and climb the leaderboard!',
+      nameLabel: "What's your name?",
+      namePlaceholder: 'Your name',
+      startButton: 'Start playing →',
+      hubGreeting: 'Hi {{name}}! Pick a game 👇',
+      wordsUnit: 'words',
+      questionsUnit: 'questions',
+      yourRecord: 'Your best: {{score}}/{{total}}',
+      generalLeaderboard: '🏆 Overall leaderboard',
+      backToGamesShort: '← Games',
+      backToGames: '← Back to games',
+      nextQuestion: 'Next →',
+      seeResult: '🏆 See result',
+      seeLeaderboard: '🏆 See leaderboard',
+      checkButton: '🔍 Check',
+      wordsCorrect: '{{score}} / {{total}} words correct',
+      correctAnswers: 'correct answers',
+      leaderboardButton: '🏆 Leaderboard',
+      leaderboardTitle: '🏆 Leaderboard',
+      noScoresYet: 'No scores for this game yet.',
+      crosswordInstructions: "Fill in the cells using the numbered clues. Press Check when you're done.",
+      across: '➡️ Across',
+      down: '⬇️ Down',
+      resultMessages: {
+        perfect: ['🏆', 'Perfect!', 'You know every secret!'],
+        great:   ['🌟', 'Great job!', 'You really know them well!'],
+        good:    ['👍', 'Not bad!', "But there's still more to discover…"],
+        low:     ['💪', 'Time for more practice!', "But what matters is being here!"],
+      },
+      gamesMeta: {
+        sposo:  { name: 'Marco Quiz' },
+        sposa:  { name: 'Sofia Quiz' },
+        cruciv: { name: "Couple's Crossword" },
+      },
+      sposo: {
+        title: 'How well do you know Marco?',
+        domande: [
+          { testo: "What's Marco's favorite dish?", opzioni: ['Carbonara', 'Margherita pizza', 'Lasagna', 'Sushi'], corretta: 0 },
+          { testo: 'Where did Marco study?', opzioni: ['Bologna', 'Milan', 'Rome', 'Turin'], corretta: 1 },
+          { testo: "What's his favorite sport?", opzioni: ['Football', 'Tennis', 'Swimming', 'Cycling'], corretta: 0 },
+          { testo: "What's the name of his best childhood friend?", opzioni: ['Luca', 'Andrea', 'Matteo', 'Davide'], corretta: 2 },
+          { testo: "What's Marco's favorite movie?", opzioni: ['The Godfather', 'Interstellar', 'Forrest Gump', 'Titanic'], corretta: 1 },
+          { testo: 'What year did he meet Sofia?', opzioni: ['2018', '2019', '2020', '2021'], corretta: 1 },
+          { testo: "What's his favorite band?", opzioni: ['Coldplay', 'Radiohead', 'Muse', 'U2'], corretta: 0 },
+          { testo: 'What was his first car?', opzioni: ['Fiat 500', 'Volkswagen Golf', 'Ford Fiesta', 'Renault Clio'], corretta: 3 },
+          { testo: 'Where would he like to go on honeymoon?', opzioni: ['Japan', 'Maldives', 'New York', 'Iceland'], corretta: 0 },
+          { testo: "What's his secret hobby?", opzioni: ['Cooking', 'Photography', 'Guitar', 'Painting'], corretta: 2 },
+        ],
+      },
+      sposa: {
+        title: 'How well do you know Sofia?',
+        domande: [
+          { testo: "What's Sofia's favorite flower?", opzioni: ['Rose', 'Peony', 'Orchid', 'Sunflower'], corretta: 1 },
+          { testo: "What's her favorite TV series?", opzioni: ['Friends', 'Fleabag', 'Breaking Bad', 'The Crown'], corretta: 3 },
+          { testo: 'Where was Sofia born?', opzioni: ['Florence', 'Siena', 'Naples', 'Venice'], corretta: 0 },
+          { testo: 'What was her favorite subject in school?', opzioni: ['Math', 'Art history', 'Literature', 'Philosophy'], corretta: 2 },
+          { testo: "What's the name of her best friend?", opzioni: ['Giulia', 'Chiara', 'Valentina', 'Sara'], corretta: 1 },
+          { testo: "What's her favorite dessert?", opzioni: ['Tiramisù', 'Panna cotta', 'Cannolo', 'Crostata'], corretta: 0 },
+          { testo: "What's her dream destination?", opzioni: ['Paris', 'Tokyo', 'Bali', 'Santorini'], corretta: 3 },
+          { testo: 'How old was she when she started dancing?', opzioni: ['4', '6', '8', '10'], corretta: 1 },
+          { testo: 'Which artist would she like to meet?', opzioni: ['Beyoncé', 'Taylor Swift', 'Adele', 'Lady Gaga'], corretta: 2 },
+          { testo: "What's her favorite book?", opzioni: ['Jane Eyre', 'Pride and Prejudice', 'Anna Karenina', 'Wuthering Heights'], corretta: 1 },
+        ],
+      },
+      cruciverba: {
+        title: "Couple's Crossword",
+        clues: {
+          1: "The surname of Marco's favorite singer",
+          5: "The bride's name",
+          6: "The surname of Sofia's favorite actor",
+          2: 'The city where they met',
+          3: 'Their little dog',
+          4: "The groom's name",
+        },
+      },
     },
   },
 }
+
+
+
+

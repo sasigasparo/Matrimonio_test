@@ -17,9 +17,28 @@ function resolve(obj, path) {
   return path.split('.').reduce((acc, key) => (acc == null ? acc : acc[key]), obj)
 }
 
-function interpolate(str, vars) {
-  if (!vars || typeof str !== 'string') return str
-  return str.replace(/\{\{(\w+)\}\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : `{{${k}}}`))
+function interpolate(value, vars) {
+  if (!vars) return value
+
+  if (typeof value === 'string') {
+    return value.replace(/\{\{(\w+)\}\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : `{{${k}}}`))
+  }
+
+  // Prima del fix, t('luoghi.ceremony', { date }) non sostituiva nulla:
+  // 'ceremony' risolve a un oggetto { nome, orario, note }, non a una
+  // stringa, quindi il vecchio interpolate() lo restituiva invariato e
+  // "{{date}}" restava scritto così com'è in pagina.
+  if (Array.isArray(value)) {
+    return value.map((item) => interpolate(item, vars))
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, interpolate(v, vars)])
+    )
+  }
+
+  return value
 }
 
 export function LanguageProvider({ children }) {

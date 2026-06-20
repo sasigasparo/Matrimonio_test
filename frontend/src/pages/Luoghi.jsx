@@ -1,11 +1,6 @@
 import { WEDDING_CONFIG } from '../config/wedding'
 import { useLanguage } from '../hooks/useLanguage'
 
-const CERIMONIA_COORDS = { lat: 40.8529, lng: 14.2616 }
-const RICEVIMENTO_COORDS = { lat: 40.8296, lng: 14.2156 }
-const CERIMONIA_INDIRIZZO = 'Via Duomo – 80138 Napoli (NA)'
-const RICEVIMENTO_INDIRIZZO = 'Via Francesco Petrarca, 80 – Posillipo, Napoli (NA)'
-
 /* ───────── COMPONENTI ───────── */
 
 function InfoCard({ icon, titolo, desc }) {
@@ -105,14 +100,19 @@ export default function Luoghi() {
   const { t } = useLanguage()
 
   const cerimonia = {
-    ...t('luoghi.ceremony', { date: WEDDING_CONFIG.date }),
-    indirizzo: CERIMONIA_INDIRIZZO,
-    coords: CERIMONIA_COORDS,
+    ...t('luoghi.ceremony', {
+      date: WEDDING_CONFIG.date,
+      time: WEDDING_CONFIG.venue.ceremony.time,
+    }),
+    indirizzo: WEDDING_CONFIG.venue.ceremony.address,
+    coords: WEDDING_CONFIG.venue.ceremony.coords,
   }
   const ricevimento = {
-    ...t('luoghi.reception'),
-    indirizzo: RICEVIMENTO_INDIRIZZO,
-    coords: RICEVIMENTO_COORDS,
+    ...t('luoghi.reception', {
+      time: WEDDING_CONFIG.venue.reception.time,
+    }),
+    indirizzo: WEDDING_CONFIG.venue.reception.address,
+    coords: WEDDING_CONFIG.venue.reception.coords,
   }
 
   return (

@@ -1,37 +1,37 @@
 import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { WEDDING_CONFIG } from '../config/wedding'
+import { useLanguage } from '../hooks/useLanguage'
 import { useEffect, useState } from 'react'
 
 /* ── Meteo ───────────────────────────────────────────────────────── */
-const WEATHER_ICONS = {
-  0:  { emoji: '☀️',  label: 'Sereno' },
-  1:  { emoji: '🌤️', label: 'Poco nuvoloso' },
-  2:  { emoji: '⛅',  label: 'Parzialmente nuvoloso' },
-  3:  { emoji: '☁️',  label: 'Nuvoloso' },
-  45: { emoji: '🌫️', label: 'Nebbia' },
-  48: { emoji: '🌫️', label: 'Nebbia' },
-  51: { emoji: '🌦️', label: 'Pioggerella' },
-  53: { emoji: '🌦️', label: 'Pioggerella' },
-  55: { emoji: '🌦️', label: 'Pioggerella' },
-  61: { emoji: '🌧️', label: 'Pioggia' },
-  63: { emoji: '🌧️', label: 'Pioggia' },
-  65: { emoji: '🌧️', label: 'Pioggia intensa' },
-  80: { emoji: '🌦️', label: 'Rovesci' },
-  81: { emoji: '🌧️', label: 'Rovesci forti' },
-  95: { emoji: '⛈️',  label: 'Temporale' },
-  99: { emoji: '⛈️',  label: 'Temporale forte' },
+// Le emoji non vanno tradotte, restano qui. Le etichette testuali invece
+// arrivano da translations.js (home.weatherCodes), già pronte in IT/EN.
+const WEATHER_EMOJI = {
+  0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+  45: '🌫️', 48: '🌫️',
+  51: '🌦️', 53: '🌦️', 55: '🌦️',
+  61: '🌧️', 63: '🌧️', 65: '🌧️',
+  80: '🌦️', 81: '🌧️',
+  95: '⛈️', 99: '⛈️',
 }
 
-function getWeather(code) {
-  return WEATHER_ICONS[code] || { emoji: '🌡️', label: 'Variabile' }
+function getWeather(code, weatherCodes) {
+  return {
+    emoji: WEATHER_EMOJI[code] || '🌡️',
+    label: weatherCodes[code] ?? weatherCodes.default,
+  }
 }
 
-function fmt(timeStr) {
-  return new Date(timeStr).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+function fmt(timeStr, locale) {
+  return new Date(timeStr).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
 }
 
 function WeatherWidget() {
+  const { t } = useLanguage()
+  const weatherCodes = t('home.weatherCodes')
+  const locale = t('home.locale')
+
   const [days, setDays]       = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState(false)
@@ -46,27 +46,27 @@ function WeatherWidget() {
       .then(r => r.json())
       .then(data => {
         const d = data.daily
-        setDays(d.time.map((t, i) => ({
-          date:     new Date(t),
+        setDays(d.time.map((timeIso, i) => ({
+          date:     new Date(timeIso),
           code:     d.weathercode[i],
           max:      Math.round(d.temperature_2m_max[i]),
           min:      Math.round(d.temperature_2m_min[i]),
           humidity: Math.round(d.relative_humidity_2m_max[i]),
-          sunrise:  fmt(d.sunrise[i]),
-          sunset:   fmt(d.sunset[i]),
+          sunrise:  fmt(d.sunrise[i], locale),
+          sunset:   fmt(d.sunset[i], locale),
         })))
         setLoading(false)
       })
       .catch(() => { setError(true); setLoading(false) })
-  }, [])
+  }, [locale])
 
   const today    = new Date()
   const tomorrow = new Date(today.getTime() + 86400000)
 
   function dayLabel(date) {
-    if (date.toDateString() === today.toDateString())    return 'Oggi'
-    if (date.toDateString() === tomorrow.toDateString()) return 'Domani'
-    return date.toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' })
+    if (date.toDateString() === today.toDateString())    return t('home.today')
+    if (date.toDateString() === tomorrow.toDateString()) return t('home.tomorrow')
+    return date.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' })
   }
 
   if (loading) return (
@@ -77,7 +77,7 @@ function WeatherWidget() {
 
   if (error) return (
     <div style={{ textAlign: 'center', padding: 24, color: 'var(--warm-gray)', fontSize: '.9rem' }}>
-      ⚠️ Impossibile caricare le previsioni meteo
+      {t('home.weatherError')}
     </div>
   )
 
@@ -88,7 +88,7 @@ function WeatherWidget() {
       gap: 8,
     }}>
       {days.map((d, i) => {
-        const w       = getWeather(d.code)
+        const w       = getWeather(d.code, weatherCodes)
         const isToday = i === 0
         return (
           <div key={i} style={{
@@ -124,11 +124,11 @@ function WeatherWidget() {
 }
 
 /* ── Spotify ─────────────────────────────────────────────────────── */
-function SpotifyWidget() {
+function SpotifyWidget({ title }) {
   return (
     <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: 'var(--shadow-md)' }}>
       <iframe
-        title="Playlist matrimonio Sofia & Marco"
+        title={title}
         src="https://open.spotify.com/embed/playlist/04hXZMm6GPheiarj7Ib9xo?utm_source=generator&theme=1"
         width="100%"
         height="380"
@@ -142,8 +142,18 @@ function SpotifyWidget() {
 
 
 /* ── Countdown ───────────────────────────────────────────────────── */
+// WEDDING_CONFIG.date è in formato "GG-MM-AAAA": il parsing va fatto a
+// mano perché new Date("14-06-2027") non è uno standard ISO e il
+// risultato cambia da browser a browser.
+function parseWeddingDateTime(dateStr, timeStr) {
+  const [day, month, year] = dateStr.split('-').map(Number)
+  const [hour, minute] = timeStr.split(':').map(Number)
+  return new Date(year, month - 1, day, hour, minute)
+}
+
 function Countdown() {
-  const wedding = new Date('2025-06-14T15:00:00')
+  const { t } = useLanguage()
+  const wedding = parseWeddingDateTime(WEDDING_CONFIG.date, WEDDING_CONFIG.venue.ceremony.time)
   const [diff, setDiff] = useState({})
 
   useEffect(() => {
@@ -165,13 +175,18 @@ function Countdown() {
 
   if (diff.past) return (
 <p style={{ color: 'white', fontFamily: 'var(--font-serif)', fontSize: '1.2rem' }}>
-  VI ASPETTIAMO 💍
+  {t('home.weddingPast')}
 </p>
   )
 
   return (
     <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-      {[['Giorni', diff.d], ['Ore', diff.h], ['Minuti', diff.m], ['Secondi', diff.s]].map(([label, val]) => (
+      {[
+        [t('home.countdownDays'), diff.d],
+        [t('home.countdownHours'), diff.h],
+        [t('home.countdownMinutes'), diff.m],
+        [t('home.countdownSeconds'), diff.s],
+      ].map(([label, val]) => (
         <div key={label} style={{
           background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)',
           borderRadius: 'var(--radius-md)', padding: '16px 20px', textAlign: 'center',
@@ -190,15 +205,25 @@ function Countdown() {
 }
 
 /* ── Home ────────────────────────────────────────────────────────── */
+// icona/colore/rotta non sono testo da tradurre, restano qui;
+// label/desc arrivano da translations.js (home.quickLinks).
+const QUICK_LINKS_META = {
+  rsvp:    { icon: '✉️', to: '/rsvp',    color: 'var(--rose)' },
+  menu:    { icon: '🍽️', to: '/menu',    color: 'var(--gold)' },
+  gallery: { icon: '📷', to: '/gallery', color: 'var(--sage)' },
+  chat:    { icon: '💌', to: '/chat',    color: 'var(--blush)' },
+}
+
 export default function Home() {
   const navigate = useNavigate()
+  const { t } = useLanguage()
 
-  const quickLinks = [
-    { icon: '✉️', label: 'Conferma presenza',  to: '/rsvp',    color: 'var(--rose)',  desc: "Rispondi all'invito" },
-    { icon: '🍽️', label: 'Scopri il menù',     to: '/menu',    color: 'var(--gold)',  desc: 'La nostra selezione' },
-    { icon: '📷', label: 'Galleria foto',       to: '/gallery', color: 'var(--sage)',  desc: 'Scatta e condividi' },
-    { icon: '💌', label: 'Lascia un messaggio', to: '/chat',    color: 'var(--blush)', desc: 'Parla agli sposi' },
-  ]
+  const quickLinksText = t('home.quickLinks')
+  const quickLinks = Object.entries(QUICK_LINKS_META).map(([key, meta]) => ({
+    ...meta,
+    label: quickLinksText[key]?.label,
+    desc: quickLinksText[key]?.desc,
+  }))
 
   return (
     <div className="page-enter" style={{ paddingBottom: 40 }}>
@@ -233,7 +258,7 @@ export default function Home() {
             color: 'rgba(255,255,255,.85)', fontSize: '1.1rem', letterSpacing: '.06em',
             marginBottom: 16,
           }}>
-            Vi invitano a condividere la loro gioia
+            {t('home.heroEyebrow')}
           </p>
 
           <h1 style={{
@@ -242,32 +267,32 @@ export default function Home() {
             color: '#fff', lineHeight: 1.1, marginBottom: 8,
             textShadow: '0 2px 20px rgba(0,0,0,.3)',
           }}>
-            Sofia
+            {WEDDING_CONFIG.couple.bride}
             <span style={{ color: 'var(--blush)', fontStyle: 'italic', fontSize: '.7em', margin: '0 .3em' }}>&amp;</span>
-            Marco
+            {WEDDING_CONFIG.couple.groom}
           </h1>
 
           <div style={{ width: 80, height: 1, background: 'rgba(255,255,255,.5)', margin: '20px auto' }} />
 
           <p style={{ color: 'rgba(255,255,255,.9)', fontSize: '1.05rem', marginBottom: 8 }}>
-            {WEDDING_CONFIG.date} · ore 15:00
+            {t('home.heroTime', { date: WEDDING_CONFIG.date, time: WEDDING_CONFIG.venue.ceremony.time })}
           </p>
           <p style={{ color: 'rgba(255,255,255,.75)', fontSize: '.95rem', marginBottom: 40 }}>
-            📍 Napoli, con vista sul Vesuvio
+            {t('home.heroLocation')}
           </p>
 
           <Countdown />
 
           <div style={{ marginTop: 48, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <button className="btn btn-primary btn-lg" onClick={() => navigate('/rsvp')}>
-              Conferma la tua presenza ✉️
+              {t('home.heroCtaRsvp')}
             </button>
             <button
               className="btn btn-lg"
               style={{ background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)', border: '1.5px solid rgba(255,255,255,.4)', color: '#fff' }}
               onClick={() => navigate('/menu')}
             >
-              Scopri il menù
+              {t('home.heroCtaMenu')}
             </button>
           </div>
         </div>
@@ -278,10 +303,10 @@ export default function Home() {
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--charcoal)', marginBottom: 8 }}>
-              🌤️ Previsioni meteo
+              {t('home.weatherTitle')}
             </h2>
             <p style={{ color: 'var(--warm-gray)', fontSize: '.9rem' }}>
-              Napoli · aggiornate in tempo reale
+              {t('home.weatherSubtitle')}
             </p>
           </div>
           <WeatherWidget />
@@ -293,13 +318,13 @@ export default function Home() {
         <div className="container-sm">
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--charcoal)', marginBottom: 8 }}>
-              🎵 La nostra playlist
+              {t('home.playlistTitle')}
             </h2>
             <p style={{ color: 'var(--warm-gray)', fontSize: '.9rem' }}>
-              Le canzoni che raccontano la nostra storia
+              {t('home.playlistSubtitle')}
             </p>
           </div>
-          <SpotifyWidget />
+          <SpotifyWidget title={t('home.playlistFrameTitle')} />
         </div>
       </section>
 
@@ -307,7 +332,7 @@ export default function Home() {
       <section style={{ padding: '60px 20px', background: 'var(--white)' }}>
         <div className="container">
           <div className="divider" style={{ marginBottom: 40 }}>
-            <span>Le sezioni</span>
+            <span>{t('home.sectionsDivider')}</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
             {quickLinks.map(l => (
@@ -345,21 +370,14 @@ export default function Home() {
       <section style={{ padding: '80px 20px', background: 'var(--white)' }}>
         <div className="container-sm" style={{ textAlign: 'center' }}>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.2rem', color: 'var(--charcoal)', marginBottom: 16 }}>
-            La nostra storia
+            {t('home.storyTitle')}
           </h2>
           <div style={{ width: 60, height: 1, background: 'var(--blush)', margin: '0 auto 24px' }} />
           <p style={{ color: 'var(--warm-gray)', lineHeight: 1.8, fontSize: '1.05rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
-            "Ci siamo incontrati per caso, ci siamo scelti per amore.
-            Ogni giorno insieme è stato un regalo, e oggi vogliamo condividere
-            la più grande avventura della nostra vita con le persone che amiamo."
+            "{t('home.storyQuote')}"
           </p>
           <div style={{ marginTop: 32, display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap' }}>
-            {[
-              { year: '2019', event: 'Il primo incontro' },
-              { year: '2021', event: 'La prima estate insieme' },
-              { year: '2023', event: 'La proposta' },
-              { year: '2025', event: 'Il grande giorno 💍' },
-            ].map(s => (
+            {t('home.timeline').map(s => (
               <div key={s.year} style={{ textAlign: 'center' }}>
                 <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: 'var(--rose)' }}>{s.year}</div>
                 <div style={{ fontSize: '.85rem', color: 'var(--warm-gray)', marginTop: 4 }}>{s.event}</div>
