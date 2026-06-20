@@ -1,44 +1,10 @@
-import { useState } from 'react'
+import { WEDDING_CONFIG } from '../config/wedding'
+import { useLanguage } from '../hooks/useLanguage'
 
-const CERIMONIA = {
-  nome: 'Duomo di Napoli',
-  indirizzo: 'Via Duomo – 80138 Napoli (NA)',
-  orario: 'Sabato 14 Giugno 2025 · ore 15:00',
-  note: 'Vi preghiamo di essere presenti almeno 15 minuti prima.',
-  coords: { lat: 40.8529, lng: 14.2616 },
-}
-
-const RICEVIMENTO = {
-  nome: 'Villa Doria d’Angri',
-  indirizzo: 'Via Francesco Petrarca, 80 – Posillipo, Napoli (NA)',
-  orario: 'A seguire · ore 17:00',
-  note: 'Il ricevimento si terrà nei giardini con vista sul Golfo di Napoli. In caso di pioggia, ci sposteremo nelle sale interne.',
-  coords: { lat: 40.8296, lng: 14.2156 },
-}
-
-const PARCHEGGI = [
-  { icon: '🅿️', titolo: 'Parcheggi consigliati', desc: 'Parcheggi a pagamento nelle zone di Posillipo e Mergellina. Consigliata arrivo anticipato.' },
-  { icon: '🚇', titolo: 'Metro + Funicolare', desc: 'Linea 1 fino a Toledo/Dante, poi autobus o taxi verso Posillipo.' },
-  { icon: '🚕', titolo: 'Taxi / NCC', desc: 'Consigliamo prenotazione: Radio Taxi Napoli +39 081 8888.' },
-]
-
-const FUORI_CITTA = [
-  {
-    icon: '🚂',
-    titolo: 'In treno',
-    desc: 'Stazione Napoli Centrale (Piazza Garibaldi). Collegamenti con Roma, Salerno e tutta Italia.',
-  },
-  {
-    icon: '✈️',
-    titolo: 'In aereo',
-    desc: 'Aeroporto di Napoli Capodichino (NAP) – 15/20 min dal centro città.',
-  },
-  {
-    icon: '🏨',
-    titolo: 'Dove dormire',
-    desc: 'Zona Chiaia, Mergellina o Centro Storico consigliate.',
-  },
-]
+const CERIMONIA_COORDS = { lat: 40.8529, lng: 14.2616 }
+const RICEVIMENTO_COORDS = { lat: 40.8296, lng: 14.2156 }
+const CERIMONIA_INDIRIZZO = 'Via Duomo – 80138 Napoli (NA)'
+const RICEVIMENTO_INDIRIZZO = 'Via Francesco Petrarca, 80 – Posillipo, Napoli (NA)'
 
 /* ───────── COMPONENTI ───────── */
 
@@ -67,6 +33,7 @@ function InfoCard({ icon, titolo, desc }) {
 }
 
 function LuogoCard({ luogo, showMap }) {
+  const { t } = useLanguage()
   return (
     <div className="card" style={{ overflow: 'hidden' }}>
       <div style={{ padding: '28px 28px 20px' }}>
@@ -105,7 +72,7 @@ function LuogoCard({ luogo, showMap }) {
             rel="noopener noreferrer"
             className="btn btn-primary btn-sm"
           >
-            🗺️ Google Maps
+            {t('luoghi.googleMaps')}
           </a>
 
           <a
@@ -114,7 +81,7 @@ function LuogoCard({ luogo, showMap }) {
             rel="noopener noreferrer"
             className="btn btn-outline btn-sm"
           >
-            🚗 Waze
+            {t('luoghi.waze')}
           </a>
         </div>
       </div>
@@ -135,6 +102,19 @@ function LuogoCard({ luogo, showMap }) {
 /* ───────── PAGE ───────── */
 
 export default function Luoghi() {
+  const { t } = useLanguage()
+
+  const cerimonia = {
+    ...t('luoghi.ceremony', { date: WEDDING_CONFIG.date }),
+    indirizzo: CERIMONIA_INDIRIZZO,
+    coords: CERIMONIA_COORDS,
+  }
+  const ricevimento = {
+    ...t('luoghi.reception'),
+    indirizzo: RICEVIMENTO_INDIRIZZO,
+    coords: RICEVIMENTO_COORDS,
+  }
+
   return (
     <div className="page-enter" style={{ padding: '60px 20px 120px' }}>
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
@@ -142,29 +122,29 @@ export default function Luoghi() {
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <div style={{ fontSize: '3rem' }}>📍</div>
           <h1 style={{ fontFamily: 'var(--font-serif)' }}>
-            Luoghi & Indicazioni – Napoli
+            {t('luoghi.pageTitle')}
           </h1>
         </div>
 
         {/* CERIMONIA */}
-        <LuogoCard luogo={CERIMONIA} showMap={false} />
+        <LuogoCard luogo={cerimonia} showMap={false} />
 
         <div style={{ height: 20 }} />
 
         {/* RICEVIMENTO */}
-        <LuogoCard luogo={RICEVIMENTO} showMap />
+        <LuogoCard luogo={ricevimento} showMap />
 
         <section style={{ marginTop: 40 }}>
-          <h2>🚗 Come arrivare</h2>
+          <h2>{t('luoghi.comeArrivare')}</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {PARCHEGGI.map(p => <InfoCard key={p.titolo} {...p} />)}
+            {t('luoghi.parcheggi').map(p => <InfoCard key={p.titolo} {...p} />)}
           </div>
         </section>
 
         <section style={{ marginTop: 40 }}>
-          <h2>🌍 Per chi viene da fuori</h2>
+          <h2>{t('luoghi.perChiVieneDaFuori')}</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {FUORI_CITTA.map(f => <InfoCard key={f.titolo} {...f} />)}
+            {t('luoghi.fuoriCitta').map(f => <InfoCard key={f.titolo} {...f} />)}
           </div>
         </section>
 

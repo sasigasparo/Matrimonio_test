@@ -20,7 +20,7 @@ SMTP_PORT     = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER     = os.getenv("SMTP_USER", "")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 COUPLE_NAMES  = os.getenv("COUPLE_NAMES", "Sofia & Marco")
-WEDDING_DATE  = os.getenv("WEDDING_DATE", "14 Giugno 2025")
+WEDDING_DATE  = os.getenv("WEDDING_DATE", "14 Giugno 2027")
 WEDDING_VENUE = os.getenv("WEDDING_VENUE", "Villa Belvedere, Toscana")
 APP_URL       = os.getenv("APP_URL", "http://localhost:5173")
 

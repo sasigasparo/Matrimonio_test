@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react'
 import { api } from '../utils/api'
 import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
+import { useLanguage } from '../hooks/useLanguage'
+import LanguageSwitch from '../components/LanguageSwitch'
 
 /* ── Wedding date ─────────────────────────────────────────────────── */
-const WEDDING_TIME = new Date('2026-06-19T15:00:00')
+const WEDDING_TIME = new Date('2027-06-19T15:00:00')
+const WEDDING_DATE_LABEL = { it: 'WEDDING_DATE', en: 'WEDDING_DATE' }
 const UNLOCK_PASSWORD = 'menu'
 const SESSION_KEY = 'wedding_menu_auth'
 
@@ -30,6 +33,7 @@ function useCountdown() {
 
 /* ── Countdown gate with password unlock ─────────────────────────── */
 function MenuCountdownGate({ diff, onUnlock }) {
+  const { t } = useLanguage()
   const pad = v => String(v ?? 0).padStart(2, '0')
   const [pwd, setPwd]     = useState('')
   const [error, setError] = useState(false)
@@ -67,6 +71,10 @@ function MenuCountdownGate({ diff, onUnlock }) {
         pointerEvents: 'none',
       }} />
 
+      <div style={{ position: 'absolute', top: 14, right: 14, zIndex: 2 }}>
+        <LanguageSwitch style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)' }} />
+      </div>
+
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ fontSize: '3.5rem', marginBottom: 20, filter: 'drop-shadow(0 0 24px rgba(200,130,106,0.45))' }}>
           🍽️
@@ -77,7 +85,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
           color: 'rgba(255,255,255,0.4)', fontSize: '.9rem',
           letterSpacing: '.12em', textTransform: 'uppercase', marginBottom: 10,
         }}>
-          il menù sarà svelato il giorno del matrimonio
+          {t('menu.revealNotice')}
         </p>
 
         <h1 style={{
@@ -93,16 +101,16 @@ function MenuCountdownGate({ diff, onUnlock }) {
           color: 'rgba(200,130,106,0.7)', fontFamily: 'Georgia, serif',
           fontStyle: 'italic', fontSize: '.95rem', marginBottom: 48,
         }}>
-          14 Giugno 2026 · Villa Belvedere, Toscana
+          {t('menu.dateLocation', { date: 'WEDDING_DATE' })}
         </p>
 
         {/* Countdown */}
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 56 }}>
           {[
-            { label: 'Giorni',  val: diff.d },
-            { label: 'Ore',     val: diff.h },
-            { label: 'Minuti',  val: diff.m },
-            { label: 'Secondi', val: diff.s },
+            { label: t('menu.days'),    val: diff.d },
+            { label: t('menu.hours'),   val: diff.h },
+            { label: t('menu.minutes'), val: diff.m },
+            { label: t('menu.seconds'), val: diff.s },
           ].map(b => (
             <div key={b.label} style={{
               minWidth: 76, padding: '18px 14px',
@@ -150,7 +158,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
               e.currentTarget.style.color = 'rgba(255,255,255,0.15)'
             }}
           >
-            anteprima
+            {t('menu.previewLabel')}
           </button>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
@@ -160,7 +168,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
               value={pwd}
               onChange={e => { setPwd(e.target.value); setError(false) }}
               onKeyDown={e => e.key === 'Enter' && tryUnlock()}
-              placeholder="Password"
+              placeholder={t('menu.passwordPlaceholder')}
               style={{
                 padding: '10px 16px', borderRadius: 8, fontSize: '1rem',
                 border: `1.5px solid ${error ? '#c97a7a' : 'rgba(200,130,106,0.35)'}`,
@@ -170,7 +178,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
               }}
             />
             {error && (
-              <p style={{ color: '#c97a7a', fontSize: '.8rem', margin: 0 }}>Password errata</p>
+              <p style={{ color: '#c97a7a', fontSize: '.8rem', margin: 0 }}>{t('menu.wrongPassword')}</p>
             )}
             <button
               onClick={tryUnlock}
@@ -182,7 +190,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
                 fontSize: '.85rem', letterSpacing: '.06em',
               }}
             >
-              Sblocca
+              {t('menu.unlock')}
             </button>
           </div>
         )}
@@ -202,10 +210,11 @@ const COURSE_ICONS = {
 }
 
 function DietBadge({ isVegan, isGlutenFree }) {
+  const { t } = useLanguage()
   return (
     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-      {isVegan      && <span className="badge" style={{ background: '#d4edda', color: '#2d6a4f', fontSize: '.7rem' }}>🌱 Vegano</span>}
-      {isGlutenFree && <span className="badge" style={{ background: '#fff3cd', color: '#7a5820', fontSize: '.7rem' }}>🌾 Senza glutine</span>}
+      {isVegan      && <span className="badge" style={{ background: '#d4edda', color: '#2d6a4f', fontSize: '.7rem' }}>{t('menu.vegan')}</span>}
+      {isGlutenFree && <span className="badge" style={{ background: '#fff3cd', color: '#7a5820', fontSize: '.7rem' }}>{t('menu.glutenFree')}</span>}
     </div>
   )
 }
@@ -215,6 +224,7 @@ export default function MenuPage() {
   const { user } = useAuth()
   const toast = useToast()
   const countdown = useCountdown()
+  const { t } = useLanguage()
 
   // Admin bypasses the gate entirely
   const isAdmin = !!user?.is_admin
@@ -231,7 +241,7 @@ export default function MenuPage() {
     try {
       const data = await api.getMenu()
       setMenu(data)
-    } catch { toast.error('Errore caricamento menù') }
+    } catch { toast.error(t('menu.loadError')) }
     setLoading(false)
   }
 
@@ -252,16 +262,20 @@ export default function MenuPage() {
       <div style={{
         background: 'linear-gradient(135deg, var(--charcoal) 0%, #3d2d28 100%)',
         padding: '80px 20px 60px', textAlign: 'center', color: 'var(--white)',
+        position: 'relative',
       }}>
+        <div style={{ position: 'absolute', top: 16, right: 16 }}>
+          <LanguageSwitch style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} />
+        </div>
         <div style={{ fontSize: '3rem', marginBottom: 16 }}>🍽️</div>
         <h1 style={{
           fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem,6vw,3.5rem)',
           fontWeight: 300, letterSpacing: '.05em', marginBottom: 12,
         }}>
-          Il Menù del Matrimonio
+          {t('menu.title')}
         </h1>
         <p style={{ color: 'rgba(255,255,255,.6)', fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.1rem' }}>
-          Una selezione di sapori per celebrare insieme
+          {t('menu.subtitle')}
         </p>
         {isAdmin && !countdown.past && (
           <div style={{
@@ -270,7 +284,7 @@ export default function MenuPage() {
             borderRadius: 99, padding: '5px 16px',
             color: 'rgba(138,158,140,0.9)', fontSize: '.78rem', letterSpacing: '.06em',
           }}>
-            ⚙ Anteprima admin
+            {t('menu.adminPreview')}
           </div>
         )}
       </div>
@@ -283,7 +297,7 @@ export default function MenuPage() {
           </div>
         ) : visibleCourses.length === 0 ? (
           <p style={{ textAlign: 'center', color: 'var(--warm-gray)', padding: 60 }}>
-            Il menù non è ancora disponibile.
+            {t('menu.notAvailable')}
           </p>
         ) : visibleCourses.map((course, ci) => {
           const info  = COURSE_ICONS[course] || { icon: '🍴', color: 'var(--rose)', bg: 'rgba(200,130,106,.1)' }
@@ -305,7 +319,7 @@ export default function MenuPage() {
                     fontFamily: 'var(--font-serif)', fontSize: '1.8rem',
                     color: 'var(--charcoal)', fontWeight: 400,
                   }}>
-                    {course}
+                    {t(`menu.courses.${course}`)}
                   </h2>
                   <div style={{ height: 2, width: 40, background: info.color, borderRadius: 99, marginTop: 4 }} />
                 </div>
@@ -340,7 +354,7 @@ export default function MenuPage() {
                     )}
                     {item.allergens && (
                       <p style={{ color: 'var(--blush)', fontSize: '.78rem', marginTop: 6, margin: '6px 0 0' }}>
-                        ⚠️ Allergeni: {item.allergens}
+                        {t('menu.allergens', { list: item.allergens })}
                       </p>
                     )}
                   </div>

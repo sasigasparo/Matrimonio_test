@@ -1,5 +1,6 @@
 import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
+import { WEDDING_CONFIG } from '../config/wedding'
 import { useEffect, useState } from 'react'
 
 /* ── Meteo ───────────────────────────────────────────────────────── */
@@ -249,7 +250,7 @@ export default function Home() {
           <div style={{ width: 80, height: 1, background: 'rgba(255,255,255,.5)', margin: '20px auto' }} />
 
           <p style={{ color: 'rgba(255,255,255,.9)', fontSize: '1.05rem', marginBottom: 8 }}>
-            Sabato 14 Giugno 2025 · ore 15:00
+            {WEDDING_CONFIG.date} · ore 15:00
           </p>
           <p style={{ color: 'rgba(255,255,255,.75)', fontSize: '.95rem', marginBottom: 40 }}>
             📍 Napoli, con vista sul Vesuvio

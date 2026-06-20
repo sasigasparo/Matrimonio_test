@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import { useLanguage } from '../hooks/useLanguage'
+import LanguageSwitch from '../components/LanguageSwitch'
 
 const API_URL = (import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')
-const WEDDING_DATE_LABEL = '14 Giugno 2026'
+const WEDDING_DATE_LABEL = { it: '14 Giugno 2026', en: 'June 14, 2026' }
 
 export default function Login() {
   const navigate = useNavigate()
   const { login } = useAuth()
+  const { t, lang } = useLanguage()
   const [password, setPassword]         = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading]           = useState(false)
@@ -16,7 +19,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    if (!password) { setError('La password è obbligatoria'); return }
+    if (!password) { setError(t('login.passwordRequired')); return }
 
     setLoading(true)
     try {
@@ -28,7 +31,7 @@ export default function Login() {
 
       if (!response.ok) {
         const err = await response.json()
-        throw new Error(err.detail || 'Password non valida')
+        throw new Error(err.detail || t('login.invalidPassword'))
       }
 
       const data = await response.json()
@@ -36,7 +39,7 @@ export default function Login() {
       login(data.guest)
       navigate('/')
     } catch (err) {
-      setError(err.message || 'Password non valida')
+      setError(err.message || t('login.invalidPassword'))
     } finally {
       setLoading(false)
     }
@@ -95,6 +98,10 @@ export default function Login() {
         }
       `}</style>
 
+      <div style={{ position: 'absolute', top: 16, right: 16, zIndex: 1 }}>
+        <LanguageSwitch />
+      </div>
+
       <div
         className="login-card"
         style={{
@@ -137,21 +144,21 @@ export default function Login() {
           fontSize: '.7rem', letterSpacing: '.14em', textTransform: 'uppercase',
           color: 'var(--rose)', fontWeight: 600,
         }}>
-          Sofia &amp; Marco · {WEDDING_DATE_LABEL}
+          {t('login.eyebrow', { date: WEDDING_DATE_LABEL[lang] })}
         </div>
 
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.9rem', color: 'var(--charcoal)', margin: '4px 0 2px' }}>
-          Benvenuto
+          {t('login.title')}
         </h2>
 
         <p style={{ color: 'var(--warm-gray)', fontSize: '.92rem', maxWidth: 300, margin: '0 0 22px', lineHeight: 1.5 }}>
-          Inserisci la password che hai ricevuto per accedere al sito del nostro matrimonio
+          {t('login.subtitle')}
         </p>
 
         <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6, textAlign: 'left' }}>
             <label htmlFor="login-password" style={{ fontSize: '.8rem', fontWeight: 600, color: 'var(--charcoal)' }}>
-              Password
+              {t('login.passwordLabel')}
             </label>
             <div style={{ position: 'relative' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--warm-gray)" strokeWidth="2" aria-hidden="true"
@@ -181,7 +188,7 @@ export default function Login() {
                 type="button"
                 className="login-eye-btn"
                 onClick={() => setShowPassword(s => !s)}
-                aria-label={showPassword ? 'Nascondi password' : 'Mostra password'}
+                aria-label={showPassword ? t('login.hidePassword') : t('login.showPassword')}
                 style={{
                   position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
                   background: 'none', border: 'none', cursor: 'pointer',
@@ -235,10 +242,10 @@ export default function Login() {
                   border: '2px solid rgba(255,255,255,.4)', borderTopColor: '#fff',
                   display: 'inline-block', animation: 'login-spin .7s linear infinite',
                 }} />
-                Accesso in corso...
+                {t('login.submitting')}
               </>
             ) : (
-              <>Entra 💍</>
+              <>{t('login.submit')}</>
             )}
           </button>
         </form>

@@ -322,6 +322,135 @@ function RecordingPill({ secs, onStop, onCancel }) {
   )
 }
 
+/* ── Camera modal (getUserMedia) ────────────────────────────────── */
+function CameraModal({ onCapture, onClose }) {
+  const videoRef = useRef(null)
+  const streamRef = useRef(null)
+  const [ready, setReady] = useState(false)
+  const [error, setError] = useState('')
+  const [facing, setFacing] = useState('environment')
+
+  const startStream = async (facingMode) => {
+    // stop previous stream if any
+    if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop())
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode, width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false,
+      })
+      streamRef.current = stream
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream
+        videoRef.current.play()
+        setReady(true)
+        setError('')
+      }
+    } catch (e) {
+      setError('Fotocamera non disponibile: ' + e.message)
+    }
+  }
+
+  useEffect(() => {
+    startStream(facing)
+    return () => { streamRef.current?.getTracks().forEach(t => t.stop()) }
+  }, [])
+
+  const flip = () => {
+    const next = facing === 'environment' ? 'user' : 'environment'
+    setFacing(next)
+    startStream(next)
+  }
+
+  const shoot = () => {
+    const video = videoRef.current
+    if (!video) return
+    const canvas = document.createElement('canvas')
+    canvas.width  = video.videoWidth
+    canvas.height = video.videoHeight
+    canvas.getContext('2d').drawImage(video, 0, 0)
+    canvas.toBlob(blob => {
+      if (!blob) return
+      const file = new File([blob], 'camera_photo.jpg', { type: 'image/jpeg' })
+      streamRef.current?.getTracks().forEach(t => t.stop())
+      onCapture(file)
+    }, 'image/jpeg', 0.92)
+  }
+
+  // close on Escape
+  useEffect(() => {
+    const h = e => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', h)
+    return () => window.removeEventListener('keydown', h)
+  }, [onClose])
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 300,
+      background: '#000',
+      display: 'flex', flexDirection: 'column',
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '12px 16px', background: 'rgba(0,0,0,0.6)', flexShrink: 0,
+      }}>
+        <button onClick={onClose} style={{
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: '#fff', fontSize: 22, lineHeight: 1, padding: '4px 8px',
+        }}>✕</button>
+        <span style={{ color: '#fff', fontFamily: 'Georgia, serif', fontSize: 15 }}>Scatta una foto</span>
+        <button onClick={flip} style={{
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: '#fff', fontSize: 22, padding: '4px 8px',
+        }} title="Cambia fotocamera">🔄</button>
+      </div>
+
+      {/* Viewfinder */}
+      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {error ? (
+          <div style={{ color: 'rgba(255,255,255,0.7)', textAlign: 'center', padding: 32, fontSize: 14 }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>📷</div>
+            {error}
+          </div>
+        ) : (
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            style={{
+              width: '100%', height: '100%', objectFit: 'cover',
+              opacity: ready ? 1 : 0, transition: 'opacity 0.3s',
+            }}
+          />
+        )}
+      </div>
+
+      {/* Shutter */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '28px 0 40px', background: 'rgba(0,0,0,0.6)', flexShrink: 0,
+      }}>
+        <button
+          onClick={shoot}
+          disabled={!ready || !!error}
+          style={{
+            width: 70, height: 70, borderRadius: '50%',
+            background: '#fff', border: '5px solid rgba(255,255,255,0.4)',
+            cursor: ready && !error ? 'pointer' : 'not-allowed',
+            opacity: ready && !error ? 1 : 0.4,
+            boxShadow: '0 0 0 3px rgba(255,255,255,0.2)',
+            transition: 'transform 0.1s, opacity 0.2s',
+          }}
+          onMouseDown={e => e.currentTarget.style.transform = 'scale(0.92)'}
+          onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
+          title="Scatta"
+        />
+      </div>
+    </div>
+  )
+}
+
 /* ── Photo Reel modal ────────────────────────────────────────────── */
 const SUPABASE_PROJECT_ID = 'wzwtwbnjcxrwxgiurgqa'
 const SUPABASE_BUCKET     = 'wedding-photos'
@@ -491,6 +620,8 @@ export default function Chat() {
   const [photoFile, setPhotoFile] = useState(null)
   const [showReel, setShowReel] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
+  const [showPhotoMenu, setShowPhotoMenu] = useState(false)
+  const [showCamera, setShowCamera] = useState(false)
 
   // audio
   const [recording, setRecording] = useState(false)
@@ -502,6 +633,7 @@ export default function Chat() {
   const fileInputRef = useRef(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
+  const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 
   const myId = user?.id || null
   const isAdmin = user?.is_admin || false
@@ -686,6 +818,14 @@ export default function Chat() {
     e.target.value = ''
   }
 
+  const handleCameraCapture = (file) => {
+    setShowCamera(false)
+    setPhotoFile(file)
+    const reader = new FileReader()
+    reader.onload = ev => setPhotoPreview(ev.target.result)
+    reader.readAsDataURL(file)
+  }
+
   const deleteMsg = async (id, type) => {
     if (!confirm('Eliminare questo messaggio?')) return
     try {
@@ -720,6 +860,7 @@ export default function Chat() {
       )}
 
       {showReel && <PhotoReelModal onClose={() => setShowReel(false)} />}
+      {showCamera && <CameraModal onCapture={handleCameraCapture} onClose={() => setShowCamera(false)} />}
 
       {/* ── Header ── */}
       <div style={{
@@ -923,26 +1064,69 @@ export default function Chat() {
           background: 'var(--white)', borderTop: '1px solid rgba(200,162,168,0.2)',
           flexShrink: 0,
         }}>
-          {/* Photo attach */}
-          <button
-            onClick={() => { ensureName(); fileInputRef.current?.click() }}
-            style={{
-              width: 38, height: 38, borderRadius: '50%', border: '1.5px solid rgba(200,162,168,0.3)',
-              background: 'var(--ivory)', cursor: 'pointer', display: 'flex',
-              alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0,
-              transition: 'all 0.2s',
-            }}
-            title="Allega foto"
-          >📷</button>
+          {/* Input nascosto per libreria */}
           <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
 
-          {/* Text area */}
+          {/* 📷 Bottone foto + popup menu */}
+          <div style={{ position: 'relative', flexShrink: 0 }}>
+            <button
+              onClick={() => { if (!ensureName()) return; setShowPhotoMenu(v => !v) }}
+              style={{
+                width: 38, height: 38, borderRadius: '50%',
+                border: `1.5px solid ${showPhotoMenu ? 'var(--rose)' : 'rgba(200,162,168,0.3)'}`,
+                background: showPhotoMenu ? 'rgba(200,130,106,0.12)' : 'var(--ivory)',
+                cursor: 'pointer', display: 'flex',
+                alignItems: 'center', justifyContent: 'center', fontSize: 16,
+                transition: 'all 0.2s',
+              }}
+              title="Foto"
+            >📷</button>
+
+            {showPhotoMenu && (
+              <>
+                <div onClick={() => setShowPhotoMenu(false)} style={{ position: 'fixed', inset: 0, zIndex: 90 }} />
+                <div style={{
+                  position: 'absolute', bottom: 46, left: 0, zIndex: 100,
+                  background: 'var(--white)', borderRadius: 14,
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
+                  border: '1px solid rgba(200,162,168,0.2)',
+                  overflow: 'hidden', minWidth: 200,
+                  animation: 'menuIn 0.15s ease-out',
+                }}>
+                  {[
+                    { icon: '📸', label: 'Scatta una foto',       action: () => { setShowPhotoMenu(false); setShowCamera(true) } },
+                    { icon: '🖼️', label: 'Carica dalla libreria', action: () => { setShowPhotoMenu(false); fileInputRef.current?.click() } },
+                  ].map((item, idx, arr) => (
+                    <button
+                      key={item.label}
+                      onClick={item.action}
+                      style={{
+                        width: '100%', padding: '12px 16px', border: 'none',
+                        background: 'none', cursor: 'pointer', textAlign: 'left',
+                        display: 'flex', alignItems: 'center', gap: 10,
+                        color: 'var(--charcoal)', fontSize: 13,
+                        borderBottom: idx < arr.length - 1 ? '1px solid rgba(200,162,168,0.1)' : 'none',
+                        transition: 'background 0.15s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--ivory)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                    >
+                      <span style={{ fontSize: 17 }}>{item.icon}</span>
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Textarea */}
           <textarea
             ref={inputRef}
             placeholder={guestName || user?.name ? 'Scrivi un messaggio…' : 'Clicca per scrivere…'}
             value={text}
             onChange={e => { setText(e.target.value); e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px' }}
-            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); !photoFile ? send() : send() } }}
+            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
             onClick={() => ensureName()}
             style={{
               flex: 1, border: '1.5px solid rgba(200,162,168,0.25)',
@@ -956,33 +1140,23 @@ export default function Chat() {
             rows={1}
           />
 
-          {/* Send or mic */}
+          {/* Send / Mic */}
           {text.trim() || photoFile ? (
-            <button
-              onClick={send}
-              disabled={sending}
-              style={{
-                width: 38, height: 38, borderRadius: '50%', border: 'none',
-                background: 'var(--rose)', color: '#fff', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 16, flexShrink: 0, transition: 'all 0.2s',
-                opacity: sending ? 0.6 : 1,
-              }}
-            >
-              ➤
-            </button>
+            <button onClick={send} disabled={sending} style={{
+              width: 38, height: 38, borderRadius: '50%', border: 'none',
+              background: 'var(--rose)', color: '#fff', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 16, flexShrink: 0, transition: 'all 0.2s',
+              opacity: sending ? 0.6 : 1,
+            }}>➤</button>
           ) : (
-            <button
-              onClick={startRecording}
-              style={{
-                width: 38, height: 38, borderRadius: '50%',
-                border: '1.5px solid rgba(200,162,168,0.3)',
-                background: 'var(--ivory)', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 16, flexShrink: 0, transition: 'all 0.2s',
-              }}
-              title="Registra messaggio vocale"
-            >🎙️</button>
+            <button onClick={startRecording} style={{
+              width: 38, height: 38, borderRadius: '50%',
+              border: '1.5px solid rgba(200,162,168,0.3)',
+              background: 'var(--ivory)', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 16, flexShrink: 0, transition: 'all 0.2s',
+            }} title="Registra messaggio vocale">🎙️</button>
           )}
         </div>
       )}

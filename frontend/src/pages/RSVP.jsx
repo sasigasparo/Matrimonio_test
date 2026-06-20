@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { api } from '../utils/api'
 import { useToast, ToastContainer } from '../hooks/useToast'
+import { useLanguage } from '../hooks/useLanguage'
+import LanguageSwitch from '../components/LanguageSwitch'
 
 export default function Rsvp() {
   const toast = useToast()
+  const { t } = useLanguage()
   const [allGuests, setAllGuests] = useState([])
   const [selectedGuestId, setSelectedGuestId] = useState('')
   const [guest, setGuest] = useState(null)
@@ -42,17 +45,17 @@ export default function Rsvp() {
   }
 
   const save = async () => {
-    if (!guest) { toast.error('Seleziona il tuo nome'); return }
+    if (!guest) { toast.error(t('rsvp.toastSelectGuest')); return }
     setSaving(true)
     try {
       const updated = await api.updatersvp(guest.id, { rsvp_status: rsvpStatus, dietary })
       setGuest(updated)
       setAllGuests(prev => prev.map(g => g.id === guest.id ? updated : g))
       toast.success(rsvpStatus === 'confirmed'
-        ? '🎉 Presenza confermata! Ci vediamo al matrimonio!'
-        : 'Risposta registrata. Grazie!')
+        ? t('rsvp.toastConfirmed')
+        : t('rsvp.toastDeclined'))
     } catch (e) {
-      toast.error('Errore: ' + e.message)
+      toast.error(t('rsvp.toastError', { message: e.message }))
     }
     setSaving(false)
   }
@@ -66,18 +69,37 @@ export default function Rsvp() {
   const confirmedCount = allGuests.filter(g => g.rsvp_status === 'confirmed').length
   const totalGuests = allGuests.length
 
+  const dietaryOptions = [
+    { val: '',               icon: '🍽️', label: t('rsvp.dietaryNone') },
+    { val: 'vegetariano',    icon: '🥗', label: t('rsvp.dietaryVegetarian') },
+    { val: 'vegano',         icon: '🌱', label: t('rsvp.dietaryVegan') },
+    { val: 'senza_glutine',  icon: '🌾', label: t('rsvp.dietaryGlutenFree') },
+    { val: 'senza_lattosio', icon: '🥛', label: t('rsvp.dietaryLactoseFree') },
+    { val: 'allergie',       icon: '⚠️', label: t('rsvp.dietaryAllergies') },
+  ]
+
+  const infoCards = [
+    { icon: '📅', label: t('rsvp.infoDate'),      val: t('rsvp.infoDateVal') },
+    { icon: '📍', label: t('rsvp.infoLocation'),  val: t('rsvp.infoLocationVal') },
+    { icon: '🚗', label: t('rsvp.infoParking'),   val: t('rsvp.infoParkingVal') },
+    { icon: '👗', label: t('rsvp.infoDressCode'), val: t('rsvp.infoDressCodeVal') },
+  ]
+
   return (
     <div className="page-enter" style={{ padding: '60px 20px 100px' }}>
       <div className="container-sm">
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 48 }}>
+        <div style={{ textAlign: 'center', marginBottom: 48, position: 'relative' }}>
+          <div style={{ position: 'absolute', top: -16, right: 0 }}>
+            <LanguageSwitch />
+          </div>
           <div style={{ fontSize: '3rem', marginBottom: 16 }}>✉️</div>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', color: 'var(--charcoal)', marginBottom: 8 }}>
-            Sezione inviti
+            {t('rsvp.headerTitle')}
           </h1>
           <p style={{ color: 'var(--warm-gray)' }}>
-            Scegli il tuo nome per confermare la tua presenza
+            {t('rsvp.headerSubtitle')}
           </p>
         </div>
 
@@ -87,7 +109,7 @@ export default function Rsvp() {
           {/* Step 1 — Guest selector */}
           <div style={{ marginBottom: 28 }}>
             <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
-              1 · Chi sei?
+              {t('rsvp.step1')}
             </label>
             <select
               className="select"
@@ -95,7 +117,7 @@ export default function Rsvp() {
               onChange={handleGuestSelect}
               style={{ fontSize: '1rem', padding: '12px 14px', width: '100%' }}
             >
-              <option value="">— Scegli il tuo nome —</option>
+              <option value="">{t('rsvp.choosePlaceholder')}</option>
               {allGuests.map(g => (
                 <option key={g.id} value={String(g.id)}>
                   {g.name}
@@ -112,10 +134,10 @@ export default function Rsvp() {
               {guest.rsvp_status !== 'pending' && (
                 <div style={{ marginBottom: 20, textAlign: 'center' }}>
                   <span className={`badge badge-${guest.rsvp_status}`}>
-                    {guest.rsvp_status === 'confirmed' ? '✓ Già confermato' : '✕ Hai già declinato'}
+                    {guest.rsvp_status === 'confirmed' ? t('rsvp.alreadyConfirmed') : t('rsvp.alreadyDeclined')}
                   </span>
                   <p style={{ fontSize: '.8rem', color: 'var(--warm-gray)', marginTop: 6 }}>
-                    Puoi aggiornare la risposta qui sotto.
+                    {t('rsvp.updateNote')}
                   </p>
                 </div>
               )}
@@ -123,12 +145,12 @@ export default function Rsvp() {
               {/* Step 2 — RSVP choice */}
               <div style={{ marginBottom: 28 }}>
                 <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
-                  2 · Puoi partecipare?
+                  {t('rsvp.step2')}
                 </label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                   {[
-                    { val: 'confirmed', icon: '🎉', label: 'Ci sarò!', desc: "Non vedo l'ora" },
-                    { val: 'declined',  icon: '😔', label: 'Non posso', desc: 'Con dispiacere' },
+                    { val: 'confirmed', icon: '🎉', label: t('rsvp.willAttend'), desc: t('rsvp.willAttendDesc') },
+                    { val: 'declined',  icon: '😔', label: t('rsvp.willDecline'), desc: t('rsvp.willDeclineDesc') },
                   ].map(opt => (
                     <button
                       key={opt.val}
@@ -152,17 +174,10 @@ export default function Rsvp() {
               {rsvpStatus === 'confirmed' && (
                 <div id="dietary" ref={dietaryRef} style={{ marginBottom: 28 }}>
                   <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
-                    3 · Esigenze alimentari
+                    {t('rsvp.step3')}
                   </label>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10 }}>
-                    {[
-                      { val: '',                icon: '🍽️', label: 'Nessuna' },
-                      { val: 'vegetariano',     icon: '🥗', label: 'Vegetariano' },
-                      { val: 'vegano',          icon: '🌱', label: 'Vegano' },
-                      { val: 'senza_glutine',   icon: '🌾', label: 'Senza glutine' },
-                      { val: 'senza_lattosio',  icon: '🥛', label: 'Senza lattosio' },
-                      { val: 'allergie',        icon: '⚠️', label: 'Allergie' },
-                    ].map(opt => (
+                    {dietaryOptions.map(opt => (
                       <button
                         key={opt.val}
                         onClick={() => setDietary(opt.val)}
@@ -182,7 +197,7 @@ export default function Rsvp() {
                   </div>
                   {dietary === 'allergie' && (
                     <p style={{ fontSize: '.82rem', color: 'var(--warm-gray)', marginTop: 8 }}>
-                      ℹ️ Specifica le tue allergie nella sezione messaggi, così potremo tener conto di tutto.
+                      {t('rsvp.allergyNote')}
                     </p>
                   )}
                 </div>
@@ -195,18 +210,13 @@ export default function Rsvp() {
                 disabled={saving}
                 style={{ width: '100%', justifyContent: 'center', padding: '14px 0' }}
               >
-                {saving ? 'Salvataggio…' : 'Conferma risposta'}
+                {saving ? t('rsvp.saving') : t('rsvp.confirm')}
               </button>
 
               {/* Info cards (only when confirming) */}
               {rsvpStatus === 'confirmed' && (
                 <div style={{ marginTop: 32, display: 'grid', gap: 12 }}>
-                  {[
-                    { icon: '📅', label: 'Data',       val: 'Sabato 14 Giugno 2025, ore 15:00' },
-                    { icon: '📍', label: 'Luogo',      val: 'Villa Belvedere, Via del Poggio 12, Siena (SI)' },
-                    { icon: '🚗', label: 'Parcheggio', val: 'Disponibile parcheggio gratuito in loco' },
-                    { icon: '👗', label: 'Dress code', val: 'Elegante. Evitare il bianco e il nero.' },
-                  ].map(info => (
+                  {infoCards.map(info => (
                     <div key={info.label} className="card" style={{ padding: '14px 18px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
                       <span style={{ fontSize: '1.3rem' }}>{info.icon}</span>
                       <div>
@@ -225,15 +235,15 @@ export default function Rsvp() {
         {allGuests.length > 0 && (
           <div style={{ marginTop: 48 }}>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--charcoal)', marginBottom: 16 }}>
-              Elenco invitati
+              {t('rsvp.guestListTitle')}
             </h2>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
               <div className="card" style={{ padding: '12px 16px', flex: '1', minWidth: 140 }}>
-                <div style={{ fontSize: '.8rem', color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>Totale invitati</div>
+                <div style={{ fontSize: '.8rem', color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>{t('rsvp.totalGuests')}</div>
                 <div style={{ fontSize: '1.6rem', fontWeight: 600, color: 'var(--charcoal)' }}>{totalGuests}</div>
               </div>
               <div className="card" style={{ padding: '12px 16px', flex: '1', minWidth: 140, background: 'rgba(200,130,106,.08)' }}>
-                <div style={{ fontSize: '.8rem', color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>Confermati</div>
+                <div style={{ fontSize: '.8rem', color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>{t('rsvp.confirmedCount')}</div>
                 <div style={{ fontSize: '1.6rem', fontWeight: 600, color: 'var(--rose)' }}>{confirmedCount}</div>
               </div>
             </div>
@@ -242,8 +252,8 @@ export default function Rsvp() {
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                   <tr style={{ background: 'var(--cream)', borderBottom: '1px solid var(--border-light)' }}>
-                    <th style={{ padding: '12px 16px', textAlign: 'left', fontSize: '.82rem', fontWeight: 600, color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>Nome</th>
-                    <th style={{ padding: '12px 16px', textAlign: 'center', fontSize: '.82rem', fontWeight: 600, color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>Stato</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontSize: '.82rem', fontWeight: 600, color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>{t('rsvp.colName')}</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'center', fontSize: '.82rem', fontWeight: 600, color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>{t('rsvp.colStatus')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -260,11 +270,11 @@ export default function Rsvp() {
                       </td>
                       <td style={{ padding: '11px 16px', textAlign: 'center' }}>
                         {g.rsvp_status === 'confirmed' ? (
-                          <span className="badge" style={{ background: 'rgba(138,158,140,.2)', color: '#2d6a4f' }}>✓ Confermato</span>
+                          <span className="badge" style={{ background: 'rgba(138,158,140,.2)', color: '#2d6a4f' }}>{t('rsvp.statusConfirmed')}</span>
                         ) : g.rsvp_status === 'declined' ? (
-                          <span className="badge" style={{ background: 'rgba(200,130,106,.2)', color: '#8b4513' }}>✕ Declinato</span>
+                          <span className="badge" style={{ background: 'rgba(200,130,106,.2)', color: '#8b4513' }}>{t('rsvp.statusDeclined')}</span>
                         ) : (
-                          <span className="badge" style={{ background: 'var(--cream)', color: 'var(--warm-gray)' }}>⏳ In sospeso</span>
+                          <span className="badge" style={{ background: 'var(--cream)', color: 'var(--warm-gray)' }}>{t('rsvp.statusPending')}</span>
                         )}
                       </td>
                     </tr>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLanguage } from '../hooks/useLanguage'
 
 /* ── Dati bancari ───────────────────────────────────────────────────
    ⚠️ PLACEHOLDER — sostituisci questi valori con i vostri dati reali
@@ -14,6 +15,7 @@ const GIFT_INFO = {
 }
 
 function CopyField({ label, value, mono = false }) {
+  const { t } = useLanguage()
   const [copied, setCopied] = useState(false)
 
   const copy = async () => {
@@ -55,13 +57,15 @@ function CopyField({ label, value, mono = false }) {
           transition: 'all .15s',
         }}
       >
-        {copied ? '✓ Copiato' : 'Copia'}
+        {copied ? t('regali.copied') : t('regali.copy')}
       </button>
     </div>
   )
 }
 
 export default function Regali() {
+  const { t } = useLanguage()
+
   return (
     <div style={{
       minHeight: 'calc(100dvh - 56px)',
@@ -73,11 +77,10 @@ export default function Regali() {
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <div style={{ fontSize: '2.6rem', marginBottom: 10 }}>🎁</div>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.9rem', color: 'var(--charcoal)', margin: '0 0 10px' }}>
-            Il vostro regalo
+            {t('regali.title')}
           </h1>
           <p style={{ color: 'var(--warm-gray)', maxWidth: 420, margin: '0 auto', lineHeight: 1.6 }}>
-            La cosa più importante per noi è avervi accanto in questo giorno. Se però desiderate
-            farci un pensiero, il modo che preferiamo è un piccolo contributo per la nostra luna di miele.
+            {t('regali.intro')}
           </p>
         </div>
 
@@ -88,16 +91,16 @@ export default function Regali() {
           padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 12,
         }}>
           <div style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', marginBottom: 4 }}>
-            Bonifico bancario
+            {t('regali.bankTransfer')}
           </div>
-          <CopyField label="Intestatario" value={GIFT_INFO.intestatario} />
-          <CopyField label="IBAN" value={GIFT_INFO.iban} mono />
-          <CopyField label="BIC / SWIFT" value={GIFT_INFO.bic} mono />
-          <CopyField label="Causale" value={GIFT_INFO.causale} />
+          <CopyField label={t('regali.fields.intestatario')} value={GIFT_INFO.intestatario} />
+          <CopyField label={t('regali.fields.iban')} value={GIFT_INFO.iban} mono />
+          <CopyField label={t('regali.fields.bic')} value={GIFT_INFO.bic} mono />
+          <CopyField label={t('regali.fields.causale')} value={GIFT_INFO.causale} />
         </div>
 
         <p style={{ textAlign: 'center', color: 'var(--warm-gray)', fontSize: '.82rem', marginTop: 20, lineHeight: 1.6 }}>
-          Grazie di cuore per l'affetto che ci dimostrerete semplicemente essendo presenti. 🌸
+          {t('regali.thanks')}
         </p>
       </div>
     </div>

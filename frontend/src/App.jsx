@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './hooks/useAuth'
+import { LanguageProvider, useLanguage } from './hooks/useLanguage'
+import LanguageSwitch from './components/LanguageSwitch'
 import Home     from './pages/Home'
 import Chat     from './pages/Chat'
 import Gallery  from './pages/Gallery'
@@ -33,6 +35,7 @@ function RequireAuth({ children }) {
 function AdminRoute({ children }) {
   const { user, loading } = useAuth()
   const navigate = useNavigate()
+  const { t } = useLanguage()
   if (loading) return (
     <div style={{ display:'flex', justifyContent:'center', padding:80 }}>
       <div className="spinner" />
@@ -41,27 +44,33 @@ function AdminRoute({ children }) {
   if (!user?.is_admin) return (
     <div style={{ textAlign:'center', padding:'80px 20px', color:'var(--warm-gray)' }}>
       <div style={{ fontSize:'3rem', marginBottom:16 }}>🔒</div>
-      <h2 style={{ fontFamily:'Georgia, serif', color:'var(--charcoal)', marginBottom:12 }}>Accesso riservato</h2>
-      <p>Questa sezione è disponibile solo per gli amministratori.</p>
-      <button className="btn btn-primary" style={{ marginTop:20 }} onClick={() => navigate('/')}>Torna alla home</button>
+      <h2 style={{ fontFamily:'Georgia, serif', color:'var(--charcoal)', marginBottom:12 }}>{t('appShell.adminOnlyTitle')}</h2>
+      <p>{t('appShell.adminOnlyText')}</p>
+      <button className="btn btn-primary" style={{ marginTop:20 }} onClick={() => navigate('/')}>{t('appShell.backHome')}</button>
     </div>
   )
   return children
 }
 
 /* ── Nav items ──────────────────────────────────────────────────── */
-const NAV = [
-  { to:'/',        icon:'🏠', label:'Home'   },
-  { to:'/chat',    icon:'💬', label:'Chat'   },
-  { to:'/gallery', icon:'🎞', label:'Gallery'},
-  { to:'/menu',    icon:'🍽️', label:'Menù'   },
-  { to:'/luoghi',  icon:'📍', label:'Luoghi' },
-  { to:'/faq',     icon:'🙋', label:'FAQ'    },
-  { to:'/rsvp',    icon:'✉️',  label:'Inviti' },
-  { to:'/tables',  icon:'🍽️', label:'Tavoli' },
-  { to:'/quiz', icon:'🎮', label:'Quiz' },
-  { to:'/regali',  icon:'🎁', label:'Regali' },
-]
+const NAV_ICONS = {
+  home:    { to:'/',        icon:'🏠' },
+  chat:    { to:'/chat',    icon:'💬' },
+  gallery: { to:'/gallery', icon:'🎞' },
+  menu:    { to:'/menu',    icon:'🍽️' },
+  luoghi:  { to:'/luoghi',  icon:'📍' },
+  faq:     { to:'/faq',     icon:'🙋' },
+  rsvp:    { to:'/rsvp',    icon:'✉️' },
+  tables:  { to:'/tables',  icon:'🍽️' },
+  quiz:    { to:'/quiz',    icon:'🎮' },
+  regali:  { to:'/regali',  icon:'🎁' },
+}
+const NAV_ORDER = ['home', 'chat', 'gallery', 'menu', 'luoghi', 'faq', 'rsvp', 'tables', 'quiz', 'regali']
+
+function useNavItems() {
+  const { t } = useLanguage()
+  return NAV_ORDER.map(key => ({ key, ...NAV_ICONS[key], label: t(`nav.${key}`) }))
+}
 
 /* ── Stili globali: loader iniziale + transizione tra pagine ──────── */
 function GlobalTransitionStyles() {
@@ -133,6 +142,8 @@ function Drawer({ open, onClose, onNavigate }) {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, logout } = useAuth()
+  const { t } = useLanguage()
+  const navItems = useNavItems()
 
   const go = (to) => { onNavigate(to, navigate); onClose() }
 
@@ -167,14 +178,14 @@ function Drawer({ open, onClose, onNavigate }) {
         <div style={{
           padding:'24px 20px 20px',
           borderBottom:'1px solid rgba(200,162,168,0.2)',
-          display:'flex', alignItems:'center', justifyContent:'space-between',
+          display:'flex', alignItems:'center', justifyContent:'space-between', gap:10,
         }}>
           <div>
             <div style={{ fontFamily:'var(--font-serif)', fontSize:'1.2rem', color:'var(--charcoal)', lineHeight:1.2 }}>
               Sofia &amp; Marco
             </div>
-            <div style={{ fontSize:'.72rem', color:'var(--warm-gray)', marginTop:3, letterSpacing:'.04em' }}>
-              14 Giugno 2026
+            <div style={{ marginTop:8 }}>
+              <LanguageSwitch />
             </div>
           </div>
           <button
@@ -189,7 +200,7 @@ function Drawer({ open, onClose, onNavigate }) {
 
         {/* Nav links */}
         <nav style={{ flex:1, padding:'12px 10px' }}>
-          {NAV.map(item => {
+          {navItems.map(item => {
             const active = location.pathname === item.to
             return (
               <button
@@ -220,46 +231,24 @@ function Drawer({ open, onClose, onNavigate }) {
               </button>
             )
           })}
-
-          {/* Admin link */}
-          {user?.is_admin && (
-            <>
-              <div style={{ height:1, background:'rgba(200,162,168,0.2)', margin:'10px 4px' }} />
-              <button
-                onClick={() => go('/admin')}
-                style={{
-                  display:'flex', alignItems:'center', gap:14,
-                  width:'100%', padding:'13px 14px',
-                  border:'none', borderRadius:10, cursor:'pointer',
-                  background: location.pathname === '/admin' ? 'rgba(138,158,140,.12)' : 'transparent',
-                  color:'#5a7a5c', fontFamily:'inherit',
-                  fontSize:'.97rem', fontWeight:600, textAlign:'left',
-                }}
-              >
-                <span style={{ fontSize:'1.2rem', width:26, textAlign:'center' }}>⚙️</span>
-                <span>Admin</span>
-              </button>
-            </>
-          )}
         </nav>
 
-        {/* User footer */}
+        {/* Footer / user area */}
         {user && (
           <div style={{
-            padding:'16px 20px',
-            borderTop:'1px solid rgba(200,162,168,0.2)',
-            display:'flex', alignItems:'center', gap:12,
+            padding:'16px 20px', borderTop:'1px solid rgba(200,162,168,0.2)',
+            display:'flex', alignItems:'center', gap:10,
           }}>
             <img
               src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=e8c4a8&color=2c2420`}
-              style={{ width:36, height:36, borderRadius:'50%', objectFit:'cover', border:'2px solid var(--blush)', flexShrink:0 }}
+              style={{ width:34, height:34, borderRadius:'50%', objectFit:'cover', border:'2px solid var(--blush)', flexShrink:0 }}
             />
             <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ fontSize:'.85rem', fontWeight:600, color:'var(--charcoal)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+              <div style={{ fontSize:'.88rem', color:'var(--charcoal)', fontWeight:600, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
                 {user.name}
               </div>
-              <div style={{ fontSize:'.72rem', color:'var(--warm-gray)' }}>
-                {user.is_admin ? 'Amministratore' : 'Ospite'}
+              <div style={{ fontSize:'.75rem', color:'var(--warm-gray)' }}>
+                {user.is_admin ? t('appShell.admin') : t('appShell.guest')}
               </div>
             </div>
             <button
@@ -270,7 +259,7 @@ function Drawer({ open, onClose, onNavigate }) {
                 color:'var(--warm-gray)', fontSize:'.78rem', flexShrink:0,
               }}
             >
-              Esci
+              {t('appShell.logout')}
             </button>
           </div>
         )}
@@ -284,6 +273,8 @@ function NavBar({ onMenuOpen, onNavigate }) {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, logout } = useAuth()
+  const { t } = useLanguage()
+  const navItems = useNavItems()
 
   if (location.pathname === '/login') return null
 
@@ -333,7 +324,7 @@ function NavBar({ onMenuOpen, onNavigate }) {
           scrollbarWidth:'none', msOverflowStyle:'none',
         }}
       >
-        {NAV.map(item => {
+        {navItems.map(item => {
           const active = location.pathname === item.to
           return (
             <button
@@ -360,6 +351,11 @@ function NavBar({ onMenuOpen, onNavigate }) {
       {/* Spacer on mobile */}
       <div className="hide-desktop" style={{ flex:1 }} />
 
+      {/* Language switch — always visible */}
+      <div style={{ flexShrink:0, marginLeft:8 }}>
+        <LanguageSwitch />
+      </div>
+
       {/* User area — visibile solo da desktop: su mobile l'identità si vede nel Drawer */}
       {user && (
         <div className="hide-mobile" style={{
@@ -378,7 +374,7 @@ function NavBar({ onMenuOpen, onNavigate }) {
                 whiteSpace:'nowrap',
               }}
             >
-              ⚙ Admin
+              {t('appShell.adminBadge')}
             </button>
           )}
           <img
@@ -393,7 +389,7 @@ function NavBar({ onMenuOpen, onNavigate }) {
               fontSize:11, color:'var(--warm-gray)', padding:0, whiteSpace:'nowrap',
             }}
           >
-            Esci
+            {t('appShell.logout')}
           </button>
         </div>
       )}
@@ -404,6 +400,7 @@ function NavBar({ onMenuOpen, onNavigate }) {
 /* ── App shell ──────────────────────────────────────────────────── */
 function AppShell() {
   const location = useLocation()
+  const { t } = useLanguage()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [appLoading, setAppLoading] = useState(true)
   const [transitioning, setTransitioning] = useState(false)
@@ -430,8 +427,8 @@ function AppShell() {
         <GlobalTransitionStyles />
         <div className="wedding-loader">
           <div className="ring">💍</div>
-          <h2>Sofia &amp; Marco</h2>
-          <p>Prepariamo un giorno speciale...</p>
+          <h2>{t('appShell.loaderTitle')}</h2>
+          <p>{t('appShell.loaderSubtitle')}</p>
         </div>
       </>
     )
@@ -446,7 +443,7 @@ function AppShell() {
 
       {transitioning && (
         <div className="transition-overlay">
-          💐 Prepariamo il prossimo momento...
+          {t('appShell.transition')}
         </div>
       )}
 
@@ -473,9 +470,11 @@ function AppShell() {
 export default function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <AuthProvider>
-        <AppShell />
-      </AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <AppShell />
+        </AuthProvider>
+      </LanguageProvider>
     </BrowserRouter>
   )
 }
