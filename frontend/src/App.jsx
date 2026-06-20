@@ -12,6 +12,8 @@ import Luoghi   from './pages/Luoghi'
 import FAQ      from './pages/FAQ'
 import Tables   from './pages/Tables'   
 import Quiz from './pages/Quiz'
+import Regali   from './pages/Regali'
+import NotFound from './pages/NotFound'
 
 // nel RequireAuth routes:
 
@@ -58,6 +60,7 @@ const NAV = [
   { to:'/rsvp',    icon:'✉️',  label:'Inviti' },
   { to:'/tables',  icon:'🍽️', label:'Tavoli' },
   { to:'/quiz', icon:'🎮', label:'Quiz' },
+  { to:'/regali',  icon:'🎁', label:'Regali' },
 ]
 
 /* ── Stili globali: loader iniziale + transizione tra pagine ──────── */
@@ -460,6 +463,8 @@ function AppShell() {
         <Route path="/tables"  element={<RequireAuth><Tables /></RequireAuth>} />  {/* ← tavoli con password propria */}
         <Route path="/messages" element={<RequireAuth><Chat /></RequireAuth>} />
         <Route path="/quiz" element={<RequireAuth><Quiz /></RequireAuth>} />
+        <Route path="/regali" element={<RequireAuth><Regali /></RequireAuth>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )
