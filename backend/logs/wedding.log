@@ -730,3 +730,4 @@
 2026-06-20 13:57:46,705 | INFO     | wedding.db | ✅ Supabase connection successful!
 2026-06-20 13:57:46,790 | INFO     | httpx | HTTP Request: GET https://wzwtwbnjcxrwxgiurgqa.supabase.co/rest/v1/menu_items?select=%2A "HTTP/2 200 OK"
 2026-06-20 13:57:46,794 | INFO     | wedding.db | 📋 Menu items already seeded (11 items)
+2026-06-20 16:21:50,511 | INFO     | wedding | 💍 Wedding App spenta
