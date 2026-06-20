@@ -103,7 +103,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
           color: 'rgba(200,130,106,0.7)', fontFamily: 'Georgia, serif',
           fontStyle: 'italic', fontSize: '.95rem', marginBottom: 48,
         }}>
-          {t('menu.dateLocation', { date: '' })}
+          {t('menu.dateLocation', { date: 'WEDDING_CONFIG.date' })}
         </p>
 
         {/* Countdown */}
