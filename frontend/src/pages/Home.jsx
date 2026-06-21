@@ -35,31 +35,30 @@ function WeatherWidget() {
   const [days, setDays]       = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState(false)
-
-  useEffect(() => {
-fetch(
-  'https://api.open-meteo.com/v1/forecast' +
-  '?latitude=40.8518&longitude=14.2681' +
-  '&daily=weathercode,temperature_2m_max,temperature_2m_min,relative_humidity_2m_max,sunrise,sunset' +
-  '&timezone=Europe%2FRome&forecast_days=5' +
-  '&models=icon_seamless'   // 👈 modello DWD ICON, più accurato per l'Europa
-)
-      .then(r => r.json())
-      .then(data => {
-        const d = data.daily
-        setDays(d.time.map((timeIso, i) => ({
-          date:     new Date(timeIso),
-          code:     d.weathercode[i],
-          max:      Math.round(d.temperature_2m_max[i]),
-          min:      Math.round(d.temperature_2m_min[i]),
-          humidity: Math.round(d.relative_humidity_2m_max[i]),
-          sunrise:  fmt(d.sunrise[i], locale),
-          sunset:   fmt(d.sunset[i], locale),
-        })))
-        setLoading(false)
-      })
-      .catch(() => { setError(true); setLoading(false) })
-  }, [locale])
+useEffect(() => {
+  fetch(
+    'https://api.open-meteo.com/v1/forecast' +
+    '?latitude=40.8518&longitude=14.2681' +   // Napoli
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,relative_humidity_2m_max,sunrise,sunset' +
+    '&timezone=Europe%2FRome&forecast_days=5' +
+    '&models=icon_seamless'   // modello DWD ICON, risoluzione migliore su Italia
+  )
+    .then(r => r.json())
+    .then(data => {
+      const d = data.daily
+      setDays(d.time.map((timeIso, i) => ({
+        date:     new Date(timeIso),
+        code:     d.weather_code[i],   // 👈 weather_code, non weathercode
+        max:      Math.round(d.temperature_2m_max[i]),
+        min:      Math.round(d.temperature_2m_min[i]),
+        humidity: Math.round(d.relative_humidity_2m_max[i]),
+        sunrise:  fmt(d.sunrise[i], locale),
+        sunset:   fmt(d.sunset[i], locale),
+      })))
+      setLoading(false)
+    })
+    .catch(() => { setError(true); setLoading(false) })
+}, [locale])
 
   const today    = new Date()
   const tomorrow = new Date(today.getTime() + 86400000)
