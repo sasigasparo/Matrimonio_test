@@ -5,60 +5,47 @@ import { useLanguage } from '../hooks/useLanguage'
 import { useEffect, useState } from 'react'
 
 /* ── Meteo ───────────────────────────────────────────────────────── */
-// Le emoji non vanno tradotte, restano qui. Le etichette testuali invece
-// arrivano da translations.js (home.weatherCodes), già pronte in IT/EN.
-const WEATHER_EMOJI = {
-  0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
-  45: '🌫️', 48: '🌫️',
-  51: '🌦️', 53: '🌦️', 55: '🌦️',
-  61: '🌧️', 63: '🌧️', 65: '🌧️',
-  80: '🌦️', 81: '🌧️',
-  95: '⛈️', 99: '⛈️',
-}
+// Provider: WeatherAPI.com (https://www.weatherapi.com/)
+// - testo condizioni già localizzato via "lang=it"
+// - icone fornite direttamente dall'API (niente mapping manuale)
+// - piano gratuito: max 3 giorni di forecast
+const WEATHER_API_KEY = 'LA_TUA_API_KEY' // 👈 incolla qui la key di weatherapi.com
 
-function getWeather(code, weatherCodes) {
-  return {
-    emoji: WEATHER_EMOJI[code] || '🌡️',
-    label: weatherCodes[code] ?? weatherCodes.default,
-  }
-}
-
-function fmt(timeStr, locale) {
-  return new Date(timeStr).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+function fmtTime(timeStr) {
+  // WeatherAPI restituisce orari tipo "05:31 AM", li convertiamo in formato 24h
+  return new Date(`2000-01-01 ${timeStr}`).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
 }
 
 function WeatherWidget() {
   const { t } = useLanguage()
-  const weatherCodes = t('home.weatherCodes')
-  const locale = t('home.locale')
 
   const [days, setDays]       = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState(false)
-useEffect(() => {
-  fetch(
-    'https://api.open-meteo.com/v1/forecast' +
-    '?latitude=40.8518&longitude=14.2681' +   // Napoli
-    '&daily=weather_code,temperature_2m_max,temperature_2m_min,relative_humidity_2m_max,sunrise,sunset' +
-    '&timezone=Europe%2FRome&forecast_days=5' +
-    '&models=icon_seamless'   // modello DWD ICON, risoluzione migliore su Italia
-  )
-    .then(r => r.json())
-    .then(data => {
-      const d = data.daily
-      setDays(d.time.map((timeIso, i) => ({
-        date:     new Date(timeIso),
-        code:     d.weather_code[i],   // 👈 weather_code, non weathercode
-        max:      Math.round(d.temperature_2m_max[i]),
-        min:      Math.round(d.temperature_2m_min[i]),
-        humidity: Math.round(d.relative_humidity_2m_max[i]),
-        sunrise:  fmt(d.sunrise[i], locale),
-        sunset:   fmt(d.sunset[i], locale),
-      })))
-      setLoading(false)
-    })
-    .catch(() => { setError(true); setLoading(false) })
-}, [locale])
+
+  useEffect(() => {
+    fetch(
+      `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}` +
+      '&q=40.8518,14.2681' +   // Napoli
+      '&days=3&lang=it&aqi=no&alerts=no'
+    )
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) throw new Error(data.error.message)
+        setDays(data.forecast.forecastday.map(d => ({
+          date:     new Date(d.date),
+          icon:     `https:${d.day.condition.icon}`,
+          label:    d.day.condition.text,
+          max:      Math.round(d.day.maxtemp_c),
+          min:      Math.round(d.day.mintemp_c),
+          humidity: Math.round(d.day.avghumidity),
+          sunrise:  fmtTime(d.astro.sunrise),
+          sunset:   fmtTime(d.astro.sunset),
+        })))
+        setLoading(false)
+      })
+      .catch(() => { setError(true); setLoading(false) })
+  }, [])
 
   const today    = new Date()
   const tomorrow = new Date(today.getTime() + 86400000)
@@ -66,7 +53,7 @@ useEffect(() => {
   function dayLabel(date) {
     if (date.toDateString() === today.toDateString())    return t('home.today')
     if (date.toDateString() === tomorrow.toDateString()) return t('home.tomorrow')
-    return date.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' })
+    return date.toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' })
   }
 
   if (loading) return (
@@ -84,11 +71,10 @@ useEffect(() => {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(5, 1fr)',
+      gridTemplateColumns: 'repeat(3, 1fr)',
       gap: 8,
     }}>
       {days.map((d, i) => {
-        const w       = getWeather(d.code, weatherCodes)
         const isToday = i === 0
         return (
           <div key={i} style={{
@@ -106,8 +92,8 @@ useEffect(() => {
             }}>
               {dayLabel(d.date)}
             </div>
-            <div style={{ fontSize: '2rem', lineHeight: 1 }}>{w.emoji}</div>
-            <div style={{ fontSize: '.7rem', color: 'var(--warm-gray)', lineHeight: 1.3 }}>{w.label}</div>
+            <img src={d.icon} alt={d.label} style={{ width: 48, height: 48, margin: '0 auto' }} />
+            <div style={{ fontSize: '.7rem', color: 'var(--warm-gray)', lineHeight: 1.3 }}>{d.label}</div>
             <div style={{ fontWeight: 600, color: 'var(--charcoal)', fontSize: '.95rem' }}>
               <span style={{ color: 'var(--rose)' }}>{d.max}°</span>
               <span style={{ color: 'var(--warm-gray)', fontWeight: 400 }}> / {d.min}°</span>
