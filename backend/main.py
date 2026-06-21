@@ -28,7 +28,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import init_db
-from routers import auth, guests, messages, photos, menu, admin, tables
+from routers import auth, guests, messages, photos, menu, admin, tables, chatbot
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 LOG_DIR = BASE_DIR / "logs"
@@ -50,10 +50,10 @@ logger = logging.getLogger("wedding")
 # ── Lifespan ──────────────────────────────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("💍 Wedding App avviata")
+    logger.info("🌸 Wedding App avviata")
     init_db()
     yield
-    logger.info("💍 Wedding App spenta")
+    logger.info("🌸 Wedding App spenta")
 
 # ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(
@@ -92,7 +92,8 @@ app.include_router(photos.router,   prefix="/api/photos",   tags=["Photos"])
 app.include_router(menu.router,     prefix="/api/menu",     tags=["Menu"])
 app.include_router(admin.router,    prefix="/api/admin",    tags=["Admin"])
 
-app.include_router(tables.router,  prefix="/api/tables",  tags=["Tables"])
+app.include_router(tables.router,   prefix="/api/tables",   tags=["Tables"])
+app.include_router(chatbot.router,  prefix="/api/chatbot",  tags=["Chatbot"])
 
 @app.get("/api/health")
 async def health():

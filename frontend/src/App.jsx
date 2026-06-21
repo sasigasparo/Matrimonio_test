@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate } from
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import { LanguageProvider, useLanguage } from './hooks/useLanguage'
 import LanguageSwitch from './components/LanguageSwitch'
+import WeddingChatbot from './components/WeddingChatbot'
 import Home     from './pages/Home'
 import Chat     from './pages/Chat'
 import Gallery  from './pages/Gallery'
@@ -463,6 +464,9 @@ function AppShell() {
         <Route path="/regali" element={<RequireAuth><Regali /></RequireAuth>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      {/* Chatbot fluttuante, visibile solo in Home */}
+      {location.pathname === '/' && <WeddingChatbot />}
     </>
   )
 }
