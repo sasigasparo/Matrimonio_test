@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 // - testo condizioni già localizzato via "lang=it"
 // - icone fornite direttamente dall'API (niente mapping manuale)
 // - piano gratuito: max 3 giorni di forecast
-const WEATHER_API_KEY = 'LA_TUA_API_KEY' // 👈 incolla qui la key di weatherapi.com
+const WEATHER_API_KEY = 'fb30c9a0bd864816bba202820262106' // 👈 incolla qui la key di weatherapi.com
 
 function fmtTime(timeStr) {
   // WeatherAPI restituisce orari tipo "05:31 AM", li convertiamo in formato 24h
