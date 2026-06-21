@@ -29,6 +29,17 @@ export default function WeddingChatbot() {
     }
   }, [open])
 
+  // Su mobile la chat occupa tutto lo schermo: blocchiamo lo scroll
+  // della pagina sotto, come fanno i chatbot standard (Intercom, Crisp...).
+  useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 640px)').matches
+    if (open && isMobile) {
+      const prevOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => { document.body.style.overflow = prevOverflow }
+    }
+  }, [open])
+
   const sendMessage = async () => {
     const text = input.trim()
     if (!text || loading) return
@@ -123,27 +134,22 @@ export default function WeddingChatbot() {
         )}
       </button>
 
-      {/* ── Chat window ── */}
-      {open && (
-        <div className="wedding-chat-window" style={{
-          position: 'fixed',
-          bottom: 'max(80px, env(safe-area-inset-bottom, 0px) + 76px)',
-          right: 8,
-          left: 8,
-          zIndex: 299,
-          width: 'auto',
-          maxWidth: 380,
-          marginLeft: 'auto',
-          height: 'min(70dvh, 560px)',
-          maxHeight: 'calc(100dvh - 110px)',
-          background: '#fff',
-          borderRadius: 18,
-          boxShadow: '0 12px 48px rgba(0,0,0,0.18)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          border: '1px solid rgba(200,162,168,0.2)',
-        }}>
+      {/* ── Backdrop (solo mobile) ── */}
+      <div
+        className={`wedding-chat-backdrop${open ? ' is-open' : ''}`}
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* ── Chat window ──
+          Sempre montata (niente più `{open && ...}`): smontare/rimontare
+          di colpo causava il "salto" visivo all'apertura su mobile.
+          Su desktop/tablet: card flottante in basso a destra.
+          Su mobile (≤640px): foglio a tutto schermo che scorre dal basso,
+          pattern standard dei chatbot (Intercom, Crisp, Drift...). */}
+      <div
+        className={`wedding-chat-window${open ? ' is-open' : ''}`}
+        aria-hidden={!open}>
           {/* Header */}
           <div style={{
             background: 'linear-gradient(135deg, #c8a2a8, #e8c4a8)',
@@ -159,7 +165,7 @@ export default function WeddingChatbot() {
             }}>
               💍
             </div>
-            <div>
+            <div style={{ flex: 1 }}>
               <div style={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem', fontFamily: 'Georgia, serif' }}>
                 Assistente Sofia & Marco
               </div>
@@ -167,6 +173,18 @@ export default function WeddingChatbot() {
                 Sempre disponibile 🌸
               </div>
             </div>
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Chiudi chat"
+              style={{
+                width: 30, height: 30, borderRadius: '50%', border: 'none',
+                background: 'rgba(255,255,255,0.25)', color: '#fff',
+                fontSize: '1rem', cursor: 'pointer', flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              ✕
+            </button>
           </div>
 
           {/* Messages */}
@@ -253,16 +271,80 @@ export default function WeddingChatbot() {
             </button>
           </div>
         </div>
-      )}
 
       <style>{`
         @keyframes typingBounce {
           0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
           30% { transform: translateY(-4px); opacity: 1; }
         }
-        @media (max-width: 480px) {
+
+        /* ── Backdrop: invisibile su desktop, visibile solo su mobile ── */
+        .wedding-chat-backdrop {
+          display: none;
+        }
+
+        /* ── Finestra chat: card flottante (desktop/tablet) ── */
+        .wedding-chat-window {
+          position: fixed;
+          z-index: 299;
+          bottom: max(80px, env(safe-area-inset-bottom, 0px) + 76px);
+          right: 8px;
+          width: min(380px, calc(100vw - 16px));
+          height: min(70dvh, 560px);
+          max-height: calc(100dvh - 110px);
+          background: #fff;
+          border-radius: 18px;
+          box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          border: 1px solid rgba(200,162,168,0.2);
+          transform-origin: bottom right;
+          opacity: 0;
+          transform: translateY(12px) scale(0.96);
+          pointer-events: none;
+          transition: opacity .18s ease, transform .2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .wedding-chat-window.is-open {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          pointer-events: auto;
+        }
+
+        /* ── Mobile: foglio a tutto schermo che scorre dal basso ── */
+        @media (max-width: 640px) {
+          .wedding-chat-backdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 298;
+            background: rgba(20, 14, 10, 0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s ease;
+          }
+          .wedding-chat-backdrop.is-open {
+            opacity: 1;
+            pointer-events: auto;
+          }
+
           .wedding-chat-window {
-            border-radius: 14px !important;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100dvh;
+            max-height: 100dvh;
+            border-radius: 0;
+            transform-origin: bottom center;
+            transform: translateY(100%);
+            box-shadow: none;
+            border: none;
+            padding-top: env(safe-area-inset-top, 0px);
+          }
+          .wedding-chat-window.is-open {
+            transform: translateY(0);
           }
         }
       `}</style>
