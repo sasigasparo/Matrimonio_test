@@ -44,3 +44,9 @@ backend/logs/
 Wedding_App/uploads/
 Wedding_App/logs/
 Wedding_App/credentials.json
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
