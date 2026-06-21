@@ -37,12 +37,13 @@ function WeatherWidget() {
   const [error, setError]     = useState(false)
 
   useEffect(() => {
-    fetch(
-      'https://api.open-meteo.com/v1/forecast' +
-      '?latitude=40.8518&longitude=14.2681' +   // Napoli
-      '&daily=weathercode,temperature_2m_max,temperature_2m_min,relative_humidity_2m_max,sunrise,sunset' +
-      '&timezone=Europe%2FRome&forecast_days=5'
-    )
+fetch(
+  'https://api.open-meteo.com/v1/forecast' +
+  '?latitude=40.8518&longitude=14.2681' +
+  '&daily=weathercode,temperature_2m_max,temperature_2m_min,relative_humidity_2m_max,sunrise,sunset' +
+  '&timezone=Europe%2FRome&forecast_days=5' +
+  '&models=icon_seamless'   // 👈 modello DWD ICON, più accurato per l'Europa
+)
       .then(r => r.json())
       .then(data => {
         const d = data.daily

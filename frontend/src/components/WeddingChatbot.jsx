@@ -94,11 +94,11 @@ export default function WeddingChatbot() {
         aria-label={open ? 'Chiudi chat' : 'Apri chat'}
         style={{
           position: 'fixed',
-          bottom: 20,
-          right: 20,
+          bottom: 'max(16px, env(safe-area-inset-bottom, 0px) + 12px)',
+          right: 16,
           zIndex: 300,
-          width: 60,
-          height: 60,
+          width: 56,
+          height: 56,
           borderRadius: '50%',
           border: 'none',
           cursor: 'pointer',
@@ -107,7 +107,7 @@ export default function WeddingChatbot() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '1.6rem',
+          fontSize: '1.5rem',
           transition: 'transform 0.2s',
         }}
         onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
@@ -125,13 +125,17 @@ export default function WeddingChatbot() {
 
       {/* ── Chat window ── */}
       {open && (
-        <div style={{
+        <div className="wedding-chat-window" style={{
           position: 'fixed',
-          bottom: 92,
-          right: 20,
+          bottom: 'max(80px, env(safe-area-inset-bottom, 0px) + 76px)',
+          right: 8,
+          left: 8,
           zIndex: 299,
-          width: 'min(360px, calc(100vw - 40px))',
-          height: 'min(520px, calc(100dvh - 140px))',
+          width: 'auto',
+          maxWidth: 380,
+          marginLeft: 'auto',
+          height: 'min(70dvh, 560px)',
+          maxHeight: 'calc(100dvh - 110px)',
           background: '#fff',
           borderRadius: 18,
           boxShadow: '0 12px 48px rgba(0,0,0,0.18)',
@@ -224,6 +228,7 @@ export default function WeddingChatbot() {
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
+              onFocus={() => setTimeout(() => scrollRef.current?.scrollIntoView?.({ block: 'end' }), 300)}
               placeholder="Scrivi un messaggio…"
               disabled={loading}
               style={{
@@ -254,6 +259,11 @@ export default function WeddingChatbot() {
         @keyframes typingBounce {
           0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
           30% { transform: translateY(-4px); opacity: 1; }
+        }
+        @media (max-width: 480px) {
+          .wedding-chat-window {
+            border-radius: 14px !important;
+          }
         }
       `}</style>
     </>

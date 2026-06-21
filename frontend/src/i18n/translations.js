@@ -164,18 +164,18 @@ export const translations = {
       parcheggi: [
         { icon: '🅿️', titolo: 'Parcheggi consigliati', desc: 'Parcheggi a pagamento nelle zone di Posillipo e Mergellina. Consigliata arrivo anticipato.' },
         { icon: '🚇', titolo: 'Metro + Funicolare', desc: 'Linea 1 fino a Toledo/Dante, poi autobus o taxi verso Posillipo.' },
-        { icon: '🚕', titolo: 'Taxi / NCC', desc: 'Consigliamo prenotazione: Radio Taxi Napoli +39 081 8888.' },
+        { icon: '🚕', titolo: 'Taxi / NCC', desc: 'Consigliamo prenotazione: {{taxiName}} {{taxiPhone}}.' },
       ],
       fuoriCitta: [
         { icon: '🚂', titolo: 'In treno', desc: 'Stazione Napoli Centrale (Piazza Garibaldi). Collegamenti con Roma, Salerno e tutta Italia.' },
-        { icon: '✈️', titolo: 'In aereo', desc: 'Aeroporto di Napoli Capodichino (NAP) – 15/20 min dal centro città.' },
+        { icon: '✈️', titolo: 'In aereo', desc: '{{airportName}} ({{airportCode}}) – 15/20 min dal centro città.' },
         { icon: '🏨', titolo: 'Dove dormire', desc: 'Zona Chiaia, Mergellina o Centro Storico consigliate.' },
       ],
     },
 
     menu: {
       revealNotice: 'il menù sarà svelato il giorno del matrimonio',
-      dateLocation: '{{date}} · Villa Doria d’Angri, Napoli',
+      dateLocation: '{{date}} · {{receptionName}}, {{city}}',
       days: 'Giorni',
       hours: 'Ore',
       minutes: 'Minuti',
@@ -247,13 +247,13 @@ export const translations = {
       saving: 'Salvataggio…',
       confirm: 'Conferma risposta',
       infoDate: 'Data',
-      infoDateVal: 'Sabato 14 Giugno 2027, ore 15:00',
+      infoDateVal: 'Sabato {{date}}, ore {{ceremonyTime}}',
       infoLocation: 'Luogo',
-      infoLocationVal: 'Villa Doria d’Angri, Via Francesco Petrarca, 80, Posillipo, Napoli (NA)',
+      infoLocationVal: '{{receptionName}}, {{receptionAddress}}',
       infoParking: 'Parcheggio',
-      infoParkingVal: 'Disponibile parcheggio gratuito in loco',
+      infoParkingVal: '{{parkingNote}}',
       infoDressCode: 'Dress code',
-      infoDressCodeVal: 'Elegante. Evitare il bianco e il nero.',
+      infoDressCodeVal: '{{dressCodeStyle}}. Evitare {{dressCodeAvoid}}.',
       guestListTitle: 'Elenco invitati',
       totalGuests: 'Totale invitati',
       confirmedCount: 'Confermati',
@@ -568,18 +568,18 @@ export const translations = {
       parcheggi: [
         { icon: '🅿️', titolo: 'Recommended parking', desc: 'Paid parking is available around Posillipo and Mergellina. Early arrival is recommended.' },
         { icon: '🚇', titolo: 'Metro + Funicular', desc: 'Line 1 to Toledo/Dante, then bus or taxi toward Posillipo.' },
-        { icon: '🚕', titolo: 'Taxi / Car service', desc: 'We recommend booking ahead: Radio Taxi Napoli +39 081 8888.' },
+        { icon: '🚕', titolo: 'Taxi / Car service', desc: 'We recommend booking ahead: {{taxiName}} {{taxiPhone}}.' },
       ],
       fuoriCitta: [
         { icon: '🚂', titolo: 'By train', desc: 'Napoli Centrale station (Piazza Garibaldi). Connections to Rome, Salerno and the rest of Italy.' },
-        { icon: '✈️', titolo: 'By plane', desc: 'Naples Capodichino Airport (NAP) – 15/20 min from the city centre.' },
+        { icon: '✈️', titolo: 'By plane', desc: '{{airportName}} ({{airportCode}}) – 15/20 min from the city centre.' },
         { icon: '🏨', titolo: 'Where to stay', desc: 'Chiaia, Mergellina or the historic centre are recommended areas.' },
       ],
     },
 
     menu: {
       revealNotice: 'the menu will be revealed on the wedding day',
-      dateLocation: '{{date}} · Villa Doria d’Angri, Naples',
+      dateLocation: '{{date}} · {{receptionName}}, {{city}}',
       days: 'Days',
       hours: 'Hours',
       minutes: 'Minutes',
@@ -651,13 +651,13 @@ export const translations = {
       saving: 'Saving…',
       confirm: 'Confirm response',
       infoDate: 'Date',
-      infoDateVal: 'Saturday June 14, 2027, 3:00 PM',
+      infoDateVal: 'Saturday {{date}}, {{ceremonyTime}}',
       infoLocation: 'Venue',
-      infoLocationVal: 'Villa Doria d’Angri, Via Francesco Petrarca, 80, Posillipo, Naples (NA)',
+      infoLocationVal: '{{receptionName}}, {{receptionAddress}}',
       infoParking: 'Parking',
-      infoParkingVal: 'Free on-site parking available',
+      infoParkingVal: '{{parkingNote}}',
       infoDressCode: 'Dress code',
-      infoDressCodeVal: 'Formal. Please avoid white and black.',
+      infoDressCodeVal: '{{dressCodeStyle}}. Please avoid {{dressCodeAvoid}}.',
       guestListTitle: 'Guest list',
       totalGuests: 'Total guests',
       confirmedCount: 'Confirmed',
@@ -806,7 +806,3 @@ export const translations = {
     },
   },
 }
-
-
-
-
