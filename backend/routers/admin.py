@@ -1,6 +1,8 @@
 import logging
+import os
 from collections import Counter
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
 from auth_config import require_admin
@@ -93,3 +95,55 @@ async def stats(admin=Depends(require_admin)):
         "table_assignments":    table_stats,
         "menu_preferences":     menu_stats,
     }
+
+
+# ── Google Drive OAuth setup (una volta sola) ─────────────────────────────────
+
+_pending_flow = {}   # in-memory, basta riavviare se scade
+
+@router.get("/drive-setup")
+async def drive_setup_start(request: Request, admin=Depends(require_admin)):
+    """
+    Step 1 — genera URL di autorizzazione Google.
+    Apri il link nel browser, autorizza, e verrai reindirizzato al callback.
+    """
+    client_id     = os.getenv("GOOGLE_CLIENT_ID", "")
+    client_secret = os.getenv("GOOGLE_CLIENT_SECRET", "")
+    if not client_id or not client_secret:
+        return {"error": "GOOGLE_CLIENT_ID e GOOGLE_CLIENT_SECRET mancanti nel .env"}
+
+    base = str(request.base_url).rstrip("/")
+    redirect_uri = f"{base}/api/admin/drive-callback"
+
+    from drive_utils import get_auth_url
+    url, flow = get_auth_url(client_id, client_secret, redirect_uri)
+    _pending_flow["flow"] = flow
+    _pending_flow["redirect_uri"] = redirect_uri
+
+    logger.info("🔗 DRIVE_SETUP | redirect_uri=%s", redirect_uri)
+    return {"auth_url": url, "istruzioni": "Apri auth_url nel browser e autorizza l'accesso a Drive"}
+
+
+@router.get("/drive-callback")
+async def drive_setup_callback(code: str, request: Request):
+    """
+    Step 2 — Google reindirizza qui con il codice.
+    Restituisce il refresh_token da aggiungere al .env.
+    """
+    flow = _pending_flow.get("flow")
+    if not flow:
+        return {"error": "Sessione scaduta. Richiama /api/admin/drive-setup"}
+
+    from drive_utils import exchange_code
+    try:
+        refresh_token = exchange_code(flow, code)
+        _pending_flow.clear()
+        logger.info("✅ DRIVE_SETUP | refresh_token ottenuto")
+        return {
+            "ok": True,
+            "refresh_token": refresh_token,
+            "istruzioni": "Copia questo valore nel .env come GOOGLE_REFRESH_TOKEN=<valore>",
+        }
+    except Exception as e:
+        logger.error("❌ DRIVE_SETUP | %s: %s", type(e).__name__, e)
+        return {"error": str(e)}

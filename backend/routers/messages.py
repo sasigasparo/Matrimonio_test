@@ -7,20 +7,23 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse
 
 from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
 from image_utils import compress_image
+from drive_utils import upload_to_drive, upload_video_to_drive
 
 router = APIRouter()
 logger = logging.getLogger("wedding.messages")
 
 ALLOWED_AUDIO = {".webm", ".ogg", ".mp3", ".wav", ".m4a"}
 ALLOWED_IMAGE = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic"}
+ALLOWED_VIDEO = {".mp4", ".mov", ".avi", ".webm", ".mkv", ".m4v"}
 MAX_AUDIO_MB = 50
 MAX_PHOTO_MB = 30
+MAX_VIDEO_MB = 500
 
 SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "wedding-photos")
 
@@ -97,12 +100,21 @@ async def list_messages():
 # ──────────────────────────────────────────────────────────────────────────────
 # SEND MESSAGE — supports anon guests (name only) and registered users
 # ──────────────────────────────────────────────────────────────────────────────
+def _drive_upload_bg(data: bytes, filename: str, mime_type: str):
+    try:
+        upload_to_drive(data, filename, mime_type)
+    except Exception as e:
+        logger.error("❌ DRIVE_BG_FAIL | filename=%s | %s: %s", filename, type(e).__name__, e)
+
+
 @router.post("/")
 async def send_message(
     request: Request,
+    background_tasks: BackgroundTasks,
     content:    Optional[str]        = Form(None),
     audio:      Optional[UploadFile] = File(None),
     file:       Optional[UploadFile] = File(None),   # inline photo from chat
+    video:      Optional[UploadFile] = File(None),   # video → Drive
     guest_name: Optional[str]        = Form(None),   # for anonymous guests
     user=Depends(get_optional_guest),
 ):
@@ -121,7 +133,7 @@ async def send_message(
         getattr(file, "content_type", None),
     )
 
-    if not content and not audio and not file:
+    if not content and not audio and not file and not video:
         logger.warning("❌ MSG_REJECT 400 | nessun payload | ip=%s", client_ip)
         raise HTTPException(400, "Almeno un contenuto è richiesto")
 
@@ -167,6 +179,35 @@ async def send_message(
         except Exception as e:
             logger.error("❌ AUDIO_FAIL | %s: %s | guest=%r", type(e).__name__, e, actor_name)
             raise HTTPException(500, f"Errore upload audio: {e}")
+
+    # ── Video upload → Google Drive ───────────────────────────────────────────
+    video_drive_url = None
+    if video:
+        raw_vname = video.filename or ""
+        ext = Path(raw_vname).suffix.lower()
+        if not ext or ext not in ALLOWED_VIDEO:
+            ct = (video.content_type or "").lower()
+            ext = {
+                "video/mp4": ".mp4", "video/quicktime": ".mov",
+                "video/x-msvideo": ".avi", "video/webm": ".webm",
+                "video/x-matroska": ".mkv", "video/x-m4v": ".m4v",
+            }.get(ct, ext)
+        if not ext or ext not in ALLOWED_VIDEO:
+            raise HTTPException(400, f"Formato video non supportato: {video.content_type}")
+
+        vdata = await video.read()
+        size_mb = len(vdata) / (1024 * 1024)
+        if size_mb > MAX_VIDEO_MB:
+            raise HTTPException(413, f"Video troppo grande ({size_mb:.0f} MB, max {MAX_VIDEO_MB} MB)")
+
+        vfilename = f"{uuid.uuid4()}{ext}"
+        mime_type_v = video.content_type or f"video/{ext.lstrip('.')}"
+        logger.info("🎬 VIDEO_UPLOAD | filename=%s | size=%.1f MB | guest=%r", vfilename, size_mb, actor_name)
+        try:
+            video_drive_url = upload_video_to_drive(vdata, vfilename, mime_type_v)
+        except Exception as e:
+            logger.error("❌ VIDEO_DRIVE_FAIL | %s: %s", type(e).__name__, e)
+            raise HTTPException(500, f"Errore upload video su Drive: {e}")
 
     # ── Inline photo upload (from chat) ───────────────────────────────────────
     if file:
@@ -226,6 +267,7 @@ async def send_message(
         try:
             photo_url = _upload_to_supabase(data, f"photos/{filename}", mime_type)
             logger.info("✅ FOTO_CHAT | UPLOAD_OK | url=%s | guest=%s | size=%.2f MB", photo_url, actor_name, size_mb)
+            background_tasks.add_task(_drive_upload_bg, data, filename, mime_type)
         except Exception as e:
             logger.error(
                 "❌ FOTO_CHAT | UPLOAD_FAIL | errore=%s | messaggio=%s | nome=%s",
@@ -237,17 +279,15 @@ async def send_message(
     has_text  = bool(content and content.strip())
     has_audio = bool(audio_path)
     has_photo = bool(photo_url)
+    has_video = bool(video_drive_url)
 
-    logger.info(
-        "📊 MESSAGE_CLASSIFY | guest=%r | has_text=%s | has_audio=%s | has_photo=%s",
-        actor_name, has_text, has_audio, has_photo,
-    )
-
-    if not has_text and not has_audio and not has_photo:
+    if not has_text and not has_audio and not has_photo and not has_video:
         logger.error("❌ MESSAGE_EMPTY | guest=%r — nessun contenuto dopo upload, abortisco", actor_name)
         raise HTTPException(400, "Nessun contenuto nel messaggio")
 
-    if has_audio and has_text:
+    if has_video:
+        msg_type = "video"
+    elif has_audio and has_text:
         msg_type = "both"
     elif has_audio:
         msg_type = "audio"
@@ -271,7 +311,7 @@ async def send_message(
     # ── Save to DB ────────────────────────────────────────────────────────────
     db = get_db()
     row = {
-        "content":    content.strip() if content else None,
+        "content":    video_drive_url if has_video else (content.strip() if content else None),
         "audio_path": audio_path,
         "photo_url":  photo_url,
         "type":       msg_type,

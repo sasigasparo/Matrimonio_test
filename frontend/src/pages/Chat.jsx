@@ -224,6 +224,26 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
             </div>
           )}
 
+          {/* Video su Drive */}
+          {msg.type === 'video' && msg.content && (
+            <a
+              href={msg.content}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '10px 14px', textDecoration: 'none',
+                color: outgoing ? '#fff' : 'var(--charcoal)',
+              }}
+            >
+              <span style={{ fontSize: 22, flexShrink: 0 }}>🎬</span>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600 }}>Video caricato su Drive</div>
+                <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>Tocca per aprire →</div>
+              </div>
+            </a>
+          )}
+
           {/* Audio */}
           {msg.audio_path && (
             <div style={{ padding: '8px 12px' }}>
@@ -655,6 +675,7 @@ export default function Chat() {
   const [nameModalMode, setNameModalMode] = useState('hidden')
   const [photoPreview, setPhotoPreview] = useState(null)
   const [photoFile, setPhotoFile] = useState(null)
+  const [videoFile, setVideoFile] = useState(null)
   const [showReel, setShowReel] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [showPhotoMenu, setShowPhotoMenu] = useState(false)
@@ -668,6 +689,7 @@ export default function Chat() {
   const chunksRef = useRef([])
   const timerRef = useRef(null)
   const fileInputRef = useRef(null)
+  const videoInputRef = useRef(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
   const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
@@ -719,7 +741,7 @@ export default function Chat() {
   const send = async () => {
     const name = ensureName()
     if (!name) return
-    if (!text.trim() && !audioBlob && !photoFile) return
+    if (!text.trim() && !audioBlob && !photoFile && !videoFile) return
     setSending(true)
 
     try {
@@ -730,6 +752,10 @@ export default function Chat() {
         const ext = audioBlob.type.includes('webm') ? '.webm' : '.ogg'
         const audioFile = new File([audioBlob], `audio${ext}`, { type: audioBlob.type })
         form.append('audio', audioFile)
+      }
+
+      if (videoFile) {
+        form.append('video', videoFile)
       }
 
       if (photoFile) {
@@ -767,6 +793,7 @@ export default function Chat() {
       setAudioBlob(null)
       setPhotoPreview(null)
       setPhotoFile(null)
+      setVideoFile(null)
       inputRef.current?.focus()
       // success shown via ✓✓ in bubble
     } catch (e) {
@@ -834,6 +861,13 @@ export default function Chat() {
     const reader = new FileReader()
     reader.onload = ev => setPhotoPreview(ev.target.result)
     reader.readAsDataURL(compressed)
+  }
+
+  const handleVideoChange = e => {
+    const f = e.target.files?.[0]
+    if (!f) return
+    e.target.value = ''
+    setVideoFile(f)
   }
 
   const deleteMsg = async (id, createdAt, type) => {
@@ -1116,6 +1150,32 @@ export default function Chat() {
         </div>
       )}
 
+      {/* ── Video preview ── */}
+      {videoFile && (
+        <div style={{
+          padding: '10px 12px', background: 'var(--cream)',
+          borderTop: '1px solid rgba(200,162,168,0.2)',
+          display: 'flex', alignItems: 'center', gap: 12,
+        }}>
+          <span style={{ fontSize: 22, flexShrink: 0 }}>🎬</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--charcoal)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {videoFile.name}
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--warm-gray)', marginTop: 2 }}>
+              {(videoFile.size / (1024 * 1024)).toFixed(1)} MB · verrà caricato su Drive
+            </div>
+          </div>
+          <button onClick={() => setVideoFile(null)} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: 'var(--warm-gray)', fontSize: 12, padding: '4px 8px',
+          }}>Scarta</button>
+          <button className="btn btn-primary btn-sm" onClick={send} disabled={sending} style={{ borderRadius: 20 }}>
+            {sending ? '…' : '✓ Invia'}
+          </button>
+        </div>
+      )}
+
       {/* ── Audio preview ── */}
       {audioBlob && !recording && (
         <div style={{
@@ -1156,13 +1216,14 @@ export default function Chat() {
       )}
 
       {/* ── Input bar ── */}
-      {!recording && !audioBlob && !photoPreview && (
+      {!recording && !audioBlob && !photoPreview && !videoFile && (
         <div style={{
           display: 'flex', alignItems: 'flex-end', gap: 8, padding: '10px 12px',
           background: 'var(--white)', borderTop: '1px solid rgba(200,162,168,0.2)',
           flexShrink: 0,
         }}>
           <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
+          <input ref={videoInputRef} type="file" accept="video/*" style={{ display: 'none' }} onChange={handleVideoChange} />
 
           {/* 📷 Bottone foto */}
           <div style={{ position: 'relative', flexShrink: 0 }}>
@@ -1193,6 +1254,7 @@ export default function Chat() {
                   {[
                     { icon: '📸', label: 'Scatta una foto', action: () => { setShowPhotoMenu(false); setShowCamera(true) } },
                     { icon: '🖼️', label: 'Carica dalla libreria', action: () => { setShowPhotoMenu(false); fileInputRef.current?.click() } },
+                    { icon: '🎬', label: 'Carica un video', action: () => { setShowPhotoMenu(false); videoInputRef.current?.click() } },
                   ].map((item, idx, arr) => (
                     <button
                       key={item.label}
