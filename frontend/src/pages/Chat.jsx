@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { api } from '../utils/api'
@@ -609,6 +610,7 @@ function PhotoReelModal({ onClose }) {
 export default function Chat() {
   const { user } = useAuth()
   const toast = useToast()
+  const navigate = useNavigate()
 
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(true)
@@ -686,9 +688,6 @@ export default function Chat() {
       }
 
       if (photoFile) {
-        // Guarantee the file has a proper extension so the backend can validate it.
-        // Some browsers (especially mobile/iOS) send File objects with names like
-        // "blob", "image", or "" — we derive the extension from the MIME type instead.
         const mimeToExt = {
           'image/jpeg': '.jpg', 'image/jpg': '.jpg',
           'image/png': '.png', 'image/webp': '.webp',
@@ -723,7 +722,6 @@ export default function Chat() {
       const token = getToken()
       if (token) headers['Authorization'] = `Bearer ${token}`
 
-      // Verifica FormData prima dell'invio
       let formEntries = []
       for (let [key, value] of form) {
         if (value instanceof File) {
@@ -749,8 +747,6 @@ export default function Chat() {
       console.log('✅ [Chat] MESSAGGIO SALVATO | id=%s | tipo=%s | photo=%s | audio=%s | text=%s', 
         msg.id, msg.type, !!msg.photo_url, !!msg.audio_path, !!msg.content)
 
-      // If backend didn't return photo_url but we have a local preview, attach it
-      // so the thumbnail renders immediately in the chat list
       if (!msg.photo_url && photoPreview) {
         msg.photo_url = photoPreview
       }
@@ -928,9 +924,8 @@ export default function Chat() {
               }}>
                 <style>{`@keyframes menuIn { from { opacity:0; transform:scale(0.95) translateY(-6px) } to { opacity:1; transform:none } }`}</style>
                 {[
-                  { icon: '📷', label: 'Rullino foto',      action: () => { setShowReel(true); setShowMenu(false) } },
-                  { icon: '🎞️', label: 'Vai ai Ricordi',    action: () => { window.location.href = '/ricordi'; setShowMenu(false) } },
-                  { icon: '💌', label: 'Vai ai Messaggi',   action: () => { window.location.href = '/messages'; setShowMenu(false) } },
+                  { icon: '📷', label: 'Rullino foto',   action: () => { setShowReel(true); setShowMenu(false) } },
+                  { icon: '🎞️', label: 'Vai ai Ricordi', action: () => { setShowMenu(false); navigate('/gallery') } },
                 ].map(item => (
                   <button
                     key={item.label}
