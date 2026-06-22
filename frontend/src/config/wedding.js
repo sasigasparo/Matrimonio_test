@@ -98,6 +98,6 @@ export const WEDDING_CONFIG = {
   app: {
     name: "Sofia & Marco Wedding",
     version: "1.0.0",
-    siteUrl: "https://sasigasparo.github.io/Matrimonio_test",
+    siteUrl: "https://matrimonio-test.pages.dev",
   },
 }

@@ -105,7 +105,7 @@ export const translations = {
               a: 'Durante la conferma della presenza troverai una sezione dedicata alle esigenze alimentari, dove potrai indicare allergie, intolleranze o preferenze come menù vegetariano, vegano o senza glutine.',
               link: {
                 label: '🍽️ Conferma presenza e indica le tue preferenze',
-                href: 'https://sasigasparo.github.io/Matrimonio_test/rsvp',
+                href: 'https://matrimonio-test.pages.dev/rsvp',
               },
             },
             {
@@ -509,7 +509,7 @@ export const translations = {
               a: "When you confirm your attendance, you'll find a section dedicated to dietary needs, where you can indicate allergies, intolerances, or preferences such as vegetarian, vegan, or gluten-free.",
               link: {
                 label: '🍽️ Confirm attendance and share your preferences',
-                href: 'https://sasigasparo.github.io/Matrimonio_test/rsvp',
+                href: 'https://matrimonio-test.pages.dev/rsvp',
               },
             },
             {
