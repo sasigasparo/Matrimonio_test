@@ -15,6 +15,7 @@ export default function TableAuth({ onSuccess }) {
   const [pwd, setPwd]       = useState('')
   const [error, setError]   = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPwd, setShowPwd] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -58,22 +59,60 @@ export default function TableAuth({ onSuccess }) {
           <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--charcoal,#2c2420)' }}>
             Password admin
           </label>
-          <input
-            type="password"
-            value={pwd}
-            onChange={e => { setPwd(e.target.value); setError('') }}
-            placeholder="••••••••"
-            autoFocus
-            disabled={loading}
-            style={{
-              padding: '12px 14px',
-              border: `1.5px solid ${error ? '#fcc' : 'rgba(200,162,168,0.4)'}`,
-              borderRadius: 10, fontSize: '1rem',
-              fontFamily: 'inherit', outline: 'none',
-              background: '#fff',
-              transition: 'border-color 0.2s',
-            }}
-          />
+          <div style={{ position: 'relative', display: 'flex' }}>
+            <input
+              type={showPwd ? 'text' : 'password'}
+              value={pwd}
+              onChange={e => { setPwd(e.target.value); setError('') }}
+              placeholder="••••••••"
+              autoFocus
+              disabled={loading}
+              style={{
+                width: '100%',
+                padding: '12px 44px 12px 14px',
+                border: `1.5px solid ${error ? '#fcc' : 'rgba(200,162,168,0.4)'}`,
+                borderRadius: 10, fontSize: '1rem',
+                fontFamily: 'inherit', outline: 'none',
+                background: '#fff',
+                transition: 'border-color 0.2s',
+                boxSizing: 'border-box',
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPwd(v => !v)}
+              disabled={loading}
+              aria-label={showPwd ? 'Nascondi password' : 'Mostra password'}
+              aria-pressed={showPwd}
+              tabIndex={-1}
+              style={{
+                position: 'absolute',
+                right: 4, top: '50%', transform: 'translateY(-50%)',
+                width: 36, height: 36,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                border: 'none', background: 'transparent',
+                color: 'var(--warm-gray,#9a8070)', cursor: loading ? 'not-allowed' : 'pointer',
+                fontSize: '1.05rem', lineHeight: 1,
+                borderRadius: 8,
+              }}
+            >
+              {showPwd ? (
+                // occhio "barrato"
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                  <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+                  <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+                  <line x1="2" y1="2" x2="22" y2="22" />
+                </svg>
+              ) : (
+                // occhio aperto
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
         {error && (

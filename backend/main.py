@@ -95,6 +95,14 @@ app.include_router(admin.router,    prefix="/api/admin",    tags=["Admin"])
 app.include_router(tables.router,   prefix="/api/tables",   tags=["Tables"])
 app.include_router(chatbot.router,  prefix="/api/chatbot",  tags=["Chatbot"])
 
-@app.get("/api/health")
+@app.get("/")
+async def root():
+    return {"status": "ok", "service": "Wedding App"}
+
+@app.get("/health")
 async def health():
+    return {"status": "ok", "service": "Wedding App"}
+
+@app.get("/api/health")
+async def api_health():
     return {"status": "ok", "service": "Wedding App"}

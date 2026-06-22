@@ -33,6 +33,42 @@ function useCountdown() {
   return diff
 }
 
+/* ── Eye icon toggle (mostra/nascondi password) ───────────────────── */
+function EyeToggleButton({ visible, onClick, dark = false }) {
+  const color = dark ? 'rgba(255,255,255,0.5)' : 'var(--warm-gray,#9a8070)'
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={visible ? 'Nascondi password' : 'Mostra password'}
+      aria-pressed={visible}
+      tabIndex={-1}
+      style={{
+        position: 'absolute',
+        right: 4, top: '50%', transform: 'translateY(-50%)',
+        width: 32, height: 32,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        border: 'none', background: 'transparent',
+        color, cursor: 'pointer', borderRadius: 8,
+      }}
+    >
+      {visible ? (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+          <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+          <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+          <line x1="2" y1="2" x2="22" y2="22" />
+        </svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      )}
+    </button>
+  )
+}
+
 /* ── Countdown gate with password unlock ─────────────────────────── */
 function MenuCountdownGate({ diff, onUnlock }) {
   const { t } = useLanguage()
@@ -40,6 +76,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
   const [pwd, setPwd]     = useState('')
   const [error, setError] = useState(false)
   const [open, setOpen]   = useState(false)
+  const [showPwd, setShowPwd] = useState(false)
 
   const tryUnlock = () => {
     if (pwd === UNLOCK_PASSWORD) {
@@ -164,21 +201,25 @@ function MenuCountdownGate({ diff, onUnlock }) {
           </button>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
-            <input
-              autoFocus
-              type="password"
-              value={pwd}
-              onChange={e => { setPwd(e.target.value); setError(false) }}
-              onKeyDown={e => e.key === 'Enter' && tryUnlock()}
-              placeholder={t('menu.passwordPlaceholder')}
-              style={{
-                padding: '10px 16px', borderRadius: 8, fontSize: '1rem',
-                border: `1.5px solid ${error ? '#c97a7a' : 'rgba(200,130,106,0.35)'}`,
-                background: 'rgba(255,255,255,0.07)', color: '#fff',
-                outline: 'none', textAlign: 'center', width: 200,
-                transition: 'border-color 0.2s',
-              }}
-            />
+            <div style={{ position: 'relative', width: 200 }}>
+              <input
+                autoFocus
+                type={showPwd ? 'text' : 'password'}
+                value={pwd}
+                onChange={e => { setPwd(e.target.value); setError(false) }}
+                onKeyDown={e => e.key === 'Enter' && tryUnlock()}
+                placeholder={t('menu.passwordPlaceholder')}
+                style={{
+                  width: '100%', boxSizing: 'border-box',
+                  padding: '10px 38px 10px 16px', borderRadius: 8, fontSize: '1rem',
+                  border: `1.5px solid ${error ? '#c97a7a' : 'rgba(200,130,106,0.35)'}`,
+                  background: 'rgba(255,255,255,0.07)', color: '#fff',
+                  outline: 'none', textAlign: 'center',
+                  transition: 'border-color 0.2s',
+                }}
+              />
+              <EyeToggleButton visible={showPwd} onClick={() => setShowPwd(v => !v)} dark />
+            </div>
             {error && (
               <p style={{ color: '#c97a7a', fontSize: '.8rem', margin: 0 }}>{t('menu.wrongPassword')}</p>
             )}
