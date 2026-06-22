@@ -640,13 +640,15 @@ export default function Chat() {
   const myId = user?.id || null
   const isAdmin = user?.is_admin || false
 
-  useEffect(() => {
-    loadMessages()
-    // Mostra subito la modale se non c'è ancora un nome
-    if (!user?.name && !getGuestName()) {
-      setShowNameModal(true)
-    }
-  }, [])
+useEffect(() => {
+  loadMessages()
+  const savedName = getGuestName()
+  if (!user?.name && (!savedName || savedName === 'Ospite')) {
+    localStorage.removeItem('wedding_guest_name')
+    setGuestName('')
+    setShowNameModal(true)
+  }
+}, [])
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
