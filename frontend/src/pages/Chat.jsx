@@ -55,7 +55,7 @@ function AudioBubble({ src, outgoing }) {
 
   return (
     <div style={{
-      display: 'flex', alignItems: 'center', gap: 10, 
+      display: 'flex', alignItems: 'center', gap: 10,
       width: '100%', minWidth: 200, flex: 1,
     }}>
       <audio
@@ -137,19 +137,19 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
           <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--sage)', paddingLeft: 4 }}>{name}</span>
         )}
 
-        <div style={{...bubbleStyle, padding: 0, overflow: 'hidden'}}>
+        <div style={{ ...bubbleStyle, padding: 0, overflow: 'hidden' }}>
           {/* Photo */}
           {msg.photo_url && (
             <div style={{ position: 'relative' }}>
               <img
                 src={msg.photo_url}
                 alt="Foto"
-                style={{ 
-                  width: '100%', 
-                  maxWidth: 300, 
-                  maxHeight: 400, 
-                  display: 'block', 
-                  objectFit: 'cover', 
+                style={{
+                  width: '100%',
+                  maxWidth: 300,
+                  maxHeight: 400,
+                  display: 'block',
+                  objectFit: 'cover',
                   cursor: 'pointer',
                   borderRadius: outgoing ? '0 4px 0 0' : '4px 0 0 0'
                 }}
@@ -172,10 +172,10 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
               </div>
               {/* Semi-transparent overlay on hover for gallery button */}
               <div style={{
-                position: 'absolute', bottom: 8, right: 8, 
+                position: 'absolute', bottom: 8, right: 8,
                 opacity: 0, transition: 'opacity 0.2s',
-                background: 'rgba(0,0,0,0.6)', 
-                borderRadius: '50%', 
+                background: 'rgba(0,0,0,0.6)',
+                borderRadius: '50%',
                 width: 36, height: 36,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer', fontSize: 18
@@ -366,7 +366,7 @@ function CameraModal({ onCapture, onClose }) {
     const video = videoRef.current
     if (!video) return
     const canvas = document.createElement('canvas')
-    canvas.width  = video.videoWidth
+    canvas.width = video.videoWidth
     canvas.height = video.videoHeight
     canvas.getContext('2d').drawImage(video, 0, 0)
     canvas.toBlob(blob => {
@@ -454,14 +454,14 @@ function CameraModal({ onCapture, onClose }) {
 
 /* ── Photo Reel modal ────────────────────────────────────────────── */
 const SUPABASE_PROJECT_ID = 'wzwtwbnjcxrwxgiurgqa'
-const SUPABASE_BUCKET     = 'wedding-photos'
+const SUPABASE_BUCKET = 'wedding-photos'
 const resolvePhotoUrl = p =>
   p.photo_url ||
   (p.filename ? `https://${SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${SUPABASE_BUCKET}/photos/${p.filename}` : null)
 
 function PhotoReelModal({ onClose }) {
-  const [photos, setPhotos]     = useState([])
-  const [loading, setLoading]   = useState(true)
+  const [photos, setPhotos] = useState([])
+  const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
@@ -640,7 +640,13 @@ export default function Chat() {
   const myId = user?.id || null
   const isAdmin = user?.is_admin || false
 
-  useEffect(() => { loadMessages() }, [])
+  useEffect(() => {
+    loadMessages()
+    // Mostra subito la modale se non c'è ancora un nome
+    if (!user?.name && !getGuestName()) {
+      setShowNameModal(true)
+    }
+  }, [])
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
@@ -672,7 +678,7 @@ export default function Chat() {
 
     try {
       console.log('📨 [Chat] INIZIO INVIO MESSAGGIO | nome=%s | testo=%d | audio=%s | foto=%s', name, text.length, !!audioBlob, !!photoFile)
-      
+
       const form = new FormData()
       // caption/text — only append if non-empty
       if (text.trim()) {
@@ -684,7 +690,7 @@ export default function Chat() {
         const ext = audioBlob.type.includes('webm') ? '.webm' : '.ogg'
         const audioFile = new File([audioBlob], `audio${ext}`, { type: audioBlob.type })
         form.append('audio', audioFile)
-        console.log('  ✓ Audio aggiunto:', { name: audioFile.name, type: audioBlob.type, size: (audioBlob.size/1024).toFixed(1) + 'KB' })
+        console.log('  ✓ Audio aggiunto:', { name: audioFile.name, type: audioBlob.type, size: (audioBlob.size / 1024).toFixed(1) + 'KB' })
       }
 
       if (photoFile) {
@@ -708,7 +714,7 @@ export default function Chat() {
           estensione_originale: origExt || '(nessuna)',
           estensione_dedotta: ext,
           nome_finale: safeFile.name,
-          size_kb: (photoFile.size/1024).toFixed(1),
+          size_kb: (photoFile.size / 1024).toFixed(1),
           type_finale: safeFile.type
         })
         form.append('photo', safeFile)
@@ -725,7 +731,7 @@ export default function Chat() {
       let formEntries = []
       for (let [key, value] of form) {
         if (value instanceof File) {
-          formEntries.push(`${key}: File(${value.name}, ${value.type}, ${(value.size/1024).toFixed(1)}KB)`)
+          formEntries.push(`${key}: File(${value.name}, ${value.type}, ${(value.size / 1024).toFixed(1)}KB)`)
         } else {
           formEntries.push(`${key}: ${String(value).substring(0, 50)}`)
         }
@@ -735,16 +741,16 @@ export default function Chat() {
 
       console.log('📡 [Chat] INVIO POST a', `${API}/messages/`)
       const res = await fetch(`${API}/messages/`, { method: 'POST', headers, body: form })
-      
+
       console.log('  ← Risposta ricevuta | status:', res.status, '| ok:', res.ok)
-      
+
       if (!res.ok) {
         const errBody = await res.json().catch(() => ({}))
         console.error('❌ [Chat] ERRORE BACKEND | status=%d | detail=%s', res.status, errBody.detail || JSON.stringify(errBody))
         throw new Error(errBody.detail || `Errore HTTP ${res.status}`)
       }
       const msg = await res.json()
-      console.log('✅ [Chat] MESSAGGIO SALVATO | id=%s | tipo=%s | photo=%s | audio=%s | text=%s', 
+      console.log('✅ [Chat] MESSAGGIO SALVATO | id=%s | tipo=%s | photo=%s | audio=%s | text=%s',
         msg.id, msg.type, !!msg.photo_url, !!msg.audio_path, !!msg.content)
 
       if (!msg.photo_url && photoPreview) {
@@ -878,6 +884,25 @@ export default function Chat() {
           <div style={{ fontSize: 11, color: 'var(--sage)' }}>
             {messages.length} messaggi · 14 Giugno 2026
           </div>
+          {(user?.name || guestName) && (
+            <div style={{
+              fontSize: 11, color: 'var(--warm-gray)',
+              display: 'flex', alignItems: 'center', gap: 4, marginTop: 1,
+            }}>
+              <span>👤</span>
+              <span>Sei in chat come <strong style={{ color: 'var(--rose)' }}>{user?.name || guestName}</strong></span>
+              {!user?.name && (
+                <button
+                  onClick={() => setShowNameModal(true)}
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    color: 'var(--warm-gray)', fontSize: 10, padding: '0 2px',
+                    textDecoration: 'underline', opacity: 0.7,
+                  }}
+                >modifica</button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* 📷 Rullino shortcut */}
@@ -924,7 +949,7 @@ export default function Chat() {
               }}>
                 <style>{`@keyframes menuIn { from { opacity:0; transform:scale(0.95) translateY(-6px) } to { opacity:1; transform:none } }`}</style>
                 {[
-                  { icon: '📷', label: 'Rullino foto',   action: () => { setShowReel(true); setShowMenu(false) } },
+                  { icon: '📷', label: 'Rullino foto', action: () => { setShowReel(true); setShowMenu(false) } },
                   { icon: '🎞️', label: 'Vai ai Ricordi', action: () => { setShowMenu(false); navigate('/gallery') } },
                 ].map(item => (
                   <button
@@ -994,14 +1019,14 @@ export default function Chat() {
           <div style={{ position: 'relative', flexShrink: 0 }}>
             <img src={photoPreview} style={{ height: 70, width: 70, borderRadius: 8, objectFit: 'cover' }} />
             <button onClick={() => { setPhotoPreview(null); setPhotoFile(null) }}
-              style={{ 
-                position: 'absolute', top: -8, right: -8, 
-                background: 'var(--rose)', border: 'none', 
+              style={{
+                position: 'absolute', top: -8, right: -8,
+                background: 'var(--rose)', border: 'none',
                 borderRadius: '50%', width: 24, height: 24,
                 cursor: 'pointer', color: '#fff', fontSize: 14,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
-              }} 
+              }}
               title="Rimuovi foto"
             >✕</button>
           </div>
@@ -1029,8 +1054,8 @@ export default function Chat() {
               {fmt(recordSecs)}
             </p>
           </div>
-          <button onClick={() => setAudioBlob(null)} style={{ 
-            background: 'none', border: 'none', cursor: 'pointer', 
+          <button onClick={() => setAudioBlob(null)} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
             color: 'var(--warm-gray)', fontSize: 12, padding: '4px 8px',
             borderRadius: 4, transition: 'all 0.2s'
           }}
@@ -1040,7 +1065,7 @@ export default function Chat() {
           >
             Scarta
           </button>
-          <button className="btn btn-primary btn-sm" onClick={send} disabled={sending} 
+          <button className="btn btn-primary btn-sm" onClick={send} disabled={sending}
             style={{ borderRadius: 20 }}>
             {sending ? '…' : '✓ Invia'}
           </button>
@@ -1089,7 +1114,7 @@ export default function Chat() {
                   animation: 'menuIn 0.15s ease-out',
                 }}>
                   {[
-                    { icon: '📸', label: 'Scatta una foto',       action: () => { setShowPhotoMenu(false); setShowCamera(true) } },
+                    { icon: '📸', label: 'Scatta una foto', action: () => { setShowPhotoMenu(false); setShowCamera(true) } },
                     { icon: '🖼️', label: 'Carica dalla libreria', action: () => { setShowPhotoMenu(false); fileInputRef.current?.click() } },
                   ].map((item, idx, arr) => (
                     <button
