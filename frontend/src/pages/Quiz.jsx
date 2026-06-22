@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 
+const API = `${(import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')}/api`
+
 /* ═══════════════════════════════════════════════════════════════════
    DATI STRUTTURALI — testi e domande vengono da translations.js,
    qui restano solo i dati "di forma" (colori, griglia cruciverba, ecc.)
@@ -42,6 +44,12 @@ function addScore(gameId, name, score, total) {
   lb[gameId].sort((a, b) => b.score - a.score || a.date - b.date)
   lb[gameId] = lb[gameId].slice(0, 20)
   saveLB(lb)
+
+  fetch(`${API}/quiz/scores`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ game_id: gameId, player_name: name, score, total }),
+  }).catch(() => {})
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -451,8 +459,24 @@ function ResultScreen({ score, total, gameColor, gameBg, onLeaderboard, onBack }
 
 function Leaderboard({ activeId, gamesMeta, onClose }) {
   const { t } = useLanguage()
-  const lb = loadLB()
   const [tab, setTab] = useState(activeId || 'sposo')
+  const [remoteScores, setRemoteScores] = useState(null)
+
+  useEffect(() => {
+    fetch(`${API}/quiz/scores`)
+      .then(r => r.ok ? r.json() : [])
+      .then(rows => {
+        const grouped = {}
+        for (const r of rows) {
+          if (!grouped[r.game_id]) grouped[r.game_id] = []
+          grouped[r.game_id].push({ name: r.player_name, score: r.score, total: r.total, date: new Date(r.created_at).getTime() })
+        }
+        setRemoteScores(grouped)
+      })
+      .catch(() => setRemoteScores(loadLB()))
+  }, [])
+
+  const lb = remoteScores ?? loadLB()
   const entries = lb[tab] || []
 
   return (

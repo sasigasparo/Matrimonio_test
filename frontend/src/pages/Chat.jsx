@@ -220,6 +220,7 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingLeft: outgoing ? 0 : 4, paddingRight: outgoing ? 4 : 0 }}>
           <span style={{ fontSize: 10, color: 'var(--warm-gray)' }}>{timeStr}</span>
+          {outgoing && <span style={{ fontSize: 11, color: '#53bdeb', fontWeight: 700, letterSpacing: '-1px' }}>✓✓</span>}
           {(isAdmin || (isMe && withinWindow)) && (
             <button
               onClick={() => onDelete(msg.id, msg.created_at, msg.type)}
@@ -717,7 +718,7 @@ export default function Chat() {
         const safeFile = origExt
           ? photoFile
           : new File([photoFile], `photo${ext}`, { type: photoFile.type || 'image/jpeg' })
-        form.append('photo', safeFile)
+        form.append('file', safeFile)
       }
 
       form.append('guest_name', name)
@@ -740,7 +741,7 @@ export default function Chat() {
       setPhotoPreview(null)
       setPhotoFile(null)
       inputRef.current?.focus()
-      toast.success('✓ Messaggio inviato!')
+      // success shown via ✓✓ in bubble
     } catch (e) {
       toast.error('Errore invio: ' + e.message)
     }
@@ -1072,8 +1073,16 @@ export default function Chat() {
           <input
             className="input" placeholder="Aggiungi didascalia…"
             value={text} onChange={e => setText(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
             style={{ flex: 1, fontSize: 13 }}
           />
+          <button onClick={send} disabled={sending} style={{
+            width: 38, height: 38, borderRadius: '50%', border: 'none',
+            background: 'var(--rose)', color: '#fff', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 16, flexShrink: 0, opacity: sending ? 0.6 : 1,
+            transition: 'all 0.2s',
+          }}>➤</button>
         </div>
       )}
 
@@ -1117,7 +1126,7 @@ export default function Chat() {
       )}
 
       {/* ── Input bar ── */}
-      {!recording && !audioBlob && (
+      {!recording && !audioBlob && !photoPreview && (
         <div style={{
           display: 'flex', alignItems: 'flex-end', gap: 8, padding: '10px 12px',
           background: 'var(--white)', borderTop: '1px solid rgba(200,162,168,0.2)',
