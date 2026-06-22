@@ -13,7 +13,7 @@ from fastapi.responses import JSONResponse
 from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
 from image_utils import compress_image
-from drive_utils import upload_to_drive, upload_video_to_drive
+from drive_utils import upload_video_to_drive
 
 router = APIRouter()
 logger = logging.getLogger("wedding.messages")
@@ -56,11 +56,14 @@ def _upload_to_supabase(data: bytes, path: str, mime_type: str) -> str:
     start = time.time()
     try:
         db = get_db()
-        db.storage.from_(SUPABASE_BUCKET).upload(
+        if not data:
+            raise ValueError("data vuota")
+        response = db.storage.from_(SUPABASE_BUCKET).upload(
             path=path,
             file=data,
             file_options={"content-type": mime_type, "upsert": "false"},
         )
+        logger.debug("Supabase upload response: %s", response)
         public_url = db.storage.from_(SUPABASE_BUCKET).get_public_url(path)
         logger.info("Supabase OK | path=%s | %dms | url=%s", path, int((time.time()-start)*1000), public_url)
         return public_url
@@ -100,13 +103,6 @@ async def list_messages():
 # ──────────────────────────────────────────────────────────────────────────────
 # SEND MESSAGE — supports anon guests (name only) and registered users
 # ──────────────────────────────────────────────────────────────────────────────
-def _drive_upload_bg(data: bytes, filename: str, mime_type: str):
-    try:
-        upload_to_drive(data, filename, mime_type)
-    except Exception as e:
-        logger.error("❌ DRIVE_BG_FAIL | filename=%s | %s: %s", filename, type(e).__name__, e)
-
-
 @router.post("/")
 async def send_message(
     request: Request,
@@ -267,7 +263,6 @@ async def send_message(
         try:
             photo_url = _upload_to_supabase(data, f"photos/{filename}", mime_type)
             logger.info("✅ FOTO_CHAT | UPLOAD_OK | url=%s | guest=%s | size=%.2f MB", photo_url, actor_name, size_mb)
-            background_tasks.add_task(_drive_upload_bg, data, filename, mime_type)
         except Exception as e:
             logger.error(
                 "❌ FOTO_CHAT | UPLOAD_FAIL | errore=%s | messaggio=%s | nome=%s",

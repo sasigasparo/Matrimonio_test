@@ -6,11 +6,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, BackgroundTasks, Depends, File, Form, HTTPException, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
 from image_utils import compress_image
-from drive_utils import upload_to_drive
 
 router = APIRouter()
 logger = logging.getLogger("wedding.photos")
@@ -37,17 +36,16 @@ def _upload_to_supabase(data: bytes, filename: str, mime_type: str) -> str:
     try:
         db = get_db()
 
-        # Step 1 — upload binario
-        logger.debug("   Supabase [1/2] upload binario → %s", path)
-        db.storage.from_(SUPABASE_BUCKET).upload(
+        if not data:
+            raise ValueError("data vuota — compressione fallita?")
+
+        response = db.storage.from_(SUPABASE_BUCKET).upload(
             path=path,
             file=data,
             file_options={"content-type": mime_type, "upsert": "false"},
         )
-        logger.debug("   Supabase [1/2] upload OK")
+        logger.debug("   Supabase upload response: %s", response)
 
-        # Step 2 — recupera URL pubblico
-        logger.debug("   Supabase [2/2] recupero URL pubblico")
         public_url = db.storage.from_(SUPABASE_BUCKET).get_public_url(path)
 
         ms = int((time.time() - start) * 1000)
@@ -95,17 +93,9 @@ async def list_photos(user=Depends(get_optional_guest)):
     return photos
 
 
-def _drive_upload_bg(data: bytes, filename: str, mime_type: str):
-    try:
-        upload_to_drive(data, filename, mime_type)
-    except Exception as e:
-        logger.error("❌ DRIVE_BG_FAIL | filename=%s | %s: %s", filename, type(e).__name__, e)
-
-
 @router.post("/")
 async def upload_photo(
     request: Request,
-    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     caption: Optional[str] = Form(None),
     user=Depends(get_current_guest),
@@ -196,7 +186,6 @@ async def upload_photo(
     photo["guest_name"] = guest_info.get("name")
     photo["avatar_url"]  = guest_info.get("avatar_url")
 
-    background_tasks.add_task(_drive_upload_bg, data, filename, mime_type)
     audit(user["email"], "upload_photo", f"photo:{photo_id}", filename, client_ip)
 
     total_ms = int((time.time() - t0) * 1000)
