@@ -9,7 +9,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
-# Force reload: updates applied
+from image_utils import compress_image
 
 router = APIRouter()
 logger = logging.getLogger("wedding.photos")
@@ -137,8 +137,8 @@ async def upload_photo(
         )
         raise HTTPException(413, f"File troppo grande (max {MAX_PHOTO_MB}MB)")
 
-    filename  = f"{uuid.uuid4()}{ext}"
-    mime_type = _mime_from_ext(ext)
+    data, ext, mime_type = compress_image(data, ext)
+    filename = f"{uuid.uuid4()}{ext}"
     logger.info(
         "✔️  VALIDATION OK | guest_id=%s | ext=%s | size=%.2f MB | uuid_filename=%s",
         guest_id, ext, size_mb, filename,

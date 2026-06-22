@@ -12,6 +12,33 @@ function getToken() {
   return localStorage.getItem('wedding_token') || ''
 }
 
+const MAX_PX = 1600
+const JPEG_Q = 0.82
+
+function compressPhoto(file) {
+  return new Promise(resolve => {
+    const img = new Image()
+    const url = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      let { width: w, height: h } = img
+      if (Math.max(w, h) > MAX_PX) {
+        const r = MAX_PX / Math.max(w, h)
+        w = Math.round(w * r)
+        h = Math.round(h * r)
+      }
+      const canvas = document.createElement('canvas')
+      canvas.width = w; canvas.height = h
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+      canvas.toBlob(blob => {
+        resolve(new File([blob], 'photo.jpg', { type: 'image/jpeg' }))
+      }, 'image/jpeg', JPEG_Q)
+    }
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file) }
+    img.src = url
+  })
+}
+
 function getGuestName() {
   return localStorage.getItem('wedding_guest_name') || ''
 }
@@ -754,7 +781,8 @@ export default function Chat() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       const mr = new MediaRecorder(stream, {
-        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/ogg'
+        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/ogg',
+        audioBitsPerSecond: 64000,
       })
       chunksRef.current = []
       mr.ondataavailable = e => chunksRef.current.push(e.data)
@@ -788,22 +816,24 @@ export default function Chat() {
     clearInterval(timerRef.current)
   }
 
-  const handleFileChange = e => {
+  const handleFileChange = async e => {
     const f = e.target.files?.[0]
     if (!f) return
-    setPhotoFile(f)
+    e.target.value = ''
+    const compressed = await compressPhoto(f)
+    setPhotoFile(compressed)
     const reader = new FileReader()
     reader.onload = ev => setPhotoPreview(ev.target.result)
-    reader.readAsDataURL(f)
-    e.target.value = ''
+    reader.readAsDataURL(compressed)
   }
 
-  const handleCameraCapture = (file) => {
+  const handleCameraCapture = async (file) => {
     setShowCamera(false)
-    setPhotoFile(file)
+    const compressed = await compressPhoto(file)
+    setPhotoFile(compressed)
     const reader = new FileReader()
     reader.onload = ev => setPhotoPreview(ev.target.result)
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(compressed)
   }
 
   const deleteMsg = async (id, createdAt, type) => {

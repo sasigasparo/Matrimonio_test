@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 
 from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
+from image_utils import compress_image
 
 router = APIRouter()
 logger = logging.getLogger("wedding.messages")
@@ -216,8 +217,8 @@ async def send_message(
             )
             raise HTTPException(413, f"File troppo grande ({size_mb:.1f} MB, max {MAX_PHOTO_MB} MB)")
 
-        filename  = f"{uuid.uuid4()}{ext}"
-        mime_type = file.content_type or _mime_from_image_ext(ext)
+        data, ext, mime_type = compress_image(data, ext)
+        filename = f"{uuid.uuid4()}{ext}"
         logger.info(
             "🖼️  FOTO_CHAT | UPLOAD_SUPABASE | nome_interno=%s | mime_type=%s | path=photos/%s",
             filename, mime_type, filename,
