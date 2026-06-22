@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
-from auth_config import get_current_guest, get_optional_guest, require_admin
+from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
 # Force reload: updates applied
 
@@ -17,9 +17,7 @@ logger = logging.getLogger("wedding.photos")
 ALLOWED_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic"}
 MAX_PHOTO_MB = 30
 
-SUPABASE_BUCKET    = os.getenv("SUPABASE_BUCKET", "wedding-photos")
-GDRIVE_CREDENTIALS = os.getenv("GOOGLE_DRIVE_CREDENTIALS", "")
-GDRIVE_FOLDER_ID   = os.getenv("GOOGLE_DRIVE_FOLDER_ID", "")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "wedding-photos")
 
 
 

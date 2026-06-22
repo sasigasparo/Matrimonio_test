@@ -4,7 +4,6 @@ from pydantic import BaseModel
 
 from auth_config import create_access_token
 from database import get_guest_by_email, get_guest_by_id, create_guest, audit
-import os
 
 router = APIRouter()
 logger = logging.getLogger("wedding.auth")

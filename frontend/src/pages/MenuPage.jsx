@@ -9,7 +9,6 @@ import { WEDDING_CONFIG } from "../config/wedding";
 
 
 const WEDDING_TIME = new Date('2027-06-19T15:00:00')
-const WEDDING_DATE_LABEL = { it: 'WEDDING_DATE', en: 'WEDDING_DATE' }
 const UNLOCK_PASSWORD = 'menu'
 const SESSION_KEY = 'wedding_menu_auth'
 

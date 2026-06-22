@@ -5,6 +5,7 @@ import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlparse
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse
@@ -326,7 +327,6 @@ async def delete_message(message_id: int, user=Depends(get_current_guest)):
     # Delete audio from Supabase
     if row.get("audio_path"):
         try:
-            from urllib.parse import urlparse
             filename = Path(urlparse(row["audio_path"]).path).name
             db.storage.from_(SUPABASE_BUCKET).remove([f"audio/{filename}"])
             logger.info("✅ STORAGE_DEL | audio/%s", filename)
@@ -336,7 +336,6 @@ async def delete_message(message_id: int, user=Depends(get_current_guest)):
     # Delete inline photo from Supabase
     if row.get("photo_url"):
         try:
-            from urllib.parse import urlparse
             filename = Path(urlparse(row["photo_url"]).path).name
             db.storage.from_(SUPABASE_BUCKET).remove([f"photos/{filename}"])
             logger.info("✅ STORAGE_DEL | photos/%s", filename)
