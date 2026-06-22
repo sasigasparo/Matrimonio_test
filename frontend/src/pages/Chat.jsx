@@ -133,7 +133,6 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: outgoing ? 'flex-end' : 'flex-start', gap: 2 }}>
-        {/* Nome mittente: sopra per i messaggi degli altri, sotto per i propri */}
         {!outgoing && (
           <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--sage)', paddingLeft: 4 }}>{name}</span>
         )}
@@ -160,7 +159,6 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
                   e.currentTarget.nextSibling && (e.currentTarget.nextSibling.style.display = 'flex')
                 }}
               />
-              {/* Fallback placeholder shown if image fails to load */}
               <div style={{
                 display: 'none', width: 200, height: 120,
                 alignItems: 'center', justifyContent: 'center',
@@ -171,7 +169,6 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
                 <span style={{ fontSize: 28 }}>🖼️</span>
                 <span>Immagine non disponibile</span>
               </div>
-              {/* Semi-transparent overlay on hover for gallery button */}
               <div style={{
                 position: 'absolute', bottom: 8, right: 8,
                 opacity: 0, transition: 'opacity 0.2s',
@@ -195,7 +192,7 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
             </div>
           )}
 
-          {/* Text / caption — not shown for pure audio messages */}
+          {/* Text / caption */}
           {msg.content && msg.type !== 'audio' && (
             <p style={{
               padding: msg.photo_url ? '6px 12px 10px' : msg.audio_path ? '6px 12px 8px' : '10px 14px',
@@ -250,8 +247,9 @@ function DateSep({ date }) {
 }
 
 /* ── Name entry modal ────────────────────────────────────────────── */
-function NameModal({ onDone }) {
-  const [name, setName] = useState('')
+// isEditing=true → modale "Cambia nome", false → primo accesso
+function NameModal({ onDone, isEditing = false, currentName = '' }) {
+  const [name, setName] = useState(currentName)
   const [err, setErr] = useState('')
 
   const submit = () => {
@@ -271,12 +269,14 @@ function NameModal({ onDone }) {
         maxWidth: 360, width: '100%', textAlign: 'center',
         boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
       }}>
-        <div style={{ fontSize: '3rem', marginBottom: 12 }}>💍</div>
+        <div style={{ fontSize: '3rem', marginBottom: 12 }}>{isEditing ? '✏️' : '💍'}</div>
         <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '1.6rem', marginBottom: 8, color: 'var(--charcoal)' }}>
-          Come ti chiami?
+          {isEditing ? 'Cambia il tuo nome' : 'Come ti chiami?'}
         </h2>
         <p style={{ color: 'var(--warm-gray)', fontSize: 14, marginBottom: 24 }}>
-          Il tuo nome apparirà accanto ai tuoi messaggi e foto nella chat del matrimonio.
+          {isEditing
+            ? 'I tuoi prossimi messaggi appariranno con questo nuovo nome.'
+            : 'Il tuo nome apparirà accanto ai tuoi messaggi e foto nella chat del matrimonio.'}
         </p>
         <input
           className="input"
@@ -289,7 +289,7 @@ function NameModal({ onDone }) {
         />
         {err && <p style={{ color: 'var(--rose)', fontSize: 12, marginBottom: 12 }}>{err}</p>}
         <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={submit}>
-          Entra nella chat 💌
+          {isEditing ? '✓ Salva nome' : 'Entra nella chat 💌'}
         </button>
       </div>
     </div>
@@ -336,7 +336,6 @@ function CameraModal({ onCapture, onClose }) {
   const [facing, setFacing] = useState('environment')
 
   const startStream = async (facingMode) => {
-    // stop previous stream if any
     if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop())
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -381,7 +380,6 @@ function CameraModal({ onCapture, onClose }) {
     }, 'image/jpeg', 0.92)
   }
 
-  // close on Escape
   useEffect(() => {
     const h = e => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', h)
@@ -394,7 +392,6 @@ function CameraModal({ onCapture, onClose }) {
       background: '#000',
       display: 'flex', flexDirection: 'column',
     }}>
-      {/* Header */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '12px 16px', background: 'rgba(0,0,0,0.6)', flexShrink: 0,
@@ -410,7 +407,6 @@ function CameraModal({ onCapture, onClose }) {
         }} title="Cambia fotocamera">🔄</button>
       </div>
 
-      {/* Viewfinder */}
       <div style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {error ? (
           <div style={{ color: 'rgba(255,255,255,0.7)', textAlign: 'center', padding: 32, fontSize: 14 }}>
@@ -431,7 +427,6 @@ function CameraModal({ onCapture, onClose }) {
         )}
       </div>
 
-      {/* Shutter */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '28px 0 40px', background: 'rgba(0,0,0,0.6)', flexShrink: 0,
@@ -477,7 +472,6 @@ function PhotoReelModal({ onClose }) {
       .catch(() => setLoading(false))
   }, [])
 
-  // close on Escape
   useEffect(() => {
     const h = e => { if (e.key === 'Escape') selected ? setSelected(null) : onClose() }
     window.addEventListener('keydown', h)
@@ -493,7 +487,6 @@ function PhotoReelModal({ onClose }) {
     }}>
       <style>{`@keyframes slideUp { from { transform:translateY(100%) } to { transform:translateY(0) } }`}</style>
 
-      {/* Header */}
       <div style={{
         height: 56, display: 'flex', alignItems: 'center', gap: 12,
         padding: '0 16px', background: 'rgba(0,0,0,0.6)',
@@ -515,7 +508,6 @@ function PhotoReelModal({ onClose }) {
         <span style={{ fontSize: 20 }}>📷</span>
       </div>
 
-      {/* Grid */}
       {loading ? (
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div className="spinner" style={{ borderColor: 'rgba(200,130,106,0.3)', borderTopColor: 'var(--rose)' }} />
@@ -565,7 +557,6 @@ function PhotoReelModal({ onClose }) {
         </div>
       )}
 
-      {/* Lightbox */}
       {selected && (
         <div
           onClick={() => setSelected(null)}
@@ -612,7 +603,7 @@ function PhotoReelModal({ onClose }) {
 
 /* ── Main Chat component ─────────────────────────────────────────── */
 export default function Chat() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const toast = useToast()
   const navigate = useNavigate()
 
@@ -621,7 +612,8 @@ export default function Chat() {
   const [text, setText] = useState('')
   const [sending, setSending] = useState(false)
   const [guestName, setGuestName] = useState(getGuestName)
-  const [showNameModal, setShowNameModal] = useState(false)
+  // nameModalMode: 'hidden' | 'new' | 'edit'
+  const [nameModalMode, setNameModalMode] = useState('hidden')
   const [photoPreview, setPhotoPreview] = useState(null)
   const [photoFile, setPhotoFile] = useState(null)
   const [showReel, setShowReel] = useState(false)
@@ -644,15 +636,22 @@ export default function Chat() {
   const myId = user?.id || null
   const isAdmin = user?.is_admin || false
 
+  // Se il nome del backend è il placeholder 'Ospite', cade sul nome locale
+  const authName = user?.name && user.name !== 'Ospite' ? user.name : null
+  const activeName = authName || guestName
+
+  useEffect(() => { loadMessages() }, [])
+
   useEffect(() => {
-    loadMessages()
+    if (authLoading) return
     const savedName = getGuestName()
-    if (!user?.name && (!savedName || savedName === 'Ospite' || savedName.trim() === '')) {
+    if (!authName && (!savedName || savedName === 'Ospite' || savedName.trim() === '')) {
       localStorage.removeItem('wedding_guest_name')
       setGuestName('')
-      setShowNameModal(true)
+      setNameModalMode('new')
     }
-  }, [])
+  }, [authLoading])
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
@@ -667,36 +666,31 @@ export default function Chat() {
   }
 
   const ensureName = () => {
-    if (user?.name) return user.name
+    if (authName) return authName
     if (guestName) return guestName
-    setShowNameModal(true)
+    setNameModalMode('new')
     return null
+  }
+
+  const handleNameDone = (name) => {
+    setGuestName(name)
+    setNameModalMode('hidden')
   }
 
   const send = async () => {
     const name = ensureName()
     if (!name) return
-    if (!text.trim() && !audioBlob && !photoFile) {
-      console.warn('[Chat] ❌ SEND | nessun contenuto: text=%s audio=%s foto=%s', text.trim().length > 0, !!audioBlob, !!photoFile)
-      return
-    }
+    if (!text.trim() && !audioBlob && !photoFile) return
     setSending(true)
 
     try {
-      console.log('📨 [Chat] INIZIO INVIO MESSAGGIO | nome=%s | testo=%d | audio=%s | foto=%s', name, text.length, !!audioBlob, !!photoFile)
-
       const form = new FormData()
-      // caption/text — only append if non-empty
-      if (text.trim()) {
-        form.append('content', text.trim())
-        console.log('  ✓ Contenuto testo aggiunto:', text.trim().substring(0, 50))
-      }
+      if (text.trim()) form.append('content', text.trim())
 
       if (audioBlob) {
         const ext = audioBlob.type.includes('webm') ? '.webm' : '.ogg'
         const audioFile = new File([audioBlob], `audio${ext}`, { type: audioBlob.type })
         form.append('audio', audioFile)
-        console.log('  ✓ Audio aggiunto:', { name: audioFile.name, type: audioBlob.type, size: (audioBlob.size / 1024).toFixed(1) + 'KB' })
       }
 
       if (photoFile) {
@@ -709,59 +703,26 @@ export default function Chat() {
           ? '.' + photoFile.name.split('.').pop().toLowerCase()
           : ''
         const ext = origExt || mimeToExt[photoFile.type] || '.jpg'
-        const safeName = `photo${ext}`
         const safeFile = origExt
           ? photoFile
-          : new File([photoFile], safeName, { type: photoFile.type || 'image/jpeg' })
-
-        console.log('🖼️  [Chat] FOTO PREPARAZIONE:', {
-          nome_originale: photoFile.name,
-          tipo_originale: photoFile.type,
-          estensione_originale: origExt || '(nessuna)',
-          estensione_dedotta: ext,
-          nome_finale: safeFile.name,
-          size_kb: (photoFile.size / 1024).toFixed(1),
-          type_finale: safeFile.type
-        })
+          : new File([photoFile], `photo${ext}`, { type: photoFile.type || 'image/jpeg' })
         form.append('photo', safeFile)
-        console.log('  ✓ Foto aggiunta al FormData come "photo"')
       }
 
       form.append('guest_name', name)
-      console.log('  ✓ Nome ospite aggiunto')
 
       const headers = {}
       const token = getToken()
       if (token) headers['Authorization'] = `Bearer ${token}`
 
-      let formEntries = []
-      for (let [key, value] of form) {
-        if (value instanceof File) {
-          formEntries.push(`${key}: File(${value.name}, ${value.type}, ${(value.size / 1024).toFixed(1)}KB)`)
-        } else {
-          formEntries.push(`${key}: ${String(value).substring(0, 50)}`)
-        }
-      }
-      console.log('📤 [Chat] FORMDATA FINALE:', formEntries)
-      console.log('  Headers:', headers)
-
-      console.log('📡 [Chat] INVIO POST a', `${API}/messages/`)
       const res = await fetch(`${API}/messages/`, { method: 'POST', headers, body: form })
-
-      console.log('  ← Risposta ricevuta | status:', res.status, '| ok:', res.ok)
 
       if (!res.ok) {
         const errBody = await res.json().catch(() => ({}))
-        console.error('❌ [Chat] ERRORE BACKEND | status=%d | detail=%s', res.status, errBody.detail || JSON.stringify(errBody))
         throw new Error(errBody.detail || `Errore HTTP ${res.status}`)
       }
       const msg = await res.json()
-      console.log('✅ [Chat] MESSAGGIO SALVATO | id=%s | tipo=%s | photo=%s | audio=%s | text=%s',
-        msg.id, msg.type, !!msg.photo_url, !!msg.audio_path, !!msg.content)
-
-      if (!msg.photo_url && photoPreview) {
-        msg.photo_url = photoPreview
-      }
+      if (!msg.photo_url && photoPreview) msg.photo_url = photoPreview
       setMessages(prev => [...prev, msg])
       setText('')
       setAudioBlob(null)
@@ -770,7 +731,6 @@ export default function Chat() {
       inputRef.current?.focus()
       toast.success('✓ Messaggio inviato!')
     } catch (e) {
-      console.error('❌ [Chat] ECCEZIONE:', e.message, e)
       toast.error('Errore invio: ' + e.message)
     }
     setSending(false)
@@ -861,55 +821,110 @@ export default function Chat() {
       <style>{`
         @keyframes msgIn { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform:none } }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+        @keyframes namePop { from { opacity:0; transform: scale(0.95) } to { opacity:1; transform: scale(1) } }
       `}</style>
 
-      {showNameModal && (
-        <NameModal onDone={name => { setGuestName(name); setShowNameModal(false) }} />
+      {/* ── Modali ── */}
+      {nameModalMode !== 'hidden' && (
+        <NameModal
+          onDone={handleNameDone}
+          isEditing={nameModalMode === 'edit'}
+          currentName={nameModalMode === 'edit' ? guestName : ''}
+        />
       )}
-
       {showReel && <PhotoReelModal onClose={() => setShowReel(false)} />}
       {showCamera && <CameraModal onCapture={handleCameraCapture} onClose={() => setShowCamera(false)} />}
 
       {/* ── Header ── */}
       <div style={{
-        height: 60, display: 'flex', alignItems: 'center', gap: 12,
-        padding: '0 12px 0 16px',
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: '0 10px 0 14px',
         background: 'var(--white)', borderBottom: '1px solid rgba(200,162,168,0.2)',
         flexShrink: 0, boxShadow: '0 1px 8px rgba(0,0,0,0.04)',
-        position: 'relative',
+        minHeight: 60,
       }}>
+        {/* Avatar */}
         <div style={{
-          width: 38, height: 38, borderRadius: '50%',
+          width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
           background: 'linear-gradient(135deg, var(--rose), var(--blush))',
           display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
         }}>💍</div>
-        <div style={{ flex: 1 }}>
+
+        {/* Titolo + sottotitolo */}
+        <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 400, color: 'var(--charcoal)' }}>
             Sofia &amp; Marco
           </div>
           <div style={{ fontSize: 11, color: 'var(--sage)' }}>
-            {messages.length} messaggi · 14 Giugno 2026
+            {messages.length} messaggi · 14 Giugno 2027
           </div>
-          {(user?.name || guestName) && (
-            <div style={{
-              fontSize: 11, color: 'var(--warm-gray)',
-              display: 'flex', alignItems: 'center', gap: 4, marginTop: 1,
-            }}>
-              <span>👤</span>
-              <span>Sei in chat come <strong style={{ color: 'var(--rose)' }}>{user?.name || guestName}</strong></span>
-              {!user?.name && (
-                <button
-                  onClick={() => setShowNameModal(true)}
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    color: 'var(--warm-gray)', fontSize: 10, padding: '0 2px',
-                    textDecoration: 'underline', opacity: 0.7,
-                  }}
-                >modifica</button>
-              )}
-            </div>
-          )}
         </div>
+
+        {/* ── Badge nome — sempre visibile, cliccabile per cambiare ── */}
+        {!authName && (
+          <button
+            onClick={() => setNameModalMode(activeName ? 'edit' : 'new')}
+            title={activeName ? 'Cambia il tuo nome' : 'Scegli il tuo nome'}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              background: activeName ? 'rgba(200,130,106,0.1)' : 'var(--rose)',
+              border: activeName ? '1.5px solid rgba(200,130,106,0.35)' : 'none',
+              borderRadius: 99,
+              padding: activeName ? '5px 10px 5px 8px' : '6px 12px',
+              cursor: 'pointer',
+              flexShrink: 0,
+              transition: 'all 0.2s',
+              animation: 'namePop 0.25s ease-out',
+              maxWidth: 160,
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = activeName
+                ? 'rgba(200,130,106,0.2)'
+                : 'color-mix(in srgb, var(--rose) 85%, black)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = activeName
+                ? 'rgba(200,130,106,0.1)'
+                : 'var(--rose)'
+            }}
+          >
+            <span style={{ fontSize: 13, flexShrink: 0 }}>{activeName ? '👤' : '✏️'}</span>
+            {activeName ? (
+              <>
+                <span style={{
+                  fontSize: 12, fontWeight: 600, color: 'var(--rose)',
+                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}>
+                  {activeName}
+                </span>
+                <span style={{ fontSize: 11, color: 'var(--warm-gray)', flexShrink: 0 }}>✎</span>
+              </>
+            ) : (
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap' }}>
+                Scegli il tuo nome
+              </span>
+            )}
+          </button>
+        )}
+
+        {/* Se autenticato con nome reale, mostra solo badge statico */}
+        {authName && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 5,
+            background: 'rgba(200,130,106,0.1)',
+            border: '1.5px solid rgba(200,130,106,0.3)',
+            borderRadius: 99, padding: '5px 10px 5px 8px',
+            maxWidth: 160, flexShrink: 0,
+          }}>
+            <span style={{ fontSize: 13 }}>👤</span>
+            <span style={{
+              fontSize: 12, fontWeight: 600, color: 'var(--rose)',
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+            }}>
+              {user.name}
+            </span>
+          </div>
+        )}
 
         {/* 📷 Rullino shortcut */}
         <button
@@ -943,7 +958,6 @@ export default function Chat() {
 
           {showMenu && (
             <>
-              {/* backdrop */}
               <div onClick={() => setShowMenu(false)} style={{ position: 'fixed', inset: 0, zIndex: 90 }} />
               <div style={{
                 position: 'absolute', top: 40, right: 0, zIndex: 100,
@@ -957,6 +971,7 @@ export default function Chat() {
                 {[
                   { icon: '📷', label: 'Rullino foto', action: () => { setShowReel(true); setShowMenu(false) } },
                   { icon: '🎞️', label: 'Vai ai Ricordi', action: () => { setShowMenu(false); navigate('/gallery') } },
+                  ...(!authName ? [{ icon: '✏️', label: 'Cambia il tuo nome', action: () => { setNameModalMode('edit'); setShowMenu(false) } }] : []),
                 ].map(item => (
                   <button
                     key={item.label}
@@ -1090,10 +1105,9 @@ export default function Chat() {
           background: 'var(--white)', borderTop: '1px solid rgba(200,162,168,0.2)',
           flexShrink: 0,
         }}>
-          {/* Input nascosto per libreria */}
           <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
 
-          {/* 📷 Bottone foto + popup menu */}
+          {/* 📷 Bottone foto */}
           <div style={{ position: 'relative', flexShrink: 0 }}>
             <button
               onClick={() => { if (!ensureName()) return; setShowPhotoMenu(v => !v) }}
@@ -1149,7 +1163,7 @@ export default function Chat() {
           {/* Textarea */}
           <textarea
             ref={inputRef}
-            placeholder={guestName || user?.name ? 'Scrivi un messaggio…' : 'Clicca per scrivere…'}
+            placeholder={activeName ? 'Scrivi un messaggio…' : 'Scegli il tuo nome per scrivere…'}
             value={text}
             onChange={e => { setText(e.target.value); e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px' }}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}

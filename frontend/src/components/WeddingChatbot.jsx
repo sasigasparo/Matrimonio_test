@@ -100,39 +100,41 @@ export default function WeddingChatbot() {
   return (
     <>
       {/* ── Floating button ── */}
-      <button
-        onClick={() => setOpen(o => !o)}
-        aria-label={open ? 'Chiudi chat' : 'Apri chat'}
-        style={{
-          position: 'fixed',
-          bottom: 'max(16px, env(safe-area-inset-bottom, 0px) + 12px)',
-          right: 16,
-          zIndex: 300,
-          width: 56,
-          height: 56,
-          borderRadius: '50%',
-          border: 'none',
-          cursor: 'pointer',
-          background: 'linear-gradient(135deg, #c8a2a8, #e8c4a8)',
-          boxShadow: '0 4px 20px rgba(200,130,100,0.4)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '1.5rem',
-          transition: 'transform 0.2s',
-        }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-      >
-        {open ? '✕' : '💬'}
-        {hasUnread && !open && (
-          <span style={{
-            position: 'absolute', top: 2, right: 2,
-            width: 14, height: 14, borderRadius: '50%',
-            background: '#c97a7a', border: '2px solid #fff',
-          }} />
-        )}
-      </button>
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          aria-label="Apri chat"
+          style={{
+            position: 'fixed',
+            bottom: 'max(16px, env(safe-area-inset-bottom, 0px) + 12px)',
+            right: 16,
+            zIndex: 300,
+            width: 56,
+            height: 56,
+            borderRadius: '50%',
+            border: 'none',
+            cursor: 'pointer',
+            background: 'linear-gradient(135deg, #c8a2a8, #e8c4a8)',
+            boxShadow: '0 4px 20px rgba(200,130,100,0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1.5rem',
+            transition: 'transform 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
+          onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          💬
+          {hasUnread && (
+            <span style={{
+              position: 'absolute', top: 2, right: 2,
+              width: 14, height: 14, borderRadius: '50%',
+              background: '#c97a7a', border: '2px solid #fff',
+            }} />
+          )}
+        </button>
+      )}
 
       {/* ── Backdrop (solo mobile) ── */}
       <div

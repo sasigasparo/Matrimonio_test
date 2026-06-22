@@ -5,7 +5,7 @@ import { useLanguage } from '../hooks/useLanguage'
 import LanguageSwitch from '../components/LanguageSwitch'
 
 const API_URL = (import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')
-const WEDDING_DATE_LABEL = { it: '14 Giugno 2026', en: 'June 14, 2026' }
+const WEDDING_DATE_LABEL = { it: '14 Giugno 2027', en: 'June 14, 2027' }
 
 export default function Login() {
   const navigate = useNavigate()

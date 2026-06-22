@@ -33,7 +33,7 @@ function WeatherWidget() {
       .then(data => {
         if (data.error) throw new Error(data.error.message)
         setDays(data.forecast.forecastday.map(d => ({
-          date:     new Date(d.date),
+          date:     new Date(d.date + 'T00:00:00'),
           icon:     `https:${d.day.condition.icon}`,
           label:    d.day.condition.text,
           max:      Math.round(d.day.maxtemp_c),

@@ -126,7 +126,9 @@ async def send_message(
     # Resolve identity
     if user:
         actor_id    = int(user["sub"])
-        actor_name  = user.get("name") or guest_name or "Ospite"
+        real_form_name = guest_name.strip() if guest_name and guest_name.strip() not in ("", "Ospite") else None
+        real_jwt_name  = user.get("name") if user.get("name") and user.get("name") != "Ospite" else None
+        actor_name  = real_form_name or real_jwt_name or "Ospite"
         actor_email = user.get("email", "anon")
         logger.info("👤 IDENTITY | tipo=auth | id=%s | name=%r | email=%r", actor_id, actor_name, actor_email)
     elif guest_name and guest_name.strip():
