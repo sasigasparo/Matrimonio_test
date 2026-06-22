@@ -12,8 +12,15 @@ import { useEffect, useState } from 'react'
 const WEATHER_API_KEY = 'fb30c9a0bd864816bba202820262106' // 👈 incolla qui la key di weatherapi.com
 
 function fmtTime(timeStr) {
-  // WeatherAPI restituisce orari tipo "05:31 AM", li convertiamo in formato 24h
-  return new Date(`2000-01-01 ${timeStr}`).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+  if (!timeStr) return '--:--'
+  try {
+    const [time, mer] = timeStr.trim().split(' ')
+    const [h, m] = time.split(':').map(Number)
+    let hours = h
+    if (mer === 'PM' && h !== 12) hours += 12
+    if (mer === 'AM' && h === 12) hours = 0
+    return `${String(hours).padStart(2, '0')}:${String(m).padStart(2, '0')}`
+  } catch { return '--:--' }
 }
 
 function WeatherWidget() {

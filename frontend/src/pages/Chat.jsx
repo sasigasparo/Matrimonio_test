@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { WEDDING_CONFIG } from '../config/wedding'
-import { API, getToken, getGuestName, compressPhoto } from '../components/chat/chatHelpers'
+import { API, getToken, getGuestName, compressPhoto, estimateWaitMinutes } from '../components/chat/chatHelpers'
 import MessageBubble, { DateSep } from '../components/chat/MessageBubble'
 import NameModal from '../components/chat/NameModal'
 import RecordingPill from '../components/chat/RecordingPill'
@@ -133,6 +133,7 @@ export default function Chat() {
       }
       const msg = await res.json()
       if (!msg.photo_url && photoPreview) msg.photo_url = photoPreview
+      if (videoFile) msg._waitMinutes = estimateWaitMinutes(videoFile.size / (1024 * 1024))
       setMessages(prev => [...prev, msg])
       setText('')
       setAudioBlob(null)
@@ -503,9 +504,9 @@ export default function Chat() {
                     border: '2px solid var(--blush)', borderTopColor: 'var(--rose)',
                     borderRadius: '50%', animation: 'spin 0.8s linear infinite',
                   }} />
-                  Caricamento su Drive…
+                  Caricamento su Drive… aspetta ~{estimateWaitMinutes(videoFile.size / (1024 * 1024))} min dopo l'invio
                 </>
-              ) : `${(videoFile.size / (1024 * 1024)).toFixed(1)} MB · verrà caricato su Drive`}
+              ) : `${(videoFile.size / (1024 * 1024)).toFixed(1)} MB · pronto in ~${estimateWaitMinutes(videoFile.size / (1024 * 1024))} min su Drive`}
             </div>
           </div>
           {!sending && (

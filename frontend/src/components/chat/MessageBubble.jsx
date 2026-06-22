@@ -139,6 +139,11 @@ export default function MessageBubble({ msg, myId, isAdmin, onDelete }) {
               <div>
                 <div style={{ fontSize: 13, fontWeight: 600 }}>Video caricato su Drive</div>
                 <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>Tocca per aprire →</div>
+                {msg._waitMinutes && (
+                  <div style={{ fontSize: 10, opacity: 0.6, marginTop: 3 }}>
+                    ⏳ Se non si riproduce, aspetta ~{msg._waitMinutes} min
+                  </div>
+                )}
               </div>
             </a>
           )}

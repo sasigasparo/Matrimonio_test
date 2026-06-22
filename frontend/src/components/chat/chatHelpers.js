@@ -39,6 +39,11 @@ export function compressPhoto(file) {
   })
 }
 
+// ~1 min base + 1 min per 15MB · min 2 · max 30
+export function estimateWaitMinutes(sizeMB) {
+  return Math.min(30, Math.max(2, Math.round(1 + sizeMB / 15)))
+}
+
 export const resolvePhotoUrl = p =>
   p.url || p.photo_url ||
   (p.filename ? `https://${SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${SUPABASE_BUCKET}/photos/${p.filename}` : null)
