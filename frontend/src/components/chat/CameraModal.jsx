@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 export default function CameraModal({ onCapture, onClose }) {
   const videoRef = useRef(null)
   const streamRef = useRef(null)
+  const lastTapRef = useRef(0)
   const [ready, setReady] = useState(false)
   const [error, setError] = useState('')
   const [facing, setFacing] = useState('environment')
@@ -37,13 +38,24 @@ export default function CameraModal({ onCapture, onClose }) {
     startStream(next)
   }
 
+  const handleDoubleTap = () => {
+    const now = Date.now()
+    if (now - lastTapRef.current < 300) flip()
+    lastTapRef.current = now
+  }
+
   const shoot = () => {
     const video = videoRef.current
     if (!video) return
     const canvas = document.createElement('canvas')
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
-    canvas.getContext('2d').drawImage(video, 0, 0)
+    const ctx = canvas.getContext('2d')
+    if (facing === 'user') {
+      ctx.translate(canvas.width, 0)
+      ctx.scale(-1, 1)
+    }
+    ctx.drawImage(video, 0, 0)
     canvas.toBlob(blob => {
       if (!blob) return
       const file = new File([blob], 'camera_photo.jpg', { type: 'image/jpeg' })
@@ -57,6 +69,8 @@ export default function CameraModal({ onCapture, onClose }) {
     window.addEventListener('keydown', h)
     return () => window.removeEventListener('keydown', h)
   }, [onClose])
+
+  const isFront = facing === 'user'
 
   return (
     <div style={{
@@ -72,14 +86,20 @@ export default function CameraModal({ onCapture, onClose }) {
           background: 'none', border: 'none', cursor: 'pointer',
           color: '#fff', fontSize: 22, lineHeight: 1, padding: '4px 8px',
         }}>✕</button>
-        <span style={{ color: '#fff', fontFamily: 'Georgia, serif', fontSize: 15 }}>Scatta una foto</span>
+        <span style={{ color: '#fff', fontFamily: 'Georgia, serif', fontSize: 15 }}>
+          {isFront ? 'Selfie' : 'Scatta una foto'}
+        </span>
         <button onClick={flip} style={{
           background: 'none', border: 'none', cursor: 'pointer',
           color: '#fff', fontSize: 22, padding: '4px 8px',
         }} title="Cambia fotocamera">🔄</button>
       </div>
 
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div
+        style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        onTouchEnd={handleDoubleTap}
+        onDoubleClick={flip}
+      >
         {error ? (
           <div style={{ color: 'rgba(255,255,255,0.7)', textAlign: 'center', padding: 32, fontSize: 14 }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>📷</div>
@@ -94,8 +114,17 @@ export default function CameraModal({ onCapture, onClose }) {
             style={{
               width: '100%', height: '100%', objectFit: 'cover',
               opacity: ready ? 1 : 0, transition: 'opacity 0.3s',
+              transform: isFront ? 'scaleX(-1)' : 'none',
             }}
           />
+        )}
+        {ready && (
+          <div style={{
+            position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)',
+            color: 'rgba(255,255,255,0.45)', fontSize: 11, pointerEvents: 'none',
+          }}>
+            Doppio tap per cambiare fotocamera
+          </div>
         )}
       </div>
 

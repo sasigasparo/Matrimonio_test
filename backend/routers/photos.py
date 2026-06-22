@@ -207,7 +207,11 @@ async def delete_photo(photo_id: int, user=Depends(get_current_guest)):
         raise HTTPException(404, "Photo not found")
 
     row      = result.data[0]
-    is_owner = str(row["guest_id"]) == str(user["sub"])
+    is_owner = (
+        row.get("guest_id") is not None
+        and user.get("sub") is not None
+        and str(row["guest_id"]) == str(user["sub"])
+    )
     if not is_owner and not user.get("is_admin"):
         raise HTTPException(403, "Forbidden")
 
