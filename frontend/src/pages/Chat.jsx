@@ -93,7 +93,7 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
   const isMe = String(msg.guest_id) === String(myId)
   const outgoing = isMe
 
-  const name = msg.guest_name || 'Ospite'
+  const name = msg.guest_name && msg.guest_name !== 'Ospite' ? msg.guest_name : (msg.guest_name || '?')
   const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
 
   const bubbleStyle = {
@@ -133,6 +133,7 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: outgoing ? 'flex-end' : 'flex-start', gap: 2 }}>
+        {/* Nome mittente: sopra per i messaggi degli altri, sotto per i propri */}
         {!outgoing && (
           <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--sage)', paddingLeft: 4 }}>{name}</span>
         )}
@@ -225,6 +226,9 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
             </button>
           )}
         </div>
+        {outgoing && (
+          <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--rose)', paddingRight: 4, opacity: 0.8 }}>{name}</span>
+        )}
       </div>
     </div>
   )
@@ -640,15 +644,15 @@ export default function Chat() {
   const myId = user?.id || null
   const isAdmin = user?.is_admin || false
 
-useEffect(() => {
-  loadMessages()
-  const savedName = getGuestName()
-  if (!user?.name && (!savedName || savedName === 'Ospite')) {
-    localStorage.removeItem('wedding_guest_name')
-    setGuestName('')
-    setShowNameModal(true)
-  }
-}, [])
+  useEffect(() => {
+    loadMessages()
+    const savedName = getGuestName()
+    if (!user?.name && (!savedName || savedName === 'Ospite' || savedName.trim() === '')) {
+      localStorage.removeItem('wedding_guest_name')
+      setGuestName('')
+      setShowNameModal(true)
+    }
+  }, [])
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
