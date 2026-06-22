@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import { WEDDING_CONFIG } from '../config/wedding'
 
-// Cambia questa password come vuoi
-const ADMIN_TABLE_PASSWORD = 'SPOSA'
+const ADMIN_TABLE_PASSWORD = WEDDING_CONFIG.admin.tablePassword
 const SESSION_KEY = 'wedding_tables_auth'
 
 export function useTableAuth() {

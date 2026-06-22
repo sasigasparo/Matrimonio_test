@@ -8,8 +8,9 @@ import { WEDDING_CONFIG } from "../config/wedding";
 
 
 
-const WEDDING_TIME = new Date('2027-06-19T15:00:00')
-const UNLOCK_PASSWORD = 'menu'
+const [_dd, _mm, _yyyy] = WEDDING_CONFIG.date.split('-')
+const WEDDING_TIME = new Date(`${_yyyy}-${_mm}-${_dd}T${WEDDING_CONFIG.venue.ceremony.time}:00`)
+const UNLOCK_PASSWORD = WEDDING_CONFIG.admin.menuPassword
 const SESSION_KEY = 'wedding_menu_auth'
 
 function useCountdown() {

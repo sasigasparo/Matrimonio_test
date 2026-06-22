@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { api } from '../utils/api'
+import { WEDDING_CONFIG } from '../config/wedding'
 
 const API = `${(import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')}/api`
 
@@ -92,6 +93,17 @@ function AudioBubble({ src, outgoing }) {
 function MessageBubble({ msg, myId, isAdmin, onDelete }) {
   const isMe = String(msg.guest_id) === String(myId)
   const outgoing = isMe
+
+  const [withinWindow, setWithinWindow] = useState(() => {
+    return Date.now() - new Date(msg.created_at).getTime() < 3 * 60 * 1000
+  })
+  useEffect(() => {
+    if (!isMe || !withinWindow) return
+    const remaining = 3 * 60 * 1000 - (Date.now() - new Date(msg.created_at).getTime())
+    if (remaining <= 0) { setWithinWindow(false); return }
+    const t = setTimeout(() => setWithinWindow(false), remaining)
+    return () => clearTimeout(t)
+  }, [isMe, msg.created_at])
 
   const name = msg.guest_name && msg.guest_name !== 'Ospite' ? msg.guest_name : (msg.guest_name || '?')
   const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
@@ -208,9 +220,9 @@ function MessageBubble({ msg, myId, isAdmin, onDelete }) {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingLeft: outgoing ? 0 : 4, paddingRight: outgoing ? 4 : 0 }}>
           <span style={{ fontSize: 10, color: 'var(--warm-gray)' }}>{timeStr}</span>
-          {(isAdmin || isMe) && (
+          {(isAdmin || (isMe && withinWindow)) && (
             <button
-              onClick={() => onDelete(msg.id, msg.type)}
+              onClick={() => onDelete(msg.id, msg.created_at, msg.type)}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 fontSize: 10, color: 'var(--warm-gray)', padding: '0 2px',
@@ -452,8 +464,7 @@ function CameraModal({ onCapture, onClose }) {
 }
 
 /* ── Photo Reel modal ────────────────────────────────────────────── */
-const SUPABASE_PROJECT_ID = 'wzwtwbnjcxrwxgiurgqa'
-const SUPABASE_BUCKET = 'wedding-photos'
+const { projectId: SUPABASE_PROJECT_ID, bucket: SUPABASE_BUCKET } = WEDDING_CONFIG.supabase
 const resolvePhotoUrl = p =>
   p.photo_url ||
   (p.filename ? `https://${SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${SUPABASE_BUCKET}/photos/${p.filename}` : null)
@@ -794,7 +805,14 @@ export default function Chat() {
     reader.readAsDataURL(file)
   }
 
-  const deleteMsg = async (id, type) => {
+  const deleteMsg = async (id, createdAt, type) => {
+    if (!isAdmin) {
+      const age = Date.now() - new Date(createdAt).getTime()
+      if (age > 3 * 60 * 1000) {
+        toast.error('Tempo scaduto: non puoi più eliminare questo messaggio')
+        return
+      }
+    }
     if (!confirm('Eliminare questo messaggio?')) return
     try {
       const headers = { Authorization: `Bearer ${getToken()}` }
@@ -853,10 +871,10 @@ export default function Chat() {
         {/* Titolo + sottotitolo */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 400, color: 'var(--charcoal)' }}>
-            Sofia &amp; Marco
+            {WEDDING_CONFIG.couple.displayName}
           </div>
           <div style={{ fontSize: 11, color: 'var(--sage)' }}>
-            {messages.length} messaggi · 14 Giugno 2027
+            {messages.length} messaggi · {WEDDING_CONFIG.dateLabel}
           </div>
         </div>
 

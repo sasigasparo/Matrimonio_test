@@ -3,10 +3,9 @@ import { api } from '../utils/api'
 import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 
-// Supabase project ID e bucket (hardcoded, noto dal .env)
-const SUPABASE_PROJECT_ID = 'wzwtwbnjcxrwxgiurgqa'
-const SUPABASE_BUCKET = 'wedding-photos'
-const getSupabasePhotoUrl = (filename) => 
+import { WEDDING_CONFIG } from '../config/wedding'
+const { projectId: SUPABASE_PROJECT_ID, bucket: SUPABASE_BUCKET } = WEDDING_CONFIG.supabase
+const getSupabasePhotoUrl = (filename) =>
   `https://${SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${SUPABASE_BUCKET}/photos/${filename}`
 
 function AudioList({ messages }) {

@@ -12,14 +12,17 @@ export const WEDDING_CONFIG = {
   couple: {
     groom: "Marco",
     bride: "Sofia",
+    displayName: "Sofia & Marco",   // usato nell'UI ovunque si mostra il nome coppia
   },
 
-  date: "14-06-2027",   // formato DD-MM-YYYY, parsato da Home.jsx e formattato da useLanguage.jsx
+  date: "14-06-2027",        // formato DD-MM-YYYY, parsato da Home.jsx e formattato da useLanguage.jsx
+  dateLabel: "14 Giugno 2027",  // etichetta UI in italiano (aggiorna insieme a date)
 
   // Unica fonte di verità per indirizzi/coordinate: prima erano duplicati
   // (e in parte sbagliati) dentro Luoghi.jsx e translations.js.
   venue: {
     city: "Napoli",
+    weatherCoords: "40.8518,14.2681",   // coordinate centro città per le previsioni meteo
 
     ceremony: {
       name: "Duomo di Napoli",
@@ -87,6 +90,23 @@ export const WEDDING_CONFIG = {
   social: {
     instagram: "",   // es. "https://instagram.com/sofiaemarco"
     hashtag: "#SofiaEMarco2027",
+  },
+
+  // ── Spotify ────────────────────────────────────────────────────────────────
+  spotify: {
+    playlistId: "04hXZMm6GPheiarj7Ib9xo",   // ID della playlist su open.spotify.com
+  },
+
+  // ── Supabase (storage foto/audio) ──────────────────────────────────────────
+  supabase: {
+    projectId: "wzwtwbnjcxrwxgiurgqa",
+    bucket: "wedding-photos",
+  },
+
+  // ── Password di accesso sezioni protette ───────────────────────────────────
+  admin: {
+    tablePassword: "SPOSA",   // password pagina tavoli
+    menuPassword:  "menu",    // password per sbloccare il menù
   },
 
   theme: {

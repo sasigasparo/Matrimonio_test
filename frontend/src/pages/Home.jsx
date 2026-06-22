@@ -26,7 +26,7 @@ function WeatherWidget() {
   useEffect(() => {
     fetch(
       `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}` +
-      '&q=40.8518,14.2681' +   // Napoli
+      `&q=${WEDDING_CONFIG.venue.weatherCoords}` +
       '&days=3&lang=it&aqi=no&alerts=no'
     )
       .then(r => r.json())
@@ -115,7 +115,7 @@ function SpotifyWidget({ title }) {
     <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: 'var(--shadow-md)' }}>
       <iframe
         title={title}
-        src="https://open.spotify.com/embed/playlist/04hXZMm6GPheiarj7Ib9xo?utm_source=generator&theme=1"
+        src={`https://open.spotify.com/embed/playlist/${WEDDING_CONFIG.spotify.playlistId}?utm_source=generator&theme=1`}
         width="100%"
         height="380"
         style={{ display: 'white', border: 'none' }}

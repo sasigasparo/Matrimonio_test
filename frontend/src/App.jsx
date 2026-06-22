@@ -17,6 +17,7 @@ import Tables   from './pages/Tables'
 import Quiz from './pages/Quiz'
 import Regali   from './pages/Regali'
 import NotFound from './pages/NotFound'
+import { WEDDING_CONFIG } from './config/wedding'
 
 // nel RequireAuth routes:
 
@@ -183,7 +184,7 @@ function Drawer({ open, onClose, onNavigate }) {
         }}>
           <div>
             <div style={{ fontFamily:'var(--font-serif)', fontSize:'1.2rem', color:'var(--charcoal)', lineHeight:1.2 }}>
-              Sofia &amp; Marco
+              {WEDDING_CONFIG.couple.displayName}
             </div>
             <div style={{ marginTop:8 }}>
               <LanguageSwitch />
@@ -313,7 +314,7 @@ function NavBar({ onMenuOpen, onNavigate }) {
           whiteSpace:'nowrap',
         }}
       >
-        Sofia &amp; Marco
+        {WEDDING_CONFIG.couple.displayName}
       </button>
 
       {/* Nav links — desktop only */}
