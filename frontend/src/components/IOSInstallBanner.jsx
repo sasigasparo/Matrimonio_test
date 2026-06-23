@@ -89,6 +89,9 @@ export default function IOSInstallBanner() {
           gap: 4,
         }}>
           <li style={{ fontSize: '.88rem', color: 'var(--ink-soft)', lineHeight: 1.45 }}>
+            {txt.step0}
+          </li>
+          <li style={{ fontSize: '.88rem', color: 'var(--ink-soft)', lineHeight: 1.45 }}>
             {txt.step1pre}
             {' '}
             <span style={{ display: 'inline-flex', verticalAlign: 'middle', marginTop: -2 }}>

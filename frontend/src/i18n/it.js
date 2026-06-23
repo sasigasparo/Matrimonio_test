@@ -345,7 +345,8 @@ export const it = {
     ],
     iosInstall: {
       title: 'Aggiungi alla schermata Home',
-      step1pre: 'Tocca',
+      step0: 'Tocca i … (tre puntini) a lato della barra indirizzi',
+      step1pre: 'Poi tocca',
       step1post: 'nella barra in basso di Safari',
       step2: 'Seleziona "Aggiungi a schermata Home"',
     },

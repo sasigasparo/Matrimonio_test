@@ -342,13 +342,15 @@ export default function Home() {
         </motion.div>
 
         {!reduce && (
-          <motion.div
-            style={{ position: 'absolute', bottom: 22, left: '50%', x: '-50%', color: 'rgba(255,255,255,.7)' }}
+          <motion.button
+            onClick={() => window.scrollTo({ top: heroRef.current?.offsetHeight || window.innerHeight, behavior: 'smooth' })}
+            style={{ position: 'absolute', bottom: 22, left: '50%', x: '-50%', color: 'rgba(255,255,255,.7)', background: 'none', border: 'none', cursor: 'pointer', padding: 8, lineHeight: 0 }}
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+            aria-label="Scorri in basso"
           >
             <ChevronDown size={26} />
-          </motion.div>
+          </motion.button>
         )}
       </section>
 

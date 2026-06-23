@@ -345,7 +345,8 @@ export const en = {
     ],
     iosInstall: {
       title: 'Add to Home Screen',
-      step1pre: 'Tap',
+      step0: 'Tap the … (three dots) next to the address bar',
+      step1pre: 'Then tap',
       step1post: 'in the Safari toolbar at the bottom',
       step2: 'Select "Add to Home Screen"',
     },
