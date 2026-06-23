@@ -1,8 +1,40 @@
 import { useState, useEffect, useRef } from 'react'
+import { Minus, Plus, Users, Baby } from 'lucide-react'
 import { api } from '../utils/api'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { useLanguage } from '../hooks/useLanguage'
 import LanguageSwitch from '../components/LanguageSwitch'
+import Skeleton from '../components/Skeleton'
+import { burstConfetti } from '../utils/confetti'
+
+/* Compact +/- stepper for party size */
+function Stepper({ icon, label, hint, value, onChange, max = 10 }) {
+  const btn = (disabled) => ({
+    width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
+    border: '1.5px solid var(--hairline)', background: '#fff',
+    cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.4 : 1,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    color: 'var(--rose-deep)', transition: 'all .15s',
+  })
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 4px' }}>
+      <span style={{
+        width: 40, height: 40, borderRadius: 12, flexShrink: 0,
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        background: 'linear-gradient(150deg,var(--rose-soft),var(--blush))', color: 'var(--rose-deep)',
+      }}>{icon}</span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontWeight: 600, color: 'var(--charcoal)', fontSize: '.95rem' }}>{label}</div>
+        <div style={{ fontSize: '.78rem', color: 'var(--warm-gray)' }}>{hint}</div>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <button type="button" aria-label="−" style={btn(value <= 0)} disabled={value <= 0} onClick={() => onChange(Math.max(0, value - 1))}><Minus size={16} /></button>
+        <span style={{ minWidth: 22, textAlign: 'center', fontWeight: 700, fontSize: '1.1rem', color: 'var(--charcoal)', fontVariantNumeric: 'tabular-nums' }}>{value}</span>
+        <button type="button" aria-label="+" style={btn(value >= max)} disabled={value >= max} onClick={() => onChange(Math.min(max, value + 1))}><Plus size={16} /></button>
+      </div>
+    </div>
+  )
+}
 
 export default function Rsvp() {
   const toast = useToast()
@@ -14,6 +46,8 @@ export default function Rsvp() {
   const [saving, setSaving] = useState(false)
   const [rsvpStatus, setRsvpStatus] = useState('confirmed')
   const [dietary, setDietary] = useState('')
+  const [companions, setCompanions] = useState(0)
+  const [children, setChildren] = useState(0)
   const dietaryRef = useRef(null)
 
   useEffect(() => {
@@ -41,6 +75,8 @@ export default function Rsvp() {
       setGuest(selected)
       setRsvpStatus(selected.rsvp_status === 'declined' ? 'declined' : 'confirmed')
       setDietary(selected.dietary || '')
+      setCompanions(Number(selected.companions) || 0)
+      setChildren(Number(selected.children) || 0)
     }
   }
 
@@ -48,12 +84,18 @@ export default function Rsvp() {
     if (!guest) { toast.error(t('rsvp.toastSelectGuest')); return }
     setSaving(true)
     try {
-      const updated = await api.updatersvp(guest.id, { rsvp_status: rsvpStatus, dietary })
+      const payload = rsvpStatus === 'confirmed'
+        ? { rsvp_status: rsvpStatus, dietary, companions, children }
+        : { rsvp_status: rsvpStatus, dietary, companions: 0, children: 0 }
+      const updated = await api.updatersvp(guest.id, payload)
       setGuest(updated)
       setAllGuests(prev => prev.map(g => g.id === guest.id ? updated : g))
-      toast.success(rsvpStatus === 'confirmed'
-        ? t('rsvp.toastConfirmed')
-        : t('rsvp.toastDeclined'))
+      if (rsvpStatus === 'confirmed') {
+        toast.success(t('rsvp.toastConfirmed'))
+        burstConfetti()
+      } else {
+        toast.success(t('rsvp.toastDeclined'))
+      }
     } catch (e) {
       toast.error(t('rsvp.toastError', { message: e.message }))
     }
@@ -61,8 +103,24 @@ export default function Rsvp() {
   }
 
   if (loading) return (
-    <div style={{ display: 'flex', justifyContent: 'center', padding: 80 }}>
-      <div className="spinner" />
+    <div className="page-enter" style={{ padding: '60px 20px 100px' }}>
+      <div className="container-sm">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, marginBottom: 40 }}>
+          <Skeleton width={64} height={64} radius="50%" />
+          <Skeleton width={220} height={30} />
+          <Skeleton width={160} height={16} />
+        </div>
+        <div className="card" style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <Skeleton width={120} height={14} />
+          <Skeleton height={48} radius="var(--radius-md)" />
+          <Skeleton width={120} height={14} style={{ marginTop: 8 }} />
+          <div style={{ display: 'flex', gap: 12 }}>
+            <Skeleton height={86} radius="var(--radius-md)" />
+            <Skeleton height={86} radius="var(--radius-md)" />
+          </div>
+          <Skeleton height={48} radius="var(--radius-pill)" style={{ marginTop: 8 }} />
+        </div>
+      </div>
     </div>
   )
 
@@ -200,6 +258,20 @@ export default function Rsvp() {
                       {t('rsvp.allergyNote')}
                     </p>
                   )}
+                </div>
+              )}
+
+              {/* Party size — companions & children (only when confirming) */}
+              {rsvpStatus === 'confirmed' && (
+                <div style={{ marginBottom: 28 }}>
+                  <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
+                    {t('rsvp.partyTitle')}
+                  </label>
+                  <div style={{ background: 'var(--ivory)', border: '1px solid var(--hairline)', borderRadius: 'var(--radius-md)', padding: '4px 14px' }}>
+                    <Stepper icon={<Users size={20} />} label={t('rsvp.companionsLabel')} hint={t('rsvp.companionsHint')} value={companions} onChange={setCompanions} />
+                    <div style={{ height: 1, background: 'var(--hairline)' }} />
+                    <Stepper icon={<Baby size={20} />} label={t('rsvp.childrenLabel')} hint={t('rsvp.childrenHint')} value={children} onChange={setChildren} />
+                  </div>
                 </div>
               )}
 

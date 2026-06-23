@@ -14,6 +14,17 @@ export const translations = {
       more: 'Altro',
     },
 
+    actions: {
+      addToCalendar: 'Aggiungi al calendario',
+      calendarApple: 'Apple / Outlook (.ics)',
+      calendarGoogle: 'Google Calendar',
+      share: 'Condividi',
+      shareWhatsApp: 'Condividi su WhatsApp',
+      shareCopy: 'Copia il link',
+      shareCopied: 'Link copiato!',
+      shareText: 'Sei invitato al matrimonio di {{couple}} il {{date}}! 💍',
+    },
+
     appShell: {
       loaderTitle: 'Sofia & Marco',
       loaderSubtitle: 'Prepariamo un giorno speciale...',
@@ -163,8 +174,10 @@ export const translations = {
       },
       comeArrivare: '🚗 Come arrivare',
       perChiVieneDaFuori: '🌍 Per chi viene da fuori',
-      googleMaps: '🗺️ Google Maps',
-      waze: '🚗 Waze',
+      ceremonyEyebrow: 'La cerimonia',
+      receptionEyebrow: 'Il ricevimento',
+      googleMaps: 'Indicazioni',
+      waze: 'Waze',
       parcheggi: [
         { icon: '🅿️', titolo: 'Parcheggi consigliati', desc: 'Parcheggi a pagamento nelle zone di Posillipo e Mergellina. Consigliata arrivo anticipato.' },
         { icon: '🚇', titolo: 'Metro + Funicolare', desc: 'Linea 1 fino a Toledo/Dante, poi autobus o taxi verso Posillipo.' },
@@ -248,6 +261,11 @@ export const translations = {
       dietaryLactoseFree: 'Senza lattosio',
       dietaryAllergies: 'Allergie',
       allergyNote: 'ℹ️ Specifica le tue allergie nella sezione messaggi, così potremo tener conto di tutto.',
+      partyTitle: 'Chi viene con te?',
+      companionsLabel: 'Accompagnatori',
+      companionsHint: 'Adulti oltre a te',
+      childrenLabel: 'Bambini',
+      childrenHint: 'Con menù dedicato',
       saving: 'Salvataggio…',
       confirm: 'Conferma risposta',
       infoDate: 'Data',
@@ -326,6 +344,12 @@ export const translations = {
         { year: '2023', event: 'La proposta' },
         { year: '2027', event: 'Il grande giorno 💍' },
       ],
+      iosInstall: {
+        title: 'Aggiungi alla schermata Home',
+        step1pre: 'Tocca',
+        step1post: 'nella barra in basso di Safari',
+        step2: 'Seleziona "Aggiungi a schermata Home"',
+      },
     },
   
     quiz: {
@@ -421,6 +445,17 @@ export const translations = {
       quiz: 'Quiz',
       regali: 'Gifts',
       more: 'More',
+    },
+
+    actions: {
+      addToCalendar: 'Add to calendar',
+      calendarApple: 'Apple / Outlook (.ics)',
+      calendarGoogle: 'Google Calendar',
+      share: 'Share',
+      shareWhatsApp: 'Share on WhatsApp',
+      shareCopy: 'Copy the link',
+      shareCopied: 'Link copied!',
+      shareText: "You're invited to {{couple}}'s wedding on {{date}}! 💍",
     },
 
     appShell: {
@@ -572,8 +607,10 @@ export const translations = {
       },
       comeArrivare: '🚗 Getting there',
       perChiVieneDaFuori: '🌍 Coming from out of town',
-      googleMaps: '🗺️ Google Maps',
-      waze: '🚗 Waze',
+      ceremonyEyebrow: 'The ceremony',
+      receptionEyebrow: 'The reception',
+      googleMaps: 'Directions',
+      waze: 'Waze',
       parcheggi: [
         { icon: '🅿️', titolo: 'Recommended parking', desc: 'Paid parking is available around Posillipo and Mergellina. Early arrival is recommended.' },
         { icon: '🚇', titolo: 'Metro + Funicular', desc: 'Line 1 to Toledo/Dante, then bus or taxi toward Posillipo.' },
@@ -657,6 +694,11 @@ export const translations = {
       dietaryLactoseFree: 'Lactose-free',
       dietaryAllergies: 'Allergies',
       allergyNote: 'ℹ️ Please specify your allergies in the messages section so we can take everything into account.',
+      partyTitle: 'Who is coming with you?',
+      companionsLabel: 'Companions',
+      companionsHint: 'Adults besides you',
+      childrenLabel: 'Children',
+      childrenHint: 'With a dedicated menu',
       saving: 'Saving…',
       confirm: 'Confirm response',
       infoDate: 'Date',
@@ -735,6 +777,12 @@ export const translations = {
         { year: '2023', event: 'The proposal' },
         { year: '2027', event: 'The big day 💍' },
       ],
+      iosInstall: {
+        title: 'Add to Home Screen',
+        step1pre: 'Tap',
+        step1post: 'in the Safari toolbar at the bottom',
+        step2: 'Select "Add to Home Screen"',
+      },
     },
   quiz: {
       pageTitle: 'How well do you know us?',

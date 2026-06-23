@@ -38,6 +38,8 @@ class GuestCreate(BaseModel):
 class rsvpUpdate(BaseModel):
     rsvp_status: str  # confirmed | declined
     dietary: Optional[str] = None
+    companions: Optional[int] = 0  # accompagnatori adulti oltre all'ospite
+    children: Optional[int] = 0     # bambini
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -187,11 +189,28 @@ async def update_rsvp(guest_id: int, body: rsvpUpdate, request: Request, user=De
     # Solo la modifica dei dati admin (es. eliminazione) resta protetta.
 
     db = get_db()
-    result = db.table("guests").update({
+
+    base_update = {
         "rsvp_status": body.rsvp_status,
         "dietary":     body.dietary,
         "updated_at":  datetime.utcnow().isoformat(),
-    }).eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
+    }
+    # companions/children are stored only if those columns exist on the table.
+    # If they don't yet (pre-migration), retry without them so RSVP never breaks.
+    # SQL to enable: ALTER TABLE guests ADD COLUMN companions int DEFAULT 0,
+    #                ADD COLUMN children int DEFAULT 0;
+    extended = {**base_update, "companions": max(0, body.companions or 0), "children": max(0, body.children or 0)}
+    try:
+        result = (
+            db.table("guests").update(extended)
+            .eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
+        )
+    except Exception as e:
+        logger.warning("rsvp companions/children columns missing, falling back: %s", e)
+        result = (
+            db.table("guests").update(base_update)
+            .eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
+        )
 
     if not result.data:
         raise HTTPException(404, "Guest not found")

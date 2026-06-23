@@ -4,6 +4,10 @@ import { useLanguage } from '../hooks/useLanguage'
 import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { Mail, UtensilsCrossed, Camera, MessageCircle, MapPin, Droplets, ChevronDown } from 'lucide-react'
+import AddToCalendar from '../components/AddToCalendar'
+import ShareButton from '../components/ShareButton'
+import Skeleton from '../components/Skeleton'
+import IOSInstallBanner from '../components/IOSInstallBanner'
 
 /* ── Reveal-on-scroll wrapper (content visible by default, motion enhances) ── */
 function Reveal({ children, delay = 0, y = 24, className, style }) {
@@ -60,6 +64,8 @@ function WeatherWidget() {
           max:      Math.round(d.day.maxtemp_c),
           min:      Math.round(d.day.mintemp_c),
           humidity: Math.round(d.day.avghumidity),
+          sunrise:  fmtTime(d.astro?.sunrise),
+          sunset:   fmtTime(d.astro?.sunset),
         })))
         setLoading(false)
       })
@@ -76,8 +82,10 @@ function WeatherWidget() {
   }
 
   if (loading) return (
-    <div style={{ textAlign: 'center', padding: '32px 0' }}>
-      <div className="spinner" style={{ margin: '0 auto' }} />
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+      {[0, 1, 2].map(i => (
+        <Skeleton key={i} height={148} radius="var(--radius-md)" />
+      ))}
     </div>
   )
   if (error) return (
@@ -114,6 +122,20 @@ function WeatherWidget() {
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: '.66rem', color: 'var(--warm-gray)' }}>
               <Droplets size={11} /> {d.humidity}%
             </div>
+            {(d.sunrise || d.sunset) && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: 2 }}>
+                {d.sunrise && (
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: '.66rem', color: 'var(--warm-gray)' }}>
+                    🌅 {d.sunrise}
+                  </div>
+                )}
+                {d.sunset && (
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: '.66rem', color: 'var(--warm-gray)' }}>
+                    🌇 {d.sunset}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )
       })}
@@ -312,6 +334,11 @@ export default function Home() {
               {t('home.heroCtaMenu')}
             </button>
           </div>
+
+          <div style={{ marginTop: 14, display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <AddToCalendar variant="light" />
+            <ShareButton variant="light" />
+          </div>
         </motion.div>
 
         {!reduce && (
@@ -393,7 +420,7 @@ export default function Home() {
             <h2 style={{ fontSize: '2.1rem', color: 'var(--charcoal)', marginBottom: 14 }}>{t('home.storyTitle')}</h2>
             <div style={{ width: 56, height: 1, background: 'var(--accent)', margin: '0 auto 22px' }} />
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.8, fontSize: '1.08rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', maxWidth: 520, margin: '0 auto' }}>
-              “{t('home.storyQuote')}”
+              "{t('home.storyQuote')}"
             </p>
             <div style={{ marginTop: 36, display: 'flex', gap: 28, justifyContent: 'center', flexWrap: 'wrap' }}>
               {t('home.timeline').map(s => (
@@ -406,6 +433,8 @@ export default function Home() {
           </Reveal>
         </div>
       </section>
+
+      <IOSInstallBanner />
 
     </div>
   )
