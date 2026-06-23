@@ -253,40 +253,92 @@ export default function Admin() {
     return acc
   }, {})
 
-  // ── Tabs ─────────────────────────────────────────────────────────────────────
-  const tabs = [
-    { id:'dashboard', label:'Dashboard',    icon:'📊' },
-    { id:'guests',    label:'Invitati',     icon:'👥' },
-    { id:'rsvp',      label:'Diete',        icon:'🍽️' },
-    { id:'photos',    label:'Foto',         icon:'📷' },
-    { id:'messages',  label:'Messaggi',     icon:'💬' },
-    { id:'stats',     label:'Statistiche',  icon:'🌍' },
-    { id:'analisi',   label:'Analisi',      icon:'📈' },
-    { id:'logs',      label:'Log',          icon:'📋' },
+  const navGroups = [
+    {
+      items: [{ id:'dashboard', label:'Dashboard', icon:'📊' }]
+    },
+    {
+      label: 'Gestione',
+      items: [
+        { id:'guests',   label:'Gestione Invitati', icon:'👥' },
+        { id:'rsvp',     label:'Diete & Tavoli',    icon:'🍽️' },
+        { id:'photos',   label:'Galleria Foto',     icon:'📷' },
+        { id:'messages', label:'Messaggi',          icon:'💬' },
+      ]
+    },
+    {
+      label: 'Dati',
+      items: [
+        { id:'analisi', label:'Analisi',        icon:'📈' },
+        { id:'stats',   label:'Geo & Traffico', icon:'🌍' },
+      ]
+    },
+    {
+      label: 'Sistema',
+      items: [{ id:'logs', label:'Registro Attività', icon:'📋' }]
+    },
   ]
 
   return (
-    <div className="page-enter" style={{ padding:'40px 0 100px' }}>
-      <div className="container">
-        <div style={{ marginBottom:32 }}>
-          <h1 style={{ fontFamily:'var(--font-serif)', fontSize:'2.2rem', color:'var(--charcoal)', marginBottom:4 }}>
-            ⚙️ Pannello Admin
-          </h1>
-          <p style={{ color:'var(--warm-gray)' }}>Gestisci invitati, invii e monitora l'attività</p>
-        </div>
-
-        {/* Tab bar */}
-        <div style={{ display:'flex', gap:8, marginBottom:32, flexWrap:'wrap' }}>
-          {tabs.map(t => (
-            <button
-              key={t.id}
-              className={`btn ${tab === t.id ? 'btn-primary' : 'btn-outline'}`}
-              onClick={() => switchTab(t.id)}
-            >
-              {t.icon} {t.label}
-            </button>
+    <div className="page-enter">
+      <style>{`
+        .admin-layout{display:flex;min-height:100vh;width:100%}
+        .admin-sidebar{width:230px;flex-shrink:0;background:var(--white);border-right:1px solid var(--cream);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+        .admin-content{flex:1;min-width:0;padding:40px 36px 100px}
+        .admin-nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 22px;border:none;background:none;cursor:pointer;font-size:.875rem;color:var(--charcoal);transition:background .15s,color .15s;border-left:3px solid transparent;font-family:inherit;line-height:1.4}
+        .admin-nav-item:hover{background:var(--ivory)}
+        .admin-nav-item.active{background:var(--rose-soft);color:var(--rose);border-left-color:var(--rose);font-weight:600}
+        .admin-nav-section{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--warm-gray);padding:20px 22px 4px}
+        .admin-sidebar-header{padding:28px 22px 20px;border-bottom:1px solid var(--cream)}
+        .admin-sidebar-divider{height:1px;background:var(--cream);margin:8px 0}
+        @media(max-width:768px){
+          .admin-layout{flex-direction:column}
+          .admin-sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--cream);flex-direction:row;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+          .admin-sidebar::-webkit-scrollbar{display:none}
+          .admin-sidebar-header{display:none}
+          .admin-nav-section{display:none}
+          .admin-sidebar-divider{display:none}
+          .admin-nav-item{white-space:nowrap;border-left:none;border-bottom:3px solid transparent;padding:10px 14px;flex-shrink:0}
+          .admin-nav-item.active{border-left-color:transparent;border-bottom-color:var(--rose);background:var(--rose-soft)}
+          .admin-content{padding:24px 16px 80px}
+        }
+      `}</style>
+      <div className="admin-layout">
+        <aside className="admin-sidebar">
+          <div className="admin-sidebar-header">
+            <div style={{ fontFamily:'var(--font-serif)', fontSize:'1.15rem', color:'var(--charcoal)', fontWeight:700, marginBottom:8 }}>
+              ⚙️ Admin
+            </div>
+            {dashboard && (
+              <div style={{ fontSize:'.75rem', color:'var(--warm-gray)', lineHeight:1.8 }}>
+                <span>{dashboard.stats.guests_total} invitati totali</span><br/>
+                <span style={{ color:'var(--sage)' }}>✓ {dashboard.stats.guests_confirmed} confermati</span>
+                {dashboard.stats.guests_pending > 0 && (
+                  <><br/><span style={{ color:'var(--gold)' }}>⏳ {dashboard.stats.guests_pending} in attesa</span></>
+                )}
+              </div>
+            )}
+          </div>
+          {navGroups.map((group, gi) => (
+            <div key={gi}>
+              {gi > 0 && gi < navGroups.length && group.label && (
+                <div className="admin-nav-section">{group.label}</div>
+              )}
+              {group.items.map(item => (
+                <button
+                  key={item.id}
+                  className={`admin-nav-item${tab === item.id ? ' active' : ''}`}
+                  onClick={() => switchTab(item.id)}
+                >
+                  <span style={{ fontSize:'1rem', lineHeight:1, width:20, textAlign:'center', flexShrink:0 }}>{item.icon}</span>
+                  <span>{item.label}</span>
+                </button>
+              ))}
+              {gi === 0 && <div className="admin-sidebar-divider" />}
+            </div>
           ))}
-        </div>
+        </aside>
+        <div className="admin-content">
 
         {/* ── Dashboard ─────────────────────────────────────────────────────── */}
         {tab === 'dashboard' && dashboard && (
@@ -986,7 +1038,8 @@ export default function Admin() {
             )}
           </div>
         )}
-      </div>
+        </div>{/* admin-content */}
+      </div>{/* admin-layout */}
       {editGuest && (
         <div style={{
           position:'fixed', inset:0, background:'rgba(0,0,0,.45)', zIndex:1000,

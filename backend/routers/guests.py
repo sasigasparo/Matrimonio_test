@@ -266,6 +266,8 @@ async def update_guest(guest_id: int, body: GuestUpdate, request: Request, admin
     patch["updated_at"] = datetime.utcnow().isoformat()
 
     result = db.table("guests").update(patch).eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
+    if not result.data:
+        raise HTTPException(404, "Guest not found or update failed")
     updated = result.data[0]
     changed = ", ".join(f"{k}={v}" for k, v in patch.items() if k != "updated_at")
     audit(admin["email"], "update_guest", f"{updated['name']} ({updated['email']})", changed,

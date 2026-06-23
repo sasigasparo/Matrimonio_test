@@ -24,8 +24,9 @@ for folder in [UPLOADS_DIR, PHOTOS_DIR, AUDIO_DIR]:
     except OSError:
         pass  # Su Render il filesystem è read-only, le foto vanno su Supabase Storage
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from database import init_db
 from routers import auth, guests, messages, photos, menu, admin, tables, chatbot, quiz
@@ -85,6 +86,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Garantisce header CORS anche sulle risposte 500 non gestite
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    origin = request.headers.get("origin", "")
+    cors_origin = origin if origin in origins else (origins[0] if origins else "*")
+    logger.error("Unhandled exception on %s %s: %s", request.method, request.url.path, exc, exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"},
+        headers={
+            "Access-Control-Allow-Origin": cors_origin,
+            "Access-Control-Allow-Credentials": "true",
+        },
+    )
 
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(auth.router,     prefix="/api/auth",     tags=["Auth"])
