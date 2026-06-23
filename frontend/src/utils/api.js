@@ -76,6 +76,8 @@ export const api = {
   // Admin
   dashboard: () => request('GET', '/admin/dashboard'),
   auditLogs: () => request('GET', '/admin/logs'),
+  geoStats:     () => request('GET', '/admin/geo-stats'),
+  rsvpTimeline: () => request('GET', '/admin/rsvp-timeline'),
 }
 
 // ── Token helpers ─────────────────────────────────────────────────────────────

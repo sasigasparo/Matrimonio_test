@@ -15,8 +15,6 @@ SECRET_KEY               = os.getenv("SECRET_KEY", "change-me-in-production")
 ALGORITHM                = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 30
 
-# Admin emails
-ADMIN_EMAILS = set(e.strip() for e in os.getenv("ADMIN_EMAILS", "").split(",") if e.strip())
 
 oauth2_scheme   = HTTPBearer()
 oauth2_optional = HTTPBearer(auto_error=False)

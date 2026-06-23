@@ -1,9 +1,11 @@
 import logging
 import os
-from collections import Counter
+from collections import Counter, defaultdict
+from datetime import datetime
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
+import httpx
 
 from auth_config import require_admin
 from database import get_db
@@ -95,6 +97,135 @@ async def stats(admin=Depends(require_admin), matrimonio_id: int = Depends(get_m
         "dietary_restrictions": dietary_stats,
         "table_assignments":    table_stats,
         "menu_preferences":     menu_stats,
+    }
+
+
+# ── RSVP timeline ────────────────────────────────────────────────────────────
+
+@router.get("/rsvp-timeline")
+async def rsvp_timeline(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
+    """RSVP responses grouped by day (confirmed + declined)."""
+    db = get_db()
+    guests = (
+        db.table("guests")
+        .select("rsvp_status, updated_at")
+        .eq("matrimonio_id", matrimonio_id)
+        .execute().data or []
+    )
+    confirmed_by_day: Counter = Counter()
+    declined_by_day: Counter = Counter()
+    for g in guests:
+        if g.get("rsvp_status") in ("confirmed", "declined") and g.get("updated_at"):
+            try:
+                day = g["updated_at"][:10]
+                if g["rsvp_status"] == "confirmed":
+                    confirmed_by_day[day] += 1
+                else:
+                    declined_by_day[day] += 1
+            except Exception:
+                pass
+    days = sorted(set(list(confirmed_by_day.keys()) + list(declined_by_day.keys())))
+    return [
+        {"date": d, "confirmed": confirmed_by_day.get(d, 0), "declined": declined_by_day.get(d, 0)}
+        for d in days
+    ]
+
+
+# ── Geo & activity stats ──────────────────────────────────────────────────────
+
+_LOCAL_IPS = {"", "127.0.0.1", "::1", "localhost", "testclient"}
+
+def _flag(cc: str) -> str:
+    if not cc or len(cc) != 2:
+        return "🌍"
+    return "".join(chr(0x1F1E6 + ord(c) - ord("A")) for c in cc.upper())
+
+
+@router.get("/geo-stats")
+async def geo_stats(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
+    """Geo-location stats from audit_log IPs + activity patterns."""
+    db = get_db()
+    logs = (
+        db.table("audit_log")
+        .select("ip, created_at, action")
+        .eq("matrimonio_id", matrimonio_id)
+        .execute()
+        .data or []
+    )
+
+    ip_counts = Counter(
+        l["ip"] for l in logs
+        if l.get("ip") and l["ip"] not in _LOCAL_IPS
+    )
+
+    # Peak hours (0–23)
+    hour_counts = [0] * 24
+    for l in logs:
+        try:
+            dt = datetime.fromisoformat(l["created_at"].replace("Z", "+00:00"))
+            hour_counts[dt.hour] += 1
+        except Exception:
+            pass
+    peak_hours = [{"hour": h, "count": hour_counts[h]} for h in range(24)]
+
+    # Action breakdown
+    action_counts = Counter(l.get("action", "unknown") for l in logs)
+    actions = [{"action": a, "count": c} for a, c in action_counts.most_common(10)]
+
+    base = {
+        "peak_hours": peak_hours,
+        "actions": actions,
+        "total_visits": sum(ip_counts.values()),
+        "unique_ips": len(ip_counts),
+        "locations": [],
+        "countries": [],
+    }
+
+    if not ip_counts:
+        return base
+
+    # Batch geolocate via ip-api.com (free, no key, max 100/req)
+    unique_ips = list(ip_counts.keys())[:100]
+    locations: list[dict] = []
+    countries_counter: Counter = Counter()
+
+    try:
+        async with httpx.AsyncClient(timeout=8) as client:
+            resp = await client.post(
+                "http://ip-api.com/batch",
+                json=[{"query": ip, "fields": "country,countryCode,city,query,status"} for ip in unique_ips],
+            )
+            geo_data = resp.json()
+
+        for item in geo_data:
+            if item.get("status") != "success":
+                continue
+            ip = item["query"]
+            count = ip_counts.get(ip, 1)
+            cc = item.get("countryCode", "")
+            country = item.get("country", "")
+            city = item.get("city", "")
+            countries_counter[country] += count
+            locations.append({
+                "ip": ip,
+                "city": city,
+                "country": country,
+                "flag": _flag(cc),
+                "visits": count,
+            })
+    except Exception as e:
+        logger.warning("Geo lookup failed: %s", e)
+
+    cc_by_country = {l["country"]: l["flag"] for l in locations}
+    countries = [
+        {"country": c, "count": n, "flag": cc_by_country.get(c, "🌍")}
+        for c, n in countries_counter.most_common()
+    ]
+
+    return {
+        **base,
+        "locations": sorted(locations, key=lambda x: -x["visits"]),
+        "countries": countries,
     }
 
 

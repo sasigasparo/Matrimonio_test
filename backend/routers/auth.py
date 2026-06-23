@@ -1,10 +1,14 @@
 import logging
+import os
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 
 from auth_config import create_access_token
 from database import get_guest_by_email, get_guest_by_id, create_guest, audit
 from tenant import resolve_matrimonio_id, HEADER_NAME
+
+LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "Sasi")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
 
 router = APIRouter()
 logger = logging.getLogger("wedding.auth")
@@ -40,20 +44,24 @@ async def me(request: Request):
 
 @router.post("/simple-login")
 async def simple_login(req: SimpleLoginRequest, request: Request):
-    """Simple password-only login. Password must be 'Sasi'."""
-    if req.password != "Sasi":
+    """Simple password-only login. Admin gets is_admin=True if ADMIN_PASSWORD matches."""
+    if ADMIN_PASSWORD and req.password == ADMIN_PASSWORD:
+        is_admin = True
+    elif req.password == LOGIN_PASSWORD:
+        is_admin = False
+    else:
         raise HTTPException(401, "Invalid password")
 
     matrimonio_id = resolve_matrimonio_id(request.headers.get(HEADER_NAME))
 
-    email = "guest@wedding.local"
+    email = "admin@wedding.local" if is_admin else "guest@wedding.local"
     guest = get_guest_by_email(email, matrimonio_id)
 
     if not guest:
-        guest = create_guest("Ospite", email, matrimonio_id=matrimonio_id)
+        name = "Amministratore" if is_admin else "Ospite"
+        guest = create_guest(name, email, matrimonio_id=matrimonio_id)
 
     guest_id = guest["id"]
-    is_admin = False
 
     token = create_access_token({
         "sub":      str(guest_id),

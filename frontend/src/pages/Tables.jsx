@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TableAuth, { useTableAuth } from './TableAuth'
+import { useAuth } from '../hooks/useAuth'
 import { WEDDING_CONFIG } from '../config/wedding'
 
 const API_URL = (import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')
@@ -301,8 +302,9 @@ function TableEditor({ table, onSave, onDelete, onClose }) {
 // ════════════════════════════════════════════════════════════════════════════
 export default function Tables() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const { isGranted } = useTableAuth()
-  const [authed, setAuthed] = useState(isGranted())
+  const [authed, setAuthed] = useState(isGranted() || !!user?.is_admin)
 
   const [tables,  setTables]  = useState([])
   const [guests,  setGuests]  = useState([])
