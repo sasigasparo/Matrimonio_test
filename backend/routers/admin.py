@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from auth_config import require_admin
 from database import get_db
+from tenant import get_matrimonio_id
 
 router = APIRouter()
 logger = logging.getLogger("wedding.admin")
@@ -18,14 +19,14 @@ class DashboardResponse(BaseModel):
 
 
 @router.get("/dashboard")
-async def dashboard(user=Depends(require_admin)) -> DashboardResponse:
+async def dashboard(user=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)) -> DashboardResponse:
     """Admin dashboard with stats and recent activity."""
     db = get_db()
 
-    guests = db.table("guests").select("rsvp_status, invite_sent").execute().data or []
-    photos_count  = len(db.table("photos").select("id").execute().data or [])
-    messages      = db.table("messages").select("type").execute().data or []
-    recent_logs   = db.table("audit_log").select("*").order("created_at", desc=True).limit(20).execute().data or []
+    guests = db.table("guests").select("rsvp_status, invite_sent").eq("matrimonio_id", matrimonio_id).execute().data or []
+    photos_count  = len(db.table("photos").select("id").eq("matrimonio_id", matrimonio_id).execute().data or [])
+    messages      = db.table("messages").select("type").eq("matrimonio_id", matrimonio_id).execute().data or []
+    recent_logs   = db.table("audit_log").select("*").eq("matrimonio_id", matrimonio_id).order("created_at", desc=True).limit(20).execute().data or []
 
     guests_total     = len(guests)
     guests_confirmed = sum(1 for g in guests if g["rsvp_status"] == "confirmed")
@@ -50,20 +51,20 @@ async def dashboard(user=Depends(require_admin)) -> DashboardResponse:
 
 
 @router.get("/logs")
-async def audit_logs(admin=Depends(require_admin)):
+async def audit_logs(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     """Fetch all audit logs (admin only)."""
     db = get_db()
-    logs = db.table("audit_log").select("*").order("created_at", desc=True).limit(100).execute().data or []
+    logs = db.table("audit_log").select("*").eq("matrimonio_id", matrimonio_id).order("created_at", desc=True).limit(100).execute().data or []
     return logs
 
 
 @router.get("/stats")
-async def stats(admin=Depends(require_admin)):
+async def stats(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     """Fetch detailed statistics (admin only)."""
     db = get_db()
 
     # Guests grouped by status
-    guests = db.table("guests").select("rsvp_status, dietary, table_num").execute().data or []
+    guests = db.table("guests").select("rsvp_status, dietary, table_num").eq("matrimonio_id", matrimonio_id).execute().data or []
 
     status_counter = Counter(g["rsvp_status"] for g in guests)
     guests_by_status = [{"rsvp_status": k, "count": v} for k, v in status_counter.items()]
@@ -79,7 +80,7 @@ async def stats(admin=Depends(require_admin)):
     table_stats = [{"table_num": k, "count": v} for k, v in sorted(table_counter.items())]
 
     # Menu choices with item details
-    choices = db.table("menu_choices").select("item_id, menu_items(course, name)").execute().data or []
+    choices = db.table("menu_choices").select("item_id, menu_items(course, name)").eq("matrimonio_id", matrimonio_id).execute().data or []
     choice_counter: dict = {}
     for c in choices:
         iid = c["item_id"]

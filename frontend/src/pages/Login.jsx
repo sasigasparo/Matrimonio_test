@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useLanguage } from '../hooks/useLanguage'
 import LanguageSwitch from '../components/LanguageSwitch'
+import { WEDDING_CONFIG } from '../config/wedding'
 
 const API_URL = (import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')
 const WEDDING_DATE_LABEL = { it: '14 Giugno 2027', en: 'June 14, 2027' }
@@ -25,7 +26,7 @@ export default function Login() {
     try {
       const response = await fetch(`${API_URL}/api/auth/simple-login`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-Matrimonio-Slug': WEDDING_CONFIG.slug },
         body: JSON.stringify({ password }),
       })
 

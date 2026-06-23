@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
+import { WEDDING_CONFIG } from '../config/wedding'
 
 const API = `${(import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')}/api`
+const TENANT = { 'X-Matrimonio-Slug': WEDDING_CONFIG.slug }
 
 /* ═══════════════════════════════════════════════════════════════════
    DATI STRUTTURALI — testi e domande vengono da translations.js,
@@ -47,7 +49,7 @@ function addScore(gameId, name, score, total) {
 
   fetch(`${API}/quiz/scores`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...TENANT },
     body: JSON.stringify({ game_id: gameId, player_name: name, score, total }),
   }).catch(() => {})
 }
@@ -463,7 +465,7 @@ function Leaderboard({ activeId, gamesMeta, onClose }) {
   const [remoteScores, setRemoteScores] = useState(null)
 
   useEffect(() => {
-    fetch(`${API}/quiz/scores`)
+    fetch(`${API}/quiz/scores`, { headers: TENANT })
       .then(r => r.ok ? r.json() : [])
       .then(rows => {
         const grouped = {}

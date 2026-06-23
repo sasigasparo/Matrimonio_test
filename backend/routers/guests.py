@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from auth_config import get_current_guest, require_admin
 from database import get_db, audit
+from tenant import get_matrimonio_id
 
 router = APIRouter()
 logger = logging.getLogger("wedding.guests")
@@ -93,46 +94,52 @@ def _send_invite_email(guest: dict) -> bool:
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 @router.get("/")
-async def list_guests(admin=Depends(require_admin)):
+async def list_guests(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
-    guests = db.table("guests").select("*").order("name").execute().data or []
+    guests = db.table("guests").select("*").eq("matrimonio_id", matrimonio_id).order("name").execute().data or []
     return guests
 
 
 @router.post("/")
-async def create_guest_endpoint(body: GuestCreate, request: Request, admin=Depends(require_admin)):
+async def create_guest_endpoint(body: GuestCreate, request: Request, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
-    # Check duplicate email
-    existing = db.table("guests").select("id").eq("email", body.email.lower()).execute().data
+    # Check duplicate email (scoped to this wedding)
+    existing = (
+        db.table("guests").select("id")
+        .eq("email", body.email.lower())
+        .eq("matrimonio_id", matrimonio_id)
+        .execute().data
+    )
     if existing:
         raise HTTPException(400, "Email già presente")
 
     try:
         result = db.table("guests").insert({
-            "name":        body.name,
-            "email":       body.email.lower(),
-            "phone":       body.phone,
-            "table_num":   body.table_num,
-            "dietary":     body.dietary,
-            "rsvp_status": "pending",
-            "invite_sent": 0,
-            "created_at":  datetime.utcnow().isoformat(),
-            "updated_at":  datetime.utcnow().isoformat(),
+            "name":          body.name,
+            "email":         body.email.lower(),
+            "phone":         body.phone,
+            "table_num":     body.table_num,
+            "dietary":       body.dietary,
+            "rsvp_status":   "pending",
+            "invite_sent":   0,
+            "matrimonio_id": matrimonio_id,
+            "created_at":    datetime.utcnow().isoformat(),
+            "updated_at":    datetime.utcnow().isoformat(),
         }).execute()
     except Exception as e:
         raise HTTPException(400, f"Errore creazione ospite: {e}")
 
     guest = result.data[0]
     audit(admin["email"], "create_guest", f"guest:{guest['id']}", body.email,
-          request.client.host if request.client else "")
+          request.client.host if request.client else "", matrimonio_id)
     logger.info("Guest created: %s (%s)", body.name, body.email)
     return guest
 
 
 @router.post("/{guest_id}/invite")
-async def send_invite(guest_id: int, request: Request, admin=Depends(require_admin)):
+async def send_invite(guest_id: int, request: Request, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
-    result = db.table("guests").select("*").eq("id", guest_id).execute()
+    result = db.table("guests").select("*").eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
     if not result.data:
         raise HTTPException(404, "Guest not found")
 
@@ -142,16 +149,17 @@ async def send_invite(guest_id: int, request: Request, admin=Depends(require_adm
         db.table("guests").update({"invite_sent": 1}).eq("id", guest_id).execute()
 
     audit(admin["email"], "send_invite", f"guest:{guest_id}", "",
-          request.client.host if request.client else "")
+          request.client.host if request.client else "", matrimonio_id)
     return {"sent": ok}
 
 
 @router.post("/invite-all")
-async def send_all_invites(request: Request, admin=Depends(require_admin)):
+async def send_all_invites(request: Request, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
     guests = (
         db.table("guests")
         .select("*")
+        .eq("matrimonio_id", matrimonio_id)
         .eq("invite_sent", 0)
         .eq("rsvp_status", "pending")
         .execute().data or []
@@ -165,12 +173,12 @@ async def send_all_invites(request: Request, admin=Depends(require_admin)):
         results.append({"id": g["id"], "email": g["email"], "sent": ok})
 
     audit(admin["email"], "send_all_invites", "", f"{len(results)} emails",
-          request.client.host if request.client else "")
+          request.client.host if request.client else "", matrimonio_id)
     return results
 
 
 @router.put("/{guest_id}/rsvp")
-async def update_rsvp(guest_id: int, body: rsvpUpdate, request: Request, user=Depends(get_current_guest)):
+async def update_rsvp(guest_id: int, body: rsvpUpdate, request: Request, user=Depends(get_current_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
     if body.rsvp_status not in ("confirmed", "declined"):
         raise HTTPException(400, "rsvp_status must be confirmed or declined")
 
@@ -183,39 +191,39 @@ async def update_rsvp(guest_id: int, body: rsvpUpdate, request: Request, user=De
         "rsvp_status": body.rsvp_status,
         "dietary":     body.dietary,
         "updated_at":  datetime.utcnow().isoformat(),
-    }).eq("id", guest_id).execute()
+    }).eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
 
     if not result.data:
         raise HTTPException(404, "Guest not found")
 
     audit(user["email"], "rsvp_update", f"guest:{guest_id}", body.rsvp_status,
-          request.client.host if request.client else "")
+          request.client.host if request.client else "", matrimonio_id)
     logger.info("rsvp updated: guest %d → %s", guest_id, body.rsvp_status)
     return result.data[0]
 
 
 @router.delete("/{guest_id}")
-async def delete_guest(guest_id: int, admin=Depends(require_admin)):
+async def delete_guest(guest_id: int, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
-    db.table("guests").delete().eq("id", guest_id).execute()
+    db.table("guests").delete().eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
     logger.info("Guest deleted: %d", guest_id)
     return {"deleted": guest_id}
 
 
 @router.get("/all-guests")
-async def get_all_guests(user=Depends(get_current_guest)):
+async def get_all_guests(user=Depends(get_current_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
     """Get all guests list visible to any logged-in user."""
     db = get_db()
-    guests = db.table("guests").select("id, name, rsvp_status").order("name").execute().data or []
+    guests = db.table("guests").select("id, name, rsvp_status").eq("matrimonio_id", matrimonio_id).order("name").execute().data or []
     return guests
 
 
 @router.get("/stats")
-async def stats(admin=Depends(require_admin)):
+async def stats(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
-    guests   = db.table("guests").select("rsvp_status, invite_sent").execute().data or []
-    photos   = db.table("photos").select("id").execute().data or []
-    messages = db.table("messages").select("id").execute().data or []
+    guests   = db.table("guests").select("rsvp_status, invite_sent").eq("matrimonio_id", matrimonio_id).execute().data or []
+    photos   = db.table("photos").select("id").eq("matrimonio_id", matrimonio_id).execute().data or []
+    messages = db.table("messages").select("id").eq("matrimonio_id", matrimonio_id).execute().data or []
 
     return {
         "total":        len(guests),

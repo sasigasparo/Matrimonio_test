@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Uplo
 from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
 from image_utils import compress_image
+from tenant import get_matrimonio_id
 
 router = APIRouter()
 logger = logging.getLogger("wedding.photos")
@@ -78,11 +79,12 @@ def _mime_from_ext(ext: str) -> str:
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @router.get("/")
-async def list_photos(user=Depends(get_optional_guest)):
+async def list_photos(user=Depends(get_optional_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
     photos = (
         db.table("photos")
         .select("*, guests(name, avatar_url)")
+        .eq("matrimonio_id", matrimonio_id)
         .order("created_at", desc=True)
         .execute().data or []
     )
@@ -99,6 +101,7 @@ async def upload_photo(
     file: UploadFile = File(...),
     caption: Optional[str] = Form(None),
     user=Depends(get_current_guest),
+    matrimonio_id: int = Depends(get_matrimonio_id),
 ):
     t0        = time.time()
     guest_id  = user["sub"]
@@ -160,11 +163,12 @@ async def upload_photo(
     try:
         db     = get_db()
         result = db.table("photos").insert({
-            "guest_id":   int(guest_id),
-            "filename":   filename,
-            "url":        public_url,
-            "caption":    caption,
-            "created_at": datetime.utcnow().isoformat(),
+            "guest_id":      int(guest_id),
+            "filename":      filename,
+            "url":           public_url,
+            "caption":       caption,
+            "matrimonio_id": matrimonio_id,
+            "created_at":    datetime.utcnow().isoformat(),
         }).execute()
 
         photo    = result.data[0]
@@ -186,7 +190,7 @@ async def upload_photo(
     photo["guest_name"] = guest_info.get("name")
     photo["avatar_url"]  = guest_info.get("avatar_url")
 
-    audit(user["email"], "upload_photo", f"photo:{photo_id}", filename, client_ip)
+    audit(user["email"], "upload_photo", f"photo:{photo_id}", filename, client_ip, matrimonio_id)
 
     total_ms = int((time.time() - t0) * 1000)
     logger.info(
@@ -200,9 +204,9 @@ async def upload_photo(
 
 
 @router.delete("/{photo_id}")
-async def delete_photo(photo_id: int, user=Depends(get_current_guest)):
+async def delete_photo(photo_id: int, user=Depends(get_current_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
     db     = get_db()
-    result = db.table("photos").select("*").eq("id", photo_id).execute()
+    result = db.table("photos").select("*").eq("id", photo_id).eq("matrimonio_id", matrimonio_id).execute()
     if not result.data:
         raise HTTPException(404, "Photo not found")
 
@@ -232,12 +236,13 @@ async def delete_photo(photo_id: int, user=Depends(get_current_guest)):
 
 
 @router.get("/my")
-async def my_photos(user=Depends(get_current_guest)):
+async def my_photos(user=Depends(get_current_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
     db   = get_db()
     rows = (
         db.table("photos")
         .select("*")
         .eq("guest_id", user["sub"])
+        .eq("matrimonio_id", matrimonio_id)
         .order("created_at", desc=True)
         .execute().data or []
     )

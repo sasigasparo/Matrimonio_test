@@ -14,6 +14,7 @@ from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
 from image_utils import compress_image
 from drive_utils import upload_video_to_drive
+from tenant import get_matrimonio_id
 
 router = APIRouter()
 logger = logging.getLogger("wedding.messages")
@@ -76,12 +77,13 @@ def _upload_to_supabase(data: bytes, path: str, mime_type: str) -> str:
 # GET PUBLIC MESSAGES
 # ──────────────────────────────────────────────────────────────────────────────
 @router.get("/public")
-async def list_messages():
+async def list_messages(matrimonio_id: int = Depends(get_matrimonio_id)):
     """Returns all messages (public). No auth required."""
     db = get_db()
     messages = (
         db.table("messages")
         .select("id, guest_id, content, audio_path, photo_url, type, created_at, guest_name, guests(name, avatar_url)")
+        .eq("matrimonio_id", matrimonio_id)
         .order("created_at", desc=True)
         .execute()
         .data or []
@@ -113,6 +115,7 @@ async def send_message(
     video:      Optional[UploadFile] = File(None),   # video → Drive
     guest_name: Optional[str]        = Form(None),   # for anonymous guests
     user=Depends(get_optional_guest),
+    matrimonio_id: int = Depends(get_matrimonio_id),
 ):
     """
     Send a message (text, audio, photo, or mix).
@@ -306,12 +309,13 @@ async def send_message(
     # ── Save to DB ────────────────────────────────────────────────────────────
     db = get_db()
     row = {
-        "content":    video_drive_url if has_video else (content.strip() if content else None),
-        "audio_path": audio_path,
-        "photo_url":  photo_url,
-        "type":       msg_type,
-        "guest_name": actor_name,
-        "created_at": datetime.utcnow().isoformat(),
+        "content":       video_drive_url if has_video else (content.strip() if content else None),
+        "audio_path":    audio_path,
+        "photo_url":     photo_url,
+        "type":          msg_type,
+        "guest_name":    actor_name,
+        "matrimonio_id": matrimonio_id,
+        "created_at":    datetime.utcnow().isoformat(),
     }
     if actor_id:
         row["guest_id"] = actor_id
@@ -335,7 +339,7 @@ async def send_message(
 
     audit(
         actor_email, "send_message", f"message:{msg_id}", msg_type,
-        request.client.host if request.client else "",
+        request.client.host if request.client else "", matrimonio_id,
     )
     logger.info("🎉 MSG_DONE | id=%s | type=%s | guest=%r | photo=%s | audio=%s | text=%s",
                 msg_id, msg_type, actor_name, bool(photo_url), bool(audio_path), has_text)
@@ -346,9 +350,9 @@ async def send_message(
 # DELETE MESSAGE
 # ──────────────────────────────────────────────────────────────────────────────
 @router.delete("/{message_id}")
-async def delete_message(message_id: int, user=Depends(get_current_guest)):
+async def delete_message(message_id: int, user=Depends(get_current_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
     db     = get_db()
-    result = db.table("messages").select("*").eq("id", message_id).execute()
+    result = db.table("messages").select("*").eq("id", message_id).eq("matrimonio_id", matrimonio_id).execute()
     if not result.data:
         raise HTTPException(404, "Message not found")
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { API, getToken, resolvePhotoUrl } from './chatHelpers'
+import { API, getToken, resolvePhotoUrl, tenantHeaders } from './chatHelpers'
 
 export default function PhotoReelModal({ onClose }) {
   const [photos, setPhotos] = useState([])
@@ -8,7 +8,8 @@ export default function PhotoReelModal({ onClose }) {
 
   useEffect(() => {
     const token = getToken()
-    const headers = token ? { Authorization: `Bearer ${token}` } : {}
+    const headers = { ...tenantHeaders() }
+    if (token) headers.Authorization = `Bearer ${token}`
     fetch(`${API}/photos/`, { headers })
       .then(r => r.ok ? r.json() : [])
       .then(data => { setPhotos(data); setLoading(false) })

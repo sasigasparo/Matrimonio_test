@@ -4,6 +4,10 @@ export const API = `${(import.meta.env.VITE_API_URL || 'https://matrimonio-test.
 
 export const { projectId: SUPABASE_PROJECT_ID, bucket: SUPABASE_BUCKET } = WEDDING_CONFIG.supabase
 
+// Header multi-tenant inviato a ogni richiesta
+export const MATRIMONIO_SLUG = WEDDING_CONFIG.slug
+export const tenantHeaders = () => ({ 'X-Matrimonio-Slug': MATRIMONIO_SLUG })
+
 export function getToken() {
   return localStorage.getItem('wedding_token') || ''
 }

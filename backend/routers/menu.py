@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from auth_config import get_current_guest, get_optional_guest, require_admin
 from database import get_db, audit
+from tenant import get_matrimonio_id
 
 router = APIRouter()
 logger = logging.getLogger("wedding.menu")
@@ -25,12 +26,13 @@ class MenuChoiceUpdate(BaseModel):
 
 
 @router.get("/")
-async def get_menu():
+async def get_menu(matrimonio_id: int = Depends(get_matrimonio_id)):
     """Public endpoint - no auth needed to view menu."""
     db = get_db()
     rows = (
         db.table("menu_items")
         .select("*")
+        .eq("matrimonio_id", matrimonio_id)
         .order("sort_order")
         .order("course")
         .order("name")
@@ -46,7 +48,7 @@ async def get_menu():
 
 
 @router.post("/")
-async def add_menu_item(body: MenuItemCreate, admin=Depends(require_admin)):
+async def add_menu_item(body: MenuItemCreate, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
     result = db.table("menu_items").insert({
         "course":        body.course,
@@ -56,19 +58,20 @@ async def add_menu_item(body: MenuItemCreate, admin=Depends(require_admin)):
         "is_vegan":      body.is_vegan,
         "is_gluten_free": body.is_gluten_free,
         "sort_order":    body.sort_order,
+        "matrimonio_id": matrimonio_id,
     }).execute()
     return result.data[0]
 
 
 @router.delete("/{item_id}")
-async def delete_menu_item(item_id: int, admin=Depends(require_admin)):
+async def delete_menu_item(item_id: int, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
-    db.table("menu_items").delete().eq("id", item_id).execute()
+    db.table("menu_items").delete().eq("id", item_id).eq("matrimonio_id", matrimonio_id).execute()
     return {"deleted": item_id}
 
 
 @router.post("/choices")
-async def save_choices(body: MenuChoiceUpdate, request: Request, user=Depends(get_current_guest)):
+async def save_choices(body: MenuChoiceUpdate, request: Request, user=Depends(get_current_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
     """Guest saves their menu choices."""
     db = get_db()
 
@@ -77,10 +80,10 @@ async def save_choices(body: MenuChoiceUpdate, request: Request, user=Depends(ge
 
     # Insert new choices
     if body.item_ids:
-        rows = [{"guest_id": int(user["sub"]), "item_id": iid} for iid in body.item_ids]
+        rows = [{"guest_id": int(user["sub"]), "item_id": iid, "matrimonio_id": matrimonio_id} for iid in body.item_ids]
         db.table("menu_choices").upsert(rows, on_conflict="guest_id,item_id").execute()
 
-    audit(user["email"], "save_menu_choices", f"guest:{user['sub']}", str(body.item_ids), "")
+    audit(user["email"], "save_menu_choices", f"guest:{user['sub']}", str(body.item_ids), "", matrimonio_id)
     return {"saved": len(body.item_ids)}
 
 
@@ -94,10 +97,10 @@ async def my_choices(user=Depends(get_optional_guest)):
 
 
 @router.get("/choices/all")
-async def all_choices(admin=Depends(require_admin)):
+async def all_choices(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
     # Fetch choices with menu item details via foreign key join
-    rows = db.table("menu_choices").select("item_id, menu_items(name, course)").execute().data or []
+    rows = db.table("menu_choices").select("item_id, menu_items(name, course)").eq("matrimonio_id", matrimonio_id).execute().data or []
 
     counts: dict = {}
     for r in rows:

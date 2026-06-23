@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 from auth_config import create_access_token
 from database import get_guest_by_email, get_guest_by_id, create_guest, audit
+from tenant import resolve_matrimonio_id, HEADER_NAME
 
 router = APIRouter()
 logger = logging.getLogger("wedding.auth")
@@ -43,11 +44,13 @@ async def simple_login(req: SimpleLoginRequest, request: Request):
     if req.password != "Sasi":
         raise HTTPException(401, "Invalid password")
 
+    matrimonio_id = resolve_matrimonio_id(request.headers.get(HEADER_NAME))
+
     email = "guest@wedding.local"
-    guest = get_guest_by_email(email)
+    guest = get_guest_by_email(email, matrimonio_id)
 
     if not guest:
-        guest = create_guest("Ospite", email)
+        guest = create_guest("Ospite", email, matrimonio_id=matrimonio_id)
 
     guest_id = guest["id"]
     is_admin = False
@@ -58,10 +61,11 @@ async def simple_login(req: SimpleLoginRequest, request: Request):
         "name":     guest["name"],
         "avatar":   guest.get("avatar_url") or "",
         "is_admin": is_admin,
+        "mid":      matrimonio_id,
     })
 
     audit(email, "login", f"guest:{guest_id}", "Simple password login",
-          request.client.host if request.client else "")
+          request.client.host if request.client else "", matrimonio_id)
     logger.info("Guest logged in via simple login (guest:%s)", guest_id)
 
     return TokenOut(

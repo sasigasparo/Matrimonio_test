@@ -1,13 +1,18 @@
 // ── API base ──────────────────────────────────────────────────────────────────
+import { WEDDING_CONFIG } from '../config/wedding'
+
 const BASE_URL = import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com'
 const BASE = `${BASE_URL}/api`
+
+// Slug del matrimonio: inviato a ogni richiesta per il filtro multi-tenant
+export const MATRIMONIO_SLUG = WEDDING_CONFIG.slug
 
 function token() {
   return localStorage.getItem('wedding_token')
 }
 
 async function request(method, path, body = null, isForm = false) {
-  const headers = {}
+  const headers = { 'X-Matrimonio-Slug': MATRIMONIO_SLUG }
   const tok = token()
   if (tok) headers['Authorization'] = `Bearer ${tok}`
 

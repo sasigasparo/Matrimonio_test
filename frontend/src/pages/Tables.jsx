@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TableAuth, { useTableAuth } from './TableAuth'
+import { WEDDING_CONFIG } from '../config/wedding'
 
 const API_URL = (import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')
 
@@ -10,7 +11,7 @@ function getToken() { return localStorage.getItem('wedding_token') }
 async function apiFetch(path, opts = {}) {
   const res = await fetch(`${API_URL}${path}`, {
     ...opts,
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}`, ...(opts.headers || {}) },
+    headers: { 'Content-Type': 'application/json', 'X-Matrimonio-Slug': WEDDING_CONFIG.slug, Authorization: `Bearer ${getToken()}`, ...(opts.headers || {}) },
   })
   if (!res.ok) throw new Error((await res.json()).detail || 'Errore API')
   return res.json()

@@ -1,11 +1,12 @@
 import logging
 from datetime import datetime
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 
 from database import get_db
+from tenant import get_matrimonio_id
 
 router = APIRouter()
 logger = logging.getLogger("wedding.quiz")
@@ -21,7 +22,7 @@ class ScoreIn(BaseModel):
 
 
 @router.post("/scores")
-async def save_score(body: ScoreIn):
+async def save_score(body: ScoreIn, matrimonio_id: int = Depends(get_matrimonio_id)):
     if body.game_id not in ALLOWED_GAMES:
         raise HTTPException(400, f"game_id non valido: {body.game_id}")
     if not body.player_name.strip():
@@ -31,11 +32,12 @@ async def save_score(body: ScoreIn):
 
     db = get_db()
     row = {
-        "game_id":     body.game_id,
-        "player_name": body.player_name.strip(),
-        "score":       body.score,
-        "total":       body.total,
-        "created_at":  datetime.utcnow().isoformat(),
+        "game_id":       body.game_id,
+        "player_name":   body.player_name.strip(),
+        "score":         body.score,
+        "total":         body.total,
+        "matrimonio_id": matrimonio_id,
+        "created_at":    datetime.utcnow().isoformat(),
     }
     result = db.table("quiz_scores").insert(row).execute()
     logger.info("✅ QUIZ_SCORE | game=%s | player=%r | score=%d/%d", body.game_id, body.player_name, body.score, body.total)
@@ -43,9 +45,13 @@ async def save_score(body: ScoreIn):
 
 
 @router.get("/scores")
-async def get_scores(game_id: Optional[str] = None):
+async def get_scores(game_id: Optional[str] = None, matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
-    q = db.table("quiz_scores").select("game_id, player_name, score, total, created_at")
+    q = (
+        db.table("quiz_scores")
+        .select("game_id, player_name, score, total, created_at")
+        .eq("matrimonio_id", matrimonio_id)
+    )
     if game_id:
         if game_id not in ALLOWED_GAMES:
             raise HTTPException(400, f"game_id non valido: {game_id}")

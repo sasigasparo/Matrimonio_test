@@ -6,15 +6,27 @@ export default function CameraModal({ onCapture, onClose }) {
   const lastTapRef = useRef(0)
   const [ready, setReady] = useState(false)
   const [error, setError] = useState('')
-  const [facing, setFacing] = useState('environment')
+  const [facing, setFacing] = useState('user')
+  const [mirror, setMirror] = useState(true) // front default mirrored; user can override
+  const [multiCam, setMultiCam] = useState(false) // hide flip when only one camera (e.g. PC)
 
   const startStream = async (facingMode) => {
     if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop())
+    setReady(false)
+    const base = { width: { ideal: 1280 }, height: { ideal: 720 } }
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode, width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: false,
-      })
+      let stream
+      try {
+        // exact = force the requested camera (many Android ignore plain facingMode on switch)
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { ...base, facingMode: { exact: facingMode } }, audio: false,
+        })
+      } catch {
+        // fallback: device has only one camera / exact unsupported
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { ...base, facingMode }, audio: false,
+        })
+      }
       streamRef.current = stream
       if (videoRef.current) {
         videoRef.current.srcObject = stream
@@ -22,6 +34,11 @@ export default function CameraModal({ onCapture, onClose }) {
         setReady(true)
         setError('')
       }
+      // labels/devices populate only after permission granted
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices()
+        setMultiCam(devices.filter(d => d.kind === 'videoinput').length > 1)
+      } catch { /* ignore */ }
     } catch (e) {
       setError('Fotocamera non disponibile: ' + e.message)
     }
@@ -35,13 +52,20 @@ export default function CameraModal({ onCapture, onClose }) {
   const flip = () => {
     const next = facing === 'environment' ? 'user' : 'environment'
     setFacing(next)
+    setMirror(next === 'user') // front mirrored, back not — manual toggle can override after
     startStream(next)
   }
 
-  const handleDoubleTap = () => {
+  const handleDoubleTap = (e) => {
+    if (!multiCam) return // single camera (PC) — nothing to switch to
+    e.preventDefault() // block browser double-tap zoom that swallows the gesture
     const now = Date.now()
-    if (now - lastTapRef.current < 300) flip()
-    lastTapRef.current = now
+    if (now - lastTapRef.current < 350) {
+      flip()
+      lastTapRef.current = 0
+    } else {
+      lastTapRef.current = now
+    }
   }
 
   const shoot = () => {
@@ -51,7 +75,7 @@ export default function CameraModal({ onCapture, onClose }) {
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
     const ctx = canvas.getContext('2d')
-    if (facing === 'user') {
+    if (mirror) {
       ctx.translate(canvas.width, 0)
       ctx.scale(-1, 1)
     }
@@ -89,14 +113,28 @@ export default function CameraModal({ onCapture, onClose }) {
         <span style={{ color: '#fff', fontFamily: 'Georgia, serif', fontSize: 15 }}>
           {isFront ? 'Selfie' : 'Scatta una foto'}
         </span>
-        <button onClick={flip} style={{
-          background: 'none', border: 'none', cursor: 'pointer',
-          color: '#fff', fontSize: 22, padding: '4px 8px',
-        }} title="Cambia fotocamera">🔄</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <button onClick={() => setMirror(m => !m)} style={{
+            background: mirror ? 'rgba(255,255,255,0.18)' : 'none',
+            border: 'none', cursor: 'pointer', borderRadius: 8,
+            color: '#fff', fontSize: 20, padding: '4px 8px',
+          }} title={mirror ? 'Specchio attivo' : 'Specchio disattivo'}>🪞</button>
+          {multiCam && (
+            <button onClick={flip} style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: '#fff', fontSize: 22, padding: '4px 8px',
+            }} title="Cambia fotocamera">🔄</button>
+          )}
+        </div>
       </div>
 
       <div
-        style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        style={{
+          flex: 1, position: 'relative', overflow: 'hidden',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          touchAction: 'manipulation', WebkitUserSelect: 'none', userSelect: 'none',
+          WebkitTapHighlightColor: 'transparent',
+        }}
         onTouchEnd={handleDoubleTap}
         onDoubleClick={flip}
       >
@@ -114,11 +152,11 @@ export default function CameraModal({ onCapture, onClose }) {
             style={{
               width: '100%', height: '100%', objectFit: 'cover',
               opacity: ready ? 1 : 0, transition: 'opacity 0.3s',
-              transform: isFront ? 'scaleX(-1)' : 'none',
+              transform: mirror ? 'scaleX(-1)' : 'none',
             }}
           />
         )}
-        {ready && (
+        {ready && multiCam && (
           <div style={{
             position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)',
             color: 'rgba(255,255,255,0.45)', fontSize: 11, pointerEvents: 'none',

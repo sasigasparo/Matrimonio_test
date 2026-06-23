@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { WEDDING_CONFIG } from '../config/wedding'
-import { API, getToken, getGuestName, compressPhoto, estimateWaitMinutes } from '../components/chat/chatHelpers'
+import { API, getToken, getGuestName, compressPhoto, estimateWaitMinutes, tenantHeaders } from '../components/chat/chatHelpers'
 import MessageBubble, { DateSep } from '../components/chat/MessageBubble'
 import NameModal from '../components/chat/NameModal'
 import RecordingPill from '../components/chat/RecordingPill'
@@ -64,7 +64,7 @@ export default function Chat() {
 
   const loadMessages = async () => {
     try {
-      const res = await fetch(`${API}/messages/public`)
+      const res = await fetch(`${API}/messages/public`, { headers: tenantHeaders() })
       const data = await res.json()
       setMessages(data.reverse())
     } catch { toast.error('Errore caricamento messaggi') }
@@ -121,7 +121,7 @@ export default function Chat() {
 
       form.append('guest_name', name)
 
-      const headers = {}
+      const headers = { ...tenantHeaders() }
       const token = getToken()
       if (token) headers['Authorization'] = `Bearer ${token}`
 
@@ -225,7 +225,7 @@ export default function Chat() {
     }
     if (!confirm('Eliminare questo messaggio?')) return
     try {
-      const headers = { Authorization: `Bearer ${getToken()}` }
+      const headers = { ...tenantHeaders(), Authorization: `Bearer ${getToken()}` }
       await fetch(`${API}/messages/${id}`, { method: 'DELETE', headers })
       setMessages(prev => prev.filter(m => m.id !== id))
       toast.success('Messaggio eliminato')
@@ -264,7 +264,7 @@ export default function Chat() {
       {/* Header */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: 10,
-        padding: '0 10px 0 14px',
+        padding: 'env(safe-area-inset-top) 10px 0 14px',
         background: 'var(--white)', borderBottom: '1px solid rgba(200,162,168,0.2)',
         flexShrink: 0, boxShadow: '0 1px 8px rgba(0,0,0,0.04)',
         minHeight: 60,
@@ -450,7 +450,7 @@ export default function Chat() {
       {/* Photo preview */}
       {photoPreview && (
         <div style={{
-          padding: '12px', background: 'var(--cream)',
+          padding: '12px 12px calc(12px + env(safe-area-inset-bottom)) 12px', background: 'var(--cream)',
           borderTop: '1px solid rgba(200,162,168,0.2)',
           display: 'flex', alignItems: 'center', gap: 12,
         }}>
@@ -472,7 +472,7 @@ export default function Chat() {
             className="input" placeholder="Aggiungi didascalia…"
             value={text} onChange={e => setText(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
-            style={{ flex: 1, fontSize: 13 }}
+            style={{ flex: 1, fontSize: 16 }}
           />
           <button onClick={send} disabled={sending} style={{
             width: 38, height: 38, borderRadius: '50%', border: 'none',
@@ -487,7 +487,7 @@ export default function Chat() {
       {/* Video preview */}
       {videoFile && (
         <div style={{
-          padding: '10px 12px', background: 'var(--cream)',
+          padding: '10px 12px calc(10px + env(safe-area-inset-bottom)) 12px', background: 'var(--cream)',
           borderTop: '1px solid rgba(200,162,168,0.2)',
           display: 'flex', alignItems: 'center', gap: 12,
         }}>
@@ -530,7 +530,7 @@ export default function Chat() {
       {/* Audio preview */}
       {audioBlob && !recording && (
         <div style={{
-          padding: '10px 12px', background: 'var(--cream)',
+          padding: '10px 12px calc(10px + env(safe-area-inset-bottom)) 12px', background: 'var(--cream)',
           borderTop: '1px solid rgba(200,162,168,0.2)',
           display: 'flex', alignItems: 'center', gap: 12,
         }}>
@@ -568,7 +568,8 @@ export default function Chat() {
       {/* Input bar */}
       {!recording && !audioBlob && !photoPreview && !videoFile && (
         <div style={{
-          display: 'flex', alignItems: 'flex-end', gap: 8, padding: '10px 12px',
+          display: 'flex', alignItems: 'flex-end', gap: 8,
+          padding: '10px 12px calc(10px + env(safe-area-inset-bottom)) 12px',
           background: 'var(--white)', borderTop: '1px solid rgba(200,162,168,0.2)',
           flexShrink: 0,
         }}>
@@ -637,7 +638,7 @@ export default function Chat() {
             onClick={() => ensureName()}
             style={{
               flex: 1, border: '1.5px solid rgba(200,162,168,0.25)',
-              borderRadius: 20, padding: '9px 14px', fontSize: 14,
+              borderRadius: 20, padding: '9px 14px', fontSize: 16,
               fontFamily: 'var(--font-sans)', resize: 'none', lineHeight: 1.4,
               background: 'var(--ivory)', color: 'var(--charcoal)', maxHeight: 120,
               outline: 'none', transition: 'border-color 0.2s',

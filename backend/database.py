@@ -66,9 +66,12 @@ def _seed_menu():
 
 
 # ── Guest Functions ────────────────────────────────────────────────────────────
-def get_guest_by_email(email: str) -> Optional[Dict]:
+def get_guest_by_email(email: str, matrimonio_id: Optional[int] = None) -> Optional[Dict]:
     try:
-        result = supabase.table("guests").select("*").eq("email", email.lower()).execute()
+        q = supabase.table("guests").select("*").eq("email", email.lower())
+        if matrimonio_id is not None:
+            q = q.eq("matrimonio_id", matrimonio_id)
+        result = q.execute()
         return result.data[0] if result.data else None
     except Exception as e:
         logger.error("Error getting guest by email: %s", e)
@@ -84,7 +87,7 @@ def get_guest_by_id(guest_id: int) -> Optional[Dict]:
         return None
 
 
-def create_guest(name: str, email: str, password_hash: str = None, google_id: str = None, avatar_url: str = None) -> Optional[Dict]:
+def create_guest(name: str, email: str, password_hash: str = None, google_id: str = None, avatar_url: str = None, matrimonio_id: int = 1) -> Optional[Dict]:
     try:
         result = supabase.table("guests").insert({
             "name":          name,
@@ -93,6 +96,7 @@ def create_guest(name: str, email: str, password_hash: str = None, google_id: st
             "google_id":     google_id,
             "avatar_url":    avatar_url,
             "rsvp_status":   "pending",
+            "matrimonio_id": matrimonio_id,
             "created_at":    datetime.utcnow().isoformat(),
             "updated_at":    datetime.utcnow().isoformat(),
         }).execute()
@@ -112,15 +116,16 @@ def update_guest(guest_id: int, updates: Dict) -> Optional[Dict]:
         return None
 
 
-def audit(actor: str, action: str, target: str = "", detail: str = "", ip: str = ""):
+def audit(actor: str, action: str, target: str = "", detail: str = "", ip: str = "", matrimonio_id: int = 1):
     try:
         supabase.table("audit_log").insert({
-            "actor":      actor,
-            "action":     action,
-            "target":     target,
-            "detail":     detail,
-            "ip":         ip,
-            "created_at": datetime.utcnow().isoformat(),
+            "actor":         actor,
+            "action":        action,
+            "target":        target,
+            "detail":        detail,
+            "ip":            ip,
+            "matrimonio_id": matrimonio_id,
+            "created_at":    datetime.utcnow().isoformat(),
         }).execute()
     except Exception as e:
         logger.error("Audit log error: %s", e)

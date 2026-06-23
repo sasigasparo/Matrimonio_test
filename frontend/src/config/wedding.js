@@ -9,6 +9,11 @@
 // da useLanguage.jsx con i valori presi da qui.
 
 export const WEDDING_CONFIG = {
+  // Identificativo del matrimonio (multi-tenant). Deve combaciare con lo
+  // `slug` nella tabella `matrimoni` su Supabase. Inviato al backend via
+  // header X-Matrimonio-Slug per filtrare tutti i dati per questo matrimonio.
+  slug: "sofia-marco",
+
   couple: {
     groom: "Marco",
     bride: "Sofia",
