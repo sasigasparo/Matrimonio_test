@@ -236,6 +236,32 @@ function Drawer({ open, onClose, onNavigate }) {
           })}
         </nav>
 
+        {/* Admin link */}
+        {user?.is_admin && (
+          <div style={{ padding:'0 10px 8px' }}>
+            <button
+              onClick={() => go('/admin')}
+              style={{
+                display:'flex', alignItems:'center', gap:14,
+                width:'100%', padding:'13px 14px',
+                border:'none', borderRadius:10, cursor:'pointer',
+                background: location.pathname === '/admin' ? 'rgba(67,160,71,0.12)' : 'rgba(67,160,71,0.06)',
+                color: location.pathname === '/admin' ? '#3d8b41' : '#5a7a5c',
+                fontFamily:'inherit', fontSize:'.97rem',
+                fontWeight: location.pathname === '/admin' ? 600 : 400,
+                textAlign:'left', transition:'background 0.15s',
+                borderTop:'1px solid rgba(67,160,71,0.15)',
+              }}
+            >
+              <span style={{ fontSize:'1.2rem', width:26, textAlign:'center', flexShrink:0 }}>⚙️</span>
+              <span>Pannello Admin</span>
+              {location.pathname === '/admin' && (
+                <span style={{ marginLeft:'auto', width:6, height:6, borderRadius:'50%', background:'#3d8b41', flexShrink:0 }} />
+              )}
+            </button>
+          </div>
+        )}
+
         {/* Footer / user area */}
         {user && (
           <div style={{

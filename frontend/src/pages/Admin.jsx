@@ -293,14 +293,16 @@ export default function Admin() {
         .admin-sidebar-divider{height:1px;background:var(--cream);margin:8px 0}
         @media(max-width:768px){
           .admin-layout{flex-direction:column}
-          .admin-sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--cream);flex-direction:row;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+          .admin-sidebar{width:100%;height:auto;position:static;border-right:none;border-bottom:2px solid var(--cream);display:flex;flex-direction:row;overflow-x:auto;scrollbar-width:none;padding:0;background:var(--white)}
           .admin-sidebar::-webkit-scrollbar{display:none}
           .admin-sidebar-header{display:none}
           .admin-nav-section{display:none}
           .admin-sidebar-divider{display:none}
-          .admin-nav-item{white-space:nowrap;border-left:none;border-bottom:3px solid transparent;padding:10px 14px;flex-shrink:0}
-          .admin-nav-item.active{border-left-color:transparent;border-bottom-color:var(--rose);background:var(--rose-soft)}
-          .admin-content{padding:24px 16px 80px}
+          .admin-nav-item{flex-direction:column;gap:3px;border-left:none;border-bottom:3px solid transparent;padding:10px 18px;flex-shrink:0;min-width:56px;font-size:.6rem;color:var(--warm-gray)}
+          .admin-nav-item .admin-nav-icon{font-size:1.4rem;line-height:1}
+          .admin-nav-item .admin-nav-label{font-size:.6rem;white-space:nowrap;max-width:54px;overflow:hidden;text-overflow:ellipsis;text-align:center}
+          .admin-nav-item.active{border-left-color:transparent;border-bottom-color:var(--rose);background:var(--rose-soft);color:var(--rose)}
+          .admin-content{padding:20px 14px 100px}
         }
       `}</style>
       <div className="admin-layout">
@@ -330,8 +332,8 @@ export default function Admin() {
                   className={`admin-nav-item${tab === item.id ? ' active' : ''}`}
                   onClick={() => switchTab(item.id)}
                 >
-                  <span style={{ fontSize:'1rem', lineHeight:1, width:20, textAlign:'center', flexShrink:0 }}>{item.icon}</span>
-                  <span>{item.label}</span>
+                  <span className="admin-nav-icon" style={{ fontSize:'1rem', lineHeight:1, width:20, textAlign:'center', flexShrink:0 }}>{item.icon}</span>
+                  <span className="admin-nav-label">{item.label}</span>
                 </button>
               ))}
               {gi === 0 && <div className="admin-sidebar-divider" />}
