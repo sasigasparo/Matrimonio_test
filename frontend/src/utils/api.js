@@ -30,7 +30,12 @@ async function request(method, path, body = null, isForm = false) {
 
   if (!res.ok) {
     let msg = `HTTP ${res.status}`
-    try { const j = await res.json(); msg = j.detail || msg } catch {}
+    try {
+      const j = await res.json()
+      if (typeof j.detail === 'string') msg = j.detail
+      else if (Array.isArray(j.detail)) msg = j.detail.map(e => e.msg || JSON.stringify(e)).join('; ')
+      else if (j.detail) msg = JSON.stringify(j.detail)
+    } catch {}
     throw new Error(msg)
   }
 
@@ -53,6 +58,7 @@ export const api = {
   allGuests:   ()      => request('GET',    '/guests/all-guests'),
   createGuest: (body)  => request('POST',   '/guests/', body),
   deleteGuest: (id)    => request('DELETE', `/guests/${id}`),
+  updateGuest: (id, b) => request('PUT',    `/guests/${id}`, b),
   updatersvp:  (id, b) => request('PUT',    `/guests/${id}/rsvp`, b),
   sendInvite:  (id)    => request('POST',   `/guests/${id}/invite`),
   sendAll:     ()      => request('POST',   '/guests/invite-all'),

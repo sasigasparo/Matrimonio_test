@@ -10,6 +10,19 @@ const DIET_LABELS = {
   allergie:       'Allergie',
 }
 
+const LOG_LABELS = {
+  create_guest:    'Ospite aggiunto',
+  update_guest:    'Ospite modificato',
+  delete_guest:    'Ospite eliminato',
+  send_invite:     'Invito inviato',
+  send_all_invites:'Inviti massivi inviati',
+  rsvp_update:     'RSVP aggiornato',
+  login:           'Accesso',
+  upload_photo:    'Foto caricata',
+  delete_photo:    'Foto eliminata',
+  delete_message:  'Messaggio eliminato',
+}
+
 function StatCard({ icon, label, value, color }) {
   return (
     <div className="card" style={{ padding:'20px 24px', display:'flex', gap:16, alignItems:'center' }}>
@@ -42,9 +55,20 @@ export default function Admin() {
 
   // New guest form
   const [newGuest, setNewGuest] = useState({ name:'', email:'', phone:'', table_num:'', dietary:'' })
-  const [addOpen, setAddOpen]   = useState(false)
-  const [adding, setAdding]     = useState(false)
-  const [rsvpng, setrsvpng]     = useState(false)
+  const [addOpen, setAddOpen]       = useState(false)
+  const [adding, setAdding]         = useState(false)
+  const [rsvpng, setrsvpng]         = useState(false)
+  const [sendOnCreate, setSendOnCreate] = useState(true)
+
+  // Edit guest
+  const [editGuest, setEditGuest]   = useState(null)
+  const [editForm, setEditForm]     = useState({})
+  const [saving, setSaving]         = useState(false)
+  const [sendOnEdit, setSendOnEdit] = useState(false)
+
+  // Guest table sort
+  const [sortField, setSortField] = useState('nome')
+  const [sortDir, setSortDir]     = useState('asc')
 
   useEffect(() => {
     loadDashboard()
@@ -98,16 +122,24 @@ export default function Admin() {
   }
 
   // ── Guest actions ────────────────────────────────────────────────────────────
+  const normalizePhone = (p) => {
+    if (!p || !p.trim()) return ''
+    const t = p.trim()
+    return t.startsWith('+') ? t : '+' + t
+  }
+
   const addGuest = async () => {
     if (!newGuest.name || !newGuest.email) { toast.error('Nome ed email richiesti'); return }
     setAdding(true)
     try {
-      const g = await api.createGuest({ ...newGuest, table_num: newGuest.table_num ? Number(newGuest.table_num) : null })
+      const tableNum = parseInt(newGuest.table_num, 10)
+      const g = await api.createGuest({ ...newGuest, phone: normalizePhone(newGuest.phone), table_num: tableNum > 0 ? tableNum : null })
       setGuests(prev => [...prev, g])
       toast.success(`✓ Invitato ${g.name} aggiunto`)
       setNewGuest({ name:'', email:'', phone:'', table_num:'', dietary:'' })
       setAddOpen(false)
       loadDashboard()
+      if (sendOnCreate) sendInvite(g.id, g.name)
     } catch(e) { toast.error('Errore: ' + e.message) }
     setAdding(false)
   }
@@ -141,6 +173,29 @@ export default function Admin() {
     } catch { toast.error('Errore') }
   }
 
+  const openEdit = (g) => {
+    setEditGuest(g)
+    setEditForm({ name: g.name, email: g.email, phone: g.phone || '', table_num: g.table_num ?? '' })
+  }
+
+  const saveEdit = async () => {
+    if (!editForm.name || !editForm.email) { toast.error('Nome ed email richiesti'); return }
+    setSaving(true)
+    try {
+      const tableNum = parseInt(editForm.table_num, 10)
+      const updated = await api.updateGuest(editGuest.id, {
+        ...editForm,
+        phone: normalizePhone(editForm.phone),
+        table_num: tableNum > 0 ? tableNum : null,
+      })
+      setGuests(prev => prev.map(g => g.id === updated.id ? updated : g))
+      toast.success(`✓ ${updated.name} aggiornato`)
+      setEditGuest(null)
+      if (sendOnEdit) sendInvite(updated.id, updated.name)
+    } catch(e) { toast.error('Errore: ' + e.message) }
+    setSaving(false)
+  }
+
   // ── Photo actions ────────────────────────────────────────────────────────────
   const deletePhoto = async (id) => {
     if (!confirm('Eliminare questa foto?')) return
@@ -164,6 +219,26 @@ export default function Admin() {
   }
 
   // ── RSVP stats (computed from guests) ───────────────────────────────────────
+  const splitName = (fullName = '') => {
+    const parts = fullName.trim().split(' ')
+    const nome    = parts[0] || ''
+    const cognome = parts.slice(1).join(' ')
+    return { nome, cognome }
+  }
+
+  const toggleSort = (field) => {
+    if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc')
+    else { setSortField(field); setSortDir('asc') }
+  }
+
+  const sortedGuests = [...guests].sort((a, b) => {
+    const { nome: na, cognome: ca } = splitName(a.name)
+    const { nome: nb, cognome: cb } = splitName(b.name)
+    const va = sortField === 'cognome' ? (ca || na) : na
+    const vb = sortField === 'cognome' ? (cb || nb) : nb
+    return sortDir === 'asc' ? va.localeCompare(vb, 'it') : vb.localeCompare(va, 'it')
+  })
+
   const confirmed = guests.filter(g => g.rsvp_status === 'confirmed')
   const totalAdults   = confirmed.reduce((s, g) => s + 1 + (g.companions || 0), 0)
   const totalChildren = confirmed.reduce((s, g) => s + (g.children || 0), 0)
@@ -240,10 +315,10 @@ export default function Admin() {
                 <tbody>
                   {dashboard.recent_logs.map(l => (
                     <tr key={l.id} style={{ borderBottom:'1px solid var(--cream)' }}>
-                      <td style={{ padding:'10px 16px', color:'var(--warm-gray)' }}>{new Date(l.created_at).toLocaleString('it-IT')}</td>
+                      <td style={{ padding:'10px 16px', color:'var(--warm-gray)', whiteSpace:'nowrap' }}>{new Date(l.created_at).toLocaleString('it-IT')}</td>
                       <td style={{ padding:'10px 16px', color:'var(--charcoal)', fontWeight:500 }}>{l.actor}</td>
-                      <td style={{ padding:'10px 16px' }}><span className="badge badge-pending">{l.action}</span></td>
-                      <td style={{ padding:'10px 16px', color:'var(--warm-gray)' }}>{l.target}</td>
+                      <td style={{ padding:'10px 16px', color:'var(--charcoal)' }}>{LOG_LABELS[l.action] || l.action}</td>
+                      <td style={{ padding:'10px 16px', color:'var(--warm-gray)', fontSize:'.82rem' }}>{l.target}{l.detail ? ` — ${l.detail}` : ''}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -255,12 +330,33 @@ export default function Admin() {
         {/* ── Invitati ──────────────────────────────────────────────────────── */}
         {tab === 'guests' && (
           <div>
+            {dashboard && (
+              <div style={{
+                display:'flex', alignItems:'center', gap:10,
+                padding:'10px 16px', borderRadius:8, marginBottom:20, fontSize:'.85rem',
+                background: dashboard.stats.email_configured ? 'rgba(135,167,127,.12)' : 'rgba(199,107,139,.1)',
+                border: `1px solid ${dashboard.stats.email_configured ? 'var(--sage)' : 'var(--rose)'}`,
+                color: dashboard.stats.email_configured ? 'var(--sage)' : 'var(--rose)',
+              }}>
+                <span style={{ fontSize:'1rem' }}>{dashboard.stats.email_configured ? '✓' : '⚠'}</span>
+                {dashboard.stats.email_configured
+                  ? 'Email configurata — gli inviti vengono inviati automaticamente.'
+                  : 'Email non configurata. Aggiungi SMTP_USER e SMTP_PASSWORD nel file .env per abilitare gli inviti.'}
+              </div>
+            )}
             <div style={{ display:'flex', gap:12, marginBottom:24, flexWrap:'wrap', alignItems:'center' }}>
               <button className="btn btn-primary" onClick={() => setAddOpen(!addOpen)}>
                 {addOpen ? '✕ Annulla' : '+ Aggiungi invitato'}
               </button>
               <button className="btn btn-outline" onClick={sendAll} disabled={rsvpng}>
                 {rsvpng ? 'Invio…' : '📧 Invia tutti gli RSVP pendenti'}
+              </button>
+              <button className="btn btn-outline" onClick={() => {
+                const emails = guests.map(g => g.email).join(', ')
+                navigator.clipboard.writeText(emails)
+                toast.success('Lista email copiata negli appunti')
+              }}>
+                📋 Copia lista email
               </button>
             </div>
 
@@ -271,33 +367,57 @@ export default function Admin() {
                   <div><label>Nome *</label><input className="input" placeholder="Mario Rossi" value={newGuest.name} onChange={e => setNewGuest(p=>({...p, name:e.target.value}))} /></div>
                   <div><label>Email *</label><input className="input" placeholder="mario@email.it" value={newGuest.email} onChange={e => setNewGuest(p=>({...p, email:e.target.value}))} /></div>
                   <div><label>Telefono</label><input className="input" placeholder="+39 333 1234567" value={newGuest.phone} onChange={e => setNewGuest(p=>({...p, phone:e.target.value}))} /></div>
-                  <div><label>Tavolo N°</label><input className="input" type="number" min="1" placeholder="1" value={newGuest.table_num} onChange={e => setNewGuest(p=>({...p, table_num:e.target.value}))} /></div>
+                  <div><label>Tavolo N°</label><input className="input" type="number" placeholder="(opzionale)" value={newGuest.table_num} onChange={e => setNewGuest(p=>({...p, table_num:e.target.value}))} /></div>
                 </div>
-                <button className="btn btn-primary" onClick={addGuest} disabled={adding} style={{ marginTop:16 }}>
-                  {adding ? 'Aggiunta…' : 'Aggiungi'}
-                </button>
+                <div style={{ marginTop:16, display:'flex', alignItems:'center', gap:16, flexWrap:'wrap' }}>
+                  <label style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer', fontSize:'.9rem', color:'var(--charcoal)', userSelect:'none' }}>
+                    <input
+                      type="checkbox"
+                      checked={sendOnCreate}
+                      onChange={e => setSendOnCreate(e.target.checked)}
+                      style={{ width:16, height:16, accentColor:'var(--rose)', cursor:'pointer' }}
+                    />
+                    Invia invito subito via email
+                  </label>
+                  <button className="btn btn-primary" onClick={addGuest} disabled={adding}>
+                    {adding ? 'Aggiunta…' : sendOnCreate ? '+ Aggiungi e invia invito' : '+ Aggiungi'}
+                  </button>
+                </div>
               </div>
             )}
 
             <div className="card" style={{ overflow:'auto' }}>
-              <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.85rem', minWidth:600 }}>
+              <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.85rem', minWidth:680 }}>
                 <thead>
                   <tr style={{ borderBottom:'2px solid var(--cream)', background:'var(--ivory)' }}>
-                    {['Nome', 'Email', 'Tavolo', 'RSVP', 'Invito', 'Azioni'].map(h => (
+                    {[
+                      { key:'nome',    label:'Nome' },
+                      { key:'cognome', label:'Cognome' },
+                    ].map(({ key, label }) => (
+                      <th key={key} onClick={() => toggleSort(key)} style={{ padding:'12px 16px', textAlign:'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.75rem', cursor:'pointer', userSelect:'none' }}>
+                        {label} {sortField === key ? (sortDir === 'asc' ? '↑' : '↓') : ''}
+                      </th>
+                    ))}
+                    {['Email', 'Tavolo', 'RSVP', 'Invito', 'Azioni'].map(h => (
                       <th key={h} style={{ padding:'12px 16px', textAlign:'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.75rem' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {guests.map(g => (
+                  {sortedGuests.map(g => {
+                    const { nome, cognome } = splitName(g.name)
+                    return (
                     <tr key={g.id} style={{ borderBottom:'1px solid var(--cream)' }}>
                       <td style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)' }}>
                         <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                           {g.avatar_url && <img src={g.avatar_url} style={{ width:28, height:28, borderRadius:'50%' }} />}
-                          {g.name}
+                          {nome}
                         </div>
                       </td>
-                      <td style={{ padding:'10px 16px', color:'var(--warm-gray)' }}>{g.email}</td>
+                      <td style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)' }}>{cognome}</td>
+                      <td style={{ padding:'10px 16px' }}>
+                        <a href={`mailto:${g.email}`} style={{ color:'var(--rose)', textDecoration:'none', fontSize:'.85rem' }}>{g.email}</a>
+                      </td>
                       <td style={{ padding:'10px 16px', color:'var(--warm-gray)' }}>{g.table_num || '—'}</td>
                       <td style={{ padding:'10px 16px' }}><span className={`badge badge-${g.rsvp_status}`}>{g.rsvp_status}</span></td>
                       <td style={{ padding:'10px 16px' }}>
@@ -306,11 +426,13 @@ export default function Admin() {
                       <td style={{ padding:'10px 16px' }}>
                         <div style={{ display:'flex', gap:6 }}>
                           <button className="btn btn-sm btn-outline" onClick={() => sendInvite(g.id, g.name)}>📧</button>
+                          <button className="btn btn-sm btn-outline" onClick={() => openEdit(g)}>✏️</button>
                           <button className="btn btn-sm" style={{ background:'rgba(199,107,139,.15)', color:'var(--rose)', border:'none' }} onClick={() => deleteGuest(g.id, g.name)}>🗑</button>
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  )
+                  })}
                 </tbody>
               </table>
               {guests.length === 0 && (
@@ -852,9 +974,9 @@ export default function Admin() {
                   <tr key={l.id} style={{ borderBottom:'1px solid var(--cream)' }}>
                     <td style={{ padding:'8px 16px', color:'var(--warm-gray)', whiteSpace:'nowrap' }}>{new Date(l.created_at).toLocaleString('it-IT')}</td>
                     <td style={{ padding:'8px 16px', color:'var(--charcoal)' }}>{l.actor}</td>
-                    <td style={{ padding:'8px 16px' }}><span className="badge badge-pending" style={{ fontSize:'.7rem' }}>{l.action}</span></td>
-                    <td style={{ padding:'8px 16px', color:'var(--warm-gray)' }}>{l.target}</td>
-                    <td style={{ padding:'8px 16px', color:'var(--warm-gray)', fontFamily:'monospace' }}>{l.ip}</td>
+                    <td style={{ padding:'8px 16px', color:'var(--charcoal)', fontSize:'.85rem' }}>{LOG_LABELS[l.action] || l.action}</td>
+                    <td style={{ padding:'8px 16px', color:'var(--warm-gray)', fontSize:'.82rem' }}>{l.target}{l.detail ? ` — ${l.detail}` : ''}</td>
+                    <td style={{ padding:'8px 16px', color:'var(--warm-gray)', fontFamily:'monospace', fontSize:'.78rem' }}>{l.ip}</td>
                   </tr>
                 ))}
               </tbody>
@@ -865,6 +987,41 @@ export default function Admin() {
           </div>
         )}
       </div>
+      {editGuest && (
+        <div style={{
+          position:'fixed', inset:0, background:'rgba(0,0,0,.45)', zIndex:1000,
+          display:'flex', alignItems:'center', justifyContent:'center', padding:16,
+        }} onClick={e => e.target === e.currentTarget && setEditGuest(null)}>
+          <div className="card" style={{ width:'100%', maxWidth:480, padding:28 }}>
+            <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.2rem', marginBottom:20 }}>
+              Modifica invitato
+            </h3>
+            <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+              <div><label>Nome *</label><input className="input" value={editForm.name} onChange={e => setEditForm(p=>({...p, name:e.target.value}))} /></div>
+              <div><label>Email *</label><input className="input" type="email" value={editForm.email} onChange={e => setEditForm(p=>({...p, email:e.target.value}))} /></div>
+              <div><label>Telefono</label><input className="input" value={editForm.phone} onChange={e => setEditForm(p=>({...p, phone:e.target.value}))} /></div>
+              <div><label>Tavolo N°</label><input className="input" type="number" placeholder="(opzionale)" value={editForm.table_num} onChange={e => setEditForm(p=>({...p, table_num:e.target.value}))} /></div>
+            </div>
+            <div style={{ marginTop:20, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:10 }}>
+              <label style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer', fontSize:'.9rem', color:'var(--charcoal)', userSelect:'none' }}>
+                <input
+                  type="checkbox"
+                  checked={sendOnEdit}
+                  onChange={e => setSendOnEdit(e.target.checked)}
+                  style={{ width:16, height:16, accentColor:'var(--rose)', cursor:'pointer' }}
+                />
+                Invia invito dopo il salvataggio
+              </label>
+              <div style={{ display:'flex', gap:10 }}>
+                <button className="btn btn-outline" onClick={() => setEditGuest(null)}>Annulla</button>
+                <button className="btn btn-primary" onClick={saveEdit} disabled={saving}>
+                  {saving ? 'Salvataggio…' : sendOnEdit ? 'Salva e invia' : 'Salva'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <ToastContainer toasts={toast.toasts} />
     </div>
   )

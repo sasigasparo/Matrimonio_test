@@ -11,6 +11,8 @@ from auth_config import require_admin
 from database import get_db
 from tenant import get_matrimonio_id
 
+SYSTEM_EMAILS = ["admin@wedding.local", "guest@wedding.local"]
+
 router = APIRouter()
 logger = logging.getLogger("wedding.admin")
 
@@ -25,7 +27,12 @@ async def dashboard(user=Depends(require_admin), matrimonio_id: int = Depends(ge
     """Admin dashboard with stats and recent activity."""
     db = get_db()
 
-    guests = db.table("guests").select("rsvp_status, invite_sent").eq("matrimonio_id", matrimonio_id).execute().data or []
+    guests = (
+        db.table("guests").select("rsvp_status, invite_sent")
+        .eq("matrimonio_id", matrimonio_id)
+        .not_.in_("email", SYSTEM_EMAILS)
+        .execute().data or []
+    )
     photos_count  = len(db.table("photos").select("id").eq("matrimonio_id", matrimonio_id).execute().data or [])
     messages      = db.table("messages").select("type").eq("matrimonio_id", matrimonio_id).execute().data or []
     recent_logs   = db.table("audit_log").select("*").eq("matrimonio_id", matrimonio_id).order("created_at", desc=True).limit(20).execute().data or []
@@ -38,15 +45,18 @@ async def dashboard(user=Depends(require_admin), matrimonio_id: int = Depends(ge
     messages_count   = sum(1 for m in messages if m["type"] in ("text", "both"))
     audio_messages   = sum(1 for m in messages if m["type"] in ("audio", "both"))
 
+    email_configured = bool(os.getenv("SMTP_USER")) and bool(os.getenv("SMTP_PASSWORD"))
+
     stats = {
-        "guests_total":    guests_total,
-        "guests_confirmed": guests_confirmed,
-        "guests_declined":  guests_declined,
-        "guests_pending":   guests_pending,
-        "invites_sent":     invites_sent,
-        "photos":           photos_count,
-        "messages":         messages_count,
-        "audio_messages":   audio_messages,
+        "guests_total":      guests_total,
+        "guests_confirmed":  guests_confirmed,
+        "guests_declined":   guests_declined,
+        "guests_pending":    guests_pending,
+        "invites_sent":      invites_sent,
+        "photos":            photos_count,
+        "messages":          messages_count,
+        "audio_messages":    audio_messages,
+        "email_configured":  email_configured,
     }
 
     return DashboardResponse(stats=stats, recent_logs=recent_logs)
@@ -66,7 +76,12 @@ async def stats(admin=Depends(require_admin), matrimonio_id: int = Depends(get_m
     db = get_db()
 
     # Guests grouped by status
-    guests = db.table("guests").select("rsvp_status, dietary, table_num").eq("matrimonio_id", matrimonio_id).execute().data or []
+    guests = (
+        db.table("guests").select("rsvp_status, dietary, table_num")
+        .eq("matrimonio_id", matrimonio_id)
+        .not_.in_("email", SYSTEM_EMAILS)
+        .execute().data or []
+    )
 
     status_counter = Counter(g["rsvp_status"] for g in guests)
     guests_by_status = [{"rsvp_status": k, "count": v} for k, v in status_counter.items()]
@@ -110,6 +125,7 @@ async def rsvp_timeline(admin=Depends(require_admin), matrimonio_id: int = Depen
         db.table("guests")
         .select("rsvp_status, updated_at")
         .eq("matrimonio_id", matrimonio_id)
+        .not_.in_("email", SYSTEM_EMAILS)
         .execute().data or []
     )
     confirmed_by_day: Counter = Counter()
