@@ -350,8 +350,15 @@ export const translations = {
         step1post: 'nella barra in basso di Safari',
         step2: 'Seleziona "Aggiungi a schermata Home"',
       },
+      chatbotPromo: {
+        eyebrow: 'Assistente virtuale',
+        title: 'Hai una domanda sul matrimonio?',
+        subtitle: 'Sono qui per rispondere subito a tutto: location, programma, dress code, parcheggio e molto altro.',
+        topics: ['📍 Location', '🗓 Programma', '👗 Dress code', '🅿️ Parcheggio', '✉️ RSVP', '🍽 Menu'],
+        cta: 'Chiedimi qualcosa',
+      },
     },
-  
+
     quiz: {
       pageTitle: 'Quanto ci conosci?',
       nameIntro: '3 minigiochi su Sofia & Marco. Sfida gli altri invitati e scala la classifica!',
@@ -782,6 +789,13 @@ export const translations = {
         step1pre: 'Tap',
         step1post: 'in the Safari toolbar at the bottom',
         step2: 'Select "Add to Home Screen"',
+      },
+      chatbotPromo: {
+        eyebrow: 'Virtual assistant',
+        title: 'Got a question about the wedding?',
+        subtitle: 'Ask me anything — venue, schedule, dress code, parking, and much more.',
+        topics: ['📍 Venue', '🗓 Schedule', '👗 Dress code', '🅿️ Parking', '✉️ RSVP', '🍽 Menu'],
+        cta: 'Ask me something',
       },
     },
   quiz: {

@@ -29,6 +29,12 @@ export default function WeddingChatbot() {
     }
   }, [open])
 
+  useEffect(() => {
+    const handler = () => setOpen(true)
+    window.addEventListener('openChatbot', handler)
+    return () => window.removeEventListener('openChatbot', handler)
+  }, [])
+
   // Su mobile la chat occupa tutto lo schermo: blocchiamo lo scroll
   // della pagina sotto, come fanno i chatbot standard (Intercom, Crisp...).
   useEffect(() => {
@@ -104,6 +110,7 @@ export default function WeddingChatbot() {
         <button
           onClick={() => setOpen(true)}
           aria-label="Apri chat"
+          className="wedding-chat-fab"
           style={{
             position: 'fixed',
             bottom: 'max(16px, env(safe-area-inset-bottom, 0px) + 12px)',
@@ -347,6 +354,10 @@ export default function WeddingChatbot() {
           }
           .wedding-chat-window.is-open {
             transform: translateY(0);
+          }
+
+          .wedding-chat-fab {
+            bottom: calc(92px + env(safe-area-inset-bottom, 0px) + 8px) !important;
           }
         }
       `}</style>

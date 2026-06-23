@@ -42,7 +42,7 @@ export default function Chat() {
   const inputRef = useRef(null)
   const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 
-  const myId = user?.id || null
+  const myId = user?.id ?? null
   const isAdmin = user?.is_admin || false
   const authName = user?.name && user.name !== 'Ospite' ? user.name : null
   const activeName = authName || guestName
@@ -477,6 +477,7 @@ export default function Chat() {
                 key={item.msg.id}
                 msg={item.msg}
                 myId={myId}
+                myName={activeName}
                 isAdmin={isAdmin}
                 onDelete={deleteMsg}
               />

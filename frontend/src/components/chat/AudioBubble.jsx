@@ -13,7 +13,9 @@ export default function AudioBubble({ src, outgoing }) {
     if (playing) { ref.current.pause(); setPlaying(false) }
     else { ref.current.play(); setPlaying(true) }
   }
-  const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
+  const fmt = s => isFinite(s) && s >= 0
+    ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
+    : '--:--'
 
   return (
     <div style={{

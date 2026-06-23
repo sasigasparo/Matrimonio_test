@@ -17,9 +17,9 @@ export function DateSep({ date }) {
   )
 }
 
-export default function MessageBubble({ msg, myId, isAdmin, onDelete }) {
-  const isMe = String(msg.guest_id) === String(myId)
-  const outgoing = isMe
+export default function MessageBubble({ msg, myId, myName, isAdmin, onDelete }) {
+  const isMe = myId != null && msg.guest_id != null && String(msg.guest_id) === String(myId)
+  const outgoing = myName != null && msg.guest_name != null && msg.guest_name === myName
 
   const [withinWindow, setWithinWindow] = useState(() => {
     return Date.now() - new Date(msg.created_at).getTime() < 3 * 60 * 1000
@@ -54,12 +54,13 @@ export default function MessageBubble({ msg, myId, isAdmin, onDelete }) {
   return (
     <div style={{
       display: 'flex',
-      flexDirection: outgoing ? 'row-reverse' : 'row',
+      flexDirection: 'row',
       alignItems: 'flex-end',
       gap: 8,
       animation: 'msgIn 0.24s var(--ease-out-quart)',
-      maxWidth: '100%',
-      minWidth: 0,
+      marginLeft: outgoing ? 'auto' : 0,
+      marginRight: outgoing ? 0 : 'auto',
+      maxWidth: 'min(80%, 420px)',
     }}>
       {!outgoing && (
         <div style={{
@@ -75,12 +76,18 @@ export default function MessageBubble({ msg, myId, isAdmin, onDelete }) {
         </div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: outgoing ? 'flex-end' : 'flex-start', gap: 3 }}>
-        {!outgoing && (
-          <span style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--rose-deep)', paddingLeft: 6 }}>{name}</span>
-        )}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: outgoing ? 'flex-end' : 'flex-start', gap: 3, minWidth: 0, flex: 1 }}>
 
         <div style={{ ...bubbleStyle, padding: 0 }}>
+          <span style={{
+            display: 'block',
+            fontSize: 11.5, fontWeight: 700, color: 'var(--rose-deep)',
+            padding: '8px 14px 5px',
+            textAlign: outgoing ? 'right' : 'left',
+          }}>
+            {name}
+          </span>
+          <div style={{ height: 1, background: outgoing ? 'rgba(199,107,139,0.2)' : 'var(--hairline)', margin: '0 10px' }} />
           {msg.photo_url && (
             <div style={{ position: 'relative', width: 'min(300px, 76vw)' }}>
               <img

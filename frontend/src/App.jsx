@@ -472,8 +472,8 @@ function AppShell() {
       {/* Bottom nav (mobile-primary). "More" opens the existing drawer. */}
       <BottomNav onMore={() => setDrawerOpen(true)} onNavigate={navigateWithTransition} />
 
-      {/* Chatbot fluttuante, visibile solo in Home */}
-      {location.pathname === '/' && <WeddingChatbot />}
+      {/* Chatbot fluttuante — tutte le pagine tranne login e chat */}
+      {location.pathname !== '/login' && location.pathname !== '/chat' && <WeddingChatbot />}
     </>
   )
 }

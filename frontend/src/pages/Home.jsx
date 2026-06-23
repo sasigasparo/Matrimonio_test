@@ -400,6 +400,82 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Chatbot promo ── */}
+      <section style={{ padding: '8px 0 48px' }}>
+        <div className="container-sm">
+          <Reveal>
+            <div style={{
+              background: 'linear-gradient(135deg, #2a1a22 0%, #3d1f30 60%, #4a2040 100%)',
+              borderRadius: 'var(--radius-xl)',
+              padding: '32px 28px',
+              display: 'flex', flexDirection: 'column', gap: 20,
+              position: 'relative', overflow: 'hidden',
+            }}>
+              {/* decorative blur blob */}
+              <div style={{
+                position: 'absolute', top: -40, right: -40,
+                width: 200, height: 200, borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(199,107,139,.35) 0%, transparent 70%)',
+                pointerEvents: 'none',
+              }} />
+
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, position: 'relative' }}>
+                <div style={{
+                  flexShrink: 0, width: 52, height: 52, borderRadius: 16,
+                  background: 'rgba(255,255,255,.1)',
+                  border: '1px solid rgba(255,255,255,.18)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '1.5rem',
+                }}>
+                  💬
+                </div>
+                <div>
+                  <p style={{ fontSize: '.72rem', fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--blush)', marginBottom: 6 }}>
+                    {t('home.chatbotPromo.eyebrow')}
+                  </p>
+                  <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.45rem', color: '#fff', lineHeight: 1.25, marginBottom: 8 }}>
+                    {t('home.chatbotPromo.title')}
+                  </h2>
+                  <p style={{ fontSize: '.88rem', color: 'rgba(255,255,255,.72)', lineHeight: 1.6, margin: 0 }}>
+                    {t('home.chatbotPromo.subtitle')}
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, position: 'relative' }}>
+                {t('home.chatbotPromo.topics').map(topic => (
+                  <span key={topic} style={{
+                    padding: '5px 12px', borderRadius: 99,
+                    background: 'rgba(255,255,255,.1)',
+                    border: '1px solid rgba(255,255,255,.18)',
+                    fontSize: '.78rem', color: 'rgba(255,255,255,.88)',
+                  }}>
+                    {topic}
+                  </span>
+                ))}
+              </div>
+
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent('openChatbot'))}
+                style={{
+                  alignSelf: 'flex-start', position: 'relative',
+                  padding: '12px 24px', borderRadius: 99, border: 'none',
+                  background: 'linear-gradient(135deg, #c8a2a8, #FBDCE6)',
+                  color: '#2a1a22', fontWeight: 700, fontSize: '.9rem',
+                  cursor: 'pointer', letterSpacing: '.01em',
+                  boxShadow: '0 4px 20px rgba(199,107,139,.4)',
+                  transition: 'transform .2s, box-shadow .2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(199,107,139,.5)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 20px rgba(199,107,139,.4)' }}
+              >
+                {t('home.chatbotPromo.cta')} →
+              </button>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ── Playlist ── */}
       <section style={{ padding: '48px 0', background: 'var(--cream)' }}>
         <div className="container-sm">
