@@ -10,10 +10,26 @@ export default function PhotoReelModal({ onClose }) {
     const token = getToken()
     const headers = { ...tenantHeaders() }
     if (token) headers.Authorization = `Bearer ${token}`
-    fetch(`${API}/photos/`, { headers })
-      .then(r => r.ok ? r.json() : [])
-      .then(data => { setPhotos(data); setLoading(false) })
-      .catch(() => setLoading(false))
+    Promise.all([
+      fetch(`${API}/photos/`, { headers }).then(r => r.ok ? r.json() : []),
+      fetch(`${API}/messages/public`, { headers }).then(r => r.ok ? r.json() : []),
+    ]).then(([photoData, messageData]) => {
+      const msgPhotos = messageData
+        .filter(m => m.photo_url)
+        .map(m => ({
+          id: `msg-${m.id}`,
+          url: m.photo_url,
+          caption: m.content,
+          guest_name: m.guest_name || 'Ospite',
+          avatar_url: m.avatar_url,
+          guest_id: m.guest_id,
+          created_at: m.created_at,
+        }))
+      const all = [...photoData, ...msgPhotos]
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      setPhotos(all)
+      setLoading(false)
+    }).catch(() => setLoading(false))
   }, [])
 
   useEffect(() => {

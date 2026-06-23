@@ -167,12 +167,21 @@ export default function Gallery() {
     if (!captured) return
     setUploading(true)
     try {
-      const form = new FormData()
       const name = captured instanceof File ? captured.name : `foto-${Date.now()}.jpg`
-      form.append('file', captured instanceof File ? captured : new File([captured], name, { type:'image/jpeg' }))
+      const file = captured instanceof File ? captured : new File([captured], name, { type:'image/jpeg' })
+
+      const form = new FormData()
+      form.append('file', file)
       form.append('caption', caption)
       const photo = await api.uploadPhoto(form)
       setPhotos(prev => [photo, ...prev])
+
+      // Invia anche in chat
+      const msgForm = new FormData()
+      msgForm.append('file', file)
+      if (caption) msgForm.append('content', caption)
+      await api.sendMessage(msgForm)
+
       toast.success('Foto caricata! 📸')
       setCaptured(null); setPreview(null); setCaption(''); setTab('gallery')
     } catch(e) {

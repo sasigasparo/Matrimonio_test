@@ -7,6 +7,7 @@ export default function AudioBubble({ src, outgoing }) {
   const [progress, setProgress] = useState(0)
   const [duration, setDuration] = useState(0)
   const ref = useRef(null)
+  const durKnown = useRef(false)
 
   const toggle = () => {
     if (!ref.current) return
@@ -23,10 +24,26 @@ export default function AudioBubble({ src, outgoing }) {
       width: '100%', minWidth: 200, flex: 1,
     }}>
       <audio
-        ref={ref} src={src}
+        ref={ref} src={src} preload="metadata"
         onEnded={() => { setPlaying(false); setProgress(0) }}
         onTimeUpdate={e => setProgress(e.target.currentTime / (e.target.duration || 1))}
-        onLoadedMetadata={e => setDuration(e.target.duration)}
+        onLoadedMetadata={e => {
+          const audio = e.target
+          if (!isFinite(audio.duration) || audio.duration === 0) {
+            audio.currentTime = 1e101
+          } else {
+            durKnown.current = true
+            setDuration(audio.duration)
+          }
+        }}
+        onSeeked={e => {
+          const audio = e.target
+          if (!durKnown.current) {
+            durKnown.current = true
+            setDuration(audio.duration)
+            audio.currentTime = 0
+          }
+        }}
       />
       <button
         onClick={toggle}
