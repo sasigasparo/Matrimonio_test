@@ -1,15 +1,30 @@
-import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { WEDDING_CONFIG } from '../config/wedding'
 import { useLanguage } from '../hooks/useLanguage'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { Mail, UtensilsCrossed, Camera, MessageCircle, MapPin, Droplets, ChevronDown } from 'lucide-react'
+
+/* ── Reveal-on-scroll wrapper (content visible by default, motion enhances) ── */
+function Reveal({ children, delay = 0, y = 24, className, style }) {
+  const reduce = useReducedMotion()
+  if (reduce) return <div className={className} style={style}>{children}</div>
+  return (
+    <motion.div
+      className={className}
+      style={style}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay }}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 /* ── Meteo ───────────────────────────────────────────────────────── */
-// Provider: WeatherAPI.com (https://www.weatherapi.com/)
-// - testo condizioni già localizzato via "lang=it"
-// - icone fornite direttamente dall'API (niente mapping manuale)
-// - piano gratuito: max 3 giorni di forecast
-const WEATHER_API_KEY = 'fb30c9a0bd864816bba202820262106' // 👈 incolla qui la key di weatherapi.com
+const WEATHER_API_KEY = 'fb30c9a0bd864816bba202820262106'
 
 function fmtTime(timeStr) {
   if (!timeStr) return '--:--'
@@ -25,7 +40,6 @@ function fmtTime(timeStr) {
 
 function WeatherWidget() {
   const { t } = useLanguage()
-
   const [days, setDays]       = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState(false)
@@ -46,8 +60,6 @@ function WeatherWidget() {
           max:      Math.round(d.day.maxtemp_c),
           min:      Math.round(d.day.mintemp_c),
           humidity: Math.round(d.day.avghumidity),
-          sunrise:  fmtTime(d.astro.sunrise),
-          sunset:   fmtTime(d.astro.sunset),
         })))
         setLoading(false)
       })
@@ -64,11 +76,10 @@ function WeatherWidget() {
   }
 
   if (loading) return (
-    <div style={{ textAlign: 'center', padding: '32px 0', color: 'var(--warm-gray)' }}>
+    <div style={{ textAlign: 'center', padding: '32px 0' }}>
       <div className="spinner" style={{ margin: '0 auto' }} />
     </div>
   )
-
   if (error) return (
     <div style={{ textAlign: 'center', padding: 24, color: 'var(--warm-gray)', fontSize: '.9rem' }}>
       {t('home.weatherError')}
@@ -76,38 +87,32 @@ function WeatherWidget() {
   )
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: 8,
-    }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
       {days.map((d, i) => {
         const isToday = i === 0
         return (
           <div key={i} style={{
-            background: isToday ? 'rgba(200,130,106,.1)' : 'var(--ivory)',
-            border: `1.5px solid ${isToday ? 'rgba(200,130,106,.35)' : 'rgba(200,162,168,.2)'}`,
+            background: isToday ? 'linear-gradient(160deg,#FCEEF4,#FBDCE6)' : 'var(--white)',
+            border: `1px solid ${isToday ? 'rgba(199,107,139,.32)' : 'var(--hairline)'}`,
             borderRadius: 'var(--radius-md)',
-            padding: '14px 8px',
+            padding: '16px 8px',
             textAlign: 'center',
-            display: 'flex', flexDirection: 'column', gap: 6,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+            boxShadow: isToday ? '0 8px 22px rgba(199,107,139,.16)' : 'var(--shadow-sm)',
           }}>
             <div style={{
-              fontSize: '.7rem', fontWeight: 700, textTransform: 'uppercase',
-              letterSpacing: '.06em',
-              color: isToday ? 'var(--rose)' : 'var(--warm-gray)',
+              fontSize: '.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.05em',
+              color: isToday ? 'var(--rose-deep)' : 'var(--warm-gray)',
             }}>
               {dayLabel(d.date)}
             </div>
-            <img src={d.icon} alt={d.label} style={{ width: 48, height: 48, margin: '0 auto' }} />
-            <div style={{ fontSize: '.7rem', color: 'var(--warm-gray)', lineHeight: 1.3 }}>{d.label}</div>
-            <div style={{ fontWeight: 600, color: 'var(--charcoal)', fontSize: '.95rem' }}>
-              <span style={{ color: 'var(--rose)' }}>{d.max}°</span>
-              <span style={{ color: 'var(--warm-gray)', fontWeight: 400 }}> / {d.min}°</span>
+            <img src={d.icon} alt={d.label} style={{ width: 46, height: 46 }} />
+            <div style={{ fontWeight: 700, color: 'var(--charcoal)', fontSize: '1.05rem', fontFamily: 'var(--font-display)', fontVariantNumeric: 'tabular-nums' }}>
+              {d.max}°<span style={{ color: 'var(--warm-gray)', fontWeight: 500, fontSize: '.85rem' }}> {d.min}°</span>
             </div>
-            <div style={{ fontSize: '.68rem', color: 'var(--warm-gray)' }}>💧 {d.humidity}%</div>
-            <div style={{ fontSize: '.65rem', color: 'var(--warm-gray)', lineHeight: 1.5 }}>
-              🌅 {d.sunrise}<br />🌇 {d.sunset}
+            <div style={{ fontSize: '.66rem', color: 'var(--warm-gray)', lineHeight: 1.3, minHeight: '1.6em' }}>{d.label}</div>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: '.66rem', color: 'var(--warm-gray)' }}>
+              <Droplets size={11} /> {d.humidity}%
             </div>
           </div>
         )
@@ -122,10 +127,10 @@ function SpotifyWidget({ title }) {
     <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: 'var(--shadow-md)' }}>
       <iframe
         title={title}
-        src={`https://open.spotify.com/embed/playlist/${WEDDING_CONFIG.spotify.playlistId}?utm_source=generator&theme=1`}
+        src={`https://open.spotify.com/embed/playlist/${WEDDING_CONFIG.spotify.playlistId}?utm_source=generator&theme=0`}
         width="100%"
         height="380"
-        style={{ display: 'white', border: 'none' }}
+        style={{ display: 'block', border: 'none' }}
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy"
       />
@@ -133,11 +138,7 @@ function SpotifyWidget({ title }) {
   )
 }
 
-
 /* ── Countdown ───────────────────────────────────────────────────── */
-// WEDDING_CONFIG.date è in formato "GG-MM-AAAA": il parsing va fatto a
-// mano perché new Date("14-06-2027") non è uno standard ISO e il
-// risultato cambia da browser a browser.
 function parseWeddingDateTime(dateStr, timeStr) {
   const [day, month, year] = dateStr.split('-').map(Number)
   const [hour, minute] = timeStr.split(':').map(Number)
@@ -151,8 +152,7 @@ function Countdown() {
 
   useEffect(() => {
     const tick = () => {
-      const now = new Date()
-      const ms  = wedding - now
+      const ms = wedding - new Date()
       if (ms <= 0) { setDiff({ past: true }); return }
       setDiff({
         d: Math.floor(ms / 86400000),
@@ -167,49 +167,73 @@ function Countdown() {
   }, [])
 
   if (diff.past) return (
-<p style={{ color: 'white', fontFamily: 'var(--font-serif)', fontSize: '1.2rem' }}>
-  {t('home.weddingPast')}
-</p>
+    <p style={{ color: '#fff', fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontStyle: 'italic' }}>
+      {t('home.weddingPast')}
+    </p>
   )
 
+  const cells = [
+    [t('home.countdownDays'), diff.d],
+    [t('home.countdownHours'), diff.h],
+    [t('home.countdownMinutes'), diff.m],
+    [t('home.countdownSeconds'), diff.s],
+  ]
+
   return (
-    <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-      {[
-        [t('home.countdownDays'), diff.d],
-        [t('home.countdownHours'), diff.h],
-        [t('home.countdownMinutes'), diff.m],
-        [t('home.countdownSeconds'), diff.s],
-      ].map(([label, val]) => (
-        <div key={label} style={{
-          background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)',
-          borderRadius: 'var(--radius-md)', padding: '16px 20px', textAlign: 'center',
-          border: '1px solid rgba(255,255,255,.3)', minWidth: 70,
-        }}>
-          <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2.2rem', color: '#fff', lineHeight: 1 }}>
-            {String(val ?? 0).padStart(2, '0')}
+    <div style={{
+      display: 'inline-flex', flexDirection: 'column', gap: 12,
+      padding: '20px 22px',
+      background: 'rgba(255,255,255,0.16)',
+      backdropFilter: 'blur(16px) saturate(160%)',
+      WebkitBackdropFilter: 'blur(16px) saturate(160%)',
+      border: '1px solid rgba(255,255,255,0.32)',
+      borderRadius: 'var(--radius-lg)',
+      boxShadow: '0 16px 40px rgba(0,0,0,.22)',
+    }}>
+      <div style={{ fontSize: '.7rem', fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,.85)' }}>
+        {t('home.countdownTitle')}
+      </div>
+      <div style={{ display: 'flex', gap: 14, justifyContent: 'center' }}>
+        {cells.map(([label, val], i) => (
+          <div key={label} style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
+            <div style={{ textAlign: 'center', minWidth: 44 }}>
+              <div style={{
+                fontFamily: 'var(--font-display)', fontWeight: 800, fontVariantNumeric: 'tabular-nums',
+                fontSize: '2.1rem', color: '#fff', lineHeight: 1,
+              }}>
+                {String(val ?? 0).padStart(2, '0')}
+              </div>
+              <div style={{ fontSize: '.6rem', color: 'rgba(255,255,255,.78)', letterSpacing: '.08em', textTransform: 'uppercase', marginTop: 6 }}>
+                {label}
+              </div>
+            </div>
+            {i < cells.length - 1 && (
+              <span style={{ color: 'rgba(255,255,255,.4)', fontSize: '1.6rem', fontWeight: 300, transform: 'translateY(-4px)' }}>:</span>
+            )}
           </div>
-          <div style={{ fontSize: '.7rem', color: 'rgba(255,255,255,.8)', letterSpacing: '.08em', textTransform: 'uppercase', marginTop: 4 }}>
-            {label}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }
 
-/* ── Home ────────────────────────────────────────────────────────── */
-// icona/colore/rotta non sono testo da tradurre, restano qui;
-// label/desc arrivano da translations.js (home.quickLinks).
+/* ── Quick actions ───────────────────────────────────────────────── */
 const QUICK_LINKS_META = {
-  rsvp:    { icon: '✉️', to: '/rsvp',    color: 'var(--rose)' },
-  menu:    { icon: '🍽️', to: '/menu',    color: 'var(--gold)' },
-  gallery: { icon: '📷', to: '/gallery', color: 'var(--sage)' },
-  chat:    { icon: '💌', to: '/chat',    color: 'var(--blush)' },
+  rsvp:    { Icon: Mail,           to: '/rsvp' },
+  menu:    { Icon: UtensilsCrossed, to: '/menu' },
+  gallery: { Icon: Camera,         to: '/gallery' },
+  chat:    { Icon: MessageCircle,  to: '/chat' },
 }
 
 export default function Home() {
   const navigate = useNavigate()
   const { t } = useLanguage()
+  const reduce = useReducedMotion()
+  const heroRef = useRef(null)
+
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+  const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12])
 
   const quickLinksText = t('home.quickLinks')
   const quickLinks = Object.entries(QUICK_LINKS_META).map(([key, meta]) => ({
@@ -219,164 +243,167 @@ export default function Home() {
   }))
 
   return (
-    <div className="page-enter" style={{ paddingBottom: 40 }}>
+    <div className="page-enter" style={{ paddingBottom: 8 }}>
 
-      {/* ── Hero con foto Vesuvio ── */}
-      <section style={{
-        minHeight: '90dvh',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
+      {/* ── Hero ── */}
+      <section ref={heroRef} style={{
+        minHeight: '94dvh',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         position: 'relative', overflow: 'hidden',
-        padding: '80px 24px',
-        textAlign: 'center',
+        padding: '88px 24px 64px', textAlign: 'center',
       }}>
-        {/* Foto di sfondo */}
+        <motion.div
+          style={{
+            position: 'absolute', inset: '-6% 0',
+            backgroundImage: 'url(foto_sfondo/vesuvio.jpeg)',
+            backgroundSize: 'cover', backgroundPosition: 'center',
+            y: reduce ? 0 : imgY, scale: reduce ? 1 : imgScale,
+          }}
+        />
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'url(foto_sfondo/vesuvio.jpeg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }} />
-        {/* Overlay scuro per leggibilità */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,.45) 0%, rgba(0,0,0,.25) 60%, rgba(0,0,0,.55) 100%)',
+          background: 'linear-gradient(to bottom, rgba(27,10,18,.42) 0%, rgba(27,10,18,.20) 45%, rgba(27,10,18,.62) 100%)',
         }} />
 
-        {/* Contenuto */}
-        <div style={{ position: 'relative', maxWidth: 640, margin: '0 auto' }}>
+        <motion.div
+          style={{ position: 'relative', maxWidth: 600, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          animate={reduce ? {} : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
           <p style={{
             fontFamily: 'var(--font-serif)', fontStyle: 'italic',
-            color: 'rgba(255,255,255,.85)', fontSize: '1.1rem', letterSpacing: '.06em',
-            marginBottom: 16,
+            color: 'rgba(255,255,255,.92)', fontSize: '1.15rem', letterSpacing: '.04em', marginBottom: 14,
           }}>
             {t('home.heroEyebrow')}
           </p>
 
           <h1 style={{
-            fontFamily: 'var(--font-serif)', fontWeight: 300,
-            fontSize: 'clamp(3rem, 10vw, 5.5rem)',
-            color: '#fff', lineHeight: 1.1, marginBottom: 8,
-            textShadow: '0 2px 20px rgba(0,0,0,.3)',
+            fontFamily: 'var(--font-serif)', fontWeight: 500,
+            fontSize: 'clamp(2.8rem, 13vw, 4.8rem)',
+            color: '#fff', lineHeight: 1.04, marginBottom: 10,
+            textShadow: '0 4px 30px rgba(0,0,0,.35)', letterSpacing: '-0.01em',
           }}>
             {WEDDING_CONFIG.couple.bride}
-            <span style={{ color: 'var(--blush)', fontStyle: 'italic', fontSize: '.7em', margin: '0 .3em' }}>&amp;</span>
+            <span style={{ color: 'var(--blush)', fontStyle: 'italic', fontWeight: 400, fontSize: '.6em', margin: '0 .26em', verticalAlign: 'middle' }}>&amp;</span>
             {WEDDING_CONFIG.couple.groom}
           </h1>
 
-          <div style={{ width: 80, height: 1, background: 'rgba(255,255,255,.5)', margin: '20px auto' }} />
+          <div style={{ width: 64, height: 1, background: 'rgba(255,255,255,.55)', margin: '14px 0 18px' }} />
 
-          <p style={{ color: 'rgba(255,255,255,.9)', fontSize: '1.05rem', marginBottom: 8 }}>
-            {t('home.heroTime', { date: WEDDING_CONFIG.date, time: WEDDING_CONFIG.venue.ceremony.time })}
+          <p style={{ color: 'rgba(255,255,255,.94)', fontSize: '1.05rem', marginBottom: 6, fontWeight: 500 }}>
+            {WEDDING_CONFIG.dateLabel}
           </p>
-          <p style={{ color: 'rgba(255,255,255,.75)', fontSize: '.95rem', marginBottom: 40 }}>
-            {t('home.heroLocation')}
+          <p style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,.82)', fontSize: '.92rem', marginBottom: 32 }}>
+            <MapPin size={14} /> {WEDDING_CONFIG.venue.reception.name}, {WEDDING_CONFIG.venue.city}
           </p>
 
           <Countdown />
 
-          <div style={{ marginTop: 48, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ marginTop: 34, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <button className="btn btn-primary btn-lg" onClick={() => navigate('/rsvp')}>
               {t('home.heroCtaRsvp')}
             </button>
             <button
               className="btn btn-lg"
-              style={{ background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)', border: '1.5px solid rgba(255,255,255,.4)', color: '#fff' }}
+              style={{ background: 'rgba(255,255,255,.16)', backdropFilter: 'blur(8px)', border: '1.5px solid rgba(255,255,255,.45)', color: '#fff' }}
               onClick={() => navigate('/menu')}
             >
               {t('home.heroCtaMenu')}
             </button>
           </div>
-        </div>
+        </motion.div>
+
+        {!reduce && (
+          <motion.div
+            style={{ position: 'absolute', bottom: 22, left: '50%', x: '-50%', color: 'rgba(255,255,255,.7)' }}
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <ChevronDown size={26} />
+          </motion.div>
+        )}
       </section>
 
       {/* ── Meteo ── */}
-      <section style={{ padding: '60px 20px', background: 'var(--white)' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--charcoal)', marginBottom: 8 }}>
-              {t('home.weatherTitle')}
-            </h2>
-            <p style={{ color: 'var(--warm-gray)', fontSize: '.9rem' }}>
-              {t('home.weatherSubtitle')}
-            </p>
+      <section style={{ padding: '56px 0 40px' }}>
+        <div className="container-sm">
+          <Reveal>
+            <div style={{ textAlign: 'center', marginBottom: 26 }}>
+              <h2 style={{ fontSize: '1.9rem', color: 'var(--charcoal)', marginBottom: 6 }}>{t('home.weatherTitle')}</h2>
+              <p style={{ color: 'var(--warm-gray)', fontSize: '.92rem', margin: 0 }}>{t('home.weatherSubtitle')}</p>
+            </div>
+            <WeatherWidget />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Quick actions ── */}
+      <section style={{ padding: '24px 0 48px' }}>
+        <div className="container-sm">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 14 }}>
+            {quickLinks.map((l, i) => (
+              <Reveal key={l.to} delay={i * 0.06}>
+                <button
+                  onClick={() => navigate(l.to)}
+                  className="quick-action"
+                  style={{
+                    width: '100%', height: '100%',
+                    background: 'var(--white)', border: '1px solid var(--hairline)',
+                    borderRadius: 'var(--radius-lg)', padding: '22px 20px',
+                    cursor: 'pointer', textAlign: 'left',
+                    display: 'flex', flexDirection: 'column', gap: 10,
+                    boxShadow: 'var(--shadow-sm)', transition: 'transform .25s var(--ease-out-quart), box-shadow .25s var(--ease-out-quart)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-lg)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = 'var(--shadow-sm)' }}
+                >
+                  <span style={{
+                    width: 46, height: 46, borderRadius: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'linear-gradient(150deg,#FCEEF4,#FBDCE6)', color: 'var(--rose-deep)',
+                  }}>
+                    <l.Icon size={22} strokeWidth={2.1} />
+                  </span>
+                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.18rem', color: 'var(--charcoal)', lineHeight: 1.15 }}>{l.label}</span>
+                  <span style={{ fontSize: '.85rem', color: 'var(--warm-gray)' }}>{l.desc}</span>
+                </button>
+              </Reveal>
+            ))}
           </div>
-          <WeatherWidget />
         </div>
       </section>
 
       {/* ── Playlist ── */}
-      <section style={{ padding: '60px 20px', background: 'var(--cream)' }}>
+      <section style={{ padding: '48px 0', background: 'var(--cream)' }}>
         <div className="container-sm">
-          <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--charcoal)', marginBottom: 8 }}>
-              {t('home.playlistTitle')}
-            </h2>
-            <p style={{ color: 'var(--warm-gray)', fontSize: '.9rem' }}>
-              {t('home.playlistSubtitle')}
-            </p>
-          </div>
-          <SpotifyWidget title={t('home.playlistFrameTitle')} />
+          <Reveal>
+            <div style={{ textAlign: 'center', marginBottom: 24 }}>
+              <h2 style={{ fontSize: '1.9rem', color: 'var(--charcoal)', marginBottom: 6 }}>{t('home.playlistTitle')}</h2>
+              <p style={{ color: 'var(--warm-gray)', fontSize: '.92rem', margin: 0 }}>{t('home.playlistSubtitle')}</p>
+            </div>
+            <SpotifyWidget title={t('home.playlistFrameTitle')} />
+          </Reveal>
         </div>
       </section>
-
-      {/* ── Quick links ── */}
-      <section style={{ padding: '60px 20px', background: 'var(--white)' }}>
-        <div className="container">
-          <div className="divider" style={{ marginBottom: 40 }}>
-            <span>{t('home.sectionsDivider')}</span>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-            {quickLinks.map(l => (
-              <button
-                key={l.to}
-                onClick={() => navigate(l.to)}
-                style={{
-                  background: 'var(--ivory)', border: '1.5px solid rgba(200,162,168,.2)',
-                  borderRadius: 'var(--radius-lg)', padding: '28px 24px',
-                  cursor: 'pointer', textAlign: 'left',
-                  transition: 'all .3s ease', display: 'flex', flexDirection: 'column', gap: 8,
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-4px)'
-                  e.currentTarget.style.boxShadow = 'var(--shadow-md)'
-                  e.currentTarget.style.borderColor = l.color
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = ''
-                  e.currentTarget.style.boxShadow = ''
-                  e.currentTarget.style.borderColor = 'rgba(200,162,168,.2)'
-                }}
-              >
-                <span style={{ fontSize: '2rem' }}>{l.icon}</span>
-                <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', color: 'var(--charcoal)' }}>{l.label}</span>
-                <span style={{ fontSize: '.85rem', color: 'var(--warm-gray)' }}>{l.desc}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
 
       {/* ── Storia ── */}
-      <section style={{ padding: '80px 20px', background: 'var(--white)' }}>
+      <section style={{ padding: '64px 0 72px' }}>
         <div className="container-sm" style={{ textAlign: 'center' }}>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.2rem', color: 'var(--charcoal)', marginBottom: 16 }}>
-            {t('home.storyTitle')}
-          </h2>
-          <div style={{ width: 60, height: 1, background: 'var(--blush)', margin: '0 auto 24px' }} />
-          <p style={{ color: 'var(--warm-gray)', lineHeight: 1.8, fontSize: '1.05rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
-            "{t('home.storyQuote')}"
-          </p>
-          <div style={{ marginTop: 32, display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap' }}>
-            {t('home.timeline').map(s => (
-              <div key={s.year} style={{ textAlign: 'center' }}>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: 'var(--rose)' }}>{s.year}</div>
-                <div style={{ fontSize: '.85rem', color: 'var(--warm-gray)', marginTop: 4 }}>{s.event}</div>
-              </div>
-            ))}
-          </div>
+          <Reveal>
+            <h2 style={{ fontSize: '2.1rem', color: 'var(--charcoal)', marginBottom: 14 }}>{t('home.storyTitle')}</h2>
+            <div style={{ width: 56, height: 1, background: 'var(--accent)', margin: '0 auto 22px' }} />
+            <p style={{ color: 'var(--ink-soft)', lineHeight: 1.8, fontSize: '1.08rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', maxWidth: 520, margin: '0 auto' }}>
+              “{t('home.storyQuote')}”
+            </p>
+            <div style={{ marginTop: 36, display: 'flex', gap: 28, justifyContent: 'center', flexWrap: 'wrap' }}>
+              {t('home.timeline').map(s => (
+                <div key={s.year} style={{ textAlign: 'center' }}>
+                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.5rem', color: 'var(--rose-deep)' }}>{s.year}</div>
+                  <div style={{ fontSize: '.85rem', color: 'var(--warm-gray)', marginTop: 4 }}>{s.event}</div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 

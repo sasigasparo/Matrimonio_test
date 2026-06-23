@@ -115,9 +115,9 @@ export const WEDDING_CONFIG = {
   },
 
   theme: {
-    primary: "#c8826a",
-    secondary: "#5a7a9c",
-    background: "#fdf7f2",
+    primary: "#C76B8B",     // dusty rosewood — vedi frontend/index.css (--rose)
+    secondary: "#FBDCE6",   // blush
+    background: "#FFF7F9",   // pink-white
   },
 
   app: {

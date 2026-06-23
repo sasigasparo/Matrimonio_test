@@ -91,7 +91,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
   return (
     <div style={{
       position: 'fixed', top: '56px', left: 0, right: 0, bottom: 0, zIndex: 100,
-      background: 'linear-gradient(155deg, #1a0e0b 0%, #2c1a14 50%, #1a0e0b 100%)',
+      background: 'linear-gradient(155deg, #241019 0%, #3a1d2c 50%, #241019 100%)',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       padding: '40px 24px', textAlign: 'center',
@@ -100,13 +100,13 @@ function MenuCountdownGate({ diff, onUnlock }) {
       <div style={{
         position: 'absolute', top: '15%', left: '10%',
         width: 300, height: 300, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(200,130,106,0.08), transparent 70%)',
+        background: 'radial-gradient(circle, rgba(199,107,139,0.08), transparent 70%)',
         pointerEvents: 'none',
       }} />
       <div style={{
         position: 'absolute', bottom: '10%', right: '5%',
         width: 250, height: 250, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(138,158,140,0.06), transparent 70%)',
+        background: 'radial-gradient(circle, rgba(67,160,71,0.06), transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -115,7 +115,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
       </div>
 
       <div style={{ position: 'relative', zIndex: 1 }}>
-        <div style={{ fontSize: '3.5rem', marginBottom: 20, filter: 'drop-shadow(0 0 24px rgba(200,130,106,0.45))' }}>
+        <div style={{ fontSize: '3.5rem', marginBottom: 20, filter: 'drop-shadow(0 0 24px rgba(199,107,139,0.45))' }}>
           🍽️
         </div>
 
@@ -137,7 +137,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
         </h1>
 
         <p style={{
-          color: 'rgba(200,130,106,0.7)', fontFamily: 'Georgia, serif',
+          color: 'rgba(199,107,139,0.7)', fontFamily: 'Georgia, serif',
           fontStyle: 'italic', fontSize: '.95rem', marginBottom: 48,
         }}>
           {t('menu.dateLocation', { date: WEDDING_CONFIG.date })}
@@ -154,15 +154,15 @@ function MenuCountdownGate({ diff, onUnlock }) {
             <div key={b.label} style={{
               minWidth: 76, padding: '18px 14px',
               background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(200,130,106,0.25)',
+              border: '1px solid rgba(199,107,139,0.25)',
               borderRadius: 14,
             }}>
               <div style={{
                 fontFamily: 'Georgia, serif',
                 fontSize: 'clamp(2.2rem, 6vw, 3.2rem)',
-                color: 'rgba(200,130,106,0.95)',
+                color: 'rgba(199,107,139,0.95)',
                 lineHeight: 1,
-                textShadow: '0 0 30px rgba(200,130,106,0.3)',
+                textShadow: '0 0 30px rgba(199,107,139,0.3)',
               }}>
                 {pad(b.val)}
               </div>
@@ -176,7 +176,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
           ))}
         </div>
 
-        <div style={{ width: 40, height: 1, background: 'rgba(200,130,106,0.2)', margin: '0 auto 40px' }} />
+        <div style={{ width: 40, height: 1, background: 'rgba(199,107,139,0.2)', margin: '0 auto 40px' }} />
 
         {/* Password unlock */}
         {!open ? (
@@ -189,8 +189,8 @@ function MenuCountdownGate({ diff, onUnlock }) {
               letterSpacing: '.08em', transition: 'all 0.3s',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = 'rgba(200,130,106,0.3)'
-              e.currentTarget.style.color = 'rgba(200,130,106,0.6)'
+              e.currentTarget.style.borderColor = 'rgba(199,107,139,0.3)'
+              e.currentTarget.style.color = 'rgba(199,107,139,0.6)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
@@ -212,7 +212,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
                 style={{
                   width: '100%', boxSizing: 'border-box',
                   padding: '10px 38px 10px 16px', borderRadius: 8, fontSize: '1rem',
-                  border: `1.5px solid ${error ? '#c97a7a' : 'rgba(200,130,106,0.35)'}`,
+                  border: `1.5px solid ${error ? '#c97a7a' : 'rgba(199,107,139,0.35)'}`,
                   background: 'rgba(255,255,255,0.07)', color: '#fff',
                   outline: 'none', textAlign: 'center',
                   transition: 'border-color 0.2s',
@@ -227,9 +227,9 @@ function MenuCountdownGate({ diff, onUnlock }) {
               onClick={tryUnlock}
               style={{
                 padding: '8px 24px', borderRadius: 99,
-                background: 'rgba(200,130,106,0.2)',
-                border: '1px solid rgba(200,130,106,0.4)',
-                color: 'rgba(200,130,106,0.9)', cursor: 'pointer',
+                background: 'rgba(199,107,139,0.2)',
+                border: '1px solid rgba(199,107,139,0.4)',
+                color: 'rgba(199,107,139,0.9)', cursor: 'pointer',
                 fontSize: '.85rem', letterSpacing: '.06em',
               }}
             >
@@ -244,12 +244,12 @@ function MenuCountdownGate({ diff, onUnlock }) {
 
 /* ── Course icon map ──────────────────────────────────────────────── */
 const COURSE_ICONS = {
-  'Benvenuto': { icon: '🥂', color: '#c8826a', bg: 'rgba(200,130,106,.1)' },
-  'Antipasto': { icon: '🥗', color: '#8a9e8c', bg: 'rgba(138,158,140,.1)' },
-  'Primo':     { icon: '🍝', color: '#c8a96a', bg: 'rgba(200,169,106,.1)' },
+  'Benvenuto': { icon: '🥂', color: '#C76B8B', bg: 'rgba(199,107,139,.1)' },
+  'Antipasto': { icon: '🥗', color: '#43A047', bg: 'rgba(67,160,71,.1)' },
+  'Primo':     { icon: '🍝', color: '#C9A36A', bg: 'rgba(200,169,106,.1)' },
   'Secondo':   { icon: '🥩', color: '#a05840', bg: 'rgba(160,88,64,.1)'   },
-  'Dessert':   { icon: '🎂', color: '#c8826a', bg: 'rgba(200,130,106,.1)' },
-  'Drink':     { icon: '🍷', color: '#8a9e8c', bg: 'rgba(138,158,140,.1)' },
+  'Dessert':   { icon: '🎂', color: '#C76B8B', bg: 'rgba(199,107,139,.1)' },
+  'Drink':     { icon: '🍷', color: '#43A047', bg: 'rgba(67,160,71,.1)' },
 }
 
 function DietBadge({ isVegan, isGlutenFree }) {
@@ -303,7 +303,7 @@ export default function MenuPage() {
 
       {/* Hero */}
       <div style={{
-        background: 'linear-gradient(135deg, var(--charcoal) 0%, #3d2d28 100%)',
+        background: 'linear-gradient(135deg, var(--charcoal) 0%, #46243a 100%)',
         padding: '80px 20px 60px', textAlign: 'center', color: 'var(--white)',
         position: 'relative',
       }}>
@@ -323,9 +323,9 @@ export default function MenuPage() {
         {isAdmin && !countdown.past && (
           <div style={{
             marginTop: 20, display: 'inline-block',
-            background: 'rgba(138,158,140,0.2)', border: '1px solid rgba(138,158,140,0.4)',
+            background: 'rgba(67,160,71,0.2)', border: '1px solid rgba(67,160,71,0.4)',
             borderRadius: 99, padding: '5px 16px',
-            color: 'rgba(138,158,140,0.9)', fontSize: '.78rem', letterSpacing: '.06em',
+            color: 'rgba(67,160,71,0.9)', fontSize: '.78rem', letterSpacing: '.06em',
           }}>
             {t('menu.adminPreview')}
           </div>
@@ -343,7 +343,7 @@ export default function MenuPage() {
             {t('menu.notAvailable')}
           </p>
         ) : visibleCourses.map((course, ci) => {
-          const info  = COURSE_ICONS[course] || { icon: '🍴', color: 'var(--rose)', bg: 'rgba(200,130,106,.1)' }
+          const info  = COURSE_ICONS[course] || { icon: '🍴', color: 'var(--rose)', bg: 'rgba(199,107,139,.1)' }
           const items = menu.courses[course] || []
           return (
             <div key={course} style={{ marginBottom: 48 }}>
@@ -376,7 +376,7 @@ export default function MenuPage() {
                     style={{
                       background: 'var(--white)',
                       borderRadius: 'var(--radius-md)',
-                      border: '1.5px solid rgba(200,162,168,.15)',
+                      border: '1.5px solid rgba(207,165,181,.15)',
                       padding: '18px 20px',
                       boxShadow: 'var(--shadow-sm)',
                     }}

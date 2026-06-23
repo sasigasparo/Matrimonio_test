@@ -21,7 +21,7 @@ function AudioList({ messages }) {
     <div style={{ display:'grid', gap:16, padding:'0 4px' }}>
       {audioMsgs.map(msg => (
         <div key={msg.id} style={{
-          background:'var(--white)', borderRadius:'16px', border:'1px solid rgba(200,162,168,.18)',
+          background:'var(--white)', borderRadius:'16px', border:'1px solid rgba(207,165,181,.18)',
           padding:'18px 20px', boxShadow:'0 1px 8px rgba(0,0,0,0.04)'
         }}>
           <div style={{ display:'flex', gap:12, alignItems:'center', marginBottom:12 }}>
@@ -211,15 +211,18 @@ export default function Gallery() {
         </p>
       </div>
 
-      {/* Tabs */}
-      <div style={{
-        display:'flex', justifyContent:'center', gap:8,
-        padding:'0 20px 32px', flexWrap:'wrap'
+      {/* Tabs — horizontal scroll on mobile, centered on desktop */}
+      <div className="no-scrollbar" style={{
+        display:'flex', justifyContent:'flex-start', gap:8,
+        padding:'0 20px 32px', overflowX:'auto', scrollSnapType:'x proximity',
+        WebkitOverflowScrolling:'touch',
       }}>
+        <div style={{ flex:1, minWidth:0 }} className="hide-mobile" />
         {tabs.map(t => (
           <button
             key={t.id}
-            className={`btn ${tab === t.id ? 'btn-primary' : 'btn-outline'}`}
+            className={`btn btn-sm ${tab === t.id ? 'btn-primary' : 'btn-secondary'}`}
+            style={{ flexShrink:0, scrollSnapAlign:'start' }}
             onClick={() => {
               setTab(t.id)
               if (t.id === 'camera') startCamera()
@@ -230,6 +233,7 @@ export default function Gallery() {
             {t.icon} {t.label}
           </button>
         ))}
+        <div style={{ flex:1, minWidth:0 }} className="hide-mobile" />
       </div>
 
       {/* Camera tab */}
@@ -408,7 +412,7 @@ export default function Gallery() {
             <p style={{ fontSize:'.85rem', opacity:.7 }}>📷 {selected.guest_name}</p>
             <div style={{ display:'flex', gap:10, justifyContent:'center', marginTop:12 }}>
               {!String(selected.id).startsWith('msg-') && (String(selected.guest_id) === String(user?.id) || user?.is_admin) && (
-                <button className="btn btn-sm" style={{ background:'rgba(200,130,106,.8)', color:'#fff' }}
+                <button className="btn btn-sm" style={{ background:'rgba(199,107,139,.8)', color:'#fff' }}
                   onClick={() => deletePhoto(selected.id)}>🗑 Elimina</button>
               )}
               <button className="btn btn-sm btn-ghost" style={{ color:'#fff' }} onClick={() => setSelected(null)}>✕ Chiudi</button>

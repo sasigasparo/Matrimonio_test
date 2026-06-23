@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './hooks/useAuth'
 import { LanguageProvider, useLanguage } from './hooks/useLanguage'
 import LanguageSwitch from './components/LanguageSwitch'
 import WeddingChatbot from './components/WeddingChatbot'
+import BottomNav from './components/BottomNav'
 import Home     from './pages/Home'
 import Chat     from './pages/Chat'
 import Gallery  from './pages/Gallery'
@@ -81,13 +82,13 @@ function GlobalTransitionStyles() {
       .wedding-loader {
         position: fixed;
         inset: 0;
-        background: #fdf7f2;
+        background: #FFF7F9;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         z-index: 9999;
-        color: var(--charcoal, #2c2420);
+        color: var(--charcoal, #1B1B1B);
         text-align: center;
         padding: 20px;
       }
@@ -115,14 +116,14 @@ function GlobalTransitionStyles() {
       .transition-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(253,247,242,0.96);
+        background: rgba(255,249,248,0.96);
         backdrop-filter: blur(2px);
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: var(--font-serif, Georgia, serif);
         font-size: 1.05rem;
-        color: var(--charcoal, #2c2420);
+        color: var(--charcoal, #1B1B1B);
         z-index: 9999;
         animation: overlay-fade .2s ease;
         pointer-events: none;
@@ -179,7 +180,7 @@ function Drawer({ open, onClose, onNavigate }) {
         {/* Header */}
         <div style={{
           padding:'24px 20px 20px',
-          borderBottom:'1px solid rgba(200,162,168,0.2)',
+          borderBottom:'1px solid rgba(207,165,181,0.2)',
           display:'flex', alignItems:'center', justifyContent:'space-between', gap:10,
         }}>
           <div>
@@ -212,14 +213,14 @@ function Drawer({ open, onClose, onNavigate }) {
                   display:'flex', alignItems:'center', gap:14,
                   width:'100%', padding:'13px 14px',
                   border:'none', borderRadius:10, cursor:'pointer',
-                  background: active ? 'rgba(200,130,106,.1)' : 'transparent',
+                  background: active ? 'rgba(199,107,139,.1)' : 'transparent',
                   color: active ? 'var(--rose)' : 'var(--charcoal)',
                   fontFamily:'inherit', fontSize:'.97rem',
                   fontWeight: active ? 600 : 400,
                   textAlign:'left', transition:'background 0.15s',
                   marginBottom:2,
                 }}
-                onMouseEnter={e => { if (!active) e.currentTarget.style.background='rgba(200,162,168,0.08)' }}
+                onMouseEnter={e => { if (!active) e.currentTarget.style.background='rgba(207,165,181,0.08)' }}
                 onMouseLeave={e => { if (!active) e.currentTarget.style.background='transparent' }}
               >
                 <span style={{ fontSize:'1.2rem', width:26, textAlign:'center', flexShrink:0 }}>{item.icon}</span>
@@ -238,11 +239,11 @@ function Drawer({ open, onClose, onNavigate }) {
         {/* Footer / user area */}
         {user && (
           <div style={{
-            padding:'16px 20px', borderTop:'1px solid rgba(200,162,168,0.2)',
+            padding:'16px 20px', borderTop:'1px solid rgba(207,165,181,0.2)',
             display:'flex', alignItems:'center', gap:10,
           }}>
             <img
-              src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=e8c4a8&color=2c2420`}
+              src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=FBDCE6&color=A63D63`}
               style={{ width:34, height:34, borderRadius:'50%', objectFit:'cover', border:'2px solid var(--blush)', flexShrink:0 }}
             />
             <div style={{ flex:1, minWidth:0 }}>
@@ -256,7 +257,7 @@ function Drawer({ open, onClose, onNavigate }) {
             <button
               onClick={() => { logout(); onClose() }}
               style={{
-                background:'none', border:'1px solid rgba(200,162,168,0.35)',
+                background:'none', border:'1px solid rgba(207,165,181,0.35)',
                 borderRadius:8, cursor:'pointer', padding:'5px 10px',
                 color:'var(--warm-gray)', fontSize:'.78rem', flexShrink:0,
               }}
@@ -278,13 +279,13 @@ function NavBar({ onMenuOpen, onNavigate }) {
   const { t } = useLanguage()
   const navItems = useNavItems()
 
-  if (location.pathname === '/login') return null
+  if (location.pathname === '/login' || location.pathname === '/chat') return null
 
   return (
     <nav style={{
       position:'fixed', top:0, left:0, right:0, zIndex:210,
       background:'rgba(255,255,255,0.96)', backdropFilter:'blur(12px)',
-      borderBottom:'1px solid rgba(200,162,168,0.2)',
+      borderBottom:'1px solid rgba(207,165,181,0.2)',
       boxShadow:'0 2px 12px rgba(0,0,0,0.06)',
       display:'flex', alignItems:'center',
       padding:'0 12px', height:56,
@@ -337,7 +338,7 @@ function NavBar({ onMenuOpen, onNavigate }) {
                 gap:2, padding:'6px 10px', border:'none',
                 cursor:'pointer', flexShrink:0, borderRadius:8,
                 color: active ? 'var(--rose)' : 'var(--warm-gray)',
-                background: active ? 'rgba(200,130,106,.08)' : 'transparent',
+                background: active ? 'rgba(199,107,139,.08)' : 'transparent',
                 transition:'all 0.2s',
               }}
             >
@@ -363,7 +364,7 @@ function NavBar({ onMenuOpen, onNavigate }) {
         <div className="hide-mobile" style={{
           display:'flex', alignItems:'center', gap:8,
           flexShrink:0, marginLeft:8, paddingLeft:8,
-          borderLeft:'1px solid rgba(200,162,168,0.25)',
+          borderLeft:'1px solid rgba(207,165,181,0.25)',
         }}>
           {user.is_admin && (
             <button
@@ -371,7 +372,7 @@ function NavBar({ onMenuOpen, onNavigate }) {
               className="hide-mobile"
               style={{
                 padding:'4px 10px', borderRadius:99,
-                background:'rgba(138,158,140,0.15)', border:'1px solid rgba(138,158,140,0.3)',
+                background:'rgba(67,160,71,0.15)', border:'1px solid rgba(67,160,71,0.3)',
                 color:'#5a7a5c', fontSize:10, fontWeight:600, cursor:'pointer',
                 whiteSpace:'nowrap',
               }}
@@ -380,7 +381,7 @@ function NavBar({ onMenuOpen, onNavigate }) {
             </button>
           )}
           <img
-            src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=e8c4a8&color=2c2420`}
+            src={user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=FBDCE6&color=A63D63`}
             style={{ width:28, height:28, borderRadius:'50%', objectFit:'cover', border:'2px solid var(--blush)' }}
           />
           <button
@@ -441,7 +442,7 @@ function AppShell() {
       <GlobalTransitionStyles />
       <NavBar onMenuOpen={() => setDrawerOpen(true)} onNavigate={navigateWithTransition} />
       <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onNavigate={navigateWithTransition} />
-      {location.pathname !== '/login' && <div style={{ height:56 }} />}
+      {location.pathname !== '/login' && location.pathname !== '/chat' && <div style={{ height:56 }} />}
 
       {transitioning && (
         <div className="transition-overlay">
@@ -465,6 +466,11 @@ function AppShell() {
         <Route path="/regali" element={<RequireAuth><Regali /></RequireAuth>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      {location.pathname !== '/login' && <div className="bottomnav-spacer" />}
+
+      {/* Bottom nav (mobile-primary). "More" opens the existing drawer. */}
+      <BottomNav onMore={() => setDrawerOpen(true)} onNavigate={navigateWithTransition} />
 
       {/* Chatbot fluttuante, visibile solo in Home */}
       {location.pathname === '/' && <WeddingChatbot />}

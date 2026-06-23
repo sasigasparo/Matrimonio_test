@@ -65,7 +65,7 @@ export default function Login() {
           top: 50%; left: 50%;
           width: 640px; height: 640px;
           transform: translate(-50%, -50%);
-          background: radial-gradient(circle, rgba(200,130,106,0.12) 0%, rgba(200,130,106,0) 70%);
+          background: radial-gradient(circle, rgba(199,107,139,0.12) 0%, rgba(199,107,139,0) 70%);
           pointer-events: none;
         }
         .login-card { animation: login-rise .6s cubic-bezier(.22,1,.36,1) both; }
@@ -83,7 +83,7 @@ export default function Login() {
         .login-input { transition: border-color .15s ease, box-shadow .15s ease; }
         .login-input:focus {
           border-color: var(--rose) !important;
-          box-shadow: 0 0 0 3px rgba(200,130,106,0.15);
+          box-shadow: 0 0 0 3px rgba(199,107,139,0.15);
           outline: none;
         }
         .login-eye-btn { transition: color .15s ease; }
@@ -91,7 +91,7 @@ export default function Login() {
         .login-submit { transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease; }
         .login-submit:hover:not(:disabled) {
           transform: translateY(-1px);
-          box-shadow: 0 12px 26px rgba(200,130,106,0.38);
+          box-shadow: 0 12px 26px rgba(199,107,139,0.38);
         }
         .login-error { animation: login-fade .25s ease; }
         @media (prefers-reduced-motion: reduce) {
@@ -110,7 +110,7 @@ export default function Login() {
           width: '100%', maxWidth: 400,
           background: 'rgba(255,255,255,0.9)',
           backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(200,162,168,0.25)',
+          border: '1px solid rgba(207,165,181,0.25)',
           borderRadius: 24,
           boxShadow: '0 24px 60px rgba(44,36,32,0.14)',
           padding: 'clamp(32px, 6vw, 48px) clamp(24px, 6vw, 40px)',
@@ -134,8 +134,8 @@ export default function Login() {
           width: 64, height: 64, borderRadius: '50%',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '1.8rem',
-          background: 'linear-gradient(135deg, var(--blush) 0%, rgba(200,130,106,.25) 100%)',
-          border: '1px solid rgba(200,130,106,.3)',
+          background: 'linear-gradient(135deg, var(--blush) 0%, rgba(199,107,139,.25) 100%)',
+          border: '1px solid rgba(199,107,139,.3)',
           marginBottom: 8,
         }}>
           💍
@@ -178,7 +178,7 @@ export default function Login() {
                 style={{
                   width: '100%', boxSizing: 'border-box',
                   padding: '12px 44px',
-                  border: `1px solid ${error ? 'rgba(196,90,79,.4)' : 'rgba(200,162,168,.3)'}`,
+                  border: `1px solid ${error ? 'rgba(196,90,79,.4)' : 'rgba(207,165,181,.3)'}`,
                   borderRadius: 10, fontSize: '1rem', fontFamily: 'inherit',
                   background: '#fff',
                 }}
@@ -230,10 +230,10 @@ export default function Login() {
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
               padding: '13px 20px', border: 'none', borderRadius: 10,
-              background: loading ? 'rgba(200,130,106,.6)' : 'linear-gradient(135deg, var(--rose) 0%, #c8826a 100%)',
+              background: loading ? 'rgba(199,107,139,.6)' : 'linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%)',
               color: '#fff', fontSize: '.97rem', fontWeight: 600, fontFamily: 'inherit',
               cursor: loading ? 'default' : 'pointer',
-              boxShadow: '0 8px 20px rgba(200,130,106,.3)',
+              boxShadow: '0 8px 20px rgba(199,107,139,.3)',
             }}
           >
             {loading ? (

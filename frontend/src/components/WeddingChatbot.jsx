@@ -114,7 +114,7 @@ export default function WeddingChatbot() {
             borderRadius: '50%',
             border: 'none',
             cursor: 'pointer',
-            background: 'linear-gradient(135deg, #c8a2a8, #e8c4a8)',
+            background: 'linear-gradient(135deg, #c8a2a8, #FBDCE6)',
             boxShadow: '0 4px 20px rgba(200,130,100,0.4)',
             display: 'flex',
             alignItems: 'center',
@@ -154,7 +154,7 @@ export default function WeddingChatbot() {
         aria-hidden={!open}>
           {/* Header */}
           <div style={{
-            background: 'linear-gradient(135deg, #c8a2a8, #e8c4a8)',
+            background: 'linear-gradient(135deg, #c8a2a8, #FBDCE6)',
             padding: '14px 18px',
             display: 'flex', alignItems: 'center', gap: 10,
             flexShrink: 0,
@@ -204,9 +204,9 @@ export default function WeddingChatbot() {
                   padding: '9px 13px',
                   borderRadius: m.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
                   background: m.role === 'user'
-                    ? 'linear-gradient(135deg, #c8a2a8, #e8c4a8)'
+                    ? 'linear-gradient(135deg, #c8a2a8, #FBDCE6)'
                     : '#fff',
-                  color: m.role === 'user' ? '#fff' : '#2c2420',
+                  color: m.role === 'user' ? '#fff' : '#1B1B1B',
                   fontSize: '0.88rem',
                   lineHeight: 1.5,
                   boxShadow: m.role === 'user' ? 'none' : '0 1px 6px rgba(0,0,0,0.06)',
@@ -240,7 +240,7 @@ export default function WeddingChatbot() {
           {/* Input */}
           <div style={{
             display: 'flex', gap: 8, padding: 12,
-            borderTop: '1px solid rgba(200,162,168,0.15)',
+            borderTop: '1px solid rgba(207,165,181,0.15)',
             background: '#fff', flexShrink: 0,
           }}>
             <input
@@ -253,7 +253,7 @@ export default function WeddingChatbot() {
               disabled={loading}
               style={{
                 flex: 1, padding: '10px 14px', borderRadius: 99,
-                border: '1.5px solid rgba(200,162,168,0.3)',
+                border: '1.5px solid rgba(207,165,181,0.3)',
                 fontSize: '0.88rem', fontFamily: 'inherit', outline: 'none',
               }}
             />
@@ -262,7 +262,7 @@ export default function WeddingChatbot() {
               disabled={loading || !input.trim()}
               style={{
                 width: 40, height: 40, borderRadius: '50%', border: 'none',
-                background: 'linear-gradient(135deg, #c8a2a8, #e8c4a8)',
+                background: 'linear-gradient(135deg, #c8a2a8, #FBDCE6)',
                 color: '#fff', fontSize: '1.1rem', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 opacity: loading || !input.trim() ? 0.5 : 1,
@@ -300,7 +300,7 @@ export default function WeddingChatbot() {
           display: flex;
           flex-direction: column;
           overflow: hidden;
-          border: 1px solid rgba(200,162,168,0.2);
+          border: 1px solid rgba(207,165,181,0.2);
           transform-origin: bottom right;
           opacity: 0;
           transform: translateY(12px) scale(0.96);

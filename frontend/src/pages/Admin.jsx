@@ -221,7 +221,7 @@ export default function Admin() {
                       <td style={{ padding:'10px 16px' }}>
                         <div style={{ display:'flex', gap:6 }}>
                           <button className="btn btn-sm btn-outline" onClick={() => sendInvite(g.id, g.name)}>📧</button>
-                          <button className="btn btn-sm" style={{ background:'rgba(200,130,106,.15)', color:'var(--rose)', border:'none' }} onClick={() => deleteGuest(g.id, g.name)}>🗑</button>
+                          <button className="btn btn-sm" style={{ background:'rgba(199,107,139,.15)', color:'var(--rose)', border:'none' }} onClick={() => deleteGuest(g.id, g.name)}>🗑</button>
                         </div>
                       </td>
                     </tr>

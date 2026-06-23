@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import { Play, Pause } from 'lucide-react'
 import Waveform from './Waveform'
 
 export default function AudioBubble({ src, outgoing }) {
@@ -28,21 +29,22 @@ export default function AudioBubble({ src, outgoing }) {
       <button
         onClick={toggle}
         style={{
-          width: 32, height: 32, borderRadius: '50%', border: 'none',
-          background: outgoing ? 'rgba(255,255,255,0.3)' : 'var(--rose)',
-          color: '#fff', cursor: 'pointer', fontSize: 11, flexShrink: 0,
+          width: 34, height: 34, borderRadius: '50%', border: 'none',
+          background: outgoing ? 'rgba(199,107,139,0.85)' : 'var(--rose)',
+          color: '#fff', cursor: 'pointer', flexShrink: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 2px 8px rgba(199,107,139,0.35)',
         }}
-        title={playing ? 'Pausa' : 'Riproduci'}
+        aria-label={playing ? 'Pausa' : 'Riproduci'}
       >
-        {playing ? '⏸' : '▶'}
+        {playing ? <Pause size={15} fill="#fff" /> : <Play size={15} fill="#fff" style={{ marginLeft: 1 }} />}
       </button>
       <Waveform
         progress={progress}
-        color={outgoing ? '#fff' : 'var(--rose)'}
-        dimColor={outgoing ? 'rgba(255,255,255,0.35)' : 'rgba(200,130,106,0.3)'}
+        color={'var(--rose-deep)'}
+        dimColor={outgoing ? 'rgba(166,61,99,0.30)' : 'rgba(199,107,139,0.28)'}
       />
-      <span style={{ fontSize: 10, opacity: 0.8, flexShrink: 0, minWidth: 40, textAlign: 'right' }}>
+      <span style={{ fontSize: 10.5, color: 'var(--warm-gray)', flexShrink: 0, minWidth: 42, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
         {fmt(duration * progress)} / {fmt(duration)}
       </span>
     </div>

@@ -142,8 +142,8 @@ function GuestPicker({ table, seatIndex, currentGuest, guests, allTables, onAssi
         background: '#fff', borderRadius: 16, width: '100%', maxWidth: 420,
         boxShadow: '0 24px 64px rgba(0,0,0,0.18)', overflow: 'hidden',
       }} onClick={e => e.stopPropagation()}>
-        <div style={{ padding: '20px 20px 0', borderBottom: '1px solid rgba(200,162,168,0.2)' }}>
-          <h3 style={{ margin: '0 0 4px', fontFamily: 'Georgia,serif', color: 'var(--charcoal,#2c2420)', fontSize: '1.1rem' }}>
+        <div style={{ padding: '20px 20px 0', borderBottom: '1px solid rgba(207,165,181,0.2)' }}>
+          <h3 style={{ margin: '0 0 4px', fontFamily: 'Georgia,serif', color: 'var(--charcoal,#1B1B1B)', fontSize: '1.1rem' }}>
             {currentGuest ? `Posto ${seatIndex + 1} — ${table.name}` : `Assegna posto ${seatIndex + 1} — ${table.name}`}
           </h3>
           {currentGuest && (
@@ -157,7 +157,7 @@ function GuestPicker({ table, seatIndex, currentGuest, guests, allTables, onAssi
             value={search}
             onChange={e => setSearch(e.target.value)}
             style={{
-              width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid rgba(200,162,168,0.35)',
+              width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid rgba(207,165,181,0.35)',
               fontSize: '0.95rem', fontFamily: 'inherit', marginBottom: 12, boxSizing: 'border-box',
             }}
           />
@@ -198,7 +198,7 @@ function GuestPicker({ table, seatIndex, currentGuest, guests, allTables, onAssi
                   width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
                   background: rsvpColor(g.rsvp_status),
                 }}/>
-                <span style={{ fontSize: '0.9rem', color: '#2c2420', flex: 1 }}>{g.name}</span>
+                <span style={{ fontSize: '0.9rem', color: '#1B1B1B', flex: 1 }}>{g.name}</span>
                 <span style={{ fontSize: '0.75rem', color: '#b0a090' }}>
                   {alreadySeated ? 'già assegnato' : g.rsvp_status === 'confirmed' ? '✓ confermato' : g.rsvp_status === 'declined' ? '✗ rifiutato' : '○ in attesa'}
                 </span>
@@ -207,9 +207,9 @@ function GuestPicker({ table, seatIndex, currentGuest, guests, allTables, onAssi
           })}
         </div>
 
-        <div style={{ padding: 16, borderTop: '1px solid rgba(200,162,168,0.15)' }}>
+        <div style={{ padding: 16, borderTop: '1px solid rgba(207,165,181,0.15)' }}>
           <button onClick={onClose} style={{
-            width: '100%', padding: '10px', borderRadius: 8, border: '1px solid rgba(200,162,168,0.35)',
+            width: '100%', padding: '10px', borderRadius: 8, border: '1px solid rgba(207,165,181,0.35)',
             background: 'none', cursor: 'pointer', fontFamily: 'inherit', color: '#9a8070', fontSize: '0.9rem',
           }}>
             Annulla
@@ -245,7 +245,7 @@ function TableEditor({ table, onSave, onDelete, onClose }) {
         background: '#fff', borderRadius: 16, width: '100%', maxWidth: 380,
         boxShadow: '0 24px 64px rgba(0,0,0,0.18)', padding: 24,
       }} onClick={e => e.stopPropagation()}>
-        <h3 style={{ margin: '0 0 20px', fontFamily: 'Georgia,serif', color: '#2c2420' }}>
+        <h3 style={{ margin: '0 0 20px', fontFamily: 'Georgia,serif', color: '#1B1B1B' }}>
           {table?.id ? 'Modifica tavolo' : 'Nuovo tavolo'}
         </h3>
 
@@ -255,14 +255,14 @@ function TableEditor({ table, onSave, onDelete, onClose }) {
             <input
               autoFocus value={name} onChange={e => setName(e.target.value)}
               placeholder="es. Tavolo degli sposi"
-              style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid rgba(200,162,168,0.4)', fontSize: '0.95rem', fontFamily: 'inherit', boxSizing: 'border-box' }}
+              style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid rgba(207,165,181,0.4)', fontSize: '0.95rem', fontFamily: 'inherit', boxSizing: 'border-box' }}
             />
           </div>
           <div>
             <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#5a4030', display: 'block', marginBottom: 4 }}>Posti a sedere</label>
             <input
               type="number" min={2} max={20} value={seats} onChange={e => setSeats(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid rgba(200,162,168,0.4)', fontSize: '0.95rem', fontFamily: 'inherit', boxSizing: 'border-box' }}
+              style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid rgba(207,165,181,0.4)', fontSize: '0.95rem', fontFamily: 'inherit', boxSizing: 'border-box' }}
             />
           </div>
         </div>
@@ -277,14 +277,14 @@ function TableEditor({ table, onSave, onDelete, onClose }) {
             </button>
           )}
           <button onClick={onClose} style={{
-            flex: 1, padding: '10px', borderRadius: 8, border: '1px solid rgba(200,162,168,0.35)',
+            flex: 1, padding: '10px', borderRadius: 8, border: '1px solid rgba(207,165,181,0.35)',
             background: 'none', cursor: 'pointer', fontFamily: 'inherit', color: '#9a8070',
           }}>
             Annulla
           </button>
           <button onClick={handleSave} disabled={saving || !name.trim()} style={{
             flex: 2, padding: '10px', borderRadius: 8, border: 'none',
-            background: 'linear-gradient(135deg,#c8a2a8,#e8c4a8)', color: '#fff',
+            background: 'linear-gradient(135deg,#c8a2a8,#FBDCE6)', color: '#fff',
             cursor: saving ? 'not-allowed' : 'pointer', fontFamily: 'inherit', fontWeight: 600,
             opacity: saving || !name.trim() ? 0.6 : 1,
           }}>
@@ -410,7 +410,7 @@ export default function Tables() {
       {/* ── Header ── */}
       <div style={{ marginBottom: 24, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h1 style={{ fontFamily: 'Georgia,serif', fontSize: '1.8rem', color: '#2c2420', margin: 0 }}>
+          <h1 style={{ fontFamily: 'Georgia,serif', fontSize: '1.8rem', color: '#1B1B1B', margin: 0 }}>
             🪑 Disposizione Tavoli
           </h1>
           <p style={{ color: '#9a8070', margin: '4px 0 0', fontSize: '0.9rem' }}>
@@ -421,7 +421,7 @@ export default function Tables() {
           onClick={() => setTableEditor({})}
           style={{
             padding: '10px 20px', borderRadius: 99, border: 'none',
-            background: 'linear-gradient(135deg,#c8a2a8,#e8c4a8)', color: '#fff',
+            background: 'linear-gradient(135deg,#c8a2a8,#FBDCE6)', color: '#fff',
             cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit', fontSize: '0.9rem',
             boxShadow: '0 2px 8px rgba(200,130,100,0.25)',
           }}
@@ -450,16 +450,16 @@ export default function Tables() {
         <div style={{
           textAlign: 'center', padding: '60px 20px',
           background: 'rgba(240,228,216,0.3)', borderRadius: 16,
-          border: '2px dashed rgba(200,162,168,0.35)',
+          border: '2px dashed rgba(207,165,181,0.35)',
         }}>
           <div style={{ fontSize: '3rem', marginBottom: 12 }}>🪑</div>
-          <h3 style={{ fontFamily: 'Georgia,serif', color: '#2c2420', margin: '0 0 8px' }}>Nessun tavolo ancora</h3>
+          <h3 style={{ fontFamily: 'Georgia,serif', color: '#1B1B1B', margin: '0 0 8px' }}>Nessun tavolo ancora</h3>
           <p style={{ color: '#9a8070', margin: '0 0 20px' }}>Crea il primo tavolo per iniziare a sistemare gli ospiti</p>
           <button
             onClick={() => setTableEditor({})}
             style={{
               padding: '12px 28px', borderRadius: 99, border: 'none',
-              background: 'linear-gradient(135deg,#c8a2a8,#e8c4a8)', color: '#fff',
+              background: 'linear-gradient(135deg,#c8a2a8,#FBDCE6)', color: '#fff',
               cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit',
             }}
           >
@@ -478,9 +478,9 @@ export default function Tables() {
           <div
             key={table.id}
             style={{
-              background: selectedTable?.id === table.id ? 'rgba(200,162,168,0.08)' : 'rgba(255,255,255,0.7)',
+              background: selectedTable?.id === table.id ? 'rgba(207,165,181,0.08)' : 'rgba(255,255,255,0.7)',
               borderRadius: 16,
-              border: `1.5px solid ${selectedTable?.id === table.id ? 'rgba(200,162,168,0.5)' : 'rgba(200,162,168,0.2)'}`,
+              border: `1.5px solid ${selectedTable?.id === table.id ? 'rgba(207,165,181,0.5)' : 'rgba(207,165,181,0.2)'}`,
               padding: 8,
               transition: 'all 0.2s',
               boxShadow: selectedTable?.id === table.id ? '0 4px 20px rgba(200,130,100,0.12)' : '0 2px 8px rgba(0,0,0,0.04)',
@@ -509,7 +509,7 @@ export default function Tables() {
                       padding: '4px 6px', borderRadius: 6, cursor: 'pointer',
                       transition: 'background 0.15s',
                     }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(200,162,168,0.1)'}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(207,165,181,0.1)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
                     {/* pallino stato */}
@@ -525,7 +525,7 @@ export default function Tables() {
                     {/* nome */}
                     <span style={{
                       fontSize: '0.8rem',
-                      color: guest ? '#2c2420' : '#c8b8a8',
+                      color: guest ? '#1B1B1B' : '#c8b8a8',
                       fontStyle: guest ? 'normal' : 'italic',
                       flex: 1,
                       lineHeight: 1.3,
@@ -542,7 +542,7 @@ export default function Tables() {
               onClick={() => setTableEditor(table)}
               style={{
                 display: 'block', width: '100%', padding: '7px', marginTop: 4,
-                borderRadius: 8, border: '1px solid rgba(200,162,168,0.3)',
+                borderRadius: 8, border: '1px solid rgba(207,165,181,0.3)',
                 background: 'none', cursor: 'pointer', color: '#9a8070',
                 fontSize: '0.78rem', fontFamily: 'inherit',
               }}
@@ -563,10 +563,10 @@ export default function Tables() {
           <div style={{
             marginTop: 24, padding: 20,
             background: 'rgba(255,255,255,0.85)', borderRadius: 16,
-            border: '1px solid rgba(200,162,168,0.25)',
+            border: '1px solid rgba(207,165,181,0.25)',
             boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
           }}>
-            <h3 style={{ fontFamily: 'Georgia,serif', color: '#2c2420', margin: '0 0 12px', fontSize: '1rem' }}>
+            <h3 style={{ fontFamily: 'Georgia,serif', color: '#1B1B1B', margin: '0 0 12px', fontSize: '1rem' }}>
               {t.name} — Ospiti assegnati ({assigned.length}/{t.seats})
             </h3>
             {assigned.length === 0 ? (
@@ -579,7 +579,7 @@ export default function Tables() {
                     padding: '5px 10px', borderRadius: 99,
                     background: `${rsvpColor(g.rsvp_status)}22`,
                     border: `1px solid ${rsvpColor(g.rsvp_status)}55`,
-                    fontSize: '0.82rem', color: '#2c2420',
+                    fontSize: '0.82rem', color: '#1B1B1B',
                   }}>
                     <span style={{ width: 7, height: 7, borderRadius: '50%', background: rsvpColor(g.rsvp_status) }} />
                     {g.name}
@@ -611,7 +611,7 @@ export default function Tables() {
             background: 'rgba(255,248,240,0.9)', borderRadius: 16,
             border: '1px solid rgba(232,196,168,0.35)',
           }}>
-            <h3 style={{ fontFamily: 'Georgia,serif', color: '#2c2420', margin: '0 0 10px', fontSize: '0.95rem' }}>
+            <h3 style={{ fontFamily: 'Georgia,serif', color: '#1B1B1B', margin: '0 0 10px', fontSize: '0.95rem' }}>
               Ospiti senza posto ({unassigned.length})
             </h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>

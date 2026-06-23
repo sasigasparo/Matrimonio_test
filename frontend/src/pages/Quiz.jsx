@@ -10,9 +10,9 @@ const TENANT = { 'X-Matrimonio-Slug': WEDDING_CONFIG.slug }
    qui restano solo i dati "di forma" (colori, griglia cruciverba, ecc.)
    ═══════════════════════════════════════════════════════════════════ */
 
-const META_SPOSO  = { id: 'sposo',  emoji: '🤵', color: '#5a7a9c', bg: 'rgba(90,122,156,0.1)' }
-const META_SPOSA  = { id: 'sposa',  emoji: '👰', color: '#c8826a', bg: 'rgba(200,130,106,0.1)' }
-const META_CRUCIV = { id: 'cruciv', emoji: '📝', color: '#8a9e8c', bg: 'rgba(138,158,140,0.1)' }
+const META_SPOSO  = { id: 'sposo',  emoji: '🤵', color: '#A63D63', bg: 'rgba(90,122,156,0.1)' }
+const META_SPOSA  = { id: 'sposa',  emoji: '👰', color: '#C76B8B', bg: 'rgba(199,107,139,0.1)' }
+const META_CRUCIV = { id: 'cruciv', emoji: '📝', color: '#43A047', bg: 'rgba(67,160,71,0.1)' }
 
 // Le parole del cruciverba sono nomi propri (Marco, Sofia, Napoli, Lara, Daniele, Cruise):
 // restano identiche in entrambe le lingue, cambia solo il testo dell'indizio (tradotto).
@@ -106,12 +106,12 @@ function QuizGame({ meta, domande, playerName, onFinish }) {
 
   const optColors = (i) => {
     if (!answered) return {
-      bg: 'var(--white)', border: '2px solid rgba(200,162,168,0.25)',
+      bg: 'var(--white)', border: '2px solid rgba(207,165,181,0.25)',
       color: 'var(--charcoal)',
     }
-    if (i === q.corretta) return { bg: 'rgba(138,158,140,0.15)', border: '2px solid #8a9e8c', color: '#2d5a2e' }
-    if (i === selected)   return { bg: 'rgba(200,130,106,0.12)', border: '2px solid #c8826a', color: '#8b3a2a' }
-    return { bg: 'var(--ivory)', border: '2px solid rgba(200,162,168,0.15)', color: 'var(--warm-gray)' }
+    if (i === q.corretta) return { bg: 'rgba(67,160,71,0.15)', border: '2px solid #43A047', color: '#2d5a2e' }
+    if (i === selected)   return { bg: 'rgba(199,107,139,0.12)', border: '2px solid #C76B8B', color: '#A63D63' }
+    return { bg: 'var(--ivory)', border: '2px solid rgba(207,165,181,0.15)', color: 'var(--warm-gray)' }
   }
 
   return (
@@ -162,7 +162,7 @@ function QuizGame({ meta, domande, playerName, onFinish }) {
             >
               <span style={{
                 width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
-                background: answered && i === q.corretta ? '#8a9e8c' : answered && i === selected ? '#c8826a' : 'rgba(200,162,168,0.2)',
+                background: answered && i === q.corretta ? '#43A047' : answered && i === selected ? '#C76B8B' : 'rgba(207,165,181,0.2)',
                 color: answered && (i === q.corretta || i === selected) ? '#fff' : 'var(--warm-gray)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '.75rem', fontWeight: 700,
@@ -267,9 +267,9 @@ function CruciverbGame({ playerName, onFinish }) {
       fontFamily: 'var(--font-serif)', textTransform: 'uppercase',
       borderRadius: 4, cursor: 'text', transition: 'background 0.2s',
     }
-    if (s === 'correct') return { ...base, background: 'rgba(138,158,140,0.3)', color: '#2d5a2e', border: '1.5px solid #8a9e8c' }
-    if (s === 'wrong')   return { ...base, background: 'rgba(200,130,106,0.2)', color: '#8b3a2a', border: '1.5px solid #c8826a' }
-    return { ...base, background: 'rgba(200,162,168,0.12)', color: 'var(--charcoal)', border: '1.5px solid rgba(200,162,168,0.3)' }
+    if (s === 'correct') return { ...base, background: 'rgba(67,160,71,0.3)', color: '#2d5a2e', border: '1.5px solid #43A047' }
+    if (s === 'wrong')   return { ...base, background: 'rgba(199,107,139,0.2)', color: '#A63D63', border: '1.5px solid #C76B8B' }
+    return { ...base, background: 'rgba(207,165,181,0.12)', color: 'var(--charcoal)', border: '1.5px solid rgba(207,165,181,0.3)' }
   }
 
   const orizzontali = parole.filter(p => p.dir === 'h').sort((a, b) => a.numero - b.numero)
@@ -350,7 +350,7 @@ function CruciverbGame({ playerName, onFinish }) {
               <span style={{ color: META_CRUCIV.color, fontWeight: 700, flexShrink: 0 }}>{p.numero}.</span>
               <span style={{ color: 'var(--charcoal)' }}>{t(`quiz.cruciverba.clues.${p.numero}`)}</span>
               {checked && (
-                <span style={{ marginLeft: 'auto', color: isWordCorrect(p, inputs) ? '#8a9e8c' : '#c8826a' }}>
+                <span style={{ marginLeft: 'auto', color: isWordCorrect(p, inputs) ? '#43A047' : '#C76B8B' }}>
                   {isWordCorrect(p, inputs) ? '✓' : '✕'}
                 </span>
               )}
@@ -374,7 +374,7 @@ function CruciverbGame({ playerName, onFinish }) {
               <span style={{ color: META_CRUCIV.color, fontWeight: 700, flexShrink: 0 }}>{p.numero}.</span>
               <span style={{ color: 'var(--charcoal)' }}>{t(`quiz.cruciverba.clues.${p.numero}`)}</span>
               {checked && (
-                <span style={{ marginLeft: 'auto', color: isWordCorrect(p, inputs) ? '#8a9e8c' : '#c8826a' }}>
+                <span style={{ marginLeft: 'auto', color: isWordCorrect(p, inputs) ? '#43A047' : '#C76B8B' }}>
                   {isWordCorrect(p, inputs) ? '✓' : '✕'}
                 </span>
               )}
@@ -390,7 +390,7 @@ function CruciverbGame({ playerName, onFinish }) {
       ) : (
         <div style={{ textAlign: 'center' }}>
           <div style={{
-            background: 'rgba(138,158,140,0.1)', border: '1.5px solid rgba(138,158,140,0.3)',
+            background: 'rgba(67,160,71,0.1)', border: '1.5px solid rgba(67,160,71,0.3)',
             borderRadius: 'var(--radius-lg)', padding: '20px 24px', marginBottom: 16,
           }}>
             <div style={{ fontSize: '2.5rem', marginBottom: 6 }}>
@@ -507,14 +507,14 @@ function Leaderboard({ activeId, gamesMeta, onClose }) {
               display: 'flex', alignItems: 'center', gap: 14,
               padding: '12px 16px', borderRadius: 'var(--radius-md)',
               background: i === 0 ? 'rgba(200,169,106,0.12)' : i === 1 ? 'rgba(180,180,180,0.1)' : i === 2 ? 'rgba(160,88,64,0.08)' : 'var(--ivory)',
-              border: i === 0 ? '1.5px solid rgba(200,169,106,0.4)' : '1.5px solid rgba(200,162,168,0.15)',
+              border: i === 0 ? '1.5px solid rgba(200,169,106,0.4)' : '1.5px solid rgba(207,165,181,0.15)',
             }}>
               <div style={{
                 width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                background: i === 0 ? 'rgba(200,169,106,0.25)' : i === 1 ? 'rgba(180,180,180,0.2)' : i === 2 ? 'rgba(160,88,64,0.15)' : 'rgba(200,162,168,0.12)',
+                background: i === 0 ? 'rgba(200,169,106,0.25)' : i === 1 ? 'rgba(180,180,180,0.2)' : i === 2 ? 'rgba(160,88,64,0.15)' : 'rgba(207,165,181,0.12)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: i < 3 ? '1rem' : '.8rem', fontWeight: 700,
-                color: i === 0 ? '#c8a96a' : i === 1 ? '#888' : i === 2 ? '#a05840' : 'var(--warm-gray)',
+                color: i === 0 ? '#C9A36A' : i === 1 ? '#888' : i === 2 ? '#a05840' : 'var(--warm-gray)',
               }}>
                 {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}
               </div>

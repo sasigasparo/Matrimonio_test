@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Images, MoreVertical, Plus, Camera, ImagePlus, Film, Mic, Send, X, UserRound, Pencil, Trash2, ChevronLeft } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { WEDDING_CONFIG } from '../config/wedding'
@@ -232,6 +233,9 @@ export default function Chat() {
     } catch { toast.error('Errore eliminazione') }
   }
 
+  // Real participant count: distinct senders (not a fabricated "online" number).
+  const participants = new Set(messages.map(m => m.guest_name).filter(n => n && n !== 'Ospite')).size
+
   const grouped = []
   let lastDate = null
   for (const msg of messages) {
@@ -249,6 +253,8 @@ export default function Chat() {
         @keyframes msgIn { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform:none } }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
         @keyframes namePop { from { opacity:0; transform: scale(0.95) } to { opacity:1; transform: scale(1) } }
+        @keyframes livePulse { 0%,100%{ transform: scale(1); opacity:1 } 50%{ transform: scale(1.25); opacity:.7 } }
+        @media (prefers-reduced-motion: reduce) { *{ animation: none !important } }
       `}</style>
 
       {nameModalMode !== 'hidden' && (
@@ -263,24 +269,46 @@ export default function Chat() {
 
       {/* Header */}
       <div style={{
-        display: 'flex', alignItems: 'center', gap: 10,
-        padding: 'env(safe-area-inset-top) 10px 0 14px',
-        background: 'var(--white)', borderBottom: '1px solid rgba(200,162,168,0.2)',
-        flexShrink: 0, boxShadow: '0 1px 8px rgba(0,0,0,0.04)',
-        minHeight: 60,
+        display: 'flex', alignItems: 'center', gap: 11,
+        padding: 'calc(env(safe-area-inset-top) + 9px) 10px 9px 14px',
+        background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(16px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+        borderBottom: '1px solid var(--hairline)',
+        flexShrink: 0, boxShadow: '0 2px 14px rgba(199,107,139,0.07)',
+        minHeight: 62, position: 'relative', zIndex: 5,
       }}>
+        <button
+          onClick={() => navigate('/')}
+          aria-label="Torna alla home"
+          style={{
+            width: 36, height: 36, borderRadius: '50%', border: 'none', flexShrink: 0,
+            background: 'transparent', color: 'var(--charcoal)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: -4,
+            transition: 'background 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(199,107,139,0.1)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+        ><ChevronLeft size={24} /></button>
         <div style={{
-          width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
-          background: 'linear-gradient(135deg, var(--rose), var(--blush))',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
+          width: 42, height: 42, borderRadius: '50%', flexShrink: 0,
+          background: 'linear-gradient(150deg, #FBCBDD, var(--rose))',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 19,
+          boxShadow: '0 3px 10px rgba(199,107,139,0.30)', border: '2px solid #fff',
         }}>💍</div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: 'Georgia, serif', fontSize: 16, fontWeight: 400, color: 'var(--charcoal)' }}>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: 17, fontWeight: 600, color: 'var(--charcoal)', lineHeight: 1.15 }}>
             {WEDDING_CONFIG.couple.displayName}
           </div>
-          <div style={{ fontSize: 11, color: 'var(--sage)' }}>
-            {messages.length} messaggi · {WEDDING_CONFIG.dateLabel}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11.5, color: 'var(--warm-gray)', marginTop: 1 }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+              <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--sage)', boxShadow: '0 0 0 3px rgba(67,160,71,0.18)', animation: 'livePulse 2.4s ease-in-out infinite' }} />
+              {participants > 0
+                ? `${participants} ${participants === 1 ? 'partecipante' : 'partecipanti'}`
+                : 'Chat degli sposi'}
+            </span>
+            <span aria-hidden="true">·</span>
+            <span>{messages.length} {messages.length === 1 ? 'messaggio' : 'messaggi'}</span>
           </div>
         </div>
 
@@ -290,8 +318,8 @@ export default function Chat() {
             title={activeName ? 'Cambia il tuo nome' : 'Scegli il tuo nome'}
             style={{
               display: 'flex', alignItems: 'center', gap: 5,
-              background: activeName ? 'rgba(200,130,106,0.1)' : 'var(--rose)',
-              border: activeName ? '1.5px solid rgba(200,130,106,0.35)' : 'none',
+              background: activeName ? 'rgba(199,107,139,0.1)' : 'var(--rose)',
+              border: activeName ? '1.5px solid rgba(199,107,139,0.35)' : 'none',
               borderRadius: 99,
               padding: activeName ? '5px 10px 5px 8px' : '6px 12px',
               cursor: 'pointer', flexShrink: 0, transition: 'all 0.2s',
@@ -299,25 +327,27 @@ export default function Chat() {
             }}
             onMouseEnter={e => {
               e.currentTarget.style.background = activeName
-                ? 'rgba(200,130,106,0.2)'
+                ? 'rgba(199,107,139,0.2)'
                 : 'color-mix(in srgb, var(--rose) 85%, black)'
             }}
             onMouseLeave={e => {
               e.currentTarget.style.background = activeName
-                ? 'rgba(200,130,106,0.1)'
+                ? 'rgba(199,107,139,0.1)'
                 : 'var(--rose)'
             }}
           >
-            <span style={{ fontSize: 13, flexShrink: 0 }}>{activeName ? '👤' : '✏️'}</span>
+            <span style={{ display: 'inline-flex', flexShrink: 0, color: activeName ? 'var(--rose-deep)' : '#fff' }}>
+              {activeName ? <UserRound size={14} /> : <Pencil size={14} />}
+            </span>
             {activeName ? (
               <>
                 <span style={{
-                  fontSize: 12, fontWeight: 600, color: 'var(--rose)',
+                  fontSize: 12, fontWeight: 600, color: 'var(--rose-deep)',
                   overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                 }}>
                   {activeName}
                 </span>
-                <span style={{ fontSize: 11, color: 'var(--warm-gray)', flexShrink: 0 }}>✎</span>
+                <Pencil size={11} style={{ color: 'var(--warm-gray)', flexShrink: 0 }} />
               </>
             ) : (
               <span style={{ fontSize: 12, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap' }}>
@@ -330,14 +360,14 @@ export default function Chat() {
         {authName && (
           <div style={{
             display: 'flex', alignItems: 'center', gap: 5,
-            background: 'rgba(200,130,106,0.1)',
-            border: '1.5px solid rgba(200,130,106,0.3)',
+            background: 'rgba(199,107,139,0.1)',
+            border: '1.5px solid rgba(199,107,139,0.3)',
             borderRadius: 99, padding: '5px 10px 5px 8px',
             maxWidth: 160, flexShrink: 0,
           }}>
-            <span style={{ fontSize: 13 }}>👤</span>
+            <UserRound size={14} style={{ color: 'var(--rose-deep)', flexShrink: 0 }} />
             <span style={{
-              fontSize: 12, fontWeight: 600, color: 'var(--rose)',
+              fontSize: 12, fontWeight: 600, color: 'var(--rose-deep)',
               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
               {user.name}
@@ -350,13 +380,13 @@ export default function Chat() {
           title="Rullino foto"
           style={{
             width: 36, height: 36, borderRadius: '50%', border: 'none',
-            background: 'rgba(200,130,106,0.1)', cursor: 'pointer',
+            background: 'rgba(199,107,139,0.1)', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 17, transition: 'background 0.2s', flexShrink: 0,
           }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(200,130,106,0.22)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(200,130,106,0.1)'}
-        >📷</button>
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(199,107,139,0.22)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(199,107,139,0.1)'}
+        ><Images size={18} style={{ color: 'var(--rose-deep)' }} /></button>
 
         <div style={{ position: 'relative', flexShrink: 0 }}>
           <button
@@ -364,14 +394,14 @@ export default function Chat() {
             title="Menu"
             style={{
               width: 36, height: 36, borderRadius: '50%', border: 'none',
-              background: showMenu ? 'rgba(200,130,106,0.15)' : 'transparent',
+              background: showMenu ? 'rgba(199,107,139,0.15)' : 'transparent',
               cursor: 'pointer', display: 'flex', alignItems: 'center',
               justifyContent: 'center', fontSize: 20, color: 'var(--warm-gray)',
               transition: 'background 0.2s',
             }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(200,130,106,0.1)'}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(199,107,139,0.1)'}
             onMouseLeave={e => { if (!showMenu) e.currentTarget.style.background = 'transparent' }}
-          >⋮</button>
+          ><MoreVertical size={19} /></button>
 
           {showMenu && (
             <>
@@ -380,15 +410,15 @@ export default function Chat() {
                 position: 'absolute', top: 40, right: 0, zIndex: 100,
                 background: 'var(--white)', borderRadius: 12,
                 boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
-                border: '1px solid rgba(200,162,168,0.2)',
+                border: '1px solid rgba(207,165,181,0.2)',
                 minWidth: 200, overflow: 'hidden',
                 animation: 'menuIn 0.15s ease-out',
               }}>
                 <style>{`@keyframes menuIn { from { opacity:0; transform:scale(0.95) translateY(-6px) } to { opacity:1; transform:none } }`}</style>
                 {[
-                  { icon: '📷', label: 'Rullino foto', action: () => { setShowReel(true); setShowMenu(false) } },
-                  { icon: '🎞️', label: 'Vai ai Ricordi', action: () => { setShowMenu(false); navigate('/gallery') } },
-                  ...(!authName ? [{ icon: '✏️', label: 'Cambia il tuo nome', action: () => { setNameModalMode('edit'); setShowMenu(false) } }] : []),
+                  { icon: <Images size={18} />, label: 'Rullino foto', action: () => { setShowReel(true); setShowMenu(false) } },
+                  { icon: <Film size={18} />, label: 'Vai ai Ricordi', action: () => { setShowMenu(false); navigate('/gallery') } },
+                  ...(!authName ? [{ icon: <Pencil size={18} />, label: 'Cambia il tuo nome', action: () => { setNameModalMode('edit'); setShowMenu(false) } }] : []),
                 ].map(item => (
                   <button
                     key={item.label}
@@ -398,13 +428,13 @@ export default function Chat() {
                       background: 'none', cursor: 'pointer', textAlign: 'left',
                       display: 'flex', alignItems: 'center', gap: 12,
                       color: 'var(--charcoal)', fontSize: 14,
-                      borderBottom: '1px solid rgba(200,162,168,0.1)',
+                      borderBottom: '1px solid rgba(207,165,181,0.1)',
                       transition: 'background 0.15s',
                     }}
                     onMouseEnter={e => e.currentTarget.style.background = 'var(--ivory)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'none'}
                   >
-                    <span style={{ fontSize: 18 }}>{item.icon}</span>
+                    <span style={{ display: 'inline-flex', color: 'var(--rose-deep)' }}>{item.icon}</span>
                     {item.label}
                   </button>
                 ))}
@@ -418,17 +448,25 @@ export default function Chat() {
       <div style={{
         flex: 1, overflowY: 'auto', padding: '16px 12px',
         display: 'flex', flexDirection: 'column', gap: 10,
-        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e8c4a8' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        background: 'radial-gradient(circle at 1px 1px, rgba(199,107,139,0.07) 1px, transparent 0) 0 0 / 22px 22px, linear-gradient(180deg, var(--bg), #FFEFF4)',
       }}>
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', padding: 40 }}>
             <div className="spinner" />
           </div>
         ) : grouped.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--warm-gray)' }}>
-            <div style={{ fontSize: '3rem', marginBottom: 12 }}>💌</div>
-            <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: 15 }}>
-              Sii il primo a lasciare un messaggio agli sposi!
+          <div style={{ margin: 'auto', textAlign: 'center', padding: '40px 24px', color: 'var(--warm-gray)', maxWidth: 320 }}>
+            <div style={{
+              width: 72, height: 72, margin: '0 auto 16px', borderRadius: '50%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: 'linear-gradient(150deg, var(--rose-soft), var(--blush))',
+              boxShadow: '0 8px 24px rgba(199,107,139,0.18)', fontSize: 30,
+            }}>💌</div>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: 'var(--charcoal)', margin: '0 0 6px' }}>
+              Nessun messaggio… ancora
+            </h2>
+            <p style={{ fontSize: 14, lineHeight: 1.55, margin: 0 }}>
+              Sii il primo a lasciare un pensiero, una foto o un vocale agli sposi 💍
             </p>
           </div>
         ) : grouped.map((item, i) =>
@@ -451,22 +489,22 @@ export default function Chat() {
       {photoPreview && (
         <div style={{
           padding: '12px 12px calc(12px + env(safe-area-inset-bottom)) 12px', background: 'var(--cream)',
-          borderTop: '1px solid rgba(200,162,168,0.2)',
+          borderTop: '1px solid rgba(207,165,181,0.2)',
           display: 'flex', alignItems: 'center', gap: 12,
         }}>
           <div style={{ position: 'relative', flexShrink: 0 }}>
-            <img src={photoPreview} style={{ height: 70, width: 70, borderRadius: 8, objectFit: 'cover' }} />
+            <img src={photoPreview} style={{ height: 72, width: 72, borderRadius: 14, objectFit: 'cover', boxShadow: 'var(--shadow-sm)' }} />
             <button onClick={() => { setPhotoPreview(null); setPhotoFile(null) }}
+              aria-label="Rimuovi foto"
               style={{
                 position: 'absolute', top: -8, right: -8,
-                background: 'var(--rose)', border: 'none',
-                borderRadius: '50%', width: 24, height: 24,
-                cursor: 'pointer', color: '#fff', fontSize: 14,
+                background: 'var(--rose)', border: '2px solid #fff',
+                borderRadius: '50%', width: 26, height: 26,
+                cursor: 'pointer', color: '#fff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+                boxShadow: '0 2px 8px rgba(199,107,139,0.4)'
               }}
-              title="Rimuovi foto"
-            >✕</button>
+            ><X size={14} /></button>
           </div>
           <input
             className="input" placeholder="Aggiungi didascalia…"
@@ -474,13 +512,13 @@ export default function Chat() {
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
             style={{ flex: 1, fontSize: 16 }}
           />
-          <button onClick={send} disabled={sending} style={{
-            width: 38, height: 38, borderRadius: '50%', border: 'none',
+          <button onClick={send} disabled={sending} aria-label="Invia foto" style={{
+            width: 40, height: 40, borderRadius: '50%', border: 'none',
             background: 'var(--rose)', color: '#fff', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 16, flexShrink: 0, opacity: sending ? 0.6 : 1,
-            transition: 'all 0.2s',
-          }}>➤</button>
+            flexShrink: 0, opacity: sending ? 0.6 : 1, transition: 'all 0.2s',
+            boxShadow: '0 4px 14px rgba(199,107,139,0.4)',
+          }}><Send size={17} style={{ marginLeft: -1 }} /></button>
         </div>
       )}
 
@@ -488,10 +526,10 @@ export default function Chat() {
       {videoFile && (
         <div style={{
           padding: '10px 12px calc(10px + env(safe-area-inset-bottom)) 12px', background: 'var(--cream)',
-          borderTop: '1px solid rgba(200,162,168,0.2)',
+          borderTop: '1px solid rgba(207,165,181,0.2)',
           display: 'flex', alignItems: 'center', gap: 12,
         }}>
-          <span style={{ fontSize: 22, flexShrink: 0 }}>🎬</span>
+          <span style={{ width: 38, height: 38, borderRadius: 11, flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(199,107,139,0.14)', color: 'var(--rose-deep)' }}><Film size={20} /></span>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--charcoal)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {videoFile.name}
@@ -531,12 +569,12 @@ export default function Chat() {
       {audioBlob && !recording && (
         <div style={{
           padding: '10px 12px calc(10px + env(safe-area-inset-bottom)) 12px', background: 'var(--cream)',
-          borderTop: '1px solid rgba(200,162,168,0.2)',
+          borderTop: '1px solid rgba(207,165,181,0.2)',
           display: 'flex', alignItems: 'center', gap: 12,
         }}>
-          <span style={{ fontSize: 18, flexShrink: 0 }}>🎙️</span>
+          <span style={{ width: 38, height: 38, borderRadius: 11, flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(199,107,139,0.14)', color: 'var(--rose-deep)' }}><Mic size={18} /></span>
           <div style={{ flex: 1 }}>
-            <span style={{ fontSize: 12, color: 'var(--charcoal)', fontWeight: 500 }}>
+            <span style={{ fontSize: 12.5, color: 'var(--charcoal)', fontWeight: 600 }}>
               Messaggio vocale pronto
             </span>
             <p style={{ fontSize: 11, color: 'var(--warm-gray)', margin: '2px 0 0 0' }}>
@@ -545,10 +583,10 @@ export default function Chat() {
           </div>
           <button onClick={() => setAudioBlob(null)} style={{
             background: 'none', border: 'none', cursor: 'pointer',
-            color: 'var(--warm-gray)', fontSize: 12, padding: '4px 8px',
-            borderRadius: 4, transition: 'all 0.2s'
+            color: 'var(--warm-gray)', fontSize: 12, padding: '4px 10px',
+            borderRadius: 'var(--radius-pill)', transition: 'all 0.2s'
           }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(200,130,106,0.1)'}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(199,107,139,0.1)'}
             onMouseLeave={e => e.currentTarget.style.background = 'none'}
             title="Scarta"
           >
@@ -570,7 +608,7 @@ export default function Chat() {
         <div style={{
           display: 'flex', alignItems: 'flex-end', gap: 8,
           padding: '10px 12px calc(10px + env(safe-area-inset-bottom)) 12px',
-          background: 'var(--white)', borderTop: '1px solid rgba(200,162,168,0.2)',
+          background: 'var(--white)', borderTop: '1px solid rgba(207,165,181,0.2)',
           flexShrink: 0,
         }}>
           <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileChange} />
@@ -581,14 +619,15 @@ export default function Chat() {
               onClick={() => { if (!ensureName()) return; setShowPhotoMenu(v => !v) }}
               style={{
                 width: 38, height: 38, borderRadius: '50%',
-                border: `1.5px solid ${showPhotoMenu ? 'var(--rose)' : 'rgba(200,162,168,0.3)'}`,
-                background: showPhotoMenu ? 'rgba(200,130,106,0.12)' : 'var(--ivory)',
+                border: `1.5px solid ${showPhotoMenu ? 'var(--rose)' : 'rgba(207,165,181,0.3)'}`,
+                background: showPhotoMenu ? 'rgba(199,107,139,0.12)' : 'var(--ivory)',
                 cursor: 'pointer', display: 'flex',
                 alignItems: 'center', justifyContent: 'center', fontSize: 16,
                 transition: 'all 0.2s',
+                color: showPhotoMenu ? 'var(--rose-deep)' : 'var(--warm-gray)',
               }}
-              title="Foto"
-            >📷</button>
+              aria-label="Aggiungi foto o video"
+            ><Plus size={20} style={{ transform: showPhotoMenu ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s' }} /></button>
 
             {showPhotoMenu && (
               <>
@@ -597,14 +636,14 @@ export default function Chat() {
                   position: 'absolute', bottom: 46, left: 0, zIndex: 100,
                   background: 'var(--white)', borderRadius: 14,
                   boxShadow: '0 8px 32px rgba(0,0,0,0.14)',
-                  border: '1px solid rgba(200,162,168,0.2)',
+                  border: '1px solid rgba(207,165,181,0.2)',
                   overflow: 'hidden', minWidth: 200,
                   animation: 'menuIn 0.15s ease-out',
                 }}>
                   {[
-                    { icon: '📸', label: 'Scatta una foto', action: () => { setShowPhotoMenu(false); setShowCamera(true) } },
-                    { icon: '🖼️', label: 'Carica dalla libreria', action: () => { setShowPhotoMenu(false); fileInputRef.current?.click() } },
-                    { icon: '🎬', label: 'Carica un video', action: () => { setShowPhotoMenu(false); videoInputRef.current?.click() } },
+                    { icon: <Camera size={17} />, label: 'Scatta una foto', action: () => { setShowPhotoMenu(false); setShowCamera(true) } },
+                    { icon: <ImagePlus size={17} />, label: 'Carica dalla libreria', action: () => { setShowPhotoMenu(false); fileInputRef.current?.click() } },
+                    { icon: <Film size={17} />, label: 'Carica un video', action: () => { setShowPhotoMenu(false); videoInputRef.current?.click() } },
                   ].map((item, idx, arr) => (
                     <button
                       key={item.label}
@@ -614,13 +653,13 @@ export default function Chat() {
                         background: 'none', cursor: 'pointer', textAlign: 'left',
                         display: 'flex', alignItems: 'center', gap: 10,
                         color: 'var(--charcoal)', fontSize: 13,
-                        borderBottom: idx < arr.length - 1 ? '1px solid rgba(200,162,168,0.1)' : 'none',
+                        borderBottom: idx < arr.length - 1 ? '1px solid rgba(207,165,181,0.1)' : 'none',
                         transition: 'background 0.15s',
                       }}
                       onMouseEnter={e => e.currentTarget.style.background = 'var(--ivory)'}
                       onMouseLeave={e => e.currentTarget.style.background = 'none'}
                     >
-                      <span style={{ fontSize: 17 }}>{item.icon}</span>
+                      <span style={{ display: 'inline-flex', color: 'var(--rose-deep)' }}>{item.icon}</span>
                       {item.label}
                     </button>
                   ))}
@@ -637,33 +676,33 @@ export default function Chat() {
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
             onClick={() => ensureName()}
             style={{
-              flex: 1, border: '1.5px solid rgba(200,162,168,0.25)',
+              flex: 1, border: '1.5px solid rgba(207,165,181,0.25)',
               borderRadius: 20, padding: '9px 14px', fontSize: 16,
               fontFamily: 'var(--font-sans)', resize: 'none', lineHeight: 1.4,
               background: 'var(--ivory)', color: 'var(--charcoal)', maxHeight: 120,
               outline: 'none', transition: 'border-color 0.2s',
             }}
-            onFocus={e => { e.target.style.borderColor = 'var(--rose)'; e.target.style.boxShadow = '0 0 0 3px rgba(200,130,106,0.1)' }}
-            onBlur={e => { e.target.style.borderColor = 'rgba(200,162,168,0.25)'; e.target.style.boxShadow = 'none' }}
+            onFocus={e => { e.target.style.borderColor = 'var(--rose)'; e.target.style.boxShadow = '0 0 0 3px rgba(199,107,139,0.1)' }}
+            onBlur={e => { e.target.style.borderColor = 'rgba(207,165,181,0.25)'; e.target.style.boxShadow = 'none' }}
             rows={1}
           />
 
           {text.trim() || photoFile ? (
-            <button onClick={send} disabled={sending} style={{
-              width: 38, height: 38, borderRadius: '50%', border: 'none',
+            <button onClick={send} disabled={sending} aria-label="Invia" style={{
+              width: 40, height: 40, borderRadius: '50%', border: 'none',
               background: 'var(--rose)', color: '#fff', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 16, flexShrink: 0, transition: 'all 0.2s',
-              opacity: sending ? 0.6 : 1,
-            }}>➤</button>
+              flexShrink: 0, transition: 'all 0.2s', opacity: sending ? 0.6 : 1,
+              boxShadow: '0 4px 14px rgba(199,107,139,0.4)',
+            }}><Send size={17} style={{ marginLeft: -1 }} /></button>
           ) : (
-            <button onClick={startRecording} style={{
-              width: 38, height: 38, borderRadius: '50%',
-              border: '1.5px solid rgba(200,162,168,0.3)',
-              background: 'var(--ivory)', cursor: 'pointer',
+            <button onClick={startRecording} aria-label="Registra messaggio vocale" style={{
+              width: 40, height: 40, borderRadius: '50%',
+              border: '1.5px solid var(--hairline)',
+              background: 'var(--ivory)', color: 'var(--rose-deep)', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 16, flexShrink: 0, transition: 'all 0.2s',
-            }} title="Registra messaggio vocale">🎙️</button>
+              flexShrink: 0, transition: 'all 0.2s',
+            }}><Mic size={18} /></button>
           )}
         </div>
       )}

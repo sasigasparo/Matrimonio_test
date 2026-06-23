@@ -4,7 +4,7 @@ export default function RecordingPill({ secs, onStop, onCancel }) {
     <div style={{
       display: 'flex', alignItems: 'center', gap: 10,
       padding: '8px 14px', background: 'var(--cream)',
-      borderTop: '1px solid rgba(200,162,168,0.2)',
+      borderTop: '1px solid rgba(207,165,181,0.2)',
     }}>
       <div style={{
         width: 10, height: 10, borderRadius: '50%', background: 'var(--rose)',

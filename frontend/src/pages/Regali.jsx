@@ -32,7 +32,7 @@ function CopyField({ label, value, mono = false }) {
     <div style={{
       display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
       padding: '12px 14px', borderRadius: 12,
-      background: 'rgba(255,255,255,0.65)', border: '1px solid rgba(200,162,168,0.25)',
+      background: 'rgba(255,255,255,0.65)', border: '1px solid rgba(207,165,181,0.25)',
     }}>
       <div style={{ minWidth: 0 }}>
         <div style={{ fontSize: '.7rem', letterSpacing: '.06em', textTransform: 'uppercase', color: 'var(--warm-gray)', marginBottom: 3 }}>
@@ -50,9 +50,9 @@ function CopyField({ label, value, mono = false }) {
       <button
         onClick={copy}
         style={{
-          flexShrink: 0, padding: '7px 12px', borderRadius: 8, border: 'none', cursor: 'pointer',
-          background: copied ? 'rgba(138,158,140,0.18)' : 'rgba(200,130,106,0.1)',
-          color: copied ? '#5a7a5c' : 'var(--rose)',
+          flexShrink: 0, padding: '8px 16px', borderRadius: 'var(--radius-pill)', border: 'none', cursor: 'pointer',
+          background: copied ? 'rgba(67,160,71,0.16)' : 'rgba(199,107,139,0.12)',
+          color: copied ? '#2e7d32' : 'var(--rose-deep)',
           fontSize: '.78rem', fontWeight: 600, whiteSpace: 'nowrap',
           transition: 'all .15s',
         }}
@@ -86,7 +86,7 @@ export default function Regali() {
 
         <div style={{
           background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(14px)',
-          border: '1px solid rgba(200,162,168,0.25)', borderRadius: 20,
+          border: '1px solid rgba(207,165,181,0.25)', borderRadius: 20,
           boxShadow: '0 16px 40px rgba(44,36,32,0.08)',
           padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 12,
         }}>

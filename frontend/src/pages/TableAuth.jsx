@@ -38,12 +38,12 @@ export default function TableAuth({ onSuccess }) {
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       gap: 20, padding: 24,
-      background: 'linear-gradient(135deg, var(--ivory,#faf6f0) 0%, var(--cream,#f5ede4) 100%)',
+      background: 'linear-gradient(135deg, var(--ivory,#faf6f0) 0%, var(--cream,#FCEDF2) 100%)',
     }}>
       <div style={{ fontSize: '2.8rem' }}>🪑</div>
       <h2 style={{
         fontFamily: 'Georgia, serif', fontSize: '1.7rem',
-        color: 'var(--charcoal,#2c2420)', margin: 0, textAlign: 'center',
+        color: 'var(--charcoal,#1B1B1B)', margin: 0, textAlign: 'center',
       }}>
         Area Tavoli
       </h2>
@@ -56,7 +56,7 @@ export default function TableAuth({ onSuccess }) {
         display: 'flex', flexDirection: 'column', gap: 14,
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--charcoal,#2c2420)' }}>
+          <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--charcoal,#1B1B1B)' }}>
             Password admin
           </label>
           <div style={{ position: 'relative', display: 'flex' }}>
@@ -70,7 +70,7 @@ export default function TableAuth({ onSuccess }) {
               style={{
                 width: '100%',
                 padding: '12px 44px 12px 14px',
-                border: `1.5px solid ${error ? '#fcc' : 'rgba(200,162,168,0.4)'}`,
+                border: `1.5px solid ${error ? '#fcc' : 'rgba(207,165,181,0.4)'}`,
                 borderRadius: 10, fontSize: '1rem',
                 fontFamily: 'inherit', outline: 'none',
                 background: '#fff',
@@ -130,7 +130,7 @@ export default function TableAuth({ onSuccess }) {
           disabled={loading || !pwd}
           style={{
             padding: '12px', borderRadius: 10, border: 'none',
-            background: 'linear-gradient(135deg,#c8a2a8,#e8c4a8)',
+            background: 'linear-gradient(135deg,#c8a2a8,#FBDCE6)',
             color: '#fff', fontWeight: 700, fontSize: '1rem',
             fontFamily: 'inherit', cursor: loading || !pwd ? 'not-allowed' : 'pointer',
             opacity: loading || !pwd ? 0.6 : 1,

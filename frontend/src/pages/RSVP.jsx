@@ -158,7 +158,7 @@ export default function Rsvp() {
                       style={{
                         padding: '20px 16px', borderRadius: 'var(--radius-md)',
                         border: rsvpStatus === opt.val ? '2px solid var(--rose)' : '2px solid var(--cream)',
-                        background: rsvpStatus === opt.val ? 'rgba(200,130,106,.08)' : 'var(--ivory)',
+                        background: rsvpStatus === opt.val ? 'rgba(199,107,139,.08)' : 'var(--ivory)',
                         cursor: 'pointer', transition: 'all .2s', textAlign: 'center',
                       }}
                     >
@@ -184,7 +184,7 @@ export default function Rsvp() {
                         style={{
                           padding: '14px 10px', borderRadius: 'var(--radius-md)',
                           border: dietary === opt.val ? '2px solid var(--rose)' : '2px solid var(--cream)',
-                          background: dietary === opt.val ? 'rgba(200,130,106,.08)' : 'var(--ivory)',
+                          background: dietary === opt.val ? 'rgba(199,107,139,.08)' : 'var(--ivory)',
                           cursor: 'pointer', transition: 'all .2s', textAlign: 'center',
                         }}
                       >
@@ -242,7 +242,7 @@ export default function Rsvp() {
                 <div style={{ fontSize: '.8rem', color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>{t('rsvp.totalGuests')}</div>
                 <div style={{ fontSize: '1.6rem', fontWeight: 600, color: 'var(--charcoal)' }}>{totalGuests}</div>
               </div>
-              <div className="card" style={{ padding: '12px 16px', flex: '1', minWidth: 140, background: 'rgba(200,130,106,.08)' }}>
+              <div className="card" style={{ padding: '12px 16px', flex: '1', minWidth: 140, background: 'rgba(199,107,139,.08)' }}>
                 <div style={{ fontSize: '.8rem', color: 'var(--warm-gray)', textTransform: 'uppercase', letterSpacing: '.04em' }}>{t('rsvp.confirmedCount')}</div>
                 <div style={{ fontSize: '1.6rem', fontWeight: 600, color: 'var(--rose)' }}>{confirmedCount}</div>
               </div>
@@ -262,7 +262,7 @@ export default function Rsvp() {
                       key={g.id}
                       style={{
                         borderBottom: idx < allGuests.length - 1 ? '1px solid var(--border-light)' : 'none',
-                        background: String(g.id) === selectedGuestId ? 'rgba(200,130,106,.05)' : 'transparent',
+                        background: String(g.id) === selectedGuestId ? 'rgba(199,107,139,.05)' : 'transparent',
                       }}
                     >
                       <td style={{ padding: '11px 16px', color: 'var(--charcoal)', fontWeight: String(g.id) === selectedGuestId ? 600 : 400 }}>
@@ -270,9 +270,9 @@ export default function Rsvp() {
                       </td>
                       <td style={{ padding: '11px 16px', textAlign: 'center' }}>
                         {g.rsvp_status === 'confirmed' ? (
-                          <span className="badge" style={{ background: 'rgba(138,158,140,.2)', color: '#2d6a4f' }}>{t('rsvp.statusConfirmed')}</span>
+                          <span className="badge" style={{ background: 'rgba(67,160,71,.2)', color: '#2d6a4f' }}>{t('rsvp.statusConfirmed')}</span>
                         ) : g.rsvp_status === 'declined' ? (
-                          <span className="badge" style={{ background: 'rgba(200,130,106,.2)', color: '#8b4513' }}>{t('rsvp.statusDeclined')}</span>
+                          <span className="badge" style={{ background: 'rgba(199,107,139,.16)', color: 'var(--rose-deep)' }}>{t('rsvp.statusDeclined')}</span>
                         ) : (
                           <span className="badge" style={{ background: 'var(--cream)', color: 'var(--warm-gray)' }}>{t('rsvp.statusPending')}</span>
                         )}

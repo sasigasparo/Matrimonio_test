@@ -11,6 +11,7 @@ export const translations = {
       tables: 'Tavoli',
       quiz: 'Quiz',
       regali: 'Regali',
+      more: 'Altro',
     },
 
     appShell: {
@@ -28,6 +29,9 @@ export const translations = {
 
     faq: {
       pageTitle: 'Domande frequenti',
+      subtitle: 'Tutto quello che vi serve sapere per il nostro giorno.',
+      searchPlaceholder: 'Cerca una domanda…',
+      noResults: 'Nessun risultato. Prova con altre parole.',
       allFilter: 'Tutte',
       categories: [
         {
@@ -291,6 +295,7 @@ export const translations = {
       today: 'Oggi',
       tomorrow: 'Domani',
       locale: 'it-IT',
+      countdownTitle: 'Al grande giorno',
       countdownDays: 'Giorni',
       countdownHours: 'Ore',
       countdownMinutes: 'Minuti',
@@ -415,6 +420,7 @@ export const translations = {
       tables: 'Tables',
       quiz: 'Quiz',
       regali: 'Gifts',
+      more: 'More',
     },
 
     appShell: {
@@ -432,6 +438,9 @@ export const translations = {
 
     faq: {
       pageTitle: 'Frequently Asked Questions',
+      subtitle: 'Everything you need to know about our day.',
+      searchPlaceholder: 'Search a question…',
+      noResults: 'No results. Try different words.',
       allFilter: 'All',
       categories: [
         {
@@ -695,6 +704,7 @@ export const translations = {
       today: 'Today',
       tomorrow: 'Tomorrow',
       locale: 'en-GB',
+      countdownTitle: 'Until the big day',
       countdownDays: 'Days',
       countdownHours: 'Hours',
       countdownMinutes: 'Minutes',

@@ -7,7 +7,7 @@ function InfoCard({ icon, titolo, desc }) {
   return (
     <div style={{
       background: 'var(--ivory)',
-      border: '1.5px solid rgba(200,162,168,.2)',
+      border: '1.5px solid rgba(207,165,181,.2)',
       borderRadius: 'var(--radius-md)',
       padding: '20px 22px',
       display: 'flex',
@@ -50,7 +50,7 @@ function LuogoCard({ luogo, showMap }) {
           <p style={{
             fontSize: '.88rem',
             color: 'var(--warm-gray)',
-            background: 'rgba(200,162,168,.1)',
+            background: 'rgba(207,165,181,.1)',
             borderRadius: 8,
             padding: '10px 14px',
             borderLeft: '3px solid var(--blush)',

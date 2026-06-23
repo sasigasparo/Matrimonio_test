@@ -54,7 +54,7 @@ export default function PhotoReelModal({ onClose }) {
 
       {loading ? (
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="spinner" style={{ borderColor: 'rgba(200,130,106,0.3)', borderTopColor: 'var(--rose)' }} />
+          <div className="spinner" style={{ borderColor: 'rgba(199,107,139,0.3)', borderTopColor: 'var(--rose)' }} />
         </div>
       ) : photos.length === 0 ? (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.35)' }}>
