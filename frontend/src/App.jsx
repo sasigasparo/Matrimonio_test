@@ -493,7 +493,7 @@ function AppShell() {
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {location.pathname !== '/login' && <div className="bottomnav-spacer" />}
+      {location.pathname !== '/login' && location.pathname !== '/chat' && <div className="bottomnav-spacer" />}
 
       {/* Bottom nav (mobile-primary). "More" opens the existing drawer. */}
       <BottomNav onMore={() => setDrawerOpen(true)} onNavigate={navigateWithTransition} />

@@ -35,15 +35,19 @@ export default function Chat() {
   const [audioBlob, setAudioBlob] = useState(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [pullDistance, setPullDistance] = useState(0)
+  const [isAtBottom, setIsAtBottom] = useState(true)
+  const [newMsgCount, setNewMsgCount] = useState(0)
   const mediaRef = useRef(null)
   const chunksRef = useRef([])
   const timerRef = useRef(null)
+  const pollingRef = useRef(null)
   const fileInputRef = useRef(null)
   const videoInputRef = useRef(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
   const messagesContainerRef = useRef(null)
   const touchStartYRef = useRef(null)
+  const lastMsgCountRef = useRef(0)
   const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 
   const myId = user?.id ?? null
@@ -51,7 +55,39 @@ export default function Chat() {
   const authName = user?.name && user.name !== 'Ospite' ? user.name : null
   const activeName = authName || guestName
 
+  const checkAtBottom = () => {
+    const el = messagesContainerRef.current
+    if (!el) return true
+    return el.scrollHeight - el.scrollTop - el.clientHeight < 80
+  }
+
+  const scrollToBottom = (smooth = true) => {
+    bottomRef.current?.scrollIntoView({ behavior: smooth ? 'smooth' : 'instant' })
+    setNewMsgCount(0)
+    setIsAtBottom(true)
+  }
+
   useEffect(() => { loadMessages() }, [])
+
+  // Auto-refresh ogni 30s
+  useEffect(() => {
+    pollingRef.current = setInterval(async () => {
+      try {
+        const res = await fetch(`${API}/messages/public`, { headers: tenantHeaders() })
+        const data = await res.json()
+        const incoming = data.reverse()
+        setMessages(prev => {
+          const added = incoming.length - lastMsgCountRef.current
+          if (added > 0 && !checkAtBottom()) {
+            setNewMsgCount(n => n + added)
+          }
+          lastMsgCountRef.current = incoming.length
+          return incoming
+        })
+      } catch { /* silenzioso */ }
+    }, 30000)
+    return () => clearInterval(pollingRef.current)
+  }, [])
 
   useEffect(() => {
     if (authLoading) return
@@ -63,8 +99,12 @@ export default function Chat() {
     }
   }, [authLoading])
 
+  // Scrolla in fondo solo se l'utente è già in fondo (non interrompere la lettura)
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (isAtBottom) {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+      setNewMsgCount(0)
+    }
   }, [messages])
 
   const handleTouchStart = e => {
@@ -93,11 +133,19 @@ export default function Chat() {
     touchStartYRef.current = null
   }
 
+  const handleScroll = () => {
+    const atBottom = checkAtBottom()
+    setIsAtBottom(atBottom)
+    if (atBottom) setNewMsgCount(0)
+  }
+
   const loadMessages = async () => {
     try {
       const res = await fetch(`${API}/messages/public`, { headers: tenantHeaders() })
       const data = await res.json()
-      setMessages(data.reverse())
+      const incoming = data.reverse()
+      lastMsgCountRef.current = incoming.length
+      setMessages(incoming)
     } catch { toast.error('Errore caricamento messaggi') }
     setLoading(false)
   }
@@ -165,12 +213,17 @@ export default function Chat() {
       const msg = await res.json()
       if (!msg.photo_url && photoPreview) msg.photo_url = photoPreview
       if (videoFile) msg._waitMinutes = estimateWaitMinutes(videoFile.size / (1024 * 1024))
-      setMessages(prev => [...prev, msg])
+      setMessages(prev => {
+        lastMsgCountRef.current = prev.length + 1
+        return [...prev, msg]
+      })
+      setIsAtBottom(true)
       setText('')
       setAudioBlob(null)
       setPhotoPreview(null)
       setPhotoFile(null)
       setVideoFile(null)
+      setTimeout(() => scrollToBottom(false), 50)
       inputRef.current?.focus()
     } catch (e) {
       toast.error('Errore invio: ' + e.message)
@@ -284,6 +337,8 @@ export default function Chat() {
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
         @keyframes namePop { from { opacity:0; transform: scale(0.95) } to { opacity:1; transform: scale(1) } }
         @keyframes livePulse { 0%,100%{ transform: scale(1); opacity:1 } 50%{ transform: scale(1.25); opacity:.7 } }
+        @keyframes spin { to { transform: rotate(360deg) } }
+        @keyframes slideUp { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform:none } }
         @media (prefers-reduced-motion: reduce) { *{ animation: none !important } }
       `}</style>
 
@@ -477,6 +532,7 @@ export default function Chat() {
       {/* Messages */}
       <div
         ref={messagesContainerRef}
+        onScroll={handleScroll}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -560,6 +616,32 @@ export default function Chat() {
             )
         )}
         <div ref={bottomRef} />
+
+        {/* Scroll-to-bottom FAB + badge nuovi messaggi */}
+        {!isAtBottom && (
+          <button
+            onClick={() => scrollToBottom()}
+            aria-label="Vai ai messaggi più recenti"
+            style={{
+              position: 'sticky', bottom: 16, alignSelf: 'center',
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: newMsgCount > 0 ? '8px 16px 8px 12px' : '10px',
+              borderRadius: 99, border: 'none', cursor: 'pointer',
+              background: 'var(--rose)', color: '#fff',
+              boxShadow: '0 4px 18px rgba(199,107,139,0.45)',
+              fontSize: 13, fontWeight: 600, zIndex: 10,
+              animation: 'slideUp 0.22s var(--ease-out-quart)',
+              transition: 'background 0.2s, box-shadow 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'var(--rose-deep)'; e.currentTarget.style.boxShadow = '0 6px 22px rgba(166,61,99,0.5)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--rose)'; e.currentTarget.style.boxShadow = '0 4px 18px rgba(199,107,139,0.45)' }}
+          >
+            {newMsgCount > 0
+              ? <><span>↓ {newMsgCount} nuov{newMsgCount === 1 ? 'o' : 'i'}</span></>
+              : <span style={{ fontSize: 16, lineHeight: 1 }}>↓</span>
+            }
+          </button>
+        )}
       </div>
 
       {/* Photo preview */}
