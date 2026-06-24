@@ -1,6 +1,6 @@
 import logging
 import os
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 from pydantic import BaseModel
 
 from auth_config import create_access_token
@@ -12,6 +12,19 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
 
 router = APIRouter()
 logger = logging.getLogger("wedding.auth")
+
+_guest_cache: dict = {}
+
+
+def _get_or_cache_guest(email: str, matrimonio_id: int) -> dict:
+    key = (email, matrimonio_id)
+    if key not in _guest_cache:
+        guest = get_guest_by_email(email, matrimonio_id)
+        if not guest:
+            name = "Amministratore" if "admin" in email else "Ospite"
+            guest = create_guest(name, email, matrimonio_id=matrimonio_id)
+        _guest_cache[key] = guest
+    return _guest_cache[key]
 
 
 class TokenOut(BaseModel):
@@ -43,7 +56,7 @@ async def me(request: Request):
 
 
 @router.post("/simple-login")
-async def simple_login(req: SimpleLoginRequest, request: Request):
+def simple_login(req: SimpleLoginRequest, request: Request, background_tasks: BackgroundTasks):
     """Simple password-only login. Admin gets is_admin=True if ADMIN_PASSWORD matches."""
     if ADMIN_PASSWORD and req.password == ADMIN_PASSWORD:
         is_admin = True
@@ -55,11 +68,7 @@ async def simple_login(req: SimpleLoginRequest, request: Request):
     matrimonio_id = resolve_matrimonio_id(request.headers.get(HEADER_NAME))
 
     email = "admin@wedding.local" if is_admin else "guest@wedding.local"
-    guest = get_guest_by_email(email, matrimonio_id)
-
-    if not guest:
-        name = "Amministratore" if is_admin else "Ospite"
-        guest = create_guest(name, email, matrimonio_id=matrimonio_id)
+    guest = _get_or_cache_guest(email, matrimonio_id)
 
     guest_id = guest["id"]
 
@@ -72,8 +81,9 @@ async def simple_login(req: SimpleLoginRequest, request: Request):
         "mid":      matrimonio_id,
     })
 
-    audit(email, "login", f"guest:{guest_id}", "Simple password login",
-          request.client.host if request.client else "", matrimonio_id)
+    client_ip = request.client.host if request.client else ""
+    background_tasks.add_task(audit, email, "login", f"guest:{guest_id}",
+                              "Simple password login", client_ip, matrimonio_id)
     logger.info("Guest logged in via simple login (guest:%s)", guest_id)
 
     return TokenOut(

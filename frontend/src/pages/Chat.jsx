@@ -481,10 +481,11 @@ export default function Chat() {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         style={{
-          flex: 1, overflowY: 'auto', padding: '16px 12px',
+          flex: 1, overflowY: 'auto', overscrollBehavior: 'contain',
+          padding: '16px 12px', WebkitOverscrollBehavior: 'contain',
           display: 'flex', flexDirection: 'column', gap: 10,
           background: 'radial-gradient(circle at 1px 1px, rgba(199,107,139,0.07) 1px, transparent 0) 0 0 / 22px 22px, linear-gradient(180deg, var(--bg), #FFEFF4)',
-          position: 'relative',
+          position: 'relative', touchAction: 'pan-y',
         }}>
         {/* Pull-to-refresh indicator */}
         {(pullDistance > 0 || isRefreshing) && (
