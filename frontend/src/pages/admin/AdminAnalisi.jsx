@@ -1,19 +1,19 @@
 import { StatCard } from './StatCard'
 
-export function AdminAnalisi({ dashboard, rsvpTimeline, timelineLoading, photos, messages, guests }) {
+export function AdminAnalisi({ t, dashboard, rsvpTimeline, timelineLoading, photos, messages, guests }) {
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:36 }}>
       {/* Funnel RSVP */}
       <div>
-        <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Funnel risposte</h3>
+        <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.rsvpFunnel}</h3>
         {dashboard && (() => {
           const total = dashboard.stats.guests_total || 1
           const responded = dashboard.stats.guests_confirmed + dashboard.stats.guests_declined
           const steps = [
-            { label:'Invitati registrati', value: dashboard.stats.guests_total, color:'var(--rose)' },
-            { label:'Inviti inviati',       value: dashboard.stats.invites_sent, color:'var(--gold)' },
-            { label:'Hanno risposto',       value: responded,                    color:'var(--blush)' },
-            { label:'Confermati',           value: dashboard.stats.guests_confirmed, color:'var(--sage)' },
+            { label: t.registered, value: dashboard.stats.guests_total, color:'var(--rose)' },
+            { label: t.invitesSent,       value: dashboard.stats.invites_sent, color:'var(--gold)' },
+            { label: t.responded,       value: responded,                    color:'var(--blush)' },
+            { label: t.confirmed,           value: dashboard.stats.guests_confirmed, color:'var(--sage)' },
           ]
           return (
             <div className="card" style={{ padding:'20px 24px', display:'flex', flexDirection:'column', gap:16 }}>
@@ -38,11 +38,11 @@ export function AdminAnalisi({ dashboard, rsvpTimeline, timelineLoading, photos,
 
       {/* Timeline RSVP */}
       <div>
-        <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Timeline risposte</h3>
-        {timelineLoading && <p style={{ color:'var(--warm-gray)' }}>⏳ Caricamento…</p>}
+        <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.rsvpTimeline}</h3>
+        {timelineLoading && <p style={{ color:'var(--warm-gray)' }}>⏳ Loading…</p>}
         {!timelineLoading && rsvpTimeline.length === 0 && (
           <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>
-            Nessuna risposta registrata ancora.
+            {t.noResponses}
           </div>
         )}
         {!timelineLoading && rsvpTimeline.length > 0 && (() => {
@@ -81,18 +81,18 @@ export function AdminAnalisi({ dashboard, rsvpTimeline, timelineLoading, photos,
       {/* Top contributor */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px,1fr))', gap:24 }}>
         <div>
-          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Top uploader foto</h3>
+          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.topPhotoUploadersTitle}</h3>
           {(() => {
             const guestMap = Object.fromEntries(guests.map(g => [g.id, g.name]))
             const counts = {}
             for (const p of photos) {
-              const name = p.guest_id ? (guestMap[p.guest_id] || `#${p.guest_id}`) : 'Anonimo'
+              const name = p.guest_id ? (guestMap[p.guest_id] || `#${p.guest_id}`) : t.anonymous
               counts[name] = (counts[name] || 0) + 1
             }
             const top = Object.entries(counts).sort(([,a],[,b]) => b-a).slice(0,5)
             const maxVal = top[0]?.[1] || 1
             return top.length === 0 ? (
-              <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>Nessuna foto ancora.</div>
+              <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>{t.noPhotosYet}</div>
             ) : (
               <div className="card" style={{ padding:'16px 20px', display:'flex', flexDirection:'column', gap:10 }}>
                 {top.map(([name, count], i) => (
@@ -111,17 +111,17 @@ export function AdminAnalisi({ dashboard, rsvpTimeline, timelineLoading, photos,
         </div>
 
         <div>
-          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Top mittenti messaggi</h3>
+          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.topSendersTitle}</h3>
           {(() => {
             const counts = {}
             for (const m of messages) {
-              const name = m.guest_name || 'Anonimo'
+              const name = m.guest_name || t.anonymous
               counts[name] = (counts[name] || 0) + 1
             }
             const top = Object.entries(counts).sort(([,a],[,b]) => b-a).slice(0,5)
             const maxVal = top[0]?.[1] || 1
             return top.length === 0 ? (
-              <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>Nessun messaggio ancora.</div>
+              <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>{t.noMessagesYet}</div>
             ) : (
               <div className="card" style={{ padding:'16px 20px', display:'flex', flexDirection:'column', gap:10 }}>
                 {top.map(([name, count], i) => (
@@ -142,9 +142,9 @@ export function AdminAnalisi({ dashboard, rsvpTimeline, timelineLoading, photos,
 
       {/* Breakdown tipi messaggio */}
       <div>
-        <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Tipologie messaggi</h3>
+        <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.messageTypes}</h3>
         {(() => {
-          const TYPE_LABELS = { text:'Testo', audio:'Vocale', photo:'Foto', video:'Video', both:'Testo + Audio' }
+          const TYPE_LABELS = { text: t.textType, audio: t.audioType, photo: t.photoType, video: t.videoType, both: t.both }
           const counts = {}
           for (const m of messages) {
             const t = m.type || 'unknown'
@@ -153,7 +153,7 @@ export function AdminAnalisi({ dashboard, rsvpTimeline, timelineLoading, photos,
           const entries = Object.entries(counts).sort(([,a],[,b]) => b-a)
           const maxVal = entries[0]?.[1] || 1
           return entries.length === 0 ? (
-            <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>Nessun messaggio ancora.</div>
+            <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>{t.noMessagesYet}</div>
           ) : (
             <div className="card" style={{ padding:'20px 24px', display:'flex', flexDirection:'column', gap:10 }}>
               {entries.map(([type, count], i) => (

@@ -1,12 +1,12 @@
 import { LOG_LABELS } from './constants'
 
-export function AdminLogs({ logs }) {
+export function AdminLogs({ t, logs }) {
   return (
     <div className="card mbl-cards" style={{ overflow:'auto' }}>
       <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.8rem', minWidth:600 }}>
         <thead>
           <tr style={{ borderBottom:'2px solid var(--cream)', background:'var(--ivory)' }}>
-            {['Data', 'Utente', 'Azione', 'Target', 'IP'].map(h => (
+            {[t.date, t.user, t.action, t.target, t.ipAddress].map(h => (
               <th key={h} style={{ padding:'12px 16px', textAlign:'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.72rem' }}>{h}</th>
             ))}
           </tr>
@@ -24,7 +24,7 @@ export function AdminLogs({ logs }) {
         </tbody>
       </table>
       {logs.length === 0 && (
-        <p style={{ textAlign:'center', padding:40, color:'var(--warm-gray)' }}>Nessun log ancora</p>
+        <p style={{ textAlign:'center', padding:40, color:'var(--warm-gray)' }}>{t.noLogs}</p>
       )}
     </div>
   )

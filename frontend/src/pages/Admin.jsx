@@ -10,9 +10,12 @@ import { AdminStats } from './admin/AdminStats'
 import { AdminAnalisi } from './admin/AdminAnalisi'
 import { AdminLogs } from './admin/AdminLogs'
 import { DIET_LABELS, LOG_LABELS } from './admin/constants'
+import { i18n } from './admin/i18n'
 
 export default function Admin() {
   const toast = useToast()
+  const [lang, setLang]           = useState('it')
+  const t = i18n[lang]
   const [tab, setTab]             = useState('dashboard')
   const [dashboard, setDashboard] = useState(null)
   const [guests, setGuests]       = useState([])
@@ -227,27 +230,27 @@ export default function Admin() {
 
   const navGroups = [
     {
-      items: [{ id:'dashboard', label:'Dashboard',        mobileLabel:'Dashboard', icon:'📊' }]
+      items: [{ id:'dashboard', label: t.dashboard,        mobileLabel: t.dashboard, icon:'📊' }]
     },
     {
-      label: 'Gestione',
+      label: t.management,
       items: [
-        { id:'guests',   label:'Gestione Invitati', mobileLabel:'Invitati', icon:'👥' },
-        { id:'rsvp',     label:'Diete & Tavoli',    mobileLabel:'Tavoli',   icon:'🍽️' },
-        { id:'photos',   label:'Galleria Foto',     mobileLabel:'Foto',     icon:'📷' },
-        { id:'messages', label:'Messaggi',          mobileLabel:'Messaggi', icon:'💬' },
+        { id:'guests',   label: t.guests, mobileLabel: t.guests, icon:'👥' },
+        { id:'rsvp',     label: t.rsvp,    mobileLabel: t.rsvp,   icon:'🍽️' },
+        { id:'photos',   label: t.photos,     mobileLabel: t.photos,     icon:'📷' },
+        { id:'messages', label: t.messages,          mobileLabel: t.messages, icon:'💬' },
       ]
     },
     {
-      label: 'Dati',
+      label: t.data,
       items: [
-        { id:'analisi', label:'Analisi',        mobileLabel:'Analisi', icon:'📈' },
-        { id:'stats',   label:'Geo & Traffico', mobileLabel:'Geo',     icon:'🌍' },
+        { id:'analisi', label: t.analytics,        mobileLabel: t.analytics, icon:'📈' },
+        { id:'stats',   label: t.stats, mobileLabel: t.stats,     icon:'🌍' },
       ]
     },
     {
-      label: 'Sistema',
-      items: [{ id:'logs', label:'Registro Attività', mobileLabel:'Log', icon:'📋' }]
+      label: t.system,
+      items: [{ id:'logs', label: t.logs, mobileLabel: t.logs, icon:'📋' }]
     },
   ]
 
@@ -300,15 +303,21 @@ export default function Admin() {
       <div className="admin-layout">
         <aside className="admin-sidebar">
           <div className="admin-sidebar-header">
-            <div style={{ fontFamily:'var(--font-serif)', fontSize:'1.15rem', color:'var(--charcoal)', fontWeight:700, marginBottom:8 }}>
-              ⚙️ Admin
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
+              <div style={{ fontFamily:'var(--font-serif)', fontSize:'1.15rem', color:'var(--charcoal)', fontWeight:700 }}>
+                ⚙️ Admin
+              </div>
+              <div style={{ display:'flex', gap:4 }}>
+                <button onClick={() => setLang('it')} style={{ padding:'4px 8px', borderRadius:4, border:'1px solid var(--cream)', background: lang === 'it' ? 'var(--rose-soft)' : 'transparent', color: lang === 'it' ? 'var(--rose)' : 'var(--warm-gray)', cursor:'pointer', fontSize:'.75rem', fontWeight: lang === 'it' ? 600 : 400 }}>IT</button>
+                <button onClick={() => setLang('en')} style={{ padding:'4px 8px', borderRadius:4, border:'1px solid var(--cream)', background: lang === 'en' ? 'var(--rose-soft)' : 'transparent', color: lang === 'en' ? 'var(--rose)' : 'var(--warm-gray)', cursor:'pointer', fontSize:'.75rem', fontWeight: lang === 'en' ? 600 : 400 }}>EN</button>
+              </div>
             </div>
             {dashboard && (
               <div style={{ fontSize:'.75rem', color:'var(--warm-gray)', lineHeight:1.8 }}>
-                <span>{dashboard.stats.guests_total} invitati totali</span><br/>
-                <span style={{ color:'var(--sage)' }}>✓ {dashboard.stats.guests_confirmed} confermati</span>
+                <span>{dashboard.stats.guests_total} {lang === 'it' ? 'invitati totali' : 'total guests'}</span><br/>
+                <span style={{ color:'var(--sage)' }}>✓ {dashboard.stats.guests_confirmed} {lang === 'it' ? 'confermati' : 'confirmed'}</span>
                 {dashboard.stats.guests_pending > 0 && (
-                  <><br/><span style={{ color:'var(--gold)' }}>⏳ {dashboard.stats.guests_pending} in attesa</span></>
+                  <><br/><span style={{ color:'var(--gold)' }}>⏳ {dashboard.stats.guests_pending} {lang === 'it' ? 'in attesa' : 'pending'}</span></>
                 )}
               </div>
             )}
@@ -345,11 +354,11 @@ export default function Admin() {
         })()}
 
         {/* ── Dashboard ─────────────────────────────────────────────────────── */}
-        {tab === 'dashboard' && dashboard && <AdminDashboard dashboard={dashboard} />}
+        {tab === 'dashboard' && dashboard && <AdminDashboard dashboard={dashboard} t={t} />}
 
         {/* ── Invitati ──────────────────────────────────────────────────────── */}
         {tab === 'guests' && (
-          <AdminGuests
+          <AdminGuests t={t}
             guests={guests} dashboard={dashboard} sortedGuests={sortedGuests} splitName={splitName}
             sortField={sortField} sortDir={sortDir} toggleSort={toggleSort}
             addOpen={addOpen} setAddOpen={setAddOpen} newGuest={newGuest} setNewGuest={setNewGuest}
@@ -363,25 +372,25 @@ export default function Admin() {
 
         {/* ── Diete & Posti ─────────────────────────────────────────────────── */}
         {tab === 'rsvp' && (
-          <AdminRsvp confirmed={confirmed} totalSeats={totalSeats} totalAdults={totalAdults} totalChildren={totalChildren} dietGroups={dietGroups} />
+          <AdminRsvp t={t} confirmed={confirmed} totalSeats={totalSeats} totalAdults={totalAdults} totalChildren={totalChildren} dietGroups={dietGroups} />
         )}
 
         {/* ── Foto ──────────────────────────────────────────────────────────── */}
-        {tab === 'photos' && <AdminPhotos photos={photos} deletePhoto={deletePhoto} />}
+        {tab === 'photos' && <AdminPhotos t={t} photos={photos} deletePhoto={deletePhoto} />}
 
         {/* ── Messaggi ──────────────────────────────────────────────────────── */}
-        {tab === 'messages' && <AdminMessages messages={messages} deleteMessage={deleteMessage} />}
+        {tab === 'messages' && <AdminMessages t={t} messages={messages} deleteMessage={deleteMessage} />}
 
         {/* ── Statistiche ───────────────────────────────────────────────────── */}
-        {tab === 'stats' && <AdminStats geoData={geoData} geoLoading={geoLoading} />}
+        {tab === 'stats' && <AdminStats t={t} geoData={geoData} geoLoading={geoLoading} />}
 
         {/* ── Analisi ───────────────────────────────────────────────────────── */}
         {tab === 'analisi' && (
-          <AdminAnalisi dashboard={dashboard} rsvpTimeline={rsvpTimeline} timelineLoading={timelineLoading} photos={photos} messages={messages} guests={guests} />
+          <AdminAnalisi t={t} dashboard={dashboard} rsvpTimeline={rsvpTimeline} timelineLoading={timelineLoading} photos={photos} messages={messages} guests={guests} />
         )}
 
         {/* ── Log ───────────────────────────────────────────────────────────── */}
-        {tab === 'logs' && <AdminLogs logs={logs} />}
+        {tab === 'logs' && <AdminLogs t={t} logs={logs} />}
         </div>{/* admin-content */}
       </div>{/* admin-layout */}
       <ToastContainer toasts={toast.toasts} />

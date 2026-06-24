@@ -1,12 +1,12 @@
-export function AdminPhotos({ photos, deletePhoto }) {
+export function AdminPhotos({ t, photos, deletePhoto }) {
   return (
     <div>
       <p style={{ color:'var(--warm-gray)', marginBottom:24, fontSize:'.9rem' }}>
-        {photos.length} foto caricate — clicca 🗑 per eliminare.
+        {photos.length} {t.photosCount} — clicca 🗑 per eliminare.
       </p>
       {photos.length === 0 ? (
         <div className="card" style={{ padding:48, textAlign:'center', color:'var(--warm-gray)' }}>
-          Nessuna foto ancora.
+          {t.noPhotos}
         </div>
       ) : (
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(200px, 1fr))', gap:12 }}>

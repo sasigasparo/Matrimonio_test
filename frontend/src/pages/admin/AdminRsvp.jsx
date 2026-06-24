@@ -1,24 +1,24 @@
 import { StatCard } from './StatCard'
 import { DIET_LABELS } from './constants'
 
-export function AdminRsvp({ confirmed, totalSeats, totalAdults, totalChildren, dietGroups }) {
+export function AdminRsvp({ t, confirmed, totalSeats, totalAdults, totalChildren, dietGroups }) {
   return (
     <div>
       {/* Posti confermati */}
-      <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Posti confermati</h3>
+      <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.confirmedSeats}</h3>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(160px, 1fr))', gap:12, marginBottom:36 }}>
-        <StatCard icon="🪑" label="Totale posti"  value={totalSeats}    color="var(--rose)" />
-        <StatCard icon="🧑" label="Adulti"        value={totalAdults}   color="var(--sage)" />
-        <StatCard icon="👶" label="Bambini"       value={totalChildren} color="var(--gold)" />
+        <StatCard icon="🪑" label={t.totalSeats}  value={totalSeats}    color="var(--rose)" />
+        <StatCard icon="🧑" label={t.adults}        value={totalAdults}   color="var(--sage)" />
+        <StatCard icon="👶" label={t.children}       value={totalChildren} color="var(--gold)" />
       </div>
 
       {/* Dettaglio per ospite confermato */}
-      <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Dettaglio posti per ospite</h3>
+      <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.seatsDetail}</h3>
       <div className="card mbl-cards" style={{ overflow:'auto', marginBottom:36 }}>
         <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.85rem', minWidth:500 }}>
           <thead>
             <tr style={{ borderBottom:'2px solid var(--cream)', background:'var(--ivory)' }}>
-              {['Nome', 'Adulti (+ acc.)', 'Bambini', 'Totale'].map(h => (
+              {[t.fullName, `${t.adults} (+ ${t.companions})`, t.children, 'Totale'].map(h => (
                 <th key={h} style={{ padding:'12px 16px', textAlign:'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.75rem' }}>{h}</th>
               ))}
             </tr>
@@ -41,15 +41,15 @@ export function AdminRsvp({ confirmed, totalSeats, totalAdults, totalChildren, d
           </tbody>
         </table>
         {confirmed.length === 0 && (
-          <p style={{ textAlign:'center', padding:40, color:'var(--warm-gray)' }}>Nessun ospite confermato ancora.</p>
+          <p style={{ textAlign:'center', padding:40, color:'var(--warm-gray)' }}>No confirmed guests yet.</p>
         )}
       </div>
 
       {/* Riepilogo diete */}
-      <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Riepilogo esigenze alimentari</h3>
+      <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.dietaryNeeds}</h3>
       {Object.keys(dietGroups).length === 0 ? (
         <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>
-          Nessuna esigenza alimentare registrata tra i confermati.
+          {t.noDietary}
         </div>
       ) : (
         <div style={{ display:'flex', flexDirection:'column', gap:12 }}>

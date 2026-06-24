@@ -1,14 +1,14 @@
 import { StatCard } from './StatCard'
 
-export function AdminStats({ geoData, geoLoading }) {
+export function AdminStats({ t, geoData, geoLoading }) {
   if (geoLoading) {
-    return <p style={{ color:'var(--warm-gray)', marginBottom:24 }}>⏳ Geolocalizzazione in corso…</p>
+    return <p style={{ color:'var(--warm-gray)', marginBottom:24 }}>⏳ Loading…</p>
   }
 
   if (!geoData) {
     return (
       <div className="card" style={{ padding:48, textAlign:'center', color:'var(--warm-gray)' }}>
-        Nessun dato disponibile.
+        {t.noData}
       </div>
     )
   }
@@ -19,20 +19,20 @@ export function AdminStats({ geoData, geoLoading }) {
     <div style={{ display:'flex', flexDirection:'column', gap:36 }}>
       {/* Stat cards */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(160px,1fr))', gap:12 }}>
-        <StatCard icon="🌐" label="Visite totali"  value={geoData.total_visits} color="var(--rose)" />
-        <StatCard icon="👤" label="IP unici"       value={geoData.unique_ips}   color="var(--sage)" />
-        <StatCard icon="🗺️" label="Paesi"          value={geoData.countries.length} color="var(--gold)" />
+        <StatCard icon="🌐" label={t.totalVisits}  value={geoData.total_visits} color="var(--rose)" />
+        <StatCard icon="👤" label={t.uniqueIPs}       value={geoData.unique_ips}   color="var(--sage)" />
+        <StatCard icon="🗺️" label={t.countries}          value={geoData.countries.length} color="var(--gold)" />
       </div>
 
       {/* Paesi */}
       {geoData.countries.length > 0 && (
         <div>
-          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Connessioni per paese</h3>
+          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.countriesByVisits}</h3>
           <div className="card mbl-cards" style={{ overflow:'auto' }}>
             <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.88rem' }}>
               <thead>
                 <tr style={{ borderBottom:'2px solid var(--cream)', background:'var(--ivory)' }}>
-                  {['', 'Paese', 'Visite', ''].map((h, i) => (
+                  {['', t.country, t.visits, ''].map((h, i) => (
                     <th key={i} style={{ padding:'12px 16px', textAlign: i === 2 ? 'right' : 'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.75rem' }}>{h}</th>
                   ))}
                 </tr>
@@ -62,12 +62,12 @@ export function AdminStats({ geoData, geoLoading }) {
       {/* Città */}
       {geoData.locations.length > 0 && (
         <div>
-          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Dettaglio città</h3>
+          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.citiesDetail}</h3>
           <div className="card mbl-cards" style={{ overflow:'auto' }}>
             <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.85rem' }}>
               <thead>
                 <tr style={{ borderBottom:'2px solid var(--cream)', background:'var(--ivory)' }}>
-                  {['', 'Città', 'Paese', 'Visite'].map((h, i) => (
+                  {['', t.city, t.country, t.visits].map((h, i) => (
                     <th key={i} style={{ padding:'10px 16px', textAlign:'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.75rem' }}>{h}</th>
                   ))}
                 </tr>
@@ -89,7 +89,7 @@ export function AdminStats({ geoData, geoLoading }) {
 
       {/* Orari di picco */}
       <div>
-        <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Orari di picco</h3>
+        <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.peakHours}</h3>
         <div className="card" style={{ padding:'20px 24px' }}>
           <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
             {geoData.peak_hours.map(h => (
@@ -112,12 +112,12 @@ export function AdminStats({ geoData, geoLoading }) {
       {/* Azioni più comuni */}
       {geoData.actions.length > 0 && (
         <div>
-          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>Azioni più frequenti</h3>
+          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.frequentActions}</h3>
           <div className="card mbl-cards" style={{ overflow:'auto' }}>
             <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.85rem' }}>
               <thead>
                 <tr style={{ borderBottom:'2px solid var(--cream)', background:'var(--ivory)' }}>
-                  {['Azione', 'Occorrenze', ''].map((h, i) => (
+                  {[t.action, t.occurrences, ''].map((h, i) => (
                     <th key={i} style={{ padding:'10px 16px', textAlign: i === 1 ? 'right' : 'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.75rem' }}>{h}</th>
                   ))}
                 </tr>

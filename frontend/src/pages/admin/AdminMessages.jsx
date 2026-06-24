@@ -1,19 +1,19 @@
-export function AdminMessages({ messages, deleteMessage }) {
+export function AdminMessages({ t, messages, deleteMessage }) {
   return (
     <div>
       <p style={{ color:'var(--warm-gray)', marginBottom:24, fontSize:'.9rem' }}>
-        {messages.length} messaggi — clicca 🗑 per eliminare.
+        {messages.length} {t.messagesCount} — clicca 🗑 per eliminare.
       </p>
       {messages.length === 0 ? (
         <div className="card" style={{ padding:48, textAlign:'center', color:'var(--warm-gray)' }}>
-          Nessun messaggio ancora.
+          {t.noMessages}
         </div>
       ) : (
         <div className="card mbl-cards" style={{ overflow:'auto' }}>
           <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.85rem' }}>
             <thead>
               <tr style={{ borderBottom:'2px solid var(--cream)', background:'var(--ivory)' }}>
-                {['Mittente', 'Contenuto', 'Tipo', 'Data', ''].map((h, i) => (
+                {[t.sender, t.content, t.type, t.date, ''].map((h, i) => (
                   <th key={i} style={{ padding:'12px 16px', textAlign:'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.75rem' }}>{h}</th>
                 ))}
               </tr>
@@ -22,7 +22,7 @@ export function AdminMessages({ messages, deleteMessage }) {
               {messages.map(m => (
                 <tr key={m.id} style={{ borderBottom:'1px solid var(--cream)' }}>
                   <td data-label="Mittente" style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)', whiteSpace:'nowrap' }}>
-                    {m.guest_name || 'Anonimo'}
+                    {m.guest_name || t.anonymous}
                   </td>
                   <td data-label="Contenuto" style={{ padding:'10px 16px', color:'var(--warm-gray)', maxWidth:320 }}>
                     {m.photo_url && (
@@ -33,7 +33,7 @@ export function AdminMessages({ messages, deleteMessage }) {
                         {m.content}
                       </span>
                     ) : m.audio_path ? (
-                      <span style={{ color:'var(--warm-gray)', fontStyle:'italic' }}>🎙️ Messaggio vocale</span>
+                      <span style={{ color:'var(--warm-gray)', fontStyle:'italic' }}>{t.voiceMessage}</span>
                     ) : (
                       <span style={{ color:'var(--warm-gray)', fontStyle:'italic' }}>—</span>
                     )}
