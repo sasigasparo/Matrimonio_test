@@ -44,3 +44,5 @@ backend/logs/
 Wedding_App/uploads/
 Wedding_App/logs/
 Wedding_App/credentials.json
+backend/load-test.js
+backend/load_json_result/

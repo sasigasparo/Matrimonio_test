@@ -33,6 +33,8 @@ export default function Chat() {
   const [recording, setRecording] = useState(false)
   const [recordSecs, setRecordSecs] = useState(0)
   const [audioBlob, setAudioBlob] = useState(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [pullDistance, setPullDistance] = useState(0)
   const mediaRef = useRef(null)
   const chunksRef = useRef([])
   const timerRef = useRef(null)
@@ -40,6 +42,8 @@ export default function Chat() {
   const videoInputRef = useRef(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
+  const messagesContainerRef = useRef(null)
+  const touchStartYRef = useRef(null)
   const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 
   const myId = user?.id ?? null
@@ -62,6 +66,32 @@ export default function Chat() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  const handleTouchStart = e => {
+    if (messagesContainerRef.current?.scrollTop === 0) {
+      touchStartYRef.current = e.touches[0].clientY
+    }
+  }
+
+  const handleTouchMove = e => {
+    if (!touchStartYRef.current || messagesContainerRef.current?.scrollTop !== 0) return
+
+    const currentY = e.touches[0].clientY
+    const distance = Math.max(0, currentY - touchStartYRef.current)
+    setPullDistance(distance)
+  }
+
+  const handleTouchEnd = async () => {
+    if (pullDistance > 60 && !isRefreshing) {
+      setIsRefreshing(true)
+      setPullDistance(0)
+      await loadMessages()
+      setIsRefreshing(false)
+    } else {
+      setPullDistance(0)
+    }
+    touchStartYRef.current = null
+  }
 
   const loadMessages = async () => {
     try {
@@ -445,11 +475,56 @@ export default function Chat() {
       </div>
 
       {/* Messages */}
-      <div style={{
-        flex: 1, overflowY: 'auto', padding: '16px 12px',
-        display: 'flex', flexDirection: 'column', gap: 10,
-        background: 'radial-gradient(circle at 1px 1px, rgba(199,107,139,0.07) 1px, transparent 0) 0 0 / 22px 22px, linear-gradient(180deg, var(--bg), #FFEFF4)',
-      }}>
+      <div
+        ref={messagesContainerRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        style={{
+          flex: 1, overflowY: 'auto', padding: '16px 12px',
+          display: 'flex', flexDirection: 'column', gap: 10,
+          background: 'radial-gradient(circle at 1px 1px, rgba(199,107,139,0.07) 1px, transparent 0) 0 0 / 22px 22px, linear-gradient(180deg, var(--bg), #FFEFF4)',
+          position: 'relative',
+        }}>
+        {/* Pull-to-refresh indicator */}
+        {(pullDistance > 0 || isRefreshing) && (
+          <div style={{
+            position: 'absolute', top: Math.min(pullDistance, 60), left: '50%',
+            transform: 'translateX(-50%)', zIndex: 10,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+          }}>
+            <div style={{
+              width: 40, height: 40, borderRadius: '50%',
+              background: 'rgba(199,107,139,0.1)', display: 'flex',
+              alignItems: 'center', justifyContent: 'center',
+              color: 'var(--rose-deep)',
+            }}>
+              {isRefreshing ? (
+                <span style={{
+                  display: 'inline-block', width: 20, height: 20,
+                  border: '2.5px solid rgba(199,107,139,0.2)', borderTopColor: 'var(--rose-deep)',
+                  borderRadius: '50%', animation: 'spin 0.8s linear infinite',
+                }} />
+              ) : (
+                <span style={{
+                  fontSize: 20,
+                  transform: `rotateZ(${Math.min(pullDistance, 60) * 1.5}deg)`,
+                  transition: 'transform 0.1s ease-out',
+                }}>⬇️</span>
+              )}
+            </div>
+            {!isRefreshing && pullDistance < 60 && (
+              <span style={{ fontSize: 12, color: 'var(--warm-gray)', fontWeight: 500 }}>
+                Scorri per aggiornare
+              </span>
+            )}
+            {pullDistance >= 60 && !isRefreshing && (
+              <span style={{ fontSize: 12, color: 'var(--rose-deep)', fontWeight: 600 }}>
+                Rilascia per aggiornare
+              </span>
+            )}
+          </div>
+        )}
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', padding: 40 }}>
             <div className="spinner" />
