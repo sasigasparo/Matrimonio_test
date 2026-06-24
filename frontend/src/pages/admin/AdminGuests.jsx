@@ -5,7 +5,7 @@ export function AdminGuests({
   t, guests, dashboard, sortedGuests, splitName, sortField, sortDir, toggleSort,
   addOpen, setAddOpen, newGuest, setNewGuest, adding, sendOnCreate, setSendOnCreate,
   addGuest, sendInvite, sendAll, rsvpng, deleteGuest,
-  editGuest, setEditGuest, editForm, setEditForm, saving, sendOnEdit, setSendOnEdit, saveEdit
+  editGuest, setEditGuest, openEdit, editForm, setEditForm, saving, sendOnEdit, setSendOnEdit, saveEdit
 }) {
   const toast = useToast()
 
@@ -104,7 +104,7 @@ export function AdminGuests({
                 </td>
                 <td className="mbl-actions" style={{ padding:'10px 16px' }}>
                   <button className="btn btn-sm btn-outline" onClick={() => sendInvite(g.id, g.name)}>📧</button>
-                  <button className="btn btn-sm btn-outline" onClick={() => setEditGuest(g)}>✏️</button>
+                  <button className="btn btn-sm btn-outline" onClick={() => openEdit(g)}>✏️</button>
                   <button className="btn btn-sm" style={{ background:'rgba(199,107,139,.15)', color:'var(--rose)', border:'none' }} onClick={() => deleteGuest(g.id, g.name)}>🗑</button>
                 </td>
               </tr>

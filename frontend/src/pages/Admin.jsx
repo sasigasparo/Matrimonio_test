@@ -364,7 +364,7 @@ export default function Admin() {
             addOpen={addOpen} setAddOpen={setAddOpen} newGuest={newGuest} setNewGuest={setNewGuest}
             adding={adding} sendOnCreate={sendOnCreate} setSendOnCreate={setSendOnCreate}
             addGuest={addGuest} sendInvite={sendInvite} sendAll={sendAll} rsvpng={rsvpng}
-            deleteGuest={deleteGuest} editGuest={editGuest} setEditGuest={setEditGuest}
+            deleteGuest={deleteGuest} editGuest={editGuest} setEditGuest={setEditGuest} openEdit={openEdit}
             editForm={editForm} setEditForm={setEditForm} saving={saving}
             sendOnEdit={sendOnEdit} setSendOnEdit={setSendOnEdit} saveEdit={saveEdit}
           />

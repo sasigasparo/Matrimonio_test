@@ -4,7 +4,7 @@ import smtplib
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
@@ -44,10 +44,17 @@ class GuestUpdate(BaseModel):
     dietary: Optional[str] = None
 
 
+class CompanionInfo(BaseModel):
+    name: str
+    dietary: Optional[str] = None
+    special_requests: Optional[str] = None
+
+
 class rsvpUpdate(BaseModel):
     rsvp_status: str  # confirmed | declined
     dietary: Optional[str] = None
-    companions: Optional[int] = 0  # accompagnatori adulti oltre all'ospite
+    special_requests: Optional[str] = None
+    companions: Optional[List[CompanionInfo]] = None  # accompagnatori con dettagli
     children: Optional[int] = 0     # bambini
 
 
@@ -208,6 +215,8 @@ async def send_all_invites(request: Request, admin=Depends(require_admin), matri
 
 @router.put("/{guest_id}/rsvp")
 async def update_rsvp(guest_id: int, body: rsvpUpdate, request: Request, user=Depends(get_current_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
+    import json
+
     if body.rsvp_status not in ("confirmed", "declined"):
         raise HTTPException(400, "rsvp_status must be confirmed or declined")
 
@@ -220,20 +229,27 @@ async def update_rsvp(guest_id: int, body: rsvpUpdate, request: Request, user=De
     base_update = {
         "rsvp_status": body.rsvp_status,
         "dietary":     body.dietary,
+        "special_requests": body.special_requests,
         "updated_at":  datetime.utcnow().isoformat(),
     }
     # companions/children are stored only if those columns exist on the table.
     # If they don't yet (pre-migration), retry without them so RSVP never breaks.
-    # SQL to enable: ALTER TABLE guests ADD COLUMN companions int DEFAULT 0,
-    #                ADD COLUMN children int DEFAULT 0;
-    extended = {**base_update, "companions": max(0, body.companions or 0), "children": max(0, body.children or 0)}
+    # SQL to enable: ALTER TABLE guests ADD COLUMN companions jsonb DEFAULT '[]',
+    #                ADD COLUMN children int DEFAULT 0,
+    #                ADD COLUMN special_requests text;
+    companions_data = body.companions or []
+    extended = {
+        **base_update,
+        "companions": json.dumps([c.model_dump() for c in companions_data]),
+        "children": max(0, body.children or 0)
+    }
     try:
         result = (
             db.table("guests").update(extended)
             .eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
         )
     except Exception as e:
-        logger.warning("rsvp companions/children columns missing, falling back: %s", e)
+        logger.warning("rsvp companions/children/special_requests columns missing, falling back: %s", e)
         result = (
             db.table("guests").update(base_update)
             .eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
@@ -242,10 +258,18 @@ async def update_rsvp(guest_id: int, body: rsvpUpdate, request: Request, user=De
     if not result.data:
         raise HTTPException(404, "Guest not found")
 
+    # Parse companions back if stored as JSON string
+    data = result.data[0]
+    if isinstance(data.get("companions"), str):
+        try:
+            data["companions"] = json.loads(data["companions"])
+        except:
+            data["companions"] = []
+
     audit(user["email"], "rsvp_update", f"guest:{guest_id}", body.rsvp_status,
           request.client.host if request.client else "", matrimonio_id)
     logger.info("rsvp updated: guest %d → %s", guest_id, body.rsvp_status)
-    return result.data[0]
+    return data
 
 
 @router.put("/{guest_id}")

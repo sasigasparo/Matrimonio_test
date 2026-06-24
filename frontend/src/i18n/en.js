@@ -4,7 +4,7 @@ export const en = {
     chat: 'Chat',
     gallery: 'Gallery',
     menu: 'Menu',
-    luoghi: 'Venues',
+    luoghi: 'Schedule',
     faq: 'FAQ',
     rsvp: 'RSVP',
     tables: 'Tables',
@@ -160,7 +160,7 @@ export const en = {
   },
 
   luoghi: {
-    pageTitle: 'Venues & Directions – Naples',
+    pageTitle: 'Schedule – Naples',
     ceremony: {
       nome: 'Naples Cathedral (Duomo)',
       orario: 'Saturday {{date}} · {{time}}',

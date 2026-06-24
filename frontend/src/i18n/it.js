@@ -4,7 +4,7 @@ export const it = {
     chat: 'Chat',
     gallery: 'Gallery',
     menu: 'Menù',
-    luoghi: 'Luoghi',
+    luoghi: 'Programma',
     faq: 'FAQ',
     rsvp: 'Inviti',
     tables: 'Tavoli',
@@ -160,7 +160,7 @@ export const it = {
   },
 
   luoghi: {
-    pageTitle: 'Luoghi & Indicazioni – Napoli',
+    pageTitle: 'Programma – Napoli',
     ceremony: {
       nome: 'Duomo di Napoli',
       orario: 'Sabato {{date}} · ore {{time}}',

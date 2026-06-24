@@ -46,8 +46,11 @@ export default function Rsvp() {
   const [saving, setSaving] = useState(false)
   const [rsvpStatus, setRsvpStatus] = useState('confirmed')
   const [dietary, setDietary] = useState('')
-  const [companions, setCompanions] = useState(0)
+  const [specialRequests, setSpecialRequests] = useState('')
+  const [companions, setCompanions] = useState([])
   const [children, setChildren] = useState(0)
+  const [editingCompanion, setEditingCompanion] = useState(null)
+  const [companionForm, setCompanionForm] = useState({ name: '', dietary: '', special_requests: '' })
   const dietaryRef = useRef(null)
 
   useEffect(() => {
@@ -75,7 +78,8 @@ export default function Rsvp() {
       setGuest(selected)
       setRsvpStatus(selected.rsvp_status === 'declined' ? 'declined' : 'confirmed')
       setDietary(selected.dietary || '')
-      setCompanions(Number(selected.companions) || 0)
+      setSpecialRequests(selected.special_requests || '')
+      setCompanions(Array.isArray(selected.companions) ? selected.companions : [])
       setChildren(Number(selected.children) || 0)
     }
   }
@@ -85,8 +89,8 @@ export default function Rsvp() {
     setSaving(true)
     try {
       const payload = rsvpStatus === 'confirmed'
-        ? { rsvp_status: rsvpStatus, dietary, companions, children }
-        : { rsvp_status: rsvpStatus, dietary, companions: 0, children: 0 }
+        ? { rsvp_status: rsvpStatus, dietary, special_requests: specialRequests, companions, children }
+        : { rsvp_status: rsvpStatus, dietary, special_requests: specialRequests, companions: [], children: 0 }
       const updated = await api.updatersvp(guest.id, payload)
       setGuest(updated)
       setAllGuests(prev => prev.map(g => g.id === guest.id ? updated : g))
@@ -261,6 +265,25 @@ export default function Rsvp() {
                 </div>
               )}
 
+              {/* Special requests for main guest (only when confirmed) */}
+              {rsvpStatus === 'confirmed' && (
+                <div style={{ marginBottom: 28 }}>
+                  <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
+                    Richieste speciali (opzionale)
+                  </label>
+                  <textarea
+                    value={specialRequests}
+                    onChange={e => setSpecialRequests(e.target.value)}
+                    placeholder="Es. senza noci, tavolo vicino all'entrata, ecc."
+                    style={{
+                      width: '100%', padding: '12px 14px', borderRadius: 'var(--radius-md)',
+                      border: '1px solid var(--hairline)', fontFamily: 'inherit', fontSize: '.95rem',
+                      color: 'var(--charcoal)', resize: 'vertical', minHeight: 80
+                    }}
+                  />
+                </div>
+              )}
+
               {/* Party size — companions & children (only when confirming) */}
               {rsvpStatus === 'confirmed' && (
                 <div style={{ marginBottom: 28 }}>
@@ -268,9 +291,153 @@ export default function Rsvp() {
                     {t('rsvp.partyTitle')}
                   </label>
                   <div style={{ background: 'var(--ivory)', border: '1px solid var(--hairline)', borderRadius: 'var(--radius-md)', padding: '4px 14px' }}>
-                    <Stepper icon={<Users size={20} />} label={t('rsvp.companionsLabel')} hint={t('rsvp.companionsHint')} value={companions} onChange={setCompanions} />
+                    <Stepper
+                      icon={<Users size={20} />}
+                      label={t('rsvp.companionsLabel')}
+                      hint={t('rsvp.companionsHint')}
+                      value={companions.length}
+                      onChange={(n) => {
+                        if (n > companions.length) {
+                          setEditingCompanion({ idx: companions.length, isNew: true })
+                          setCompanionForm({ name: '', dietary: '', special_requests: '' })
+                        } else {
+                          setCompanions(companions.slice(0, n))
+                        }
+                      }}
+                    />
                     <div style={{ height: 1, background: 'var(--hairline)' }} />
                     <Stepper icon={<Baby size={20} />} label={t('rsvp.childrenLabel')} hint={t('rsvp.childrenHint')} value={children} onChange={setChildren} />
+                  </div>
+
+                  {/* Companion list */}
+                  {companions.length > 0 && (
+                    <div style={{ marginTop: 16 }}>
+                      {companions.map((c, idx) => (
+                        <div
+                          key={idx}
+                          style={{
+                            padding: '12px 14px', marginBottom: 8, borderRadius: 'var(--radius-md)',
+                            background: 'var(--ivory)', border: '1px solid var(--hairline)',
+                            display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                          }}
+                        >
+                          <div>
+                            <div style={{ fontWeight: 600, color: 'var(--charcoal)', fontSize: '.95rem' }}>{c.name}</div>
+                            <div style={{ fontSize: '.82rem', color: 'var(--warm-gray)' }}>
+                              {c.dietary && `Dieta: ${c.dietary}`}
+                              {c.special_requests && ` • ${c.special_requests}`}
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => {
+                              setEditingCompanion({ idx, isNew: false })
+                              setCompanionForm(c)
+                            }}
+                            style={{
+                              padding: '6px 10px', borderRadius: 6, border: '1px solid var(--hairline)',
+                              background: 'white', cursor: 'pointer', fontSize: '.85rem', color: 'var(--warm-gray)'
+                            }}
+                          >
+                            ✏️ Modifica
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Modal for editing companion */}
+              {editingCompanion && (
+                <div style={{
+                  position: 'fixed', inset: 0, background: 'rgba(0,0,0,.45)', zIndex: 1000,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16,
+                }} onClick={e => e.target === e.currentTarget && setEditingCompanion(null)}>
+                  <div className="card" style={{ width: '100%', maxWidth: 480, padding: 28 }}>
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', marginBottom: 20 }}>
+                      {editingCompanion.isNew ? 'Aggiungi accompagnatore' : 'Modifica accompagnatore'}
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      <div>
+                        <label style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', display: 'block', marginBottom: 4 }}>Nome *</label>
+                        <input
+                          className="input"
+                          placeholder="Nome Cognome"
+                          value={companionForm.name}
+                          onChange={e => setCompanionForm(p => ({ ...p, name: e.target.value }))}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', display: 'block', marginBottom: 8 }}>Intolleranze alimentari (opzionale)</label>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 8 }}>
+                          {dietaryOptions.map(opt => (
+                            <button
+                              key={opt.val}
+                              onClick={() => setCompanionForm(p => ({ ...p, dietary: opt.val }))}
+                              style={{
+                                padding: '10px 8px', borderRadius: 'var(--radius-md)',
+                                border: companionForm.dietary === opt.val ? '2px solid var(--rose)' : '2px solid var(--cream)',
+                                background: companionForm.dietary === opt.val ? 'rgba(199,107,139,.08)' : 'var(--ivory)',
+                                cursor: 'pointer', transition: 'all .2s', textAlign: 'center', fontSize: '.78rem'
+                              }}
+                            >
+                              <div style={{ fontSize: '1.1rem', marginBottom: 2 }}>{opt.icon}</div>
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', display: 'block', marginBottom: 4 }}>Richieste speciali (opzionale)</label>
+                        <textarea
+                          value={companionForm.special_requests}
+                          onChange={e => setCompanionForm(p => ({ ...p, special_requests: e.target.value }))}
+                          placeholder="Es. allergia a frutta secca, preferenza di menu, ecc."
+                          style={{
+                            width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)',
+                            border: '1px solid var(--hairline)', fontFamily: 'inherit', fontSize: '.9rem',
+                            color: 'var(--charcoal)', resize: 'vertical', minHeight: 60
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
+                      <button
+                        className="btn btn-outline"
+                        onClick={() => {
+                          if (!editingCompanion.isNew) {
+                            setCompanions(companions.filter((_, i) => i !== editingCompanion.idx))
+                          }
+                          setEditingCompanion(null)
+                        }}
+                        style={{ flex: 1 }}
+                      >
+                        {editingCompanion.isNew ? 'Annulla' : 'Elimina'}
+                      </button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          if (!companionForm.name.trim()) {
+                            toast.error('Il nome è obbligatorio')
+                            return
+                          }
+                          const updated = [...companions]
+                          if (editingCompanion.isNew) {
+                            updated.push(companionForm)
+                          } else {
+                            updated[editingCompanion.idx] = companionForm
+                          }
+                          setCompanions(updated)
+                          setEditingCompanion(null)
+                        }}
+                        style={{ flex: 1 }}
+                      >
+                        Salva
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
