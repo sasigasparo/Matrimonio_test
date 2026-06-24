@@ -83,15 +83,30 @@ async def list_photos(user=Depends(get_optional_guest), matrimonio_id: int = Dep
     db = get_db()
     photos = (
         db.table("photos")
-        .select("*, guests(name, avatar_url)")
+        .select("*")
         .eq("matrimonio_id", matrimonio_id)
         .order("created_at", desc=True)
         .execute().data or []
     )
     for p in photos:
-        guest_info = p.pop("guests", {}) or {}
-        p["guest_name"] = guest_info.get("name")
-        p["avatar_url"]  = guest_info.get("avatar_url")
+        guest_id = p.get("guest_id")
+        if guest_id:
+            try:
+                guest_result = db.table("guests").select("name, avatar_url").eq("id", guest_id).execute()
+                if guest_result.data:
+                    guest_info = guest_result.data[0]
+                    p["guest_name"] = guest_info.get("name")
+                    p["avatar_url"] = guest_info.get("avatar_url")
+                else:
+                    p["guest_name"] = None
+                    p["avatar_url"] = None
+            except Exception as e:
+                logger.warning("⚠️  Failed to fetch guest info for photo id=%s guest_id=%s: %s", p.get("id"), guest_id, e)
+                p["guest_name"] = None
+                p["avatar_url"] = None
+        else:
+            p["guest_name"] = None
+            p["avatar_url"] = None
     return photos
 
 
