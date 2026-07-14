@@ -7,10 +7,10 @@ reskins the whole app. Motion via `framer-motion`, icons via `lucide-react`.
 
 ## Theme
 
-Light, warm, airy. Near-white pink-tinted background; white cards floating on soft,
-pink-tinted shadows; one confident pink as the brand voice; deep-rose for pink text that
-must meet contrast. Editorial serif display + clean sans body. Feels like Apple Invites
-crossed with Instagram, not a wedding template.
+Light, warm, airy. Ivory background; white cards floating on soft, pink-tinted shadows;
+one confident pink as the brand voice; deep-rose for pink text that must meet contrast.
+Editorial serif display + clean sans body. Feels like Apple Invites crossed with
+Instagram, not a wedding template.
 
 ## Color
 
@@ -19,7 +19,7 @@ Primary palette — a delicate dusty-rosewood take on the brief's pink (softened
 
 | Token | Value | Role |
 |---|---|---|
-| `--bg` / `--ivory` | `#FFF7F9` | App background (pink-white) |
+| `--bg` / `--ivory` | `#FFFFF0` | App background (ivory) |
 | `--cream` | `#FCEDF2` | Alternating section background |
 | `--white` / cards | `#FFFFFF` | Card / surface |
 | `--rose` (primary) | `#C76B8B` | Dusty rosewood — buttons, active states, accents (delicate; white text on it = button only, 3.6:1) |

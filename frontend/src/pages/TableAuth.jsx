@@ -38,7 +38,7 @@ export default function TableAuth({ onSuccess }) {
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       gap: 20, padding: 24,
-      background: 'linear-gradient(135deg, var(--ivory,#faf6f0) 0%, var(--cream,#FCEDF2) 100%)',
+      background: 'linear-gradient(135deg, var(--ivory,#FFFFF0) 0%, var(--cream,#FCEDF2) 100%)',
     }}>
       <div style={{ fontSize: '2.8rem' }}>🪑</div>
       <h2 style={{

@@ -81,7 +81,7 @@ function GlobalTransitionStyles() {
       .wedding-loader {
         position: fixed;
         inset: 0;
-        background: #FFF7F9;
+        background: var(--bg, #FFFFF0);
         display: flex;
         flex-direction: column;
         align-items: center;
