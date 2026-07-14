@@ -331,8 +331,8 @@ export default function Home() {
           <p style={{ color: 'rgba(255,255,255,.94)', fontSize: '1.05rem', marginBottom: 6, fontWeight: 500 }}>
             {WEDDING_CONFIG.dateLabel}
           </p>
-          <p style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,.82)', fontSize: '.92rem', marginBottom: 32 }}>
-            <MapPin size={14} /> {WEDDING_CONFIG.venue.reception.name}, {WEDDING_CONFIG.venue.city}
+          <p style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,.82)', fontSize: '.92rem', marginBottom: 32, textAlign: 'center' }}>
+            <MapPin size={14} /> {WEDDING_CONFIG.venue.ceremony.name} &amp; {WEDDING_CONFIG.venue.reception.name}, {WEDDING_CONFIG.venue.city}
           </p>
 
           <Countdown />
