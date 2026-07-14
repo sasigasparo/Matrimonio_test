@@ -19,7 +19,7 @@ export function buildWeddingEvent() {
   const start = parseLocal(date, venue.ceremony.time)
   const end = new Date(start.getTime() + 8 * 60 * 60 * 1000) // ~8h celebration
   const title = `${couple.displayName}'s Wedding`
-  const location = `${venue.ceremony.name}, ${venue.ceremony.address}`
+  const location = `${venue.ceremony.name} (${venue.ceremony.address}) & ${venue.reception.name} (${venue.reception.address})`
   const description =
     `Ceremony: ${venue.ceremony.name} (${venue.ceremony.time}) — ${venue.ceremony.address}\n` +
     `Dinner: ${venue.reception.name} (${venue.reception.time}) — ${venue.reception.address}\n` +
