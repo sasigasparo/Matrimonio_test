@@ -112,7 +112,7 @@ export default function IOSInstallBanner() {
 
       <button
         onClick={dismiss}
-        aria-label="Chiudi"
+        aria-label="Close"
         style={{
           flexShrink: 0,
           background: 'none',

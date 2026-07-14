@@ -134,7 +134,7 @@ async def send_message(
 
     if not content and not audio and not file and not video:
         logger.warning("❌ MSG_REJECT 400 | nessun payload | ip=%s", client_ip)
-        raise HTTPException(400, "Almeno un contenuto è richiesto")
+        raise HTTPException(400, "At least one piece of content is required")
 
     # Resolve identity
     if user:
@@ -154,7 +154,7 @@ async def send_message(
             "❌ MSG_REJECT 400 | nome mancante | ip=%s | auth=%s | guest_name=%r",
             client_ip, bool(user), guest_name,
         )
-        raise HTTPException(400, "Nome richiesto per inviare un messaggio")
+        raise HTTPException(400, "Name required to send a message")
 
     audio_path = None
     photo_url  = None
@@ -164,12 +164,12 @@ async def send_message(
         ext = Path(audio.filename).suffix.lower()
         if ext not in ALLOWED_AUDIO:
             logger.warning("❌ AUDIO_REJECT | ext=%r | filename=%r | guest=%r", ext, audio.filename, actor_name)
-            raise HTTPException(400, f"Formato audio non supportato: {ext}")
+            raise HTTPException(400, f"Unsupported audio format: {ext}")
         data = await audio.read()
         size_mb = len(data) / (1024 * 1024)
         logger.info("🎙️  AUDIO_UPLOAD | ext=%s | size=%.2f MB | guest=%r", ext, size_mb, actor_name)
         if size_mb > MAX_AUDIO_MB:
-            raise HTTPException(413, f"File troppo grande (max {MAX_AUDIO_MB} MB)")
+            raise HTTPException(413, f"File too large (max {MAX_AUDIO_MB} MB)")
         filename  = f"{uuid.uuid4()}{ext}"
         mime_type = audio.content_type or _mime_from_audio_ext(ext)
         try:
@@ -177,7 +177,7 @@ async def send_message(
             logger.info("✅ AUDIO_OK | path=audio/%s | guest=%r", filename, actor_name)
         except Exception as e:
             logger.error("❌ AUDIO_FAIL | %s: %s | guest=%r", type(e).__name__, e, actor_name)
-            raise HTTPException(500, f"Errore upload audio: {e}")
+            raise HTTPException(500, f"Audio upload error: {e}")
 
     # ── Video upload → Google Drive ───────────────────────────────────────────
     video_drive_url = None
@@ -192,12 +192,12 @@ async def send_message(
                 "video/x-matroska": ".mkv", "video/x-m4v": ".m4v",
             }.get(ct, ext)
         if not ext or ext not in ALLOWED_VIDEO:
-            raise HTTPException(400, f"Formato video non supportato: {video.content_type}")
+            raise HTTPException(400, f"Unsupported video format: {video.content_type}")
 
         vdata = await video.read()
         size_mb = len(vdata) / (1024 * 1024)
         if size_mb > MAX_VIDEO_MB:
-            raise HTTPException(413, f"Video troppo grande ({size_mb:.0f} MB, max {MAX_VIDEO_MB} MB)")
+            raise HTTPException(413, f"Video too large ({size_mb:.0f} MB, max {MAX_VIDEO_MB} MB)")
 
         vfilename = f"{uuid.uuid4()}{ext}"
         mime_type_v = video.content_type or f"video/{ext.lstrip('.')}"
@@ -206,7 +206,7 @@ async def send_message(
             video_drive_url = upload_video_to_drive(vdata, vfilename, mime_type_v)
         except Exception as e:
             logger.error("❌ VIDEO_DRIVE_FAIL | %s: %s", type(e).__name__, e)
-            raise HTTPException(500, f"Errore upload video su Drive: {e}")
+            raise HTTPException(500, f"Drive video upload error: {e}")
 
     # ── Inline photo upload (from chat) ───────────────────────────────────────
     if file:
@@ -255,7 +255,7 @@ async def send_message(
                 "❌ FOTO_CHAT 413 | FILE TROPPO GRANDE | size=%.2f MB | max=%d MB",
                 size_mb, MAX_PHOTO_MB,
             )
-            raise HTTPException(413, f"File troppo grande ({size_mb:.1f} MB, max {MAX_PHOTO_MB} MB)")
+            raise HTTPException(413, f"File too large ({size_mb:.1f} MB, max {MAX_PHOTO_MB} MB)")
 
         data, ext, mime_type = compress_image(data, ext)
         filename = f"{uuid.uuid4()}{ext}"
@@ -271,7 +271,7 @@ async def send_message(
                 "❌ FOTO_CHAT | UPLOAD_FAIL | errore=%s | messaggio=%s | nome=%s",
                 type(e).__name__, str(e), filename
             )
-            raise HTTPException(500, f"Errore upload foto: {e}")
+            raise HTTPException(500, f"Photo upload error: {e}")
 
     # ── Message type ──────────────────────────────────────────────────────────
     has_text  = bool(content and content.strip())
@@ -281,7 +281,7 @@ async def send_message(
 
     if not has_text and not has_audio and not has_photo and not has_video:
         logger.error("❌ MESSAGE_EMPTY | guest=%r — nessun contenuto dopo upload, abortisco", actor_name)
-        raise HTTPException(400, "Nessun contenuto nel messaggio")
+        raise HTTPException(400, "No content in the message")
 
     if has_video:
         msg_type = "video"

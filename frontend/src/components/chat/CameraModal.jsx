@@ -40,7 +40,7 @@ export default function CameraModal({ onCapture, onClose }) {
         setMultiCam(devices.filter(d => d.kind === 'videoinput').length > 1)
       } catch { /* ignore */ }
     } catch (e) {
-      setError('Fotocamera non disponibile: ' + e.message)
+      setError('Camera unavailable: ' + e.message)
     }
   }
 
@@ -111,19 +111,19 @@ export default function CameraModal({ onCapture, onClose }) {
           color: '#fff', fontSize: 22, lineHeight: 1, padding: '4px 8px',
         }}>✕</button>
         <span style={{ color: '#fff', fontFamily: 'Georgia, serif', fontSize: 15 }}>
-          {isFront ? 'Selfie' : 'Scatta una foto'}
+          {isFront ? 'Selfie' : 'Take a photo'}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <button onClick={() => setMirror(m => !m)} style={{
             background: mirror ? 'rgba(255,255,255,0.18)' : 'none',
             border: 'none', cursor: 'pointer', borderRadius: 8,
             color: '#fff', fontSize: 20, padding: '4px 8px',
-          }} title={mirror ? 'Specchio attivo' : 'Specchio disattivo'}>🪞</button>
+          }} title={mirror ? 'Mirror on' : 'Mirror off'}>🪞</button>
           {multiCam && (
             <button onClick={flip} style={{
               background: 'none', border: 'none', cursor: 'pointer',
               color: '#fff', fontSize: 22, padding: '4px 8px',
-            }} title="Cambia fotocamera">🔄</button>
+            }} title="Switch camera">🔄</button>
           )}
         </div>
       </div>
@@ -161,7 +161,7 @@ export default function CameraModal({ onCapture, onClose }) {
             position: 'absolute', bottom: 12, left: '50%', transform: 'translateX(-50%)',
             color: 'rgba(255,255,255,0.45)', fontSize: 11, pointerEvents: 'none',
           }}>
-            Doppio tap per cambiare fotocamera
+            Double tap to switch camera
           </div>
         )}
       </div>
@@ -183,7 +183,7 @@ export default function CameraModal({ onCapture, onClose }) {
           }}
           onMouseDown={e => e.currentTarget.style.transform = 'scale(0.92)'}
           onMouseUp={e => e.currentTarget.style.transform = 'scale(1)'}
-          title="Scatta"
+          title="Capture"
         />
       </div>
     </div>

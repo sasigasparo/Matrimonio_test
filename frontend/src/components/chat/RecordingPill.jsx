@@ -11,14 +11,14 @@ export default function RecordingPill({ secs, onStop, onCancel }) {
         animation: 'pulse 1s infinite',
       }} />
       <span style={{ fontSize: 13, color: 'var(--charcoal)', fontWeight: 500 }}>
-        Registrazione… {fmt(secs)}
+        Recording… {fmt(secs)}
       </span>
       <div style={{ flex: 1 }} />
       <button onClick={onCancel} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--warm-gray)', fontSize: 13 }}>
-        Annulla
+        Cancel
       </button>
       <button onClick={onStop} className="btn btn-primary btn-sm" style={{ borderRadius: 99 }}>
-        ⏹ Invia
+        ⏹ Send
       </button>
     </div>
   )

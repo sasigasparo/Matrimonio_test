@@ -3,7 +3,7 @@ import { CheckCheck, Trash2, Film, ZoomIn, ImageOff } from 'lucide-react'
 import AudioBubble from './AudioBubble'
 
 export function DateSep({ date }) {
-  const label = new Date(date).toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' })
+  const label = new Date(date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '10px 0 4px' }}>
       <div style={{ flex: 1, height: 1, background: 'var(--hairline)' }} />
@@ -49,7 +49,7 @@ export default function MessageBubble({ msg, myId, myName, isAdmin, onDelete }) 
     wordBreak: 'break-word',
   }
 
-  const timeStr = new Date(msg.created_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+  const timeStr = new Date(msg.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
 
   return (
     <div style={{
@@ -92,7 +92,7 @@ export default function MessageBubble({ msg, myId, myName, isAdmin, onDelete }) 
             <div style={{ position: 'relative', width: 'min(300px, 76vw)' }}>
               <img
                 src={msg.photo_url}
-                alt={`Foto di ${name}`}
+                alt={`Photo by ${name}`}
                 loading="lazy"
                 style={{
                   width: '100%', maxWidth: 300, maxHeight: 400,
@@ -110,11 +110,11 @@ export default function MessageBubble({ msg, myId, myName, isAdmin, onDelete }) 
                 background: 'var(--cream)', color: 'var(--warm-gray)',
                 fontSize: 13, gap: 8, flexDirection: 'column',
               }}>
-                <ImageOff size={26} /><span>Immagine non disponibile</span>
+                <ImageOff size={26} /><span>Image unavailable</span>
               </div>
               <div
                 role="button"
-                aria-label="Ingrandisci foto"
+                aria-label="Zoom photo"
                 style={{
                   position: 'absolute', bottom: 8, right: 8,
                   background: 'rgba(27,27,27,0.55)', backdropFilter: 'blur(6px)',
@@ -141,11 +141,11 @@ export default function MessageBubble({ msg, myId, myName, isAdmin, onDelete }) 
                 background: 'rgba(199,107,139,0.16)', color: 'var(--rose-deep)',
               }}><Film size={20} /></span>
               <div>
-                <div style={{ fontSize: 13.5, fontWeight: 600 }}>Video su Drive</div>
-                <div style={{ fontSize: 11.5, color: 'var(--warm-gray)', marginTop: 1 }}>Tocca per aprire →</div>
+                <div style={{ fontSize: 13.5, fontWeight: 600 }}>Video on Drive</div>
+                <div style={{ fontSize: 11.5, color: 'var(--warm-gray)', marginTop: 1 }}>Tap to open →</div>
                 {msg._waitMinutes && (
                   <div style={{ fontSize: 10.5, color: 'var(--warm-gray)', marginTop: 3 }}>
-                    ⏳ Se non parte, attendi ~{msg._waitMinutes} min
+                    ⏳ If it doesn't start, wait ~{msg._waitMinutes} min
                   </div>
                 )}
               </div>
@@ -172,11 +172,11 @@ export default function MessageBubble({ msg, myId, myName, isAdmin, onDelete }) 
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 5, paddingLeft: outgoing ? 0 : 6, paddingRight: outgoing ? 6 : 0 }}>
           <span style={{ fontSize: 10.5, color: 'var(--warm-gray)' }}>{timeStr}</span>
-          {outgoing && <CheckCheck size={13} style={{ color: 'var(--rose-deep)' }} aria-label="Inviato" />}
+          {outgoing && <CheckCheck size={13} style={{ color: 'var(--rose-deep)' }} aria-label="Sent" />}
           {(isAdmin || (isMe && withinWindow)) && (
             <button
               onClick={() => onDelete(msg.id, msg.created_at, msg.type)}
-              aria-label="Elimina messaggio"
+              aria-label="Delete message"
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
                 color: 'var(--warm-gray)', padding: '0 2px', display: 'inline-flex',

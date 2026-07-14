@@ -43,8 +43,8 @@ export function AdminStats({ t, geoData, geoLoading }) {
                   return (
                     <tr key={i} style={{ borderBottom:'1px solid var(--cream)' }}>
                       <td style={{ padding:'10px 16px', fontSize:'1.4rem', width:40 }}>{c.flag}</td>
-                      <td data-label="Paese" style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)' }}>{c.country}</td>
-                      <td data-label="Visite" style={{ padding:'10px 16px', textAlign:'right', color:'var(--warm-gray)' }}>{c.count} <span style={{ fontSize:'.75rem' }}>({pct}%)</span></td>
+                      <td data-label="Country" style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)' }}>{c.country}</td>
+                      <td data-label="Visits" style={{ padding:'10px 16px', textAlign:'right', color:'var(--warm-gray)' }}>{c.count} <span style={{ fontSize:'.75rem' }}>({pct}%)</span></td>
                       <td className="mbl-hide" style={{ padding:'10px 24px 10px 8px', width:140 }}>
                         <div style={{ background:'var(--cream)', borderRadius:4, height:8, overflow:'hidden' }}>
                           <div style={{ width:'100%', background:'var(--rose)', height:'100%', borderRadius:4, transform:`scaleX(${pct/100})`, transformOrigin:'left', transition:'transform .4s' }} />
@@ -76,9 +76,9 @@ export function AdminStats({ t, geoData, geoLoading }) {
                 {geoData.locations.map((l, i) => (
                   <tr key={i} style={{ borderBottom:'1px solid var(--cream)' }}>
                     <td style={{ padding:'8px 16px', fontSize:'1.2rem', width:36 }}>{l.flag}</td>
-                    <td data-label="Città" style={{ padding:'8px 16px', fontWeight:500, color:'var(--charcoal)' }}>{l.city || '—'}</td>
-                    <td data-label="Paese" style={{ padding:'8px 16px', color:'var(--warm-gray)' }}>{l.country}</td>
-                    <td data-label="Visite" style={{ padding:'8px 16px', color:'var(--warm-gray)' }}>{l.visits}</td>
+                    <td data-label="City" style={{ padding:'8px 16px', fontWeight:500, color:'var(--charcoal)' }}>{l.city || '—'}</td>
+                    <td data-label="Country" style={{ padding:'8px 16px', color:'var(--warm-gray)' }}>{l.country}</td>
+                    <td data-label="Visits" style={{ padding:'8px 16px', color:'var(--warm-gray)' }}>{l.visits}</td>
                   </tr>
                 ))}
               </tbody>
@@ -127,10 +127,10 @@ export function AdminStats({ t, geoData, geoLoading }) {
                   const maxAct = geoData.actions[0]?.count || 1
                   return (
                     <tr key={i} style={{ borderBottom:'1px solid var(--cream)' }}>
-                      <td data-label="Azione" style={{ padding:'8px 16px', fontWeight:500, color:'var(--charcoal)' }}>
+                      <td data-label="Action" style={{ padding:'8px 16px', fontWeight:500, color:'var(--charcoal)' }}>
                         <span className="badge badge-pending" style={{ fontSize:'.75rem' }}>{a.action}</span>
                       </td>
-                      <td data-label="N°" style={{ padding:'8px 16px', textAlign:'right', color:'var(--warm-gray)' }}>{a.count}</td>
+                      <td data-label="Count" style={{ padding:'8px 16px', textAlign:'right', color:'var(--warm-gray)' }}>{a.count}</td>
                       <td className="mbl-hide" style={{ padding:'8px 24px 8px 8px', width:120 }}>
                         <div style={{ background:'var(--cream)', borderRadius:4, height:8, overflow:'hidden' }}>
                           <div style={{ width:'100%', background:'var(--gold)', height:'100%', borderRadius:4, transform:`scaleX(${a.count/maxAct})`, transformOrigin:'left' }} />

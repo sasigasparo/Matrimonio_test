@@ -14,7 +14,7 @@ async function apiFetch(path, opts = {}) {
     ...opts,
     headers: { 'Content-Type': 'application/json', 'X-Matrimonio-Slug': WEDDING_CONFIG.slug, Authorization: `Bearer ${getToken()}`, ...(opts.headers || {}) },
   })
-  if (!res.ok) throw new Error((await res.json()).detail || 'Errore API')
+  if (!res.ok) throw new Error((await res.json()).detail || 'API Error')
   return res.json()
 }
 
@@ -145,16 +145,16 @@ function GuestPicker({ table, seatIndex, currentGuest, guests, allTables, onAssi
       }} onClick={e => e.stopPropagation()}>
         <div style={{ padding: '20px 20px 0', borderBottom: '1px solid rgba(207,165,181,0.2)' }}>
           <h3 style={{ margin: '0 0 4px', fontFamily: 'Georgia,serif', color: 'var(--charcoal,#1B1B1B)', fontSize: '1.1rem' }}>
-            {currentGuest ? `Posto ${seatIndex + 1} — ${table.name}` : `Assegna posto ${seatIndex + 1} — ${table.name}`}
+            {currentGuest ? `Seat ${seatIndex + 1} — ${table.name}` : `Assign seat ${seatIndex + 1} — ${table.name}`}
           </h3>
           {currentGuest && (
             <p style={{ margin: '0 0 12px', color: '#9a8070', fontSize: '0.85rem' }}>
-              Attualmente: <strong>{currentGuest.name}</strong>
+              Currently: <strong>{currentGuest.name}</strong>
             </p>
           )}
           <input
             autoFocus
-            placeholder="Cerca ospite…"
+            placeholder="Search guest…"
             value={search}
             onChange={e => setSearch(e.target.value)}
             style={{
@@ -174,11 +174,11 @@ function GuestPicker({ table, seatIndex, currentGuest, guests, allTables, onAssi
                 fontSize: '0.9rem', fontWeight: 600,
               }}
             >
-              🗑 Rimuovi ospite da questo posto
+              🗑 Remove guest from this seat
             </button>
           )}
           {filtered.length === 0 && (
-            <p style={{ padding: '12px 20px', color: '#b0a090', fontSize: '0.85rem' }}>Nessun ospite trovato</p>
+            <p style={{ padding: '12px 20px', color: '#b0a090', fontSize: '0.85rem' }}>No guest found</p>
           )}
           {filtered.map(g => {
             const alreadySeated = seated.has(g.id) && g.id !== currentGuest?.id
@@ -201,7 +201,7 @@ function GuestPicker({ table, seatIndex, currentGuest, guests, allTables, onAssi
                 }}/>
                 <span style={{ fontSize: '0.9rem', color: '#1B1B1B', flex: 1 }}>{g.name}</span>
                 <span style={{ fontSize: '0.75rem', color: '#b0a090' }}>
-                  {alreadySeated ? 'già assegnato' : g.rsvp_status === 'confirmed' ? '✓ confermato' : g.rsvp_status === 'declined' ? '✗ rifiutato' : '○ in attesa'}
+                  {alreadySeated ? 'already assigned' : g.rsvp_status === 'confirmed' ? '✓ confirmed' : g.rsvp_status === 'declined' ? '✗ declined' : '○ pending'}
                 </span>
               </button>
             )
@@ -213,7 +213,7 @@ function GuestPicker({ table, seatIndex, currentGuest, guests, allTables, onAssi
             width: '100%', padding: '10px', borderRadius: 8, border: '1px solid rgba(207,165,181,0.35)',
             background: 'none', cursor: 'pointer', fontFamily: 'inherit', color: '#9a8070', fontSize: '0.9rem',
           }}>
-            Annulla
+            Cancel
           </button>
         </div>
       </div>
@@ -247,20 +247,20 @@ function TableEditor({ table, onSave, onDelete, onClose }) {
         boxShadow: '0 24px 64px rgba(0,0,0,0.18)', padding: 24,
       }} onClick={e => e.stopPropagation()}>
         <h3 style={{ margin: '0 0 20px', fontFamily: 'Georgia,serif', color: '#1B1B1B' }}>
-          {table?.id ? 'Modifica tavolo' : 'Nuovo tavolo'}
+          {table?.id ? 'Edit table' : 'New table'}
         </h3>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <div>
-            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#5a4030', display: 'block', marginBottom: 4 }}>Nome tavolo</label>
+            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#5a4030', display: 'block', marginBottom: 4 }}>Table name</label>
             <input
               autoFocus value={name} onChange={e => setName(e.target.value)}
-              placeholder="es. Tavolo degli sposi"
+              placeholder="e.g. Head table"
               style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid rgba(207,165,181,0.4)', fontSize: '0.95rem', fontFamily: 'inherit', boxSizing: 'border-box' }}
             />
           </div>
           <div>
-            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#5a4030', display: 'block', marginBottom: 4 }}>Posti a sedere</label>
+            <label style={{ fontSize: '0.8rem', fontWeight: 600, color: '#5a4030', display: 'block', marginBottom: 4 }}>Seats</label>
             <input
               type="number" min={2} max={20} value={seats} onChange={e => setSeats(e.target.value)}
               style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid rgba(207,165,181,0.4)', fontSize: '0.95rem', fontFamily: 'inherit', boxSizing: 'border-box' }}
@@ -274,14 +274,14 @@ function TableEditor({ table, onSave, onDelete, onClose }) {
               padding: '10px 16px', borderRadius: 8, border: '1px solid #fcc',
               background: '#fee', color: '#c33', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.85rem',
             }}>
-              Elimina
+              Delete
             </button>
           )}
           <button onClick={onClose} style={{
             flex: 1, padding: '10px', borderRadius: 8, border: '1px solid rgba(207,165,181,0.35)',
             background: 'none', cursor: 'pointer', fontFamily: 'inherit', color: '#9a8070',
           }}>
-            Annulla
+            Cancel
           </button>
           <button onClick={handleSave} disabled={saving || !name.trim()} style={{
             flex: 2, padding: '10px', borderRadius: 8, border: 'none',
@@ -289,7 +289,7 @@ function TableEditor({ table, onSave, onDelete, onClose }) {
             cursor: saving ? 'not-allowed' : 'pointer', fontFamily: 'inherit', fontWeight: 600,
             opacity: saving || !name.trim() ? 0.6 : 1,
           }}>
-            {saving ? 'Salvo…' : '✓ Salva'}
+            {saving ? 'Saving…' : '✓ Save'}
           </button>
         </div>
       </div>
@@ -377,7 +377,7 @@ export default function Tables() {
   }
 
   const handleDeleteTable = async (id) => {
-    if (!confirm('Eliminare questo tavolo? Gli ospiti assegnati verranno rimossi.')) return
+    if (!confirm('Delete this table? Assigned guests will be removed.')) return
     try {
       await apiFetch(`/api/tables/${id}`, { method: 'DELETE' })
       setTableEditor(null)
@@ -402,7 +402,7 @@ export default function Tables() {
   if (error) return (
     <div style={{ textAlign: 'center', padding: 40, color: '#c33' }}>
       <p>{error}</p>
-      <button className="btn btn-primary" onClick={load}>Riprova</button>
+      <button className="btn btn-primary" onClick={load}>Retry</button>
     </div>
   )
 
@@ -413,10 +413,10 @@ export default function Tables() {
       <div style={{ marginBottom: 24, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 style={{ fontFamily: 'Georgia,serif', fontSize: '1.8rem', color: '#1B1B1B', margin: 0 }}>
-            🪑 Disposizione Tavoli
+            🪑 Table Layout
           </h1>
           <p style={{ color: '#9a8070', margin: '4px 0 0', fontSize: '0.9rem' }}>
-            {tables.length} tavoli · {assignedCount} ospiti assegnati · {freeSeats} posti liberi
+            {tables.length} tables · {assignedCount} guests assigned · {freeSeats} free seats
           </p>
         </div>
         <button
@@ -428,17 +428,17 @@ export default function Tables() {
             boxShadow: '0 2px 8px rgba(200,130,100,0.25)',
           }}
         >
-          + Nuovo tavolo
+          + New table
         </button>
       </div>
 
       {/* ── Legend ── */}
       <div style={{ display: 'flex', gap: 16, marginBottom: 20, flexWrap: 'wrap' }}>
         {[
-          { color: '#6a9e6c', label: 'Confermato' },
-          { color: '#b0a090', label: 'In attesa' },
-          { color: '#c97a7a', label: 'Rifiutato' },
-          { color: 'rgba(255,255,255,0.7)', label: 'Posto libero', border: 'rgba(180,140,120,0.4)' },
+          { color: '#6a9e6c', label: 'Confirmed' },
+          { color: '#b0a090', label: 'Pending' },
+          { color: '#c97a7a', label: 'Declined' },
+          { color: 'rgba(255,255,255,0.7)', label: 'Free seat', border: 'rgba(180,140,120,0.4)' },
         ].map(({ color, label, border }) => (
           <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8rem', color: '#9a8070' }}>
             <span style={{ width: 12, height: 12, borderRadius: '50%', background: color, border: border ? `1px solid ${border}` : 'none', flexShrink: 0 }} />
@@ -455,8 +455,8 @@ export default function Tables() {
           border: '2px dashed rgba(207,165,181,0.35)',
         }}>
           <div style={{ fontSize: '3rem', marginBottom: 12 }}>🪑</div>
-          <h3 style={{ fontFamily: 'Georgia,serif', color: '#1B1B1B', margin: '0 0 8px' }}>Nessun tavolo ancora</h3>
-          <p style={{ color: '#9a8070', margin: '0 0 20px' }}>Crea il primo tavolo per iniziare a sistemare gli ospiti</p>
+          <h3 style={{ fontFamily: 'Georgia,serif', color: '#1B1B1B', margin: '0 0 8px' }}>No tables yet</h3>
+          <p style={{ color: '#9a8070', margin: '0 0 20px' }}>Create the first table to start seating guests</p>
           <button
             onClick={() => setTableEditor({})}
             style={{
@@ -465,7 +465,7 @@ export default function Tables() {
               cursor: 'pointer', fontWeight: 600, fontFamily: 'inherit',
             }}
           >
-            + Crea primo tavolo
+            + Create first table
           </button>
         </div>
       )}
@@ -532,7 +532,7 @@ export default function Tables() {
                       flex: 1,
                       lineHeight: 1.3,
                     }}>
-                      {guest ? guest.name : 'posto libero'}
+                      {guest ? guest.name : 'free seat'}
                     </span>
                   </div>
                 )
@@ -549,7 +549,7 @@ export default function Tables() {
                 fontSize: '0.78rem', fontFamily: 'inherit',
               }}
             >
-              ✎ Modifica tavolo
+              ✎ Edit table
             </button>
           </div>
         ))}
@@ -569,10 +569,10 @@ export default function Tables() {
             boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
           }}>
             <h3 style={{ fontFamily: 'Georgia,serif', color: '#1B1B1B', margin: '0 0 12px', fontSize: '1rem' }}>
-              {t.name} — Ospiti assegnati ({assigned.length}/{t.seats})
+              {t.name} — Assigned guests ({assigned.length}/{t.seats})
             </h3>
             {assigned.length === 0 ? (
-              <p style={{ color: '#b0a090', fontSize: '0.85rem', margin: 0 }}>Nessun ospite assegnato. Clicca su un posto per aggiungere.</p>
+              <p style={{ color: '#b0a090', fontSize: '0.85rem', margin: 0 }}>No guests assigned. Click a seat to add.</p>
             ) : (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {assigned.map((g, i) => g && (
@@ -595,7 +595,7 @@ export default function Tables() {
             )}
             {empty > 0 && (
               <p style={{ color: '#b0a090', fontSize: '0.8rem', margin: '10px 0 0' }}>
-                {empty} {empty === 1 ? 'posto libero' : 'posti liberi'} — clicca sugli omini nella planimetria per assegnare
+                {empty} {empty === 1 ? 'free seat' : 'free seats'} — click the figures in the floor plan to assign
               </p>
             )}
           </div>
@@ -614,7 +614,7 @@ export default function Tables() {
             border: '1px solid rgba(232,196,168,0.35)',
           }}>
             <h3 style={{ fontFamily: 'Georgia,serif', color: '#1B1B1B', margin: '0 0 10px', fontSize: '0.95rem' }}>
-              Ospiti senza posto ({unassigned.length})
+              Guests without a seat ({unassigned.length})
             </h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
               {unassigned.map(g => (

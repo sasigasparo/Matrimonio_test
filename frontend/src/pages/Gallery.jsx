@@ -13,7 +13,7 @@ function AudioList({ messages }) {
   if (audioMsgs.length === 0) return (
     <div style={{ textAlign:'center', padding: '60px 20px', color:'var(--warm-gray)' }}>
       <div style={{ fontSize:'3rem', marginBottom:12 }}>🎙️</div>
-      <p>Nessun audio ancora. Registra un messaggio vocale dalla Chat.</p>
+      <p>No audio yet. Record a voice message from the Chat.</p>
     </div>
   )
 
@@ -29,9 +29,9 @@ function AudioList({ messages }) {
               🎙️
             </div>
             <div>
-              <div style={{ fontWeight:600, color:'var(--charcoal)', marginBottom:2 }}>{msg.guest_name || 'Ospite'}</div>
+              <div style={{ fontWeight:600, color:'var(--charcoal)', marginBottom:2 }}>{msg.guest_name || 'Guest'}</div>
               <div style={{ fontSize:12, color:'var(--warm-gray)' }}>
-                {new Date(msg.created_at).toLocaleString('it-IT', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })}
+                {new Date(msg.created_at).toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })}
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function Gallery() {
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       
       setPhotos(allPhotos)
-    } catch(e) { toast.error('Errore caricamento foto') }
+    } catch(e) { toast.error('Error loading photos') }
     setLoading(false)
   }
 
@@ -105,7 +105,7 @@ export default function Gallery() {
     try {
       const data = await api.listMessages()
       setMessages(data)
-    } catch(e) { toast.error('Errore caricamento audio') }
+    } catch(e) { toast.error('Error loading audio') }
     setAudioLoading(false)
   }
 
@@ -119,7 +119,7 @@ export default function Gallery() {
       if (videoRef.current) videoRef.current.srcObject = stream
       setCameraOn(true)
     } catch(e) {
-      toast.error('Impossibile accedere alla fotocamera: ' + e.message)
+      toast.error('Unable to access the camera: ' + e.message)
     }
   }
 
@@ -176,35 +176,35 @@ export default function Gallery() {
       const photo = await api.uploadPhoto(form)
       setPhotos(prev => [photo, ...prev])
 
-      // Invia anche in chat
+      // Also send to chat
       const msgForm = new FormData()
       msgForm.append('file', file)
       if (caption) msgForm.append('content', caption)
       await api.sendMessage(msgForm)
 
-      toast.success('Foto caricata! 📸')
+      toast.success('Photo uploaded! 📸')
       setCaptured(null); setPreview(null); setCaption(''); setTab('gallery')
     } catch(e) {
-      toast.error('Errore upload: ' + e.message)
+      toast.error('Upload error: ' + e.message)
     }
     setUploading(false)
   }
 
   const deletePhoto = async (id) => {
-    if (!confirm('Eliminare questa foto?')) return
+    if (!confirm('Delete this photo?')) return
     try {
       await api.deletePhoto(id)
       setPhotos(prev => prev.filter(p => p.id !== id))
-      toast.success('Foto eliminata')
+      toast.success('Photo deleted')
       setSelected(null)
-    } catch(e) { toast.error('Errore eliminazione') }
+    } catch(e) { toast.error('Error deleting') }
   }
 
   const tabs = [
-    { id:'gallery', label:'Foto', icon:'🖼️' },
+    { id:'gallery', label:'Photos', icon:'🖼️' },
     { id:'audio',   label:'Audio', icon:'🎙️' },
-    { id:'camera',  label:'Fotocamera', icon:'📸' },
-    { id:'upload',  label:'Carica', icon:'⬆️' },
+    { id:'camera',  label:'Camera', icon:'📸' },
+    { id:'upload',  label:'Upload', icon:'⬆️' },
   ]
 
   return (
@@ -213,10 +213,10 @@ export default function Gallery() {
       <div style={{ textAlign:'center', padding:'0 20px 40px' }}>
         <div style={{ fontSize:'3rem', marginBottom:16 }}>📷</div>
         <h1 style={{ fontFamily:'var(--font-serif)', fontSize:'2.5rem', color:'var(--charcoal)', marginBottom:8 }}>
-          Galleria dei ricordi
+          Memories Gallery
         </h1>
         <p style={{ color:'var(--warm-gray)' }}>
-          Scatta e condividi i tuoi momenti preferiti • {photos.length} foto • {messages.filter(m => m.audio_path).length} audio
+          Capture and share your favorite moments • {photos.length} photos • {messages.filter(m => m.audio_path).length} audio
         </p>
       </div>
 
@@ -259,8 +259,8 @@ export default function Gallery() {
                 {!cameraOn && (
                   <div style={{ padding:48, textAlign:'center' }}>
                     <div style={{ fontSize:'4rem', marginBottom:16 }}>📷</div>
-                    <p style={{ color:'var(--warm-gray)', marginBottom:20 }}>La fotocamera è spenta</p>
-                    <button className="btn btn-primary" onClick={startCamera}>Accendi la fotocamera</button>
+                    <p style={{ color:'var(--warm-gray)', marginBottom:20 }}>The camera is off</p>
+                    <button className="btn btn-primary" onClick={startCamera}>Turn on the camera</button>
                   </div>
                 )}
                 {cameraOn && (
@@ -283,18 +283,18 @@ export default function Gallery() {
               </>
             ) : (
               <div>
-                <img src={preview} alt="Anteprima" style={{ width:'100%', display:'block' }} />
+                <img src={preview} alt="Preview" style={{ width:'100%', display:'block' }} />
                 <div style={{ padding:24, display:'flex', flexDirection:'column', gap:16 }}>
                   <input
                     className="input"
-                    placeholder="Aggiungi una didascalia…"
+                    placeholder="Add a caption…"
                     value={caption}
                     onChange={e => setCaption(e.target.value)}
                   />
                   <div style={{ display:'flex', gap:12 }}>
-                    <button className="btn btn-outline" onClick={retake} style={{ flex:1 }}>↩ Rifai</button>
+                    <button className="btn btn-outline" onClick={retake} style={{ flex:1 }}>↩ Retake</button>
                     <button className="btn btn-primary" onClick={upload} disabled={uploading} style={{ flex:2 }}>
-                      {uploading ? 'Caricamento…' : '⬆️ Pubblica nella galleria'}
+                      {uploading ? 'Uploading…' : '⬆️ Publish to gallery'}
                     </button>
                   </div>
                 </div>
@@ -319,18 +319,18 @@ export default function Gallery() {
                 onMouseLeave={e => e.currentTarget.style.borderColor='var(--blush)'}
               >
                 <div style={{ fontSize:'3rem', marginBottom:12 }}>⬆️</div>
-                <p style={{ color:'var(--warm-gray)', marginBottom:4 }}>Clicca o trascina qui le tue foto</p>
+                <p style={{ color:'var(--warm-gray)', marginBottom:4 }}>Click or drag your photos here</p>
                 <p style={{ fontSize:'.8rem', color:'var(--blush)' }}>JPG, PNG, WEBP · max 30MB</p>
                 <input type="file" accept="image/*" onChange={handleFile} style={{ display:'none' }} multiple={false} />
               </label>
             ) : (
               <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
-                <img src={preview} alt="Anteprima" style={{ width:'100%', borderRadius:'var(--radius-md)', objectFit:'cover', maxHeight:320 }} />
-                <input className="input" placeholder="Didascalia…" value={caption} onChange={e => setCaption(e.target.value)} />
+                <img src={preview} alt="Preview" style={{ width:'100%', borderRadius:'var(--radius-md)', objectFit:'cover', maxHeight:320 }} />
+                <input className="input" placeholder="Caption…" value={caption} onChange={e => setCaption(e.target.value)} />
                 <div style={{ display:'flex', gap:12 }}>
-                  <button className="btn btn-outline" onClick={() => { setPreview(null); setCaptured(null) }} style={{ flex:1 }}>✕ Rimuovi</button>
+                  <button className="btn btn-outline" onClick={() => { setPreview(null); setCaptured(null) }} style={{ flex:1 }}>✕ Remove</button>
                   <button className="btn btn-primary" onClick={upload} disabled={uploading} style={{ flex:2 }}>
-                    {uploading ? 'Caricamento…' : 'Pubblica'}
+                    {uploading ? 'Uploading…' : 'Publish'}
                   </button>
                 </div>
               </div>
@@ -347,7 +347,7 @@ export default function Gallery() {
           ) : photos.length === 0 ? (
             <div style={{ textAlign:'center', padding:60, color:'var(--warm-gray)' }}>
               <div style={{ fontSize:'3rem', marginBottom:12 }}>📷</div>
-              <p>Nessuna foto ancora. Sii il primo a condividere un momento!</p>
+              <p>No photos yet. Be the first to share a moment!</p>
             </div>
           ) : (
             <div style={{
@@ -422,9 +422,9 @@ export default function Gallery() {
             <div style={{ display:'flex', gap:10, justifyContent:'center', marginTop:12 }}>
               {!String(selected.id).startsWith('msg-') && (String(selected.guest_id) === String(user?.id) || user?.is_admin) && (
                 <button className="btn btn-sm" style={{ background:'rgba(199,107,139,.8)', color:'#fff' }}
-                  onClick={() => deletePhoto(selected.id)}>🗑 Elimina</button>
+                  onClick={() => deletePhoto(selected.id)}>🗑 Delete</button>
               )}
-              <button className="btn btn-sm btn-ghost" style={{ color:'#fff' }} onClick={() => setSelected(null)}>✕ Chiudi</button>
+              <button className="btn btn-sm btn-ghost" style={{ color:'#fff' }} onClick={() => setSelected(null)}>✕ Close</button>
             </div>
           </div>
         </div>

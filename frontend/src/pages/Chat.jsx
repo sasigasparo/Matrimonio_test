@@ -146,7 +146,7 @@ export default function Chat() {
       const incoming = data.reverse()
       lastMsgCountRef.current = incoming.length
       setMessages(incoming)
-    } catch { toast.error('Errore caricamento messaggi') }
+    } catch { toast.error('Error loading messages') }
     setLoading(false)
   }
 
@@ -208,7 +208,7 @@ export default function Chat() {
 
       if (!res.ok) {
         const errBody = await res.json().catch(() => ({}))
-        throw new Error(errBody.detail || `Errore HTTP ${res.status}`)
+        throw new Error(errBody.detail || `HTTP Error ${res.status}`)
       }
       const msg = await res.json()
       if (!msg.photo_url && photoPreview) msg.photo_url = photoPreview
@@ -226,7 +226,7 @@ export default function Chat() {
       setTimeout(() => scrollToBottom(false), 50)
       inputRef.current?.focus()
     } catch (e) {
-      toast.error('Errore invio: ' + e.message)
+      toast.error('Send error: ' + e.message)
     }
     setSending(false)
   }
@@ -252,7 +252,7 @@ export default function Chat() {
       setRecording(true)
       setRecordSecs(0)
       timerRef.current = setInterval(() => setRecordSecs(s => s + 1), 1000)
-    } catch (e) { toast.error('Microfono non disponibile: ' + e.message) }
+    } catch (e) { toast.error('Microphone unavailable: ' + e.message) }
   }
 
   const stopRecording = () => {
@@ -303,17 +303,17 @@ export default function Chat() {
     if (!isAdmin) {
       const age = Date.now() - new Date(createdAt).getTime()
       if (age > 3 * 60 * 1000) {
-        toast.error('Tempo scaduto: non puoi più eliminare questo messaggio')
+        toast.error('Time expired: you can no longer delete this message')
         return
       }
     }
-    if (!confirm('Eliminare questo messaggio?')) return
+    if (!confirm('Delete this message?')) return
     try {
       const headers = { ...tenantHeaders(), Authorization: `Bearer ${getToken()}` }
       await fetch(`${API}/messages/${id}`, { method: 'DELETE', headers })
       setMessages(prev => prev.filter(m => m.id !== id))
-      toast.success('Messaggio eliminato')
-    } catch { toast.error('Errore eliminazione') }
+      toast.success('Message deleted')
+    } catch { toast.error('Error deleting') }
   }
 
   // Real participant count: distinct senders (not a fabricated "online" number).
@@ -364,7 +364,7 @@ export default function Chat() {
       }}>
         <button
           onClick={() => navigate('/')}
-          aria-label="Torna alla home"
+          aria-label="Back to home"
           style={{
             width: 36, height: 36, borderRadius: '50%', border: 'none', flexShrink: 0,
             background: 'transparent', color: 'var(--charcoal)', cursor: 'pointer',
@@ -389,18 +389,18 @@ export default function Chat() {
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--sage)', boxShadow: '0 0 0 3px rgba(67,160,71,0.18)', animation: 'livePulse 2.4s ease-in-out infinite' }} />
               {participants > 0
-                ? `${participants} ${participants === 1 ? 'partecipante' : 'partecipanti'}`
-                : 'Chat degli sposi'}
+                ? `${participants} ${participants === 1 ? 'participant' : 'participants'}`
+                : "Couple's chat"}
             </span>
             <span aria-hidden="true">·</span>
-            <span>{messages.length} {messages.length === 1 ? 'messaggio' : 'messaggi'}</span>
+            <span>{messages.length} {messages.length === 1 ? 'message' : 'messages'}</span>
           </div>
         </div>
 
         {!authName && (
           <button
             onClick={() => setNameModalMode(activeName ? 'edit' : 'new')}
-            title={activeName ? 'Cambia il tuo nome' : 'Scegli il tuo nome'}
+            title={activeName ? 'Change your name' : 'Choose your name'}
             style={{
               display: 'flex', alignItems: 'center', gap: 5,
               background: activeName ? 'rgba(199,107,139,0.1)' : 'var(--rose)',
@@ -436,7 +436,7 @@ export default function Chat() {
               </>
             ) : (
               <span style={{ fontSize: 12, fontWeight: 600, color: '#fff', whiteSpace: 'nowrap' }}>
-                Scegli il tuo nome
+                Choose your name
               </span>
             )}
           </button>
@@ -462,7 +462,7 @@ export default function Chat() {
 
         <button
           onClick={() => setShowReel(true)}
-          title="Rullino foto"
+          title="Photo reel"
           style={{
             width: 36, height: 36, borderRadius: '50%', border: 'none',
             background: 'rgba(199,107,139,0.1)', cursor: 'pointer',
@@ -501,9 +501,9 @@ export default function Chat() {
               }}>
                 <style>{`@keyframes menuIn { from { opacity:0; transform:scale(0.95) translateY(-6px) } to { opacity:1; transform:none } }`}</style>
                 {[
-                  { icon: <Images size={18} />, label: 'Rullino foto', action: () => { setShowReel(true); setShowMenu(false) } },
-                  { icon: <Film size={18} />, label: 'Vai ai Ricordi', action: () => { setShowMenu(false); navigate('/gallery') } },
-                  ...(!authName ? [{ icon: <Pencil size={18} />, label: 'Cambia il tuo nome', action: () => { setNameModalMode('edit'); setShowMenu(false) } }] : []),
+                  { icon: <Images size={18} />, label: 'Photo reel', action: () => { setShowReel(true); setShowMenu(false) } },
+                  { icon: <Film size={18} />, label: 'Go to Memories', action: () => { setShowMenu(false); navigate('/gallery') } },
+                  ...(!authName ? [{ icon: <Pencil size={18} />, label: 'Change your name', action: () => { setNameModalMode('edit'); setShowMenu(false) } }] : []),
                 ].map(item => (
                   <button
                     key={item.label}
@@ -572,12 +572,12 @@ export default function Chat() {
             </div>
             {!isRefreshing && pullDistance < 60 && (
               <span style={{ fontSize: 12, color: 'var(--warm-gray)', fontWeight: 500 }}>
-                Scorri per aggiornare
+                Pull to refresh
               </span>
             )}
             {pullDistance >= 60 && !isRefreshing && (
               <span style={{ fontSize: 12, color: 'var(--rose-deep)', fontWeight: 600 }}>
-                Rilascia per aggiornare
+                Release to refresh
               </span>
             )}
           </div>
@@ -595,10 +595,10 @@ export default function Chat() {
               boxShadow: '0 8px 24px rgba(199,107,139,0.18)', fontSize: 30,
             }}>💌</div>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: 'var(--charcoal)', margin: '0 0 6px' }}>
-              Nessun messaggio… ancora
+              No messages… yet
             </h2>
             <p style={{ fontSize: 14, lineHeight: 1.55, margin: 0 }}>
-              Sii il primo a lasciare un pensiero, una foto o un vocale agli sposi 💍
+              Be the first to leave a thought, a photo, or a voice message for the couple 💍
             </p>
           </div>
         ) : grouped.map((item, i) =>
@@ -621,7 +621,7 @@ export default function Chat() {
         {!isAtBottom && (
           <button
             onClick={() => scrollToBottom()}
-            aria-label="Vai ai messaggi più recenti"
+            aria-label="Go to most recent messages"
             style={{
               position: 'sticky', bottom: 16, alignSelf: 'center',
               display: 'flex', alignItems: 'center', gap: 6,
@@ -637,7 +637,7 @@ export default function Chat() {
             onMouseLeave={e => { e.currentTarget.style.background = 'var(--rose)'; e.currentTarget.style.boxShadow = '0 4px 18px rgba(199,107,139,0.45)' }}
           >
             {newMsgCount > 0
-              ? <><span>↓ {newMsgCount} nuov{newMsgCount === 1 ? 'o' : 'i'}</span></>
+              ? <><span>↓ {newMsgCount} new</span></>
               : <span style={{ fontSize: 16, lineHeight: 1 }}>↓</span>
             }
           </button>
@@ -654,7 +654,7 @@ export default function Chat() {
           <div style={{ position: 'relative', flexShrink: 0 }}>
             <img src={photoPreview} style={{ height: 72, width: 72, borderRadius: 14, objectFit: 'cover', boxShadow: 'var(--shadow-sm)' }} />
             <button onClick={() => { setPhotoPreview(null); setPhotoFile(null) }}
-              aria-label="Rimuovi foto"
+              aria-label="Remove photo"
               style={{
                 position: 'absolute', top: -8, right: -8,
                 background: 'var(--rose)', border: '2px solid #fff',
@@ -666,12 +666,12 @@ export default function Chat() {
             ><X size={14} /></button>
           </div>
           <input
-            className="input" placeholder="Aggiungi didascalia…"
+            className="input" placeholder="Add a caption…"
             value={text} onChange={e => setText(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
             style={{ flex: 1, fontSize: 16 }}
           />
-          <button onClick={send} disabled={sending} aria-label="Invia foto" style={{
+          <button onClick={send} disabled={sending} aria-label="Send photo" style={{
             width: 40, height: 40, borderRadius: '50%', border: 'none',
             background: 'var(--rose)', color: '#fff', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -701,16 +701,16 @@ export default function Chat() {
                     border: '2px solid var(--blush)', borderTopColor: 'var(--rose)',
                     borderRadius: '50%', animation: 'spin 0.8s linear infinite',
                   }} />
-                  Caricamento su Drive… aspetta ~{estimateWaitMinutes(videoFile.size / (1024 * 1024))} min dopo l'invio
+                  Uploading to Drive… wait ~{estimateWaitMinutes(videoFile.size / (1024 * 1024))} min after sending
                 </>
-              ) : `${(videoFile.size / (1024 * 1024)).toFixed(1)} MB · pronto in ~${estimateWaitMinutes(videoFile.size / (1024 * 1024))} min su Drive`}
+              ) : `${(videoFile.size / (1024 * 1024)).toFixed(1)} MB · ready in ~${estimateWaitMinutes(videoFile.size / (1024 * 1024))} min on Drive`}
             </div>
           </div>
           {!sending && (
             <button onClick={() => setVideoFile(null)} style={{
               background: 'none', border: 'none', cursor: 'pointer',
               color: 'var(--warm-gray)', fontSize: 12, padding: '4px 8px',
-            }}>Scarta</button>
+            }}>Discard</button>
           )}
           <button className="btn btn-primary btn-sm" onClick={send} disabled={sending} style={{ borderRadius: 20, display: 'flex', alignItems: 'center', gap: 6 }}>
             {sending ? (
@@ -719,7 +719,7 @@ export default function Chat() {
                 border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff',
                 borderRadius: '50%', animation: 'spin 0.8s linear infinite',
               }} />
-            ) : '✓ Invia'}
+            ) : '✓ Send'}
           </button>
         </div>
       )}
@@ -734,7 +734,7 @@ export default function Chat() {
           <span style={{ width: 38, height: 38, borderRadius: 11, flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(199,107,139,0.14)', color: 'var(--rose-deep)' }}><Mic size={18} /></span>
           <div style={{ flex: 1 }}>
             <span style={{ fontSize: 12.5, color: 'var(--charcoal)', fontWeight: 600 }}>
-              Messaggio vocale pronto
+              Voice message ready
             </span>
             <p style={{ fontSize: 11, color: 'var(--warm-gray)', margin: '2px 0 0 0' }}>
               {fmt(recordSecs)}
@@ -747,12 +747,12 @@ export default function Chat() {
           }}
             onMouseEnter={e => e.currentTarget.style.background = 'rgba(199,107,139,0.1)'}
             onMouseLeave={e => e.currentTarget.style.background = 'none'}
-            title="Scarta"
+            title="Discard"
           >
-            Scarta
+            Discard
           </button>
           <button className="btn btn-primary btn-sm" onClick={send} disabled={sending} style={{ borderRadius: 20 }}>
-            {sending ? '…' : '✓ Invia'}
+            {sending ? '…' : '✓ Send'}
           </button>
         </div>
       )}
@@ -785,7 +785,7 @@ export default function Chat() {
                 transition: 'all 0.2s',
                 color: showPhotoMenu ? 'var(--rose-deep)' : 'var(--warm-gray)',
               }}
-              aria-label="Aggiungi foto o video"
+              aria-label="Add photo or video"
             ><Plus size={20} style={{ transform: showPhotoMenu ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s' }} /></button>
 
             {showPhotoMenu && (
@@ -800,9 +800,9 @@ export default function Chat() {
                   animation: 'menuIn 0.15s ease-out',
                 }}>
                   {[
-                    { icon: <Camera size={17} />, label: 'Scatta una foto', action: () => { setShowPhotoMenu(false); setShowCamera(true) } },
-                    { icon: <ImagePlus size={17} />, label: 'Carica dalla libreria', action: () => { setShowPhotoMenu(false); fileInputRef.current?.click() } },
-                    { icon: <Film size={17} />, label: 'Carica un video', action: () => { setShowPhotoMenu(false); videoInputRef.current?.click() } },
+                    { icon: <Camera size={17} />, label: 'Take a photo', action: () => { setShowPhotoMenu(false); setShowCamera(true) } },
+                    { icon: <ImagePlus size={17} />, label: 'Upload from library', action: () => { setShowPhotoMenu(false); fileInputRef.current?.click() } },
+                    { icon: <Film size={17} />, label: 'Upload a video', action: () => { setShowPhotoMenu(false); videoInputRef.current?.click() } },
                   ].map((item, idx, arr) => (
                     <button
                       key={item.label}
@@ -829,7 +829,7 @@ export default function Chat() {
 
           <textarea
             ref={inputRef}
-            placeholder={activeName ? 'Scrivi un messaggio…' : 'Scegli il tuo nome per scrivere…'}
+            placeholder={activeName ? 'Write a message…' : 'Choose your name to write…'}
             value={text}
             onChange={e => { setText(e.target.value); e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px' }}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
@@ -847,7 +847,7 @@ export default function Chat() {
           />
 
           {text.trim() || photoFile ? (
-            <button onClick={send} disabled={sending} aria-label="Invia" style={{
+            <button onClick={send} disabled={sending} aria-label="Send" style={{
               width: 40, height: 40, borderRadius: '50%', border: 'none',
               background: 'var(--rose)', color: '#fff', cursor: 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -855,7 +855,7 @@ export default function Chat() {
               boxShadow: '0 4px 14px rgba(199,107,139,0.4)',
             }}><Send size={17} style={{ marginLeft: -1 }} /></button>
           ) : (
-            <button onClick={startRecording} aria-label="Registra messaggio vocale" style={{
+            <button onClick={startRecording} aria-label="Record voice message" style={{
               width: 40, height: 40, borderRadius: '50%',
               border: '1.5px solid var(--hairline)',
               background: 'var(--ivory)', color: 'var(--rose-deep)', cursor: 'pointer',

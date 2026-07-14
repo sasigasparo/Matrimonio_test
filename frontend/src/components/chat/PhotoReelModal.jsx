@@ -20,7 +20,7 @@ export default function PhotoReelModal({ onClose }) {
           id: `msg-${m.id}`,
           url: m.photo_url,
           caption: m.content,
-          guest_name: m.guest_name || 'Ospite',
+          guest_name: m.guest_name || 'Guest',
           avatar_url: m.avatar_url,
           guest_id: m.guest_id,
           created_at: m.created_at,
@@ -59,10 +59,10 @@ export default function PhotoReelModal({ onClose }) {
         }}>‹</button>
         <div style={{ flex: 1 }}>
           <div style={{ color: '#fff', fontFamily: 'Georgia, serif', fontSize: 16 }}>
-            Rullino foto
+            Photo reel
           </div>
           <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>
-            {loading ? '…' : `${photos.length} foto condivise`}
+            {loading ? '…' : `${photos.length} photos shared`}
           </div>
         </div>
         <span style={{ fontSize: 20 }}>📷</span>
@@ -75,7 +75,7 @@ export default function PhotoReelModal({ onClose }) {
       ) : photos.length === 0 ? (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.35)' }}>
           <div style={{ fontSize: '3rem', marginBottom: 12 }}>📷</div>
-          <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>Nessuna foto ancora</p>
+          <p style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>No photos yet</p>
         </div>
       ) : (
         <div style={{
@@ -140,10 +140,10 @@ export default function PhotoReelModal({ onClose }) {
               </p>
             )}
             <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12 }}>
-              📷 {selected.guest_name || 'Ospite'}
+              📷 {selected.guest_name || 'Guest'}
               {selected.created_at && (
                 <span style={{ marginLeft: 8 }}>
-                  · {new Date(selected.created_at).toLocaleDateString('it-IT', { day: 'numeric', month: 'short' })}
+                  · {new Date(selected.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                 </span>
               )}
             </p>
@@ -153,7 +153,7 @@ export default function PhotoReelModal({ onClose }) {
                 marginTop: 12, background: 'rgba(255,255,255,0.1)', border: 'none',
                 color: '#fff', padding: '6px 20px', borderRadius: 99, cursor: 'pointer', fontSize: 13,
               }}
-            >✕ Chiudi</button>
+            >✕ Close</button>
           </div>
         </div>
       )}

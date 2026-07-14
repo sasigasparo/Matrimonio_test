@@ -67,7 +67,7 @@ export const WEDDING_CONFIG = {
     airport: {
       name: "Zürich Airport",
       code: "ZRH",
-      distanceFromCenter: "circa 15 min dal centro città in treno",
+      distanceFromCenter: "about 15 min from the city centre by train",
     },
     trainStation: {
       name: "Zürich Hauptbahnhof (Zürich HB)",

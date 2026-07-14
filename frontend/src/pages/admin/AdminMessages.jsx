@@ -2,7 +2,7 @@ export function AdminMessages({ t, messages, deleteMessage }) {
   return (
     <div>
       <p style={{ color:'var(--warm-gray)', marginBottom:24, fontSize:'.9rem' }}>
-        {messages.length} {t.messagesCount} — clicca 🗑 per eliminare.
+        {messages.length} {t.messagesCount} — click 🗑 to delete.
       </p>
       {messages.length === 0 ? (
         <div className="card" style={{ padding:48, textAlign:'center', color:'var(--warm-gray)' }}>
@@ -21,10 +21,10 @@ export function AdminMessages({ t, messages, deleteMessage }) {
             <tbody>
               {messages.map(m => (
                 <tr key={m.id} style={{ borderBottom:'1px solid var(--cream)' }}>
-                  <td data-label="Mittente" style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)', whiteSpace:'nowrap' }}>
+                  <td data-label="Sender" style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)', whiteSpace:'nowrap' }}>
                     {m.guest_name || t.anonymous}
                   </td>
-                  <td data-label="Contenuto" style={{ padding:'10px 16px', color:'var(--warm-gray)', maxWidth:320 }}>
+                  <td data-label="Content" style={{ padding:'10px 16px', color:'var(--warm-gray)', maxWidth:320 }}>
                     {m.photo_url && (
                       <img src={m.photo_url} alt="" style={{ width:40, height:40, objectFit:'cover', borderRadius:4, marginRight:8, verticalAlign:'middle' }} />
                     )}
@@ -38,11 +38,11 @@ export function AdminMessages({ t, messages, deleteMessage }) {
                       <span style={{ color:'var(--warm-gray)', fontStyle:'italic' }}>—</span>
                     )}
                   </td>
-                  <td data-label="Tipo" style={{ padding:'10px 16px' }}>
+                  <td data-label="Type" style={{ padding:'10px 16px' }}>
                     <span className="badge badge-pending" style={{ fontSize:'.7rem' }}>{m.type}</span>
                   </td>
-                  <td data-label="Data" style={{ padding:'10px 16px', color:'var(--warm-gray)', whiteSpace:'nowrap' }}>
-                    {new Date(m.created_at).toLocaleString('it-IT')}
+                  <td data-label="Date" style={{ padding:'10px 16px', color:'var(--warm-gray)', whiteSpace:'nowrap' }}>
+                    {new Date(m.created_at).toLocaleString('en-GB')}
                   </td>
                   <td className="mbl-actions" style={{ padding:'10px 16px' }}>
                     <button
@@ -53,7 +53,7 @@ export function AdminMessages({ t, messages, deleteMessage }) {
                         cursor:'pointer', fontSize:'.85rem',
                       }}
                     >
-                      🗑 Elimina
+                      🗑 Delete
                     </button>
                   </td>
                 </tr>

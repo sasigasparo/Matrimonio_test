@@ -18,7 +18,7 @@ export function AdminRsvp({ t, confirmed, totalSeats, totalAdults, totalChildren
         <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.85rem', minWidth:500 }}>
           <thead>
             <tr style={{ borderBottom:'2px solid var(--cream)', background:'var(--ivory)' }}>
-              {[t.fullName, `${t.adults} (+ ${t.companions})`, t.children, 'Totale'].map(h => (
+              {[t.fullName, `${t.adults} (+ ${t.companions})`, t.children, 'Total'].map(h => (
                 <th key={h} style={{ padding:'12px 16px', textAlign:'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.75rem' }}>{h}</th>
               ))}
             </tr>
@@ -29,12 +29,12 @@ export function AdminRsvp({ t, confirmed, totalSeats, totalAdults, totalChildren
               const children = g.children || 0
               return (
                 <tr key={g.id} style={{ borderBottom:'1px solid var(--cream)' }}>
-                  <td data-label="Nome" style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)' }}>{g.name}</td>
-                  <td data-label="Adulti" style={{ padding:'10px 16px', color:'var(--warm-gray)' }}>
-                    {adults}{g.companions > 0 && <span style={{ fontSize:'.75rem', marginLeft:4, color:'var(--warm-gray)' }}>(+{g.companions} acc.)</span>}
+                  <td data-label="Name" style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)' }}>{g.name}</td>
+                  <td data-label="Adults" style={{ padding:'10px 16px', color:'var(--warm-gray)' }}>
+                    {adults}{g.companions > 0 && <span style={{ fontSize:'.75rem', marginLeft:4, color:'var(--warm-gray)' }}>(+{g.companions} {t.companions})</span>}
                   </td>
-                  <td data-label="Bambini" style={{ padding:'10px 16px', color:'var(--warm-gray)' }}>{children || '—'}</td>
-                  <td data-label="Totale" style={{ padding:'10px 16px', fontWeight:600, color:'var(--charcoal)' }}>{adults + children}</td>
+                  <td data-label="Children" style={{ padding:'10px 16px', color:'var(--warm-gray)' }}>{children || '—'}</td>
+                  <td data-label="Total" style={{ padding:'10px 16px', fontWeight:600, color:'var(--charcoal)' }}>{adults + children}</td>
                 </tr>
               )
             })}

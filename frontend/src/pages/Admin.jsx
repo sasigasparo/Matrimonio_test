@@ -14,8 +14,7 @@ import { i18n } from './admin/i18n'
 
 export default function Admin() {
   const toast = useToast()
-  const [lang, setLang]           = useState('it')
-  const t = i18n[lang]
+  const t = i18n.en
   const [tab, setTab]             = useState('dashboard')
   const [dashboard, setDashboard] = useState(null)
   const [guests, setGuests]       = useState([])
@@ -54,7 +53,7 @@ export default function Admin() {
     try {
       const data = await api.dashboard()
       setDashboard(data)
-    } catch { toast.error('Errore caricamento dashboard') }
+    } catch { toast.error('Error loading dashboard') }
     setLoading(false)
   }
 
@@ -76,14 +75,14 @@ export default function Admin() {
 
   const loadGeoStats = async () => {
     setGeoLoading(true)
-    try { setGeoData(await api.geoStats()) } catch { toast.error('Errore caricamento statistiche') }
+    try { setGeoData(await api.geoStats()) } catch { toast.error('Error loading statistics') }
     setGeoLoading(false)
   }
 
   const loadRsvpTimeline = async () => {
     if (rsvpTimeline.length > 0) return
     setTimelineLoading(true)
-    try { setRsvpTimeline(await api.rsvpTimeline()) } catch { toast.error('Errore caricamento timeline') }
+    try { setRsvpTimeline(await api.rsvpTimeline()) } catch { toast.error('Error loading timeline') }
     setTimelineLoading(false)
   }
 
@@ -104,27 +103,27 @@ export default function Admin() {
   }
 
   const addGuest = async () => {
-    if (!newGuest.name || !newGuest.email) { toast.error('Nome ed email richiesti'); return }
+    if (!newGuest.name || !newGuest.email) { toast.error('Name and email required'); return }
     setAdding(true)
     try {
       const tableNum = parseInt(newGuest.table_num, 10)
       const g = await api.createGuest({ ...newGuest, phone: normalizePhone(newGuest.phone), table_num: tableNum > 0 ? tableNum : null })
       setGuests(prev => [...prev, g])
-      toast.success(`✓ Invitato ${g.name} aggiunto`)
+      toast.success(`✓ Guest ${g.name} added`)
       setNewGuest({ name:'', email:'', phone:'', table_num:'', dietary:'' })
       setAddOpen(false)
       loadDashboard()
       if (sendOnCreate) sendInvite(g.id, g.name)
-    } catch(e) { toast.error('Errore: ' + e.message) }
+    } catch(e) { toast.error('Error: ' + e.message) }
     setAdding(false)
   }
 
   const sendInvite = async (id, name) => {
     try {
       const r = await api.sendInvite(id)
-      r.sent ? toast.success(`📧 Invito inviato a ${name}`) : toast.error('SMTP non configurato — configura le variabili email nel .env')
+      r.sent ? toast.success(`📧 Invite sent to ${name}`) : toast.error('SMTP not configured — set the email variables in .env')
       loadGuests()
-    } catch(e) { toast.error('Errore: ' + e.message) }
+    } catch(e) { toast.error('Error: ' + e.message) }
   }
 
   const sendAll = async () => {
@@ -132,20 +131,20 @@ export default function Admin() {
     try {
       const results = await api.sendAll()
       const sent = results.filter(r => r.sent).length
-      toast.success(`📧 ${sent} rsvp inviati su ${results.length}`)
+      toast.success(`📧 ${sent} RSVPs sent out of ${results.length}`)
       loadGuests(); loadDashboard()
-    } catch(e) { toast.error('Errore: ' + e.message) }
+    } catch(e) { toast.error('Error: ' + e.message) }
     setrsvpng(false)
   }
 
   const deleteGuest = async (id, name) => {
-    if (!confirm(`Eliminare ${name}?`)) return
+    if (!confirm(`Delete ${name}?`)) return
     try {
       await api.deleteGuest(id)
       setGuests(prev => prev.filter(g => g.id !== id))
-      toast.success('Invitato eliminato')
+      toast.success('Guest deleted')
       loadDashboard()
-    } catch { toast.error('Errore') }
+    } catch { toast.error('Error') }
   }
 
   const openEdit = (g) => {
@@ -154,7 +153,7 @@ export default function Admin() {
   }
 
   const saveEdit = async () => {
-    if (!editForm.name || !editForm.email) { toast.error('Nome ed email richiesti'); return }
+    if (!editForm.name || !editForm.email) { toast.error('Name and email required'); return }
     setSaving(true)
     try {
       const tableNum = parseInt(editForm.table_num, 10)
@@ -164,33 +163,33 @@ export default function Admin() {
         table_num: tableNum > 0 ? tableNum : null,
       })
       setGuests(prev => prev.map(g => g.id === updated.id ? updated : g))
-      toast.success(`✓ ${updated.name} aggiornato`)
+      toast.success(`✓ ${updated.name} updated`)
       setEditGuest(null)
       if (sendOnEdit) sendInvite(updated.id, updated.name)
-    } catch(e) { toast.error('Errore: ' + e.message) }
+    } catch(e) { toast.error('Error: ' + e.message) }
     setSaving(false)
   }
 
   // ── Photo actions ────────────────────────────────────────────────────────────
   const deletePhoto = async (id) => {
-    if (!confirm('Eliminare questa foto?')) return
+    if (!confirm('Delete this photo?')) return
     try {
       await api.deletePhoto(id)
       setPhotos(prev => prev.filter(p => p.id !== id))
-      toast.success('Foto eliminata')
+      toast.success('Photo deleted')
       loadDashboard()
-    } catch { toast.error('Errore eliminazione foto') }
+    } catch { toast.error('Error deleting photo') }
   }
 
   // ── Message actions ──────────────────────────────────────────────────────────
   const deleteMessage = async (id) => {
-    if (!confirm('Eliminare questo messaggio?')) return
+    if (!confirm('Delete this message?')) return
     try {
       await api.deleteMsg(id)
       setMessages(prev => prev.filter(m => m.id !== id))
-      toast.success('Messaggio eliminato')
+      toast.success('Message deleted')
       loadDashboard()
-    } catch { toast.error('Errore eliminazione messaggio') }
+    } catch { toast.error('Error deleting message') }
   }
 
   // ── RSVP stats (computed from guests) ───────────────────────────────────────
@@ -303,21 +302,15 @@ export default function Admin() {
       <div className="admin-layout">
         <aside className="admin-sidebar">
           <div className="admin-sidebar-header">
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
-              <div style={{ fontFamily:'var(--font-serif)', fontSize:'1.15rem', color:'var(--charcoal)', fontWeight:700 }}>
-                ⚙️ Admin
-              </div>
-              <div style={{ display:'flex', gap:4 }}>
-                <button onClick={() => setLang('it')} style={{ padding:'4px 8px', borderRadius:4, border:'1px solid var(--cream)', background: lang === 'it' ? 'var(--rose-soft)' : 'transparent', color: lang === 'it' ? 'var(--rose)' : 'var(--warm-gray)', cursor:'pointer', fontSize:'.75rem', fontWeight: lang === 'it' ? 600 : 400 }}>IT</button>
-                <button onClick={() => setLang('en')} style={{ padding:'4px 8px', borderRadius:4, border:'1px solid var(--cream)', background: lang === 'en' ? 'var(--rose-soft)' : 'transparent', color: lang === 'en' ? 'var(--rose)' : 'var(--warm-gray)', cursor:'pointer', fontSize:'.75rem', fontWeight: lang === 'en' ? 600 : 400 }}>EN</button>
-              </div>
+            <div style={{ fontFamily:'var(--font-serif)', fontSize:'1.15rem', color:'var(--charcoal)', fontWeight:700, marginBottom:8 }}>
+              ⚙️ Admin
             </div>
             {dashboard && (
               <div style={{ fontSize:'.75rem', color:'var(--warm-gray)', lineHeight:1.8 }}>
-                <span>{dashboard.stats.guests_total} {lang === 'it' ? 'invitati totali' : 'total guests'}</span><br/>
-                <span style={{ color:'var(--sage)' }}>✓ {dashboard.stats.guests_confirmed} {lang === 'it' ? 'confermati' : 'confirmed'}</span>
+                <span>{dashboard.stats.guests_total} total guests</span><br/>
+                <span style={{ color:'var(--sage)' }}>✓ {dashboard.stats.guests_confirmed} confirmed</span>
                 {dashboard.stats.guests_pending > 0 && (
-                  <><br/><span style={{ color:'var(--gold)' }}>⏳ {dashboard.stats.guests_pending} {lang === 'it' ? 'in attesa' : 'pending'}</span></>
+                  <><br/><span style={{ color:'var(--gold)' }}>⏳ {dashboard.stats.guests_pending} pending</span></>
                 )}
               </div>
             )}

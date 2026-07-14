@@ -89,7 +89,7 @@ export default function WeddingChatbot() {
       console.error('[Chatbot] ❌ Errore catturato:', e)
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Scusa, qualcosa è andato storto. Riprova tra poco oppure scrivi direttamente agli sposi! 💌',
+        content: "Sorry, something went wrong. Please try again shortly, or reach out to the couple directly! 💌",
       }])
     } finally {
       setLoading(false)
@@ -109,7 +109,7 @@ export default function WeddingChatbot() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          aria-label="Apri chat"
+          aria-label="Open chat"
           className="wedding-chat-fab"
           style={{
             position: 'fixed',
@@ -184,7 +184,7 @@ export default function WeddingChatbot() {
             </div>
             <button
               onClick={() => setOpen(false)}
-              aria-label="Chiudi chat"
+              aria-label="Close chat"
               style={{
                 width: 30, height: 30, borderRadius: '50%', border: 'none',
                 background: 'rgba(255,255,255,0.25)', color: '#fff',
@@ -256,7 +256,7 @@ export default function WeddingChatbot() {
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               onFocus={() => setTimeout(() => scrollRef.current?.scrollIntoView?.({ block: 'end' }), 300)}
-              placeholder="Scrivi un messaggio…"
+              placeholder="Type a message…"
               disabled={loading}
               style={{
                 flex: 1, padding: '10px 14px', borderRadius: 99,

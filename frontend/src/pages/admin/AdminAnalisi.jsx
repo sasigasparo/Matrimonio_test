@@ -52,14 +52,14 @@ export function AdminAnalisi({ t, dashboard, rsvpTimeline, timelineLoading, phot
               {rsvpTimeline.map((d, i) => (
                 <div key={i} style={{ display:'flex', alignItems:'center', gap:12 }}>
                   <span style={{ width:72, fontSize:'.75rem', color:'var(--warm-gray)', flexShrink:0 }}>
-                    {new Date(d.date + 'T12:00:00').toLocaleDateString('it-IT', { day:'2-digit', month:'short' })}
+                    {new Date(d.date + 'T12:00:00').toLocaleDateString('en-GB', { day:'2-digit', month:'short' })}
                   </span>
                   <div style={{ flex:1, display:'flex', gap:3, height:14, overflow:'hidden', borderRadius:3 }}>
                     {d.confirmed > 0 && (
-                      <div style={{ height:'100%', borderRadius:3, background:'var(--sage)', flex:d.confirmed }} title={`${d.confirmed} confermati`} />
+                      <div style={{ height:'100%', borderRadius:3, background:'var(--sage)', flex:d.confirmed }} title={`${d.confirmed} confirmed`} />
                     )}
                     {d.declined > 0 && (
-                      <div style={{ height:'100%', borderRadius:3, background:'var(--rose)', flex:d.declined }} title={`${d.declined} declinati`} />
+                      <div style={{ height:'100%', borderRadius:3, background:'var(--rose)', flex:d.declined }} title={`${d.declined} declined`} />
                     )}
                     <div style={{ height:'100%', background:'var(--cream)', flex: Math.max(maxDay - d.confirmed - d.declined, 0), borderRadius:3 }} />
                   </div>
@@ -70,8 +70,8 @@ export function AdminAnalisi({ t, dashboard, rsvpTimeline, timelineLoading, phot
                 </div>
               ))}
               <div style={{ display:'flex', gap:20, marginTop:8, fontSize:'.74rem', color:'var(--warm-gray)' }}>
-                <span><span style={{ display:'inline-block', width:10, height:10, borderRadius:2, background:'var(--sage)', marginRight:4 }} />Confermati</span>
-                <span><span style={{ display:'inline-block', width:10, height:10, borderRadius:2, background:'var(--rose)', marginRight:4 }} />Declinati</span>
+                <span><span style={{ display:'inline-block', width:10, height:10, borderRadius:2, background:'var(--sage)', marginRight:4 }} />Confirmed</span>
+                <span><span style={{ display:'inline-block', width:10, height:10, borderRadius:2, background:'var(--rose)', marginRight:4 }} />Declined</span>
               </div>
             </div>
           )

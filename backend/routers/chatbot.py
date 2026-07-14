@@ -129,7 +129,7 @@ async def chat(body: ChatRequest):
 
     if not GROQ_API_KEY:
         logger.error("❌ GROQ_API_KEY non configurata sul server")
-        raise HTTPException(500, "GROQ_API_KEY non configurata sul server")
+        raise HTTPException(500, "GROQ_API_KEY not configured on the server")
 
     logger.info("🔑 GROQ_API_KEY presente (lunghezza=%d, inizia con %s…)",
                 len(GROQ_API_KEY), GROQ_API_KEY[:10])
@@ -138,7 +138,7 @@ async def chat(body: ChatRequest):
         from groq import Groq
     except ImportError:
         logger.error("❌ Libreria 'groq' non installata sul server")
-        raise HTTPException(500, "Libreria 'groq' non installata sul server")
+        raise HTTPException(500, "'groq' library not installed on the server")
 
     client = Groq(api_key=GROQ_API_KEY)
 
@@ -162,4 +162,4 @@ async def chat(body: ChatRequest):
         return {"reply": reply}
     except Exception as e:
         logger.error("❌ Groq API error | type=%s | message=%s", type(e).__name__, str(e))
-        raise HTTPException(502, f"Errore chatbot: {e}")
+        raise HTTPException(502, f"Chatbot error: {e}")

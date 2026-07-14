@@ -94,7 +94,7 @@ async def create_table(body: TableCreate, user=Depends(get_current_guest), matri
     }).execute()
 
     if not result.data:
-        raise HTTPException(500, "Errore creazione tavolo")
+        raise HTTPException(500, "Error creating table")
 
     t = result.data[0]
     logger.info("Table created: %s (%d posti)", body.name, body.seats)
@@ -108,7 +108,7 @@ async def update_table(table_id: int, body: TableUpdate, user=Depends(get_curren
     db = get_db()
     existing = db.table("tables").select("*").eq("id", table_id).eq("matrimonio_id", matrimonio_id).execute().data
     if not existing:
-        raise HTTPException(404, "Tavolo non trovato")
+        raise HTTPException(404, "Table not found")
 
     t = existing[0]
     updates: dict = {"updated_at": datetime.utcnow().isoformat()}
@@ -124,7 +124,7 @@ async def update_table(table_id: int, body: TableUpdate, user=Depends(get_curren
 
     result = db.table("tables").update(updates).eq("id", table_id).execute()
     if not result.data:
-        raise HTTPException(500, "Errore aggiornamento tavolo")
+        raise HTTPException(500, "Error updating table")
 
     guests = db.table("guests").select("id, name, rsvp_status").eq("matrimonio_id", matrimonio_id).execute().data or []
     guests_by_id = {g["id"]: g for g in guests}
@@ -138,7 +138,7 @@ async def delete_table(table_id: int, user=Depends(get_current_guest), matrimoni
     db = get_db()
     existing = db.table("tables").select("id").eq("id", table_id).eq("matrimonio_id", matrimonio_id).execute().data
     if not existing:
-        raise HTTPException(404, "Tavolo non trovato")
+        raise HTTPException(404, "Table not found")
     db.table("tables").delete().eq("id", table_id).execute()
     logger.info("Table deleted: %d", table_id)
 
@@ -152,11 +152,11 @@ async def assign_seat(table_id: int, body: AssignSeat, user=Depends(get_current_
     # Carica il tavolo
     existing = db.table("tables").select("*").eq("id", table_id).eq("matrimonio_id", matrimonio_id).execute().data
     if not existing:
-        raise HTTPException(404, "Tavolo non trovato")
+        raise HTTPException(404, "Table not found")
     t = existing[0]
 
     if body.seat_index < 0 or body.seat_index >= t["seats"]:
-        raise HTTPException(400, "Indice posto non valido")
+        raise HTTPException(400, "Invalid seat index")
 
     # Verifica che l'ospite non sia già seduto altrove (solo tavoli di questo matrimonio)
     all_tables = db.table("tables").select("id, name, seats_data").eq("matrimonio_id", matrimonio_id).execute().data or []
@@ -164,7 +164,7 @@ async def assign_seat(table_id: int, body: AssignSeat, user=Depends(get_current_
         sd = other.get("seats_data") or []
         for i, gid in enumerate(sd):
             if gid == body.guest_id and not (other["id"] == table_id and i == body.seat_index):
-                raise HTTPException(400, f"Ospite già assegnato al tavolo '{other['name']}'")
+                raise HTTPException(400, f"Guest already assigned to table '{other['name']}'")
 
     # Aggiorna seats_data
     seats_data = t.get("seats_data") or [None] * t["seats"]
@@ -178,7 +178,7 @@ async def assign_seat(table_id: int, body: AssignSeat, user=Depends(get_current_
     }).eq("id", table_id).execute()
 
     if not result.data:
-        raise HTTPException(500, "Errore assegnazione")
+        raise HTTPException(500, "Error assigning seat")
 
     guests = db.table("guests").select("id, name, rsvp_status").eq("matrimonio_id", matrimonio_id).execute().data or []
     guests_by_id = {g["id"]: g for g in guests}
@@ -193,11 +193,11 @@ async def remove_seat(table_id: int, seat_index: int, user=Depends(get_current_g
 
     existing = db.table("tables").select("*").eq("id", table_id).eq("matrimonio_id", matrimonio_id).execute().data
     if not existing:
-        raise HTTPException(404, "Tavolo non trovato")
+        raise HTTPException(404, "Table not found")
     t = existing[0]
 
     if seat_index < 0 or seat_index >= t["seats"]:
-        raise HTTPException(400, "Indice posto non valido")
+        raise HTTPException(400, "Invalid seat index")
 
     seats_data = t.get("seats_data") or [None] * t["seats"]
     while len(seats_data) < t["seats"]:
@@ -210,7 +210,7 @@ async def remove_seat(table_id: int, seat_index: int, user=Depends(get_current_g
     }).eq("id", table_id).execute()
 
     if not result.data:
-        raise HTTPException(500, "Errore rimozione")
+        raise HTTPException(500, "Error removing guest")
 
     guests = db.table("guests").select("id, name, rsvp_status").eq("matrimonio_id", matrimonio_id).execute().data or []
     guests_by_id = {g["id"]: g for g in guests}

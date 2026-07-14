@@ -25,7 +25,7 @@ export default function TableAuth({ onSuccess }) {
         sessionStorage.setItem(SESSION_KEY, '1')
         onSuccess()
       } else {
-        setError('Password non corretta')
+        setError('Incorrect password')
         setPwd('')
       }
       setLoading(false)
@@ -45,10 +45,10 @@ export default function TableAuth({ onSuccess }) {
         fontFamily: 'Georgia, serif', fontSize: '1.7rem',
         color: 'var(--charcoal,#1B1B1B)', margin: 0, textAlign: 'center',
       }}>
-        Area Tavoli
+        Tables Area
       </h2>
       <p style={{ color: 'var(--warm-gray,#9a8070)', margin: 0, textAlign: 'center', maxWidth: 300, fontSize: '0.9rem' }}>
-        Inserisci la password amministratore per gestire la disposizione dei tavoli
+        Enter the administrator password to manage the table layout
       </p>
 
       <form onSubmit={handleSubmit} style={{
@@ -57,7 +57,7 @@ export default function TableAuth({ onSuccess }) {
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
           <label style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--charcoal,#1B1B1B)' }}>
-            Password admin
+            Admin password
           </label>
           <div style={{ position: 'relative', display: 'flex' }}>
             <input
@@ -82,7 +82,7 @@ export default function TableAuth({ onSuccess }) {
               type="button"
               onClick={() => setShowPwd(v => !v)}
               disabled={loading}
-              aria-label={showPwd ? 'Nascondi password' : 'Mostra password'}
+              aria-label={showPwd ? 'Hide password' : 'Show password'}
               aria-pressed={showPwd}
               tabIndex={-1}
               style={{
@@ -138,7 +138,7 @@ export default function TableAuth({ onSuccess }) {
             boxShadow: '0 2px 10px rgba(200,130,100,0.2)',
           }}
         >
-          {loading ? '⏳ Verifico…' : '🔓 Entra'}
+          {loading ? '⏳ Verifying…' : '🔓 Enter'}
         </button>
       </form>
     </div>

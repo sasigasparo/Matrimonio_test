@@ -144,7 +144,7 @@ async def create_guest_endpoint(body: GuestCreate, request: Request, admin=Depen
         .execute().data
     )
     if existing:
-        raise HTTPException(400, "Email già presente")
+        raise HTTPException(400, "Email already exists")
 
     guest_data = {
         "name":          body.name,
@@ -162,7 +162,7 @@ async def create_guest_endpoint(body: GuestCreate, request: Request, admin=Depen
     try:
         result = db.table("guests").insert(guest_data).execute()
     except Exception as e:
-        raise HTTPException(400, f"Errore creazione ospite: {e}")
+        raise HTTPException(400, f"Error creating guest: {e}")
 
     guest = result.data[0]
     audit(admin["email"], "create_guest", f"{body.name} ({body.email})", "",
@@ -284,9 +284,9 @@ async def update_guest(guest_id: int, body: GuestUpdate, request: Request, admin
         patch["email"] = patch["email"].lower()
         dup = db.table("guests").select("id").eq("email", patch["email"]).eq("matrimonio_id", matrimonio_id).neq("id", guest_id).execute()
         if dup.data:
-            raise HTTPException(400, "Email già in uso da un altro ospite")
+            raise HTTPException(400, "Email already in use by another guest")
     if not patch:
-        raise HTTPException(400, "Nessun campo da aggiornare")
+        raise HTTPException(400, "No fields to update")
     patch["updated_at"] = datetime.utcnow().isoformat()
 
     result = db.table("guests").update(patch).eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
@@ -310,7 +310,7 @@ async def delete_guest(guest_id: int, request: Request, admin=Depends(require_ad
         result = db.table("guests").delete().eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
     except Exception as e:
         logger.error("Delete guest error: %s", e)
-        raise HTTPException(500, f"Errore eliminazione: {e}")
+        raise HTTPException(500, f"Error deleting: {e}")
     audit(admin["email"], "delete_guest", f"{guest['name']} ({guest['email']})", "",
           request.client.host if request.client else "", matrimonio_id)
     logger.info("Guest deleted: %d (%s)", guest_id, guest["email"])

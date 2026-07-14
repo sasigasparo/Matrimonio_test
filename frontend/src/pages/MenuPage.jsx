@@ -39,7 +39,7 @@ function EyeToggleButton({ visible, onClick, dark = false }) {
     <button
       type="button"
       onClick={onClick}
-      aria-label={visible ? 'Nascondi password' : 'Mostra password'}
+      aria-label={visible ? 'Hide password' : 'Show password'}
       aria-pressed={visible}
       tabIndex={-1}
       style={{

@@ -265,12 +265,12 @@ export default function Rsvp() {
               {rsvpStatus === 'confirmed' && (
                 <div style={{ marginBottom: 28 }}>
                   <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
-                    Richieste speciali (opzionale)
+                    Special requests (optional)
                   </label>
                   <textarea
                     value={specialRequests}
                     onChange={e => setSpecialRequests(e.target.value)}
-                    placeholder="Es. senza noci, tavolo vicino all'entrata, ecc."
+                    placeholder="E.g. no nuts, table near the entrance, etc."
                     style={{
                       width: '100%', padding: '12px 14px', borderRadius: 'var(--radius-md)',
                       border: '1px solid var(--hairline)', fontFamily: 'inherit', fontSize: '.95rem',
@@ -320,7 +320,7 @@ export default function Rsvp() {
                           <div>
                             <div style={{ fontWeight: 600, color: 'var(--charcoal)', fontSize: '.95rem' }}>{c.name}</div>
                             <div style={{ fontSize: '.82rem', color: 'var(--warm-gray)' }}>
-                              {c.dietary && `Dieta: ${c.dietary}`}
+                              {c.dietary && `Diet: ${c.dietary}`}
                               {c.special_requests && ` • ${c.special_requests}`}
                             </div>
                           </div>
@@ -334,7 +334,7 @@ export default function Rsvp() {
                               background: 'white', cursor: 'pointer', fontSize: '.85rem', color: 'var(--warm-gray)'
                             }}
                           >
-                            ✏️ Modifica
+                            ✏️ Edit
                           </button>
                         </div>
                       ))}
@@ -351,21 +351,21 @@ export default function Rsvp() {
                 }} onClick={e => e.target === e.currentTarget && setEditingCompanion(null)}>
                   <div className="card" style={{ width: '100%', maxWidth: 480, padding: 28 }}>
                     <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', marginBottom: 20 }}>
-                      {editingCompanion.isNew ? 'Aggiungi accompagnatore' : 'Modifica accompagnatore'}
+                      {editingCompanion.isNew ? 'Add companion' : 'Edit companion'}
                     </h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                       <div>
-                        <label style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', display: 'block', marginBottom: 4 }}>Nome *</label>
+                        <label style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', display: 'block', marginBottom: 4 }}>Name *</label>
                         <input
                           className="input"
-                          placeholder="Nome Cognome"
+                          placeholder="First Last"
                           value={companionForm.name}
                           onChange={e => setCompanionForm(p => ({ ...p, name: e.target.value }))}
                         />
                       </div>
 
                       <div>
-                        <label style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', display: 'block', marginBottom: 8 }}>Intolleranze alimentari (opzionale)</label>
+                        <label style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', display: 'block', marginBottom: 8 }}>Dietary restrictions (optional)</label>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 8 }}>
                           {dietaryOptions.map(opt => (
                             <button
@@ -386,11 +386,11 @@ export default function Rsvp() {
                       </div>
 
                       <div>
-                        <label style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', display: 'block', marginBottom: 4 }}>Richieste speciali (opzionale)</label>
+                        <label style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', display: 'block', marginBottom: 4 }}>Special requests (optional)</label>
                         <textarea
                           value={companionForm.special_requests}
                           onChange={e => setCompanionForm(p => ({ ...p, special_requests: e.target.value }))}
-                          placeholder="Es. allergia a frutta secca, preferenza di menu, ecc."
+                          placeholder="E.g. nut allergy, menu preference, etc."
                           style={{
                             width: '100%', padding: '10px 12px', borderRadius: 'var(--radius-md)',
                             border: '1px solid var(--hairline)', fontFamily: 'inherit', fontSize: '.9rem',
@@ -411,13 +411,13 @@ export default function Rsvp() {
                         }}
                         style={{ flex: 1 }}
                       >
-                        {editingCompanion.isNew ? 'Annulla' : 'Elimina'}
+                        {editingCompanion.isNew ? 'Cancel' : 'Delete'}
                       </button>
                       <button
                         className="btn btn-primary"
                         onClick={() => {
                           if (!companionForm.name.trim()) {
-                            toast.error('Il nome è obbligatorio')
+                            toast.error('Name is required')
                             return
                           }
                           const updated = [...companions]
@@ -431,7 +431,7 @@ export default function Rsvp() {
                         }}
                         style={{ flex: 1 }}
                       >
-                        Salva
+                        Save
                       </button>
                     </div>
                   </div>

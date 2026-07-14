@@ -142,7 +142,7 @@ async def upload_photo(
         ext = ct_to_ext.get(ct, ext)
 
     if ext not in ALLOWED_EXTS:
-        raise HTTPException(400, f"Formato non supportato: {ext}")
+        raise HTTPException(400, f"Unsupported format: {ext}")
 
     data    = await file.read()
     size_mb = len(data) / (1024 * 1024)
@@ -152,7 +152,7 @@ async def upload_photo(
             "🚫 VALIDATION FAIL | guest_id=%s | size=%.2f MB > max=%d MB | filename=%s",
             guest_id, size_mb, MAX_PHOTO_MB, file.filename,
         )
-        raise HTTPException(413, f"File troppo grande (max {MAX_PHOTO_MB}MB)")
+        raise HTTPException(413, f"File too large (max {MAX_PHOTO_MB}MB)")
 
     data, ext, mime_type = compress_image(data, ext)
     filename = f"{uuid.uuid4()}{ext}"
@@ -169,7 +169,7 @@ async def upload_photo(
             "💥 UPLOAD ABORTED | guest_id=%s | Supabase è obbligatorio ed è fallito | %s: %s",
             guest_id, type(e).__name__, e,
         )
-        raise HTTPException(500, f"Errore upload immagine: {e}")
+        raise HTTPException(500, f"Image upload error: {e}")
 
 
     # ── 4. Salva metadati DB ──────────────────────────────────────────────────
@@ -197,7 +197,7 @@ async def upload_photo(
             "❌ DB INSERT FAIL | guest_id=%s | filename=%s | %s: %s",
             guest_id, filename, type(e).__name__, e,
         )
-        raise HTTPException(500, f"Errore salvataggio metadati: {e}")
+        raise HTTPException(500, f"Error saving metadata: {e}")
 
     # ── 5. Arricchisci risposta con dati guest ────────────────────────────────
     guest_result = db.table("guests").select("name, avatar_url").eq("id", guest_id).execute()

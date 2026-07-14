@@ -24,11 +24,11 @@ class ScoreIn(BaseModel):
 @router.post("/scores")
 async def save_score(body: ScoreIn, matrimonio_id: int = Depends(get_matrimonio_id)):
     if body.game_id not in ALLOWED_GAMES:
-        raise HTTPException(400, f"game_id non valido: {body.game_id}")
+        raise HTTPException(400, f"Invalid game_id: {body.game_id}")
     if not body.player_name.strip():
-        raise HTTPException(400, "player_name richiesto")
+        raise HTTPException(400, "player_name required")
     if body.score < 0 or body.total <= 0 or body.score > body.total:
-        raise HTTPException(400, "score/total non validi")
+        raise HTTPException(400, "invalid score/total")
 
     db = get_db()
     row = {
@@ -54,7 +54,7 @@ async def get_scores(game_id: Optional[str] = None, matrimonio_id: int = Depends
     )
     if game_id:
         if game_id not in ALLOWED_GAMES:
-            raise HTTPException(400, f"game_id non valido: {game_id}")
+            raise HTTPException(400, f"Invalid game_id: {game_id}")
         q = q.eq("game_id", game_id)
     rows = q.order("score", desc=True).order("created_at").limit(100).execute().data or []
     return rows

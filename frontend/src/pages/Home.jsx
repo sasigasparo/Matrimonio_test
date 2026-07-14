@@ -78,7 +78,7 @@ function WeatherWidget() {
   function dayLabel(date) {
     if (date.toDateString() === today.toDateString())    return t('home.today')
     if (date.toDateString() === tomorrow.toDateString()) return t('home.tomorrow')
-    return date.toLocaleDateString('it-IT', { weekday: 'short', day: 'numeric', month: 'short' })
+    return date.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
   }
 
   if (loading) return (
@@ -361,7 +361,7 @@ export default function Home() {
             style={{ position: 'absolute', bottom: 22, left: '50%', x: '-50%', color: 'rgba(255,255,255,.7)', background: 'none', border: 'none', cursor: 'pointer', padding: 8, lineHeight: 0 }}
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-            aria-label="Scorri in basso"
+            aria-label="Scroll down"
           >
             <ChevronDown size={26} />
           </motion.button>

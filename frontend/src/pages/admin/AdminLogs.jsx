@@ -14,9 +14,9 @@ export function AdminLogs({ t, logs }) {
         <tbody>
           {logs.map(l => (
             <tr key={l.id} style={{ borderBottom:'1px solid var(--cream)' }}>
-              <td data-label="Data" style={{ padding:'8px 16px', color:'var(--warm-gray)', whiteSpace:'nowrap' }}>{new Date(l.created_at).toLocaleString('it-IT')}</td>
-              <td data-label="Utente" style={{ padding:'8px 16px', color:'var(--charcoal)' }}>{l.actor}</td>
-              <td data-label="Azione" style={{ padding:'8px 16px', color:'var(--charcoal)', fontSize:'.85rem' }}>{LOG_LABELS[l.action] || l.action}</td>
+              <td data-label="Date" style={{ padding:'8px 16px', color:'var(--warm-gray)', whiteSpace:'nowrap' }}>{new Date(l.created_at).toLocaleString('en-GB')}</td>
+              <td data-label="User" style={{ padding:'8px 16px', color:'var(--charcoal)' }}>{l.actor}</td>
+              <td data-label="Action" style={{ padding:'8px 16px', color:'var(--charcoal)', fontSize:'.85rem' }}>{LOG_LABELS[l.action] || l.action}</td>
               <td data-label="Target" style={{ padding:'8px 16px', color:'var(--warm-gray)', fontSize:'.82rem' }}>{l.target}{l.detail ? ` — ${l.detail}` : ''}</td>
               <td data-label="IP" className="mbl-hide" style={{ padding:'8px 16px', color:'var(--warm-gray)', fontFamily:'monospace', fontSize:'.78rem' }}>{l.ip}</td>
             </tr>
