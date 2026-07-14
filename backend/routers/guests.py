@@ -20,9 +20,9 @@ SMTP_HOST      = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT      = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER      = os.getenv("SMTP_USER", "")
 SMTP_PASSWORD  = os.getenv("SMTP_PASSWORD", "")
-COUPLE_NAMES   = os.getenv("COUPLE_NAMES", "Sofia & Marco")
-WEDDING_DATE   = os.getenv("WEDDING_DATE", "14 Giugno 2027")
-WEDDING_VENUE  = os.getenv("WEDDING_VENUE", "Villa Doria d'Angri, Napoli")
+COUPLE_NAMES   = os.getenv("COUPLE_NAMES", "Antonios & Petronia")
+WEDDING_DATE   = os.getenv("WEDDING_DATE", "17 October 2026")
+WEDDING_VENUE  = os.getenv("WEDDING_VENUE", "Estia Home of Taste, Zürich")
 APP_URL        = os.getenv("APP_URL", "http://localhost:5173")
 LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
 
@@ -65,13 +65,13 @@ def _send_invite_email(guest: dict) -> bool:
         return False
     try:
         msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"💌 Sei invitato al matrimonio di {COUPLE_NAMES}"
+        msg["Subject"] = f"💌 You're invited to {COUPLE_NAMES}'s wedding"
         msg["From"]    = SMTP_USER
         msg["To"]      = guest["email"]
 
         password_hint = (
             f'<div style="background:#fdf6f0;border:1.5px dashed #e8bfa0;border-radius:8px;padding:16px 20px;margin:20px 0;text-align:center">'
-            f'<p style="margin:0 0 4px;color:#888;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em">Password di accesso</p>'
+            f'<p style="margin:0 0 4px;color:#888;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em">Access password</p>'
             f'<p style="margin:0;font-size:1.4rem;font-weight:700;color:#c8956c;letter-spacing:.12em">{LOGIN_PASSWORD}</p>'
             f'</div>'
         ) if LOGIN_PASSWORD else ""
@@ -84,19 +84,19 @@ def _send_invite_email(guest: dict) -> bool:
     <p style="color:#fff8f3;margin:8px 0 0;font-size:1.1rem">{WEDDING_DATE}</p>
   </div>
   <div style="padding:40px 48px">
-    <p style="font-size:1.1rem;color:#333">Caro/a <strong>{guest['name']}</strong>,</p>
+    <p style="font-size:1.1rem;color:#333">Dear <strong>{guest['name']}</strong>,</p>
     <p style="color:#555;line-height:1.7">
-      Con immensa gioia ti invitiamo a condividere con noi il giorno più bello della nostra vita.
-      Il matrimonio sarà celebrato presso <strong>{WEDDING_VENUE}</strong>.
+      We're overjoyed to invite you to share the most beautiful day of our lives with us.
+      The wedding will be celebrated at <strong>{WEDDING_VENUE}</strong>.
     </p>
     {password_hint}
     <div style="text-align:center;margin:32px 0">
       <a href="{APP_URL}" style="background:#c8956c;color:#fff;padding:14px 36px;border-radius:50px;text-decoration:none;font-size:1rem;font-weight:600">
-        Accedi al sito del matrimonio
+        Visit the wedding website
       </a>
     </div>
     <p style="color:#888;font-size:.9rem;text-align:center">
-      Usa la password indicata per accedere, confermare la presenza, lasciare messaggi e caricare foto.
+      Use the password above to log in, confirm your attendance, leave messages, and upload photos.
     </p>
   </div>
   <div style="background:#fdf6f0;padding:24px;text-align:center">

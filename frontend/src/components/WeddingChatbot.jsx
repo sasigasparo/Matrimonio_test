@@ -4,7 +4,7 @@ const API_URL = (import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrend
 
 const WELCOME_MESSAGE = {
   role: 'assistant',
-  content: 'Ciao! 👋 Sono l\'assistente virtuale di Sofia & Marco. Chiedimi qualsiasi cosa sul matrimonio: data, location, programma, dress code, RSVP… 🌸',
+  content: "Hi! 👋 I'm Antonios & Petronia's virtual assistant. Ask me anything about the wedding: date, venue, schedule, dress code, RSVP… 🌸",
 }
 
 export default function WeddingChatbot() {
@@ -176,10 +176,10 @@ export default function WeddingChatbot() {
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem', fontFamily: 'Georgia, serif' }}>
-                Assistente Sofia & Marco
+                Antonios & Petronia's Assistant
               </div>
               <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.72rem' }}>
-                Sempre disponibile 🌸
+                Always here to help 🌸
               </div>
             </div>
             <button

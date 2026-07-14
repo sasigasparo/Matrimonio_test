@@ -2,16 +2,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useLanguage } from '../hooks/useLanguage'
-import LanguageSwitch from '../components/LanguageSwitch'
 import { WEDDING_CONFIG } from '../config/wedding'
 
 const API_URL = (import.meta.env.VITE_API_URL || 'https://matrimonio-test.onrender.com').replace(/\/$/, '')
-const WEDDING_DATE_LABEL = { it: '14 Giugno 2027', en: 'June 14, 2027' }
 
 export default function Login() {
   const navigate = useNavigate()
   const { login } = useAuth()
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const [password, setPassword]         = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading]           = useState(false)
@@ -99,10 +97,6 @@ export default function Login() {
         }
       `}</style>
 
-      <div style={{ position: 'absolute', top: 16, right: 16, zIndex: 1 }}>
-        <LanguageSwitch />
-      </div>
-
       <div
         className="login-card"
         style={{
@@ -145,7 +139,7 @@ export default function Login() {
           fontSize: '.7rem', letterSpacing: '.14em', textTransform: 'uppercase',
           color: 'var(--rose)', fontWeight: 600,
         }}>
-          {t('login.eyebrow', { date: WEDDING_DATE_LABEL[lang] })}
+          {t('login.eyebrow', { date: WEDDING_CONFIG.dateLabel })}
         </div>
 
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.9rem', color: 'var(--charcoal)', margin: '4px 0 2px' }}>

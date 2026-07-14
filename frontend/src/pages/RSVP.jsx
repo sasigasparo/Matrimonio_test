@@ -3,7 +3,6 @@ import { Minus, Plus, Users, Baby } from 'lucide-react'
 import { api } from '../utils/api'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { useLanguage } from '../hooks/useLanguage'
-import LanguageSwitch from '../components/LanguageSwitch'
 import Skeleton from '../components/Skeleton'
 import { burstConfetti } from '../utils/confetti'
 
@@ -153,9 +152,6 @@ export default function Rsvp() {
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 48, position: 'relative' }}>
-          <div style={{ position: 'absolute', top: -16, right: 0 }}>
-            <LanguageSwitch />
-          </div>
           <div style={{ fontSize: '3rem', marginBottom: 16 }}>✉️</div>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', color: 'var(--charcoal)', marginBottom: 8 }}>
             {t('rsvp.headerTitle')}

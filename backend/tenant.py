@@ -6,7 +6,7 @@ con lo slug del proprio matrimonio (preso da wedding.js). Qui lo traduciamo
 nell'id numerico usato come foreign key su tutte le tabelle.
 
 NON DISTRUTTIVO: se l'header manca (frontend non ancora aggiornato) si usa
-DEFAULT_MATRIMONIO_ID (= 1, "Sofia & Marco"), quindi il comportamento attuale
+DEFAULT_MATRIMONIO_ID (= 1, "Antonios & Petronia"), quindi il comportamento attuale
 resta identico.
 """
 import os

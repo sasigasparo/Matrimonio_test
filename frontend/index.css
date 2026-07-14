@@ -1,5 +1,5 @@
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-/* SOFIA & MARCO — LUXURY WEDDING SOCIAL NETWORK                              */
+/* ANTONIOS & PETRONIA — LUXURY WEDDING SOCIAL NETWORK                        */
 /* Design system. See DESIGN.md. Pages style via var(--token); retuning here  */
 /* reskins the whole app. Legacy token names kept for compatibility.          */
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -18,8 +18,8 @@
   --charcoal:    #1B1B1B;   /* primary text */
   --ink-soft:    #3A3A3D;   /* secondary text */
   --warm-gray:   #6B7280;   /* muted text (AA on white) */
-  --bg:          #FFF7F9;   /* app background (pink-white) */
-  --ivory:       #FFF7F9;   /* legacy alias of --bg */
+  --bg:          #FFFFF0;   /* app background (ivory) */
+  --ivory:       #FFFFF0;   /* legacy alias of --bg */
   --cream:       #FCEDF2;   /* alternating section bg */
   --white:       #FFFFFF;   /* card / surface */
   --hairline:    rgba(207,165,181,.28);

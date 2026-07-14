@@ -3,7 +3,6 @@ import { api } from '../utils/api'
 import { useAuth } from '../hooks/useAuth'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { useLanguage } from '../hooks/useLanguage'
-import LanguageSwitch from '../components/LanguageSwitch'
 import { WEDDING_CONFIG } from "../config/wedding";
 
 
@@ -110,10 +109,6 @@ function MenuCountdownGate({ diff, onUnlock }) {
         pointerEvents: 'none',
       }} />
 
-      <div style={{ position: 'absolute', top: 14, right: 14, zIndex: 2 }}>
-        <LanguageSwitch style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)' }} />
-      </div>
-
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ fontSize: '3.5rem', marginBottom: 20, filter: 'drop-shadow(0 0 24px rgba(199,107,139,0.45))' }}>
           🍽️
@@ -133,7 +128,7 @@ function MenuCountdownGate({ diff, onUnlock }) {
           color: 'rgba(255,255,255,0.9)',
           letterSpacing: '.05em', marginBottom: 8,
         }}>
-          Sofia &amp; Marco
+          {WEDDING_CONFIG.couple.displayName}
         </h1>
 
         <p style={{
@@ -307,9 +302,6 @@ export default function MenuPage() {
         padding: '80px 20px 60px', textAlign: 'center', color: 'var(--white)',
         position: 'relative',
       }}>
-        <div style={{ position: 'absolute', top: 16, right: 16 }}>
-          <LanguageSwitch style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} />
-        </div>
         <div style={{ fontSize: '3rem', marginBottom: 16 }}>🍽️</div>
         <h1 style={{
           fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem,6vw,3.5rem)',

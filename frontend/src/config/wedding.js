@@ -12,94 +12,108 @@ export const WEDDING_CONFIG = {
   // Identificativo del matrimonio (multi-tenant). Deve combaciare con lo
   // `slug` nella tabella `matrimoni` su Supabase. Inviato al backend via
   // header X-Matrimonio-Slug per filtrare tutti i dati per questo matrimonio.
-  slug: "sofia-marco",
+  slug: "antonios-petronia",
 
   couple: {
-    groom: "Marco",
-    bride: "Sofia",
-    displayName: "Sofia & Marco",   // usato nell'UI ovunque si mostra il nome coppia
+    groom: "Antonios",
+    bride: "Petronia",
+    displayName: "Antonios & Petronia",   // usato nell'UI ovunque si mostra il nome coppia
   },
 
-  date: "14-06-2027",        // formato DD-MM-YYYY, parsato da Home.jsx e formattato da useLanguage.jsx
-  dateLabel: "14 Giugno 2027",  // etichetta UI in italiano (aggiorna insieme a date)
+  date: "17-10-2026",        // formato DD-MM-YYYY, parsato da Home.jsx e formattato da useLanguage.jsx
+  dateLabel: "17 October 2026",  // etichetta UI (aggiorna insieme a date)
 
   // Unica fonte di verità per indirizzi/coordinate: prima erano duplicati
   // (e in parte sbagliati) dentro Luoghi.jsx e translations.js.
   venue: {
-    city: "Napoli",
-    weatherCoords: "40.8518,14.2681",   // coordinate centro città per le previsioni meteo
+    city: "Zürich",
+    weatherCoords: "47.3769,8.5417",   // coordinate centro città per le previsioni meteo
 
     ceremony: {
-      name: "Duomo di Napoli",
-      address: "Via Duomo – 80138 Napoli (NA)",
-      time: "15:00",
-      coords: { lat: 40.8529, lng: 14.2616 },
+      name: "Stadthaus Zürich",
+      address: "Stadthausquai 17, 8001 Zürich",
+      time: "11:00",
+      coords: { lat: 47.3665, lng: 8.5410 },   // approssimative — verifica su Google Maps
     },
 
     reception: {
-      name: "Villa Doria d'Angri",
-      address: "Via Francesco Petrarca, 80 – Posillipo, Napoli (NA)",
+      name: "Estia Home of Taste",
+      address: "Hohlstrasse 365, 8004 Zürich",
       time: "17:00",
-      coords: { lat: 40.8296, lng: 14.2156 },
+      coords: { lat: 47.3765, lng: 8.5107 },   // approssimative — verifica su Google Maps
     },
   },
 
   // ── Dress code ──────────────────────────────────────────────────────────
   dressCode: {
-    style: "Elegante",
-    avoid: ["bianco"],   // colori da evitare — solo bianco, riservato alla sposa
+    style: "Elegant",
+    avoid: ["white"],   // colori da evitare — solo bianco, riservato alla sposa
   },
 
   // ── Logistica / trasporti ───────────────────────────────────────────────
   logistics: {
     parking: {
       available: true,
-      note: "Parcheggio gratuito disponibile in loco",
+      note: "Paid parking available near both venues in central Zürich",
     },
     taxi: {
-      name: "Radio Taxi Napoli",
-      phone: "+39 081 8888",
+      name: "Taxi Zürich",
+      phone: "",   // nessun numero specifico fornito — copy usa app di prenotazione
     },
     shuttle: {
-      available: true,
-      from: "centro di Napoli",
+      available: false,   // nessuno shuttle confermato — Zürich ha ottimi trasporti pubblici
+      from: "",
     },
     airport: {
-      name: "Aeroporto di Napoli Capodichino",
-      code: "NAP",
-      distanceFromCenter: "15/20 min dal centro città",
+      name: "Zürich Airport",
+      code: "ZRH",
+      distanceFromCenter: "circa 15 min dal centro città in treno",
     },
     trainStation: {
-      name: "Napoli Centrale",
-      location: "Piazza Garibaldi",
+      name: "Zürich Hauptbahnhof (Zürich HB)",
+      location: "Bahnhofplatz",
     },
-    recommendedAreas: ["Chiaia", "Mergellina", "Centro Storico"],
+    recommendedAreas: ["Altstadt", "Seefeld", "Kreis 4/5"],
   },
 
   // ── Regalo / lista nozze ────────────────────────────────────────────────
+  // Due conti separati: famiglia della sposa (UBS) e famiglia dello sposo (Piraeus).
   gift: {
-    bankTransfer: {
-      accountHolder: "Sofia Rossi e Marco Bianchi",   // ← personalizza con i veri nomi/cognomi
-      iban: "IT00X0000000000000000000000",            // ← inserisci l'IBAN reale
-      bic: "XXXXXXXX",                                  // ← inserisci il BIC/SWIFT reale
-      reference: "Regalo di nozze Sofia & Marco",
-    },
+    bankTransfer: [
+      {
+        label: "Petronia",
+        accountHolder: "Petronia Charalampopoulou",
+        bank: "UBS Switzerland",
+        iban: "CH06 0021 5215 2874 3440 X",
+        bic: "UBSWCHZH80A",
+        reference: "Wedding gift for Antonios & Petronia",
+      },
+      {
+        label: "Antonios",
+        accountHolder: "Antonios Stougias",
+        bank: "Piraeus Bank",
+        iban: "GR74 0172 1040 0051 0408 6642 539",
+        bic: "PIRBGRAAXXX",
+        reference: "Wedding gift for Antonios & Petronia",
+      },
+    ],
   },
 
   // ── Contatti e social ───────────────────────────────────────────────────
   contacts: {
-    email: "sofia.marco.wedding@example.com",   // ← personalizza
+    email: "stougiasantony@hotmail.com, petroniachar@gmail.com",
     phone: "",                                    // opzionale
   },
 
   social: {
-    instagram: "",   // es. "https://instagram.com/sofiaemarco"
-    hashtag: "#SofiaEMarco2027",
+    instagram: "",   // es. "https://instagram.com/antoniosepetronia"
+    hashtag: "",      // nessun hashtag fornito
   },
 
   // ── Spotify ────────────────────────────────────────────────────────────────
+  // Playlist condivisa separatamente dalla coppia — vuoto finché non arriva l'ID.
   spotify: {
-    playlistId: "04hXZMm6GPheiarj7Ib9xo",   // ID della playlist su open.spotify.com
+    playlistId: "",   // ID della playlist su open.spotify.com (es. "04hXZMm6GPheiarj7Ib9xo")
   },
 
   // ── Supabase (storage foto/audio) ──────────────────────────────────────────
@@ -114,15 +128,22 @@ export const WEDDING_CONFIG = {
     menuPassword:  "menu",    // password per sbloccare il menù
   },
 
+  // Nota: questi valori sono solo documentazione — i colori effettivi vivono
+  // nelle CSS var in frontend/index.css (--rose, --bg, ecc.), non letti da qui.
   theme: {
     primary: "#C76B8B",     // dusty rosewood — vedi frontend/index.css (--rose)
     secondary: "#FBDCE6",   // blush
-    background: "#FFF7F9",   // pink-white
+    background: "#FFFFF0",   // ivory — vedi frontend/index.css (--bg)
   },
 
   app: {
-    name: "Sofia & Marco Wedding",
+    name: "Antonios & Petronia Wedding",
     version: "1.0.0",
     siteUrl: "https://matrimonio-test.pages.dev",
+    // Foto hero (skyline di Zürich) e foto della cartolina d'invito ufficiale.
+    // Metti i file in frontend/public/foto_sfondo/ con questi nomi esatti.
+    heroImage: "foto_sfondo/zurich-hero.jpg",
+    inviteCardImage: "foto_sfondo/invite-card.jpg",
+    luoghiBannerImage: "foto_sfondo/zurich-dusk.jpg",
   },
 }

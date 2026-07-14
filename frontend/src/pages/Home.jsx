@@ -145,6 +145,19 @@ function WeatherWidget() {
 
 /* ── Spotify ─────────────────────────────────────────────────────── */
 function SpotifyWidget({ title }) {
+  const { t } = useLanguage()
+
+  if (!WEDDING_CONFIG.spotify.playlistId) {
+    return (
+      <div style={{
+        borderRadius: 'var(--radius-lg)', padding: '40px 24px', textAlign: 'center',
+        background: 'var(--white)', border: '1px solid var(--hairline)', color: 'var(--warm-gray)',
+      }}>
+        {t('home.playlistComingSoon')}
+      </div>
+    )
+  }
+
   return (
     <div style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: 'var(--shadow-md)' }}>
       <iframe
@@ -277,8 +290,9 @@ export default function Home() {
         <motion.div
           style={{
             position: 'absolute', inset: '-6% 0',
-            backgroundImage: 'url(foto_sfondo/vesuvio.jpeg)',
-            backgroundSize: 'cover', backgroundPosition: 'center',
+            ...(WEDDING_CONFIG.app.heroImage
+              ? { backgroundImage: `url(${WEDDING_CONFIG.app.heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+              : { background: 'linear-gradient(160deg, #C76B8B 0%, #A63D63 55%, #46243a 100%)' }),
             y: reduce ? 0 : imgY, scale: reduce ? 1 : imgScale,
           }}
         />
@@ -353,6 +367,25 @@ export default function Home() {
           </motion.button>
         )}
       </section>
+
+      {/* ── Cartolina d'invito ── */}
+      {WEDDING_CONFIG.app.inviteCardImage && (
+        <section style={{ padding: '48px 0 8px' }}>
+          <div className="container-sm" style={{ display: 'flex', justifyContent: 'center' }}>
+            <Reveal>
+              <img
+                src={WEDDING_CONFIG.app.inviteCardImage}
+                alt={`${WEDDING_CONFIG.couple.displayName} — invitation`}
+                style={{
+                  maxWidth: 340, width: '100%', borderRadius: 'var(--radius-md)',
+                  boxShadow: '0 20px 50px rgba(44,36,32,0.18)', display: 'block',
+                  transform: 'rotate(-1.5deg)',
+                }}
+              />
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       {/* ── Meteo ── */}
       <section style={{ padding: '56px 0 40px' }}>
@@ -499,6 +532,9 @@ export default function Home() {
             <div style={{ width: 56, height: 1, background: 'var(--accent)', margin: '0 auto 22px' }} />
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.8, fontSize: '1.08rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', maxWidth: 520, margin: '0 auto' }}>
               "{t('home.storyQuote')}"
+            </p>
+            <p style={{ color: 'var(--warm-gray)', lineHeight: 1.7, fontSize: '.98rem', maxWidth: 480, margin: '18px auto 0' }}>
+              {t('home.storyText')}
             </p>
             <div style={{ marginTop: 36, display: 'flex', gap: 28, justifyContent: 'center', flexWrap: 'wrap' }}>
               {t('home.timeline').map(s => (

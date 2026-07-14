@@ -18,11 +18,11 @@ export function buildWeddingEvent() {
   const { couple, venue, date, app } = WEDDING_CONFIG
   const start = parseLocal(date, venue.ceremony.time)
   const end = new Date(start.getTime() + 8 * 60 * 60 * 1000) // ~8h celebration
-  const title = `Matrimonio ${couple.displayName}`
+  const title = `${couple.displayName}'s Wedding`
   const location = `${venue.ceremony.name}, ${venue.ceremony.address}`
   const description =
-    `Cerimonia: ${venue.ceremony.name} (${venue.ceremony.time}) — ${venue.ceremony.address}\n` +
-    `Ricevimento: ${venue.reception.name} (${venue.reception.time}) — ${venue.reception.address}\n` +
+    `Ceremony: ${venue.ceremony.name} (${venue.ceremony.time}) — ${venue.ceremony.address}\n` +
+    `Dinner: ${venue.reception.name} (${venue.reception.time}) — ${venue.reception.address}\n` +
     (app?.siteUrl ? `\n${app.siteUrl}` : '')
   return { title, start, end, location, description }
 }
@@ -41,11 +41,11 @@ export function googleCalendarUrl(ev = buildWeddingEvent()) {
 export function buildICS(ev = buildWeddingEvent()) {
   const esc = s => String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n')
   const stamp = fmt(new Date())
-  const uid = `${stamp}-${Math.random().toString(36).slice(2)}@sofia-marco`
+  const uid = `${stamp}-${Math.random().toString(36).slice(2)}@${WEDDING_CONFIG.slug}`
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Sofia & Marco//Wedding//IT',
+    `PRODID:-//${WEDDING_CONFIG.couple.displayName}//Wedding//EN`,
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     'BEGIN:VEVENT',
@@ -72,7 +72,7 @@ export function downloadICS(ev = buildWeddingEvent()) {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = 'sofia-marco-wedding.ics'
+  a.download = `${WEDDING_CONFIG.slug}-wedding.ics`
   document.body.appendChild(a)
   a.click()
   a.remove()

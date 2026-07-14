@@ -116,6 +116,18 @@ export default function Luoghi() {
     <div className="page-enter" style={{ padding: '60px 20px 120px' }}>
       <div style={{ maxWidth: 720, margin: '0 auto' }}>
 
+        {WEDDING_CONFIG.app.luoghiBannerImage && (
+          <img
+            src={WEDDING_CONFIG.app.luoghiBannerImage}
+            alt={`${WEDDING_CONFIG.venue.city} skyline`}
+            style={{
+              width: '100%', height: 180, objectFit: 'cover',
+              borderRadius: 'var(--radius-lg)', marginBottom: 28,
+              boxShadow: 'var(--shadow-md)',
+            }}
+          />
+        )}
+
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <div style={{
             width: 56, height: 56, margin: '0 auto 14px', borderRadius: '50%',

@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../hooks/useLanguage'
-import LanguageSwitch from '../components/LanguageSwitch'
 
 export default function NotFound() {
   const navigate = useNavigate()
@@ -13,9 +12,6 @@ export default function NotFound() {
       textAlign: 'center', padding: 24, position: 'relative',
       background: 'linear-gradient(135deg, var(--ivory) 0%, var(--cream) 100%)',
     }}>
-      <div style={{ position: 'absolute', top: 16, right: 16 }}>
-        <LanguageSwitch />
-      </div>
       <div style={{ fontSize: '3.2rem', marginBottom: 6 }}>🥀</div>
       <div style={{
         fontFamily: 'var(--font-serif)', fontSize: '5rem', lineHeight: 1,

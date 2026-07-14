@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 import { LanguageProvider, useLanguage } from './hooks/useLanguage'
-import LanguageSwitch from './components/LanguageSwitch'
 import WeddingChatbot from './components/WeddingChatbot'
 import BottomNav from './components/BottomNav'
 import Home     from './pages/Home'
@@ -65,7 +64,7 @@ const NAV_ICONS = {
   faq:     { to:'/faq',     icon:'🙋' },
   rsvp:    { to:'/rsvp',    icon:'✉️' },
   tables:  { to:'/tables',  icon:'🍽️' },
-  quiz:    { to:'/quiz',    icon:'🎮' },
+  quiz:    { to:'/quiz',    icon:'🎮', disabled: true },
   regali:  { to:'/regali',  icon:'🎁' },
 }
 const NAV_ORDER = ['home', 'chat', 'gallery', 'menu', 'luoghi', 'faq', 'rsvp', 'tables', 'quiz', 'regali']
@@ -187,9 +186,6 @@ function Drawer({ open, onClose, onNavigate }) {
             <div style={{ fontFamily:'var(--font-serif)', fontSize:'1.2rem', color:'var(--charcoal)', lineHeight:1.2 }}>
               {WEDDING_CONFIG.couple.displayName}
             </div>
-            <div style={{ marginTop:8 }}>
-              <LanguageSwitch />
-            </div>
           </div>
           <button
             onClick={onClose}
@@ -208,23 +204,28 @@ function Drawer({ open, onClose, onNavigate }) {
             return (
               <button
                 key={item.to}
-                onClick={() => go(item.to)}
+                onClick={() => { if (!item.disabled) go(item.to) }}
+                disabled={item.disabled}
                 style={{
                   display:'flex', alignItems:'center', gap:14,
                   width:'100%', padding:'13px 14px',
-                  border:'none', borderRadius:10, cursor:'pointer',
+                  border:'none', borderRadius:10, cursor: item.disabled ? 'default' : 'pointer',
                   background: active ? 'rgba(199,107,139,.1)' : 'transparent',
                   color: active ? 'var(--rose)' : 'var(--charcoal)',
+                  opacity: item.disabled ? 0.4 : 1,
                   fontFamily:'inherit', fontSize:'.97rem',
                   fontWeight: active ? 600 : 400,
                   textAlign:'left', transition:'background 0.15s',
                   marginBottom:2,
                 }}
-                onMouseEnter={e => { if (!active) e.currentTarget.style.background='rgba(207,165,181,0.08)' }}
+                onMouseEnter={e => { if (!active && !item.disabled) e.currentTarget.style.background='rgba(207,165,181,0.08)' }}
                 onMouseLeave={e => { if (!active) e.currentTarget.style.background='transparent' }}
               >
                 <span style={{ fontSize:'1.2rem', width:26, textAlign:'center', flexShrink:0 }}>{item.icon}</span>
                 <span>{item.label}</span>
+                {item.disabled && (
+                  <span style={{ marginLeft:'auto', fontSize:'.62rem', color:'var(--warm-gray)', flexShrink:0 }}>soon</span>
+                )}
                 {active && (
                   <span style={{
                     marginLeft:'auto', width:6, height:6, borderRadius:'50%',
@@ -358,13 +359,15 @@ function NavBar({ onMenuOpen, onNavigate }) {
           return (
             <button
               key={item.to}
-              onClick={() => onNavigate(item.to, navigate)}
+              onClick={() => { if (!item.disabled) onNavigate(item.to, navigate) }}
+              disabled={item.disabled}
               style={{
                 display:'flex', flexDirection:'column', alignItems:'center',
                 gap:2, padding:'6px 10px', border:'none',
-                cursor:'pointer', flexShrink:0, borderRadius:8,
+                cursor: item.disabled ? 'default' : 'pointer', flexShrink:0, borderRadius:8,
                 color: active ? 'var(--rose)' : 'var(--warm-gray)',
                 background: active ? 'rgba(199,107,139,.08)' : 'transparent',
+                opacity: item.disabled ? 0.4 : 1,
                 transition:'all 0.2s',
               }}
             >
@@ -379,11 +382,6 @@ function NavBar({ onMenuOpen, onNavigate }) {
 
       {/* Spacer on mobile */}
       <div className="hide-desktop" style={{ flex:1 }} />
-
-      {/* Language switch — always visible */}
-      <div style={{ flexShrink:0, marginLeft:8 }}>
-        <LanguageSwitch />
-      </div>
 
       {/* User area — visibile solo da desktop: su mobile l'identità si vede nel Drawer */}
       {user && (

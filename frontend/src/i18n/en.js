@@ -25,7 +25,7 @@ export const en = {
   },
 
   appShell: {
-    loaderTitle: 'Sofia & Marco',
+    loaderTitle: 'Antonios & Petronia',
     loaderSubtitle: 'Getting a special day ready...',
     transition: '💐 Setting up the next moment...',
     adminOnlyTitle: 'Restricted access',
@@ -74,7 +74,7 @@ export const en = {
           },
           {
             q: 'What shoes do you recommend?',
-            a: 'The ceremony will take place in a basilica in the historic centre of Naples, while the reception will be at a villa with scenic outdoor spaces. We recommend elegant but comfortable shoes, especially if you plan to dance the night away.',
+            a: 'The ceremony will take place at the Stadthaus Zürich, right in the city centre, and dinner will follow at Estia Home of Taste. We recommend elegant but comfortable shoes, especially if you plan to dance the night away.',
           },
         ],
       },
@@ -85,15 +85,15 @@ export const en = {
         domande: [
           {
             q: 'What time do the ceremony and reception start?',
-            a: "The ceremony will begin at 3:00 PM. Afterwards, we'll move to the reception, which will start around 5:00 PM with drinks, dinner, and dancing into the night.",
+            a: "The ceremony will begin at 11:00 AM at the Stadthaus Zürich. Afterwards, we'll move to Estia Home of Taste, where dinner starts around 5:00 PM with drinks, food, and dancing into the night.",
           },
           {
             q: 'Where can I park?',
-            a: 'The reception venue has parking reserved for guests. Taxi and shuttle services are also available from the main areas of central Naples.',
+            a: 'Paid parking is available near both venues in central Zürich. Taxis and public transport are also easily available across the city.',
           },
           {
             q: 'Will there be a shuttle service?',
-            a: 'Yes, a shuttle service to and from central Naples will be available at set times. We recommend reserving your spot when you confirm your attendance.',
+            a: "No dedicated shuttle is planned, but Zürich's public transport is excellent and taxis are readily available between the two venues.",
           },
           {
             q: 'What happens if the weather is bad?',
@@ -147,7 +147,7 @@ export const en = {
   },
 
   login: {
-    eyebrow: 'Sofia & Marco · {{date}}',
+    eyebrow: 'Antonios & Petronia · {{date}}',
     title: 'Welcome',
     subtitle: 'Enter the password you received to access our wedding website',
     passwordLabel: 'Password',
@@ -160,32 +160,32 @@ export const en = {
   },
 
   luoghi: {
-    pageTitle: 'Schedule – Naples',
+    pageTitle: 'Schedule – Zürich',
     ceremony: {
-      nome: 'Naples Cathedral (Duomo)',
+      nome: 'Stadthaus Zürich',
       orario: 'Saturday {{date}} · {{time}}',
       note: 'Please arrive at least 15 minutes early.',
     },
     reception: {
-      nome: "Villa Doria d'Angri",
-      orario: 'Following the ceremony · {{time}}',
-      note: "The reception will be held in the gardens overlooking the Gulf of Naples. In case of rain, we'll move indoors.",
+      nome: 'Estia Home of Taste',
+      orario: 'Dinner from · {{time}}',
+      note: 'Join us for dinner, drinks, and dancing into the night.',
     },
     comeArrivare: '🚗 Getting there',
     perChiVieneDaFuori: '🌍 Coming from out of town',
     ceremonyEyebrow: 'The ceremony',
-    receptionEyebrow: 'The reception',
+    receptionEyebrow: 'The dinner',
     googleMaps: 'Directions',
     waze: 'Waze',
     parcheggi: [
-      { icon: '🅿️', titolo: 'Recommended parking', desc: 'Paid parking is available around Posillipo and Mergellina. Early arrival is recommended.' },
-      { icon: '🚇', titolo: 'Metro + Funicular', desc: 'Line 1 to Toledo/Dante, then bus or taxi toward Posillipo.' },
-      { icon: '🚕', titolo: 'Taxi / Car service', desc: 'We recommend booking ahead: {{taxiName}} {{taxiPhone}}.' },
+      { icon: '🅿️', titolo: 'Recommended parking', desc: 'Paid parking is available near both venues in central Zürich. Early arrival is recommended.' },
+      { icon: '🚋', titolo: 'Tram / Bus', desc: "Zürich's tram network connects the city centre directly to both venues." },
+      { icon: '🚕', titolo: 'Taxi / Car service', desc: 'We recommend booking a taxi in advance via a ride-hailing app.' },
     ],
     fuoriCitta: [
-      { icon: '🚂', titolo: 'By train', desc: 'Napoli Centrale station (Piazza Garibaldi). Connections to Rome, Salerno and the rest of Italy.' },
-      { icon: '✈️', titolo: 'By plane', desc: '{{airportName}} ({{airportCode}}) – 15/20 min from the city centre.' },
-      { icon: '🏨', titolo: 'Where to stay', desc: 'Chiaia, Mergellina or the historic centre are recommended areas.' },
+      { icon: '🚂', titolo: 'By train', desc: 'Zürich Hauptbahnhof (Zürich HB), close to both venues. Direct connections across Switzerland and Europe.' },
+      { icon: '✈️', titolo: 'By plane', desc: '{{airportName}} ({{airportCode}}) – {{distanceFromCenter}}.' },
+      { icon: '🏨', titolo: 'Where to stay', desc: 'Altstadt (Old Town), Seefeld or Kreis 4/5 are recommended areas close to the venues.' },
     ],
   },
 
@@ -320,14 +320,15 @@ export const en = {
     weddingPast: "WE CAN'T WAIT TO SEE YOU 💍",
     heroEyebrow: 'Invite you to share in their joy',
     heroTime: '{{date}} · {{time}}',
-    heroLocation: '📍 Naples, with a view of Mount Vesuvius',
+    heroLocation: '📍 Zürich, Switzerland',
     heroCtaRsvp: 'Confirm your attendance ✉️',
     heroCtaMenu: 'Discover the menu',
     weatherTitle: '🌤️ Weather forecast',
-    weatherSubtitle: 'Naples · updated in real time',
+    weatherSubtitle: 'Zürich · updated in real time',
     playlistTitle: '🎵 Our playlist',
     playlistSubtitle: 'The songs that tell our story',
-    playlistFrameTitle: 'Sofia & Marco wedding playlist',
+    playlistComingSoon: "The playlist is being put together — check back soon!",
+    playlistFrameTitle: 'Antonios & Petronia wedding playlist',
     sectionsDivider: 'Explore',
     quickLinks: {
       rsvp:    { label: 'Confirm attendance', desc: 'Reply to the invitation' },
@@ -336,12 +337,14 @@ export const en = {
       chat:    { label: 'Leave a message',    desc: 'Talk to the couple' },
     },
     storyTitle: 'Our story',
-    storyQuote: 'We met by chance, we chose each other out of love. Every day together has been a gift, and today we want to share the greatest adventure of our lives with the people we love.',
+    storyQuote: "We've laughed our way through life, survived the Covid era, packed our bags for Switzerland, travelled together… then travelled some more… and now we're making it official: our biggest adventure is just getting started!",
+    storyText: "Bring your smiles, dancing shoes, and appetite for a celebration full of joy, laughter, and very good times. We want to share this moment with you! RSVP today to join us! Bring your best vibes as we create unforgettable memories!",
     timeline: [
-      { year: '2019', event: 'We first met' },
-      { year: '2021', event: 'Our first summer together' },
-      { year: '2023', event: 'The proposal' },
-      { year: '2027', event: 'The big day 💍' },
+      { year: '💛', event: 'Life, laughter, through it all' },
+      { year: '🦠', event: 'Survived the Covid era together' },
+      { year: '🇨🇭', event: 'Packed their bags for Switzerland' },
+      { year: '✈️', event: 'Travelled together… then travelled some more' },
+      { year: '💍', event: '17 Oct 2026 — making it official' },
     ],
     iosInstall: {
       title: 'Add to Home Screen',

@@ -1,18 +1,6 @@
 import { useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
-
-/* ── Dati bancari ───────────────────────────────────────────────────
-   ⚠️ PLACEHOLDER — sostituisci questi valori con i vostri dati reali
-   prima di pubblicare il sito. L'IBAN qui sotto è un esempio fittizio
-   (è l'IBAN di esempio standard usato nella documentazione bancaria
-   italiana), NON è un conto corrente reale.
--------------------------------------------------------------------- */
-const GIFT_INFO = {
-  intestatario: 'Sofia Rossi e Marco Bianchi',
-  iban: 'IT60 X054 2811 1010 0000 0123 456',
-  bic: 'BPPIITRRXXX',
-  causale: 'Regalo di nozze — Sofia & Marco',
-}
+import { WEDDING_CONFIG } from '../config/wedding'
 
 function CopyField({ label, value, mono = false }) {
   const { t } = useLanguage()
@@ -84,19 +72,23 @@ export default function Regali() {
           </p>
         </div>
 
-        <div style={{
-          background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(14px)',
-          border: '1px solid rgba(207,165,181,0.25)', borderRadius: 20,
-          boxShadow: '0 16px 40px rgba(44,36,32,0.08)',
-          padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 12,
-        }}>
-          <div style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', marginBottom: 4 }}>
-            {t('regali.bankTransfer')}
-          </div>
-          <CopyField label={t('regali.fields.intestatario')} value={GIFT_INFO.intestatario} />
-          <CopyField label={t('regali.fields.iban')} value={GIFT_INFO.iban} mono />
-          <CopyField label={t('regali.fields.bic')} value={GIFT_INFO.bic} mono />
-          <CopyField label={t('regali.fields.causale')} value={GIFT_INFO.causale} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {WEDDING_CONFIG.gift.bankTransfer.map(account => (
+            <div key={account.iban} style={{
+              background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(14px)',
+              border: '1px solid rgba(207,165,181,0.25)', borderRadius: 20,
+              boxShadow: '0 16px 40px rgba(44,36,32,0.08)',
+              padding: '28px 24px', display: 'flex', flexDirection: 'column', gap: 12,
+            }}>
+              <div style={{ fontSize: '.85rem', fontWeight: 600, color: 'var(--charcoal)', marginBottom: 4 }}>
+                {t('regali.bankTransfer')}{account.bank ? ` — ${account.bank}` : ''}
+              </div>
+              <CopyField label={t('regali.fields.intestatario')} value={account.accountHolder} />
+              <CopyField label={t('regali.fields.iban')} value={account.iban} mono />
+              <CopyField label={t('regali.fields.bic')} value={account.bic} mono />
+              <CopyField label={t('regali.fields.causale')} value={account.reference} />
+            </div>
+          ))}
         </div>
 
         <p style={{ textAlign: 'center', color: 'var(--warm-gray)', fontSize: '.82rem', marginTop: 20, lineHeight: 1.6 }}>
