@@ -87,6 +87,17 @@ def upload_to_drive(data: bytes, filename: str, mime_type: str, folder_id: str =
         raise
 
 
+def delete_from_drive(file_id: str) -> None:
+    """Delete a file from Drive. Raises on failure — caller decides whether to swallow it."""
+    if not _is_configured():
+        logger.warning("⚠️  DRIVE_SKIP | variabili GOOGLE_* non configurate — delete ignorato")
+        return
+
+    service = get_drive_service()
+    service.files().delete(fileId=file_id).execute()
+    logger.info("✅ DRIVE_DELETE_OK | file_id=%s", file_id)
+
+
 def upload_video_to_drive(data: bytes, filename: str, mime_type: str) -> str:
     """
     Upload video to Drive, make it publicly readable via link.

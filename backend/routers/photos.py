@@ -9,6 +9,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
+from drive_utils import upload_to_drive, delete_from_drive
 from image_utils import compress_image
 from tenant import get_matrimonio_id
 
@@ -154,8 +155,17 @@ async def upload_photo(
         )
         raise HTTPException(413, f"File too large (max {MAX_PHOTO_MB}MB)")
 
+    # Tiene da parte l'originale (pre-compressione) per il backup su Drive:
+    # Supabase riceve la versione ottimizzata per il web (max 1920px, JPEG q82),
+    # Drive riceve i byte originali così la coppia ha sempre la qualità piena.
+    original_data = data
+    original_ext  = ext
+    original_mime = _mime_from_ext(ext)
+
     data, ext, mime_type = compress_image(data, ext)
-    filename = f"{uuid.uuid4()}{ext}"
+    photo_uuid     = uuid.uuid4()
+    filename       = f"{photo_uuid}{ext}"
+    drive_filename = f"{photo_uuid}{original_ext}"
     logger.info(
         "✔️  VALIDATION OK | guest_id=%s | ext=%s | size=%.2f MB | uuid_filename=%s",
         guest_id, ext, size_mb, filename,
@@ -171,6 +181,15 @@ async def upload_photo(
         )
         raise HTTPException(500, f"Image upload error: {e}")
 
+    # ── 3. Google Drive backup (best-effort — non blocca l'upload se fallisce) ──
+    drive_file_id = None
+    try:
+        drive_file_id = upload_to_drive(original_data, drive_filename, original_mime)
+    except Exception as e:
+        logger.warning(
+            "⚠️  DRIVE_BACKUP_FAIL | guest_id=%s | filename=%s | Supabase resta la copia primaria | %s: %s",
+            guest_id, drive_filename, type(e).__name__, e,
+        )
 
     # ── 4. Salva metadati DB ──────────────────────────────────────────────────
     logger.info("💾 DB INSERT | guest_id=%s | filename=%s", guest_id, filename)
@@ -183,6 +202,7 @@ async def upload_photo(
             "url":           public_url,
             "caption":       caption,
             "matrimonio_id": matrimonio_id,
+            "drive_file_id": drive_file_id,
             "created_at":    datetime.utcnow().isoformat(),
         }).execute()
 
@@ -212,7 +232,7 @@ async def upload_photo(
         "🎉 UPLOAD COMPLETE | photo_id=%s | guest_id=%s | size=%.2f MB | total=%d ms"
         " | supabase=OK | drive=%s | caption=%r",
         photo_id, guest_id, size_mb, total_ms,
-        caption or "",
+        "OK" if drive_file_id else "skip", caption or "",
     )
 
     return photo
@@ -244,6 +264,12 @@ async def delete_photo(photo_id: int, user=Depends(get_current_guest), matrimoni
         logger.info("✅ Supabase Storage DELETE OK | photo_id=%s | filename=%s", photo_id, row["filename"])
     except Exception as e:
         logger.warning("⚠️  Supabase Storage DELETE FAIL | photo_id=%s | %s: %s", photo_id, type(e).__name__, e)
+
+    if row.get("drive_file_id"):
+        try:
+            delete_from_drive(row["drive_file_id"])
+        except Exception as e:
+            logger.warning("⚠️  Drive DELETE FAIL | photo_id=%s | %s: %s", photo_id, type(e).__name__, e)
 
     db.table("photos").delete().eq("id", photo_id).execute()
     logger.info("✅ DB DELETE OK | photo_id=%s", photo_id)

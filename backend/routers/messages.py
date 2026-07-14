@@ -13,7 +13,7 @@ from fastapi.responses import JSONResponse
 from auth_config import get_current_guest, get_optional_guest
 from database import get_db, audit
 from image_utils import compress_image
-from drive_utils import upload_video_to_drive
+from drive_utils import upload_video_to_drive, upload_to_drive, delete_from_drive
 from tenant import get_matrimonio_id
 
 router = APIRouter()
@@ -158,6 +158,7 @@ async def send_message(
 
     audio_path = None
     photo_url  = None
+    photo_drive_file_id = None
 
     # ── Audio upload ──────────────────────────────────────────────────────────
     if audio:
@@ -257,8 +258,17 @@ async def send_message(
             )
             raise HTTPException(413, f"File too large ({size_mb:.1f} MB, max {MAX_PHOTO_MB} MB)")
 
+        # Tiene da parte l'originale (pre-compressione) per il backup su Drive,
+        # stesso schema della galleria: Supabase riceve la versione ottimizzata
+        # per il web, Drive riceve i byte originali a piena qualità.
+        original_data = data
+        original_ext  = ext
+        original_mime = _mime_from_image_ext(ext)
+
         data, ext, mime_type = compress_image(data, ext)
-        filename = f"{uuid.uuid4()}{ext}"
+        photo_uuid     = uuid.uuid4()
+        filename       = f"{photo_uuid}{ext}"
+        drive_filename = f"{photo_uuid}{original_ext}"
         logger.info(
             "🖼️  FOTO_CHAT | UPLOAD_SUPABASE | nome_interno=%s | mime_type=%s | path=photos/%s",
             filename, mime_type, filename,
@@ -272,6 +282,14 @@ async def send_message(
                 type(e).__name__, str(e), filename
             )
             raise HTTPException(500, f"Photo upload error: {e}")
+
+        try:
+            photo_drive_file_id = upload_to_drive(original_data, drive_filename, original_mime)
+        except Exception as e:
+            logger.warning(
+                "⚠️  FOTO_CHAT | DRIVE_BACKUP_FAIL | guest=%s | filename=%s | Supabase resta la copia primaria | %s: %s",
+                actor_name, drive_filename, type(e).__name__, e,
+            )
 
     # ── Message type ──────────────────────────────────────────────────────────
     has_text  = bool(content and content.strip())
@@ -312,6 +330,7 @@ async def send_message(
         "content":       video_drive_url if has_video else (content.strip() if content else None),
         "audio_path":    audio_path,
         "photo_url":     photo_url,
+        "photo_drive_file_id": photo_drive_file_id,
         "type":          msg_type,
         "guest_name":    actor_name,
         "matrimonio_id": matrimonio_id,
@@ -385,6 +404,12 @@ async def delete_message(message_id: int, user=Depends(get_current_guest), matri
             logger.info("✅ STORAGE_DEL | photos/%s", filename)
         except Exception as e:
             logger.warning("⚠️  STORAGE_DEL_FAIL | photos | msg_id=%s | %s: %s", message_id, type(e).__name__, e)
+
+    if row.get("photo_drive_file_id"):
+        try:
+            delete_from_drive(row["photo_drive_file_id"])
+        except Exception as e:
+            logger.warning("⚠️  DRIVE_DEL_FAIL | msg_id=%s | %s: %s", message_id, type(e).__name__, e)
 
     db.table("messages").delete().eq("id", message_id).execute()
     logger.info("✅ MSG_DELETED | id=%s", message_id)
