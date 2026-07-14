@@ -8,7 +8,9 @@ Uso:
      siano impostate (stesso .env del backend).
   2. Esegui:
        python seed_guests.py
-  3. Per azzerare prima gli ospiti esistenti (es. i 50 fittizi di Sofia & Marco):
+  3. Per azzerare prima gli ospiti già inseriti per QUESTO matrimonio
+     (matrimoni.slug = "antonios-petronia", id=2 — non tocca i 53 ospiti
+     fittizi del vecchio demo "sofia-marco", id=1):
        python seed_guests.py --clear
 
 Nota: gli invitati senza email (Vasiliki Kontotoli, Jonathan Kauffmann) non
@@ -45,6 +47,18 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 
 db = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+# ── Tenant: risolve lo slug nel matrimonio_id (tabella condivisa fra matrimoni) ──
+MATRIMONIO_SLUG = "antonios-petronia"
+
+def resolve_matrimonio_id() -> int:
+    res = db.table("matrimoni").select("id").eq("slug", MATRIMONIO_SLUG).limit(1).execute()
+    if not res.data:
+        print(f"❌  Nessun matrimonio con slug {MATRIMONIO_SLUG!r} su Supabase — crealo prima nella tabella `matrimoni`")
+        sys.exit(1)
+    return int(res.data[0]["id"])
+
+MATRIMONIO_ID = resolve_matrimonio_id()
+
 # ── Lista invitati reale ────────────────────────────────────────────
 GUESTS = [
     {"name": "Theodoros Stougias",             "email": "stoujias@otenet.gr"},
@@ -78,9 +92,9 @@ GUESTS = [
 
 
 def clear_guests():
-    print("🗑  Cancello tutti gli ospiti esistenti…")
-    db.table("guests").delete().neq("id", 0).execute()
-    print("   ✓ Tabella svuotata")
+    print(f"🗑  Cancello gli ospiti esistenti del matrimonio id={MATRIMONIO_ID}…")
+    db.table("guests").delete().eq("matrimonio_id", MATRIMONIO_ID).execute()
+    print("   ✓ Tabella svuotata (solo per questo matrimonio)")
 
 
 def seed():
@@ -94,23 +108,24 @@ def seed():
             skipped += 1
             continue
 
-        # Controlla se l'email esiste già
-        existing = db.table("guests").select("id").eq("email", g["email"]).execute().data
+        # Controlla se l'email esiste già per QUESTO matrimonio
+        existing = db.table("guests").select("id").eq("email", g["email"]).eq("matrimonio_id", MATRIMONIO_ID).execute().data
         if existing:
             print(f"   ⚠  {g['name']} già presente — salto")
             skipped += 1
             continue
 
         db.table("guests").insert({
-            "name":        g["name"],
-            "email":       g["email"],
-            "phone":       None,
-            "table_num":   None,
-            "dietary":     None,
-            "rsvp_status": "pending",
-            "invite_sent": 0,
-            "created_at":  now,
-            "updated_at":  now,
+            "name":          g["name"],
+            "email":         g["email"],
+            "phone":         None,
+            "table_num":     None,
+            "dietary":       None,
+            "rsvp_status":   "pending",
+            "invite_sent":   0,
+            "matrimonio_id": MATRIMONIO_ID,
+            "created_at":    now,
+            "updated_at":    now,
         }).execute()
         print(f"   ✓ {g['name']}")
         inserted += 1
