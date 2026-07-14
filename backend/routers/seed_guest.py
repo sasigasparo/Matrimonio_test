@@ -25,6 +25,12 @@ import sys
 import argparse
 from datetime import datetime
 
+# Su Windows la console usa cp1252, che non supporta le emoji usate nei
+# print sotto: senza questo la print crasha a metà script (UnicodeEncodeError)
+# PRIMA di aver inserito gli ospiti nel DB.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 # ── Carica .env se presente ────────────────────────────────────────
 try:
     from dotenv import load_dotenv
