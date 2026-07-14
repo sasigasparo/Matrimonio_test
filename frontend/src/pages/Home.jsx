@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { WEDDING_CONFIG } from '../config/wedding'
 import { useLanguage } from '../hooks/useLanguage'
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import { Mail, UtensilsCrossed, Camera, MessageCircle, MapPin, Droplets, ChevronDown } from 'lucide-react'
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { Mail, UtensilsCrossed, Camera, MessageCircle, MapPin, Droplets, ChevronDown, ZoomIn, X } from 'lucide-react'
 import AddToCalendar from '../components/AddToCalendar'
 import ShareButton from '../components/ShareButton'
 import Skeleton from '../components/Skeleton'
@@ -265,6 +265,7 @@ export default function Home() {
   const { t } = useLanguage()
   const reduce = useReducedMotion()
   const heroRef = useRef(null)
+  const [inviteOpen, setInviteOpen] = useState(false)
 
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
   const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
@@ -371,17 +372,36 @@ export default function Home() {
       {/* ── Cartolina d'invito ── */}
       {WEDDING_CONFIG.app.inviteCardImage && (
         <section style={{ padding: '48px 0 8px' }}>
-          <div className="container-sm" style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className="container-sm" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Reveal>
-              <img
-                src={WEDDING_CONFIG.app.inviteCardImage}
-                alt={`${WEDDING_CONFIG.couple.displayName} — invitation`}
+              <button
+                onClick={() => setInviteOpen(true)}
+                aria-label={t('home.inviteCardHint')}
                 style={{
-                  maxWidth: 340, width: '100%', borderRadius: 'var(--radius-md)',
-                  boxShadow: '0 20px 50px rgba(44,36,32,0.18)', display: 'block',
-                  transform: 'rotate(-1.5deg)',
+                  position: 'relative', display: 'block', border: 'none', padding: 0,
+                  background: 'none', cursor: 'zoom-in', transform: 'rotate(-1.5deg)',
                 }}
-              />
+              >
+                <img
+                  src={WEDDING_CONFIG.app.inviteCardImage}
+                  alt={`${WEDDING_CONFIG.couple.displayName} — invitation`}
+                  style={{
+                    maxWidth: 460, width: '100%', borderRadius: 'var(--radius-md)',
+                    boxShadow: '0 20px 50px rgba(44,36,32,0.18)', display: 'block',
+                  }}
+                />
+                <span style={{
+                  position: 'absolute', bottom: 12, right: 12,
+                  width: 36, height: 36, borderRadius: '50%',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'rgba(27,27,27,.55)', backdropFilter: 'blur(4px)', color: '#fff',
+                }}>
+                  <ZoomIn size={17} />
+                </span>
+              </button>
+              <p style={{ marginTop: 10, fontSize: '.8rem', color: 'var(--warm-gray)', transform: 'rotate(-1.5deg)' }}>
+                {t('home.inviteCardHint')}
+              </p>
             </Reveal>
           </div>
         </section>
@@ -549,6 +569,47 @@ export default function Home() {
       </section>
 
       <IOSInstallBanner />
+
+      {/* ── Lightbox cartolina d'invito ── */}
+      <AnimatePresence>
+        {inviteOpen && (
+          <motion.div
+            onClick={() => setInviteOpen(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduce ? 0 : 0.22 }}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 'var(--z-modal)',
+              background: 'rgba(27,27,27,.92)', display: 'flex',
+              alignItems: 'center', justifyContent: 'center', padding: 24,
+            }}
+          >
+            <motion.img
+              src={WEDDING_CONFIG.app.inviteCardImage}
+              alt={`${WEDDING_CONFIG.couple.displayName} — invitation`}
+              onClick={e => e.stopPropagation()}
+              initial={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
+              transition={{ duration: reduce ? 0 : 0.26, ease: [0.16, 1, 0.3, 1] }}
+              style={{ maxWidth: '100%', maxHeight: '86dvh', borderRadius: 'var(--radius-md)', objectFit: 'contain' }}
+            />
+            <button
+              onClick={() => setInviteOpen(false)}
+              aria-label="Close"
+              style={{
+                position: 'absolute', top: 18, right: 18,
+                width: 44, height: 44, borderRadius: '50%', border: 'none',
+                background: 'rgba(255,255,255,.14)', backdropFilter: 'blur(6px)', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+              }}
+            >
+              <X size={20} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   )

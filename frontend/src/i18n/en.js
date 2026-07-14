@@ -323,6 +323,7 @@ export const en = {
     heroLocation: '📍 Zürich, Switzerland',
     heroCtaRsvp: 'Confirm your attendance ✉️',
     heroCtaMenu: 'Discover the menu',
+    inviteCardHint: 'Tap to enlarge',
     weatherTitle: '🌤️ Weather forecast',
     weatherSubtitle: 'Zürich · updated in real time',
     playlistTitle: '🎵 Our playlist',
