@@ -27,6 +27,16 @@ function Reveal({ children, delay = 0, y = 24, className, style }) {
   )
 }
 
+/* ── Section header (title + optional subtitle, shared shape) ──────── */
+function SectionHeader({ title, subtitle, style }) {
+  return (
+    <div style={{ textAlign: 'center', marginBottom: 26, ...style }}>
+      <h2 style={{ fontSize: '2rem', color: 'var(--charcoal)', marginBottom: subtitle ? 6 : 0 }}>{title}</h2>
+      {subtitle && <p style={{ color: 'var(--warm-gray)', fontSize: '.92rem', margin: 0 }}>{subtitle}</p>}
+    </div>
+  )
+}
+
 /* ── Meteo ───────────────────────────────────────────────────────── */
 const WEATHER_API_KEY = 'fb30c9a0bd864816bba202820262106'
 
@@ -100,7 +110,7 @@ function WeatherWidget() {
         const isToday = i === 0
         return (
           <div key={i} style={{
-            background: isToday ? 'linear-gradient(160deg,#FCEEF4,#FBDCE6)' : 'var(--white)',
+            background: isToday ? 'var(--gradient-blush)' : 'var(--white)',
             border: `1px solid ${isToday ? 'rgba(199,107,139,.32)' : 'var(--hairline)'}`,
             borderRadius: 'var(--radius-md)',
             padding: '16px 8px',
@@ -408,41 +418,33 @@ export default function Home() {
       )}
 
       {/* ── Meteo ── */}
-      <section style={{ padding: '56px 0 40px' }}>
+      <section style={{ padding: '64px 0' }}>
         <div className="container-sm">
           <Reveal>
-            <div style={{ textAlign: 'center', marginBottom: 26 }}>
-              <h2 style={{ fontSize: '1.9rem', color: 'var(--charcoal)', marginBottom: 6 }}>{t('home.weatherTitle')}</h2>
-              <p style={{ color: 'var(--warm-gray)', fontSize: '.92rem', margin: 0 }}>{t('home.weatherSubtitle')}</p>
-            </div>
+            <SectionHeader title={t('home.weatherTitle')} subtitle={t('home.weatherSubtitle')} />
             <WeatherWidget />
           </Reveal>
         </div>
       </section>
 
       {/* ── Quick actions ── */}
-      <section style={{ padding: '24px 0 48px' }}>
+      <section style={{ padding: '64px 0', background: 'var(--cream)' }}>
         <div className="container-sm">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 14 }}>
             {quickLinks.map((l, i) => (
               <Reveal key={l.to} delay={i * 0.06}>
                 <button
                   onClick={() => navigate(l.to)}
-                  className="quick-action"
+                  className="card quick-action"
                   style={{
                     width: '100%', height: '100%',
-                    background: 'var(--white)', border: '1px solid var(--hairline)',
-                    borderRadius: 'var(--radius-lg)', padding: '22px 20px',
                     cursor: 'pointer', textAlign: 'left',
                     display: 'flex', flexDirection: 'column', gap: 10,
-                    boxShadow: 'var(--shadow-sm)', transition: 'transform .25s var(--ease-out-quart), box-shadow .25s var(--ease-out-quart)',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = 'var(--shadow-lg)' }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = 'var(--shadow-sm)' }}
                 >
                   <span style={{
-                    width: 46, height: 46, borderRadius: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    background: 'linear-gradient(150deg,#FCEEF4,#FBDCE6)', color: 'var(--rose-deep)',
+                    width: 46, height: 46, borderRadius: 'var(--radius-sm)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'var(--gradient-blush)', color: 'var(--rose-deep)',
                   }}>
                     <l.Icon size={22} strokeWidth={2.1} />
                   </span>
@@ -456,7 +458,7 @@ export default function Home() {
       </section>
 
       {/* ── Chatbot promo ── */}
-      <section style={{ padding: '8px 0 48px' }}>
+      <section style={{ padding: '64px 0' }}>
         <div className="container-sm">
           <Reveal>
             <div style={{
@@ -515,7 +517,7 @@ export default function Home() {
                 style={{
                   alignSelf: 'flex-start', position: 'relative',
                   padding: '12px 24px', borderRadius: 99, border: 'none',
-                  background: 'linear-gradient(135deg, #c8a2a8, #FBDCE6)',
+                  background: 'linear-gradient(135deg, var(--accent), var(--blush))',
                   color: '#2a1a22', fontWeight: 700, fontSize: '.9rem',
                   cursor: 'pointer', letterSpacing: '.01em',
                   boxShadow: '0 4px 20px rgba(199,107,139,.4)',
@@ -532,23 +534,20 @@ export default function Home() {
       </section>
 
       {/* ── Playlist ── */}
-      <section style={{ padding: '48px 0', background: 'var(--cream)' }}>
+      <section style={{ padding: '64px 0', background: 'var(--cream)' }}>
         <div className="container-sm">
           <Reveal>
-            <div style={{ textAlign: 'center', marginBottom: 24 }}>
-              <h2 style={{ fontSize: '1.9rem', color: 'var(--charcoal)', marginBottom: 6 }}>{t('home.playlistTitle')}</h2>
-              <p style={{ color: 'var(--warm-gray)', fontSize: '.92rem', margin: 0 }}>{t('home.playlistSubtitle')}</p>
-            </div>
+            <SectionHeader title={t('home.playlistTitle')} subtitle={t('home.playlistSubtitle')} />
             <SpotifyWidget title={t('home.playlistFrameTitle')} />
           </Reveal>
         </div>
       </section>
 
       {/* ── Storia ── */}
-      <section style={{ padding: '64px 0 72px' }}>
+      <section style={{ padding: '64px 0' }}>
         <div className="container-sm" style={{ textAlign: 'center' }}>
           <Reveal>
-            <h2 style={{ fontSize: '2.1rem', color: 'var(--charcoal)', marginBottom: 14 }}>{t('home.storyTitle')}</h2>
+            <SectionHeader title={t('home.storyTitle')} style={{ marginBottom: 14 }} />
             <div style={{ width: 56, height: 1, background: 'var(--accent)', margin: '0 auto 22px' }} />
             <p style={{ color: 'var(--ink-soft)', lineHeight: 1.8, fontSize: '1.08rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', maxWidth: 520, margin: '0 auto' }}>
               "{t('home.storyQuote')}"

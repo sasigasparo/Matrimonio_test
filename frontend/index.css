@@ -60,6 +60,7 @@
   --shadow-lg: 0 20px 50px rgba(199,107,139,.14), 0 8px 18px rgba(27,27,27,.06);
   --shadow-xl: 0 32px 72px rgba(199,107,139,.18), 0 12px 28px rgba(27,27,27,.08);
   --glow-rose: 0 8px 28px rgba(199,107,139,.40);
+  --gradient-blush: linear-gradient(155deg, var(--rose-soft), var(--blush));
 
   /* ─ Motion ─ */
   --ease-out-quart: cubic-bezier(.25, 1, .5, 1);
@@ -268,6 +269,9 @@ label {
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 .card:hover { box-shadow: var(--shadow-lg); }
+
+/* Quick-action tile: a .card that also lifts on hover */
+.quick-action:hover { transform: translateY(-4px); }
 
 /* Selectable pill chip (RSVP diet, gallery/menu filters) */
 .chip {
