@@ -326,8 +326,9 @@ export default function Home() {
           </p>
 
           <h1 style={{
+            width: '100%',
             fontFamily: 'var(--font-serif)', fontWeight: 500,
-            fontSize: 'clamp(2.8rem, 13vw, 4.8rem)',
+            fontSize: 'clamp(2.3rem, 12vw, 4.8rem)',
             color: '#fff', lineHeight: 1.04, marginBottom: 10,
             textShadow: '0 4px 30px rgba(0,0,0,.35)', letterSpacing: '-0.01em',
           }}>
@@ -341,8 +342,9 @@ export default function Home() {
           <p style={{ color: 'rgba(255,255,255,.94)', fontSize: '1.05rem', marginBottom: 6, fontWeight: 500 }}>
             {WEDDING_CONFIG.dateLabel}
           </p>
-          <p style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,.82)', fontSize: '.92rem', marginBottom: 32, textAlign: 'center' }}>
-            <MapPin size={14} /> {WEDDING_CONFIG.venue.ceremony.name} &amp; {WEDDING_CONFIG.venue.reception.name}, {WEDDING_CONFIG.venue.city}
+          <p style={{ width: '100%', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', flexWrap: 'wrap', gap: 6, color: 'rgba(255,255,255,.82)', fontSize: '.92rem', marginBottom: 32, textAlign: 'center' }}>
+            <MapPin size={14} style={{ flexShrink: 0, marginTop: 3 }} />
+            <span style={{ minWidth: 0 }}>{WEDDING_CONFIG.venue.ceremony.name} &amp; {WEDDING_CONFIG.venue.reception.name}, {WEDDING_CONFIG.venue.city}</span>
           </p>
 
           <Countdown />
