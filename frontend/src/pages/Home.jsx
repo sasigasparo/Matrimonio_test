@@ -313,7 +313,7 @@ export default function Home() {
         }} />
 
         <motion.div
-          style={{ position: 'relative', maxWidth: 600, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+          style={{ position: 'relative', width: '100%', maxWidth: 600, margin: '0 auto' }}
           initial={reduce ? false : { opacity: 0, y: 18 }}
           animate={reduce ? {} : { opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -337,7 +337,7 @@ export default function Home() {
             {WEDDING_CONFIG.couple.bride}
           </h1>
 
-          <div style={{ width: 64, height: 1, background: 'rgba(255,255,255,.55)', margin: '14px 0 18px' }} />
+          <div style={{ width: 64, height: 1, background: 'rgba(255,255,255,.55)', margin: '14px auto 18px' }} />
 
           <p style={{ color: 'rgba(255,255,255,.94)', fontSize: '1.05rem', marginBottom: 6, fontWeight: 500 }}>
             {WEDDING_CONFIG.dateLabel}
