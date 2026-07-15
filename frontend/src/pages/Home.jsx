@@ -333,7 +333,9 @@ export default function Home() {
             textShadow: '0 4px 30px rgba(0,0,0,.35)', letterSpacing: '-0.01em',
           }}>
             {WEDDING_CONFIG.couple.groom}
-            <span style={{ color: 'var(--blush)', fontStyle: 'italic', fontWeight: 400, fontSize: '.6em', margin: '0 .26em', verticalAlign: 'middle' }}>&amp;</span>
+            {' '}
+            <span style={{ color: 'var(--blush)', fontStyle: 'italic', fontWeight: 400, fontSize: '.6em', margin: '0 .08em', verticalAlign: 'middle' }}>&amp;</span>
+            {' '}
             {WEDDING_CONFIG.couple.bride}
           </h1>
 
