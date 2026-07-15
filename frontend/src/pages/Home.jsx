@@ -417,8 +417,32 @@ export default function Home() {
         </section>
       )}
 
-      {/* ── Meteo ── */}
+      {/* ── Storia ── */}
       <section style={{ padding: '64px 0' }}>
+        <div className="container-sm" style={{ textAlign: 'center' }}>
+          <Reveal>
+            <SectionHeader title={t('home.storyTitle')} style={{ marginBottom: 14 }} />
+            <div style={{ width: 56, height: 1, background: 'var(--accent)', margin: '0 auto 22px' }} />
+            <p style={{ color: 'var(--ink-soft)', lineHeight: 1.8, fontSize: '1.08rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', maxWidth: 520, margin: '0 auto' }}>
+              "{t('home.storyQuote')}"
+            </p>
+            <p style={{ color: 'var(--warm-gray)', lineHeight: 1.7, fontSize: '.98rem', maxWidth: 480, margin: '18px auto 0' }}>
+              {t('home.storyText')}
+            </p>
+            <div style={{ marginTop: 36, display: 'flex', gap: 28, justifyContent: 'center', flexWrap: 'wrap' }}>
+              {t('home.timeline').map(s => (
+                <div key={s.year} style={{ textAlign: 'center' }}>
+                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.5rem', color: 'var(--rose-deep)' }}>{s.year}</div>
+                  <div style={{ fontSize: '.85rem', color: 'var(--warm-gray)', marginTop: 4 }}>{s.event}</div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Meteo ── */}
+      <section style={{ padding: '64px 0', background: 'var(--cream)' }}>
         <div className="container-sm">
           <Reveal>
             <SectionHeader title={t('home.weatherTitle')} subtitle={t('home.weatherSubtitle')} />
@@ -428,7 +452,7 @@ export default function Home() {
       </section>
 
       {/* ── Quick actions ── */}
-      <section style={{ padding: '64px 0', background: 'var(--cream)' }}>
+      <section style={{ padding: '64px 0' }}>
         <div className="container-sm">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 14 }}>
             {quickLinks.map((l, i) => (
@@ -458,7 +482,7 @@ export default function Home() {
       </section>
 
       {/* ── Chatbot promo ── */}
-      <section style={{ padding: '64px 0' }}>
+      <section style={{ padding: '64px 0', background: 'var(--cream)' }}>
         <div className="container-sm">
           <Reveal>
             <div style={{
@@ -534,35 +558,11 @@ export default function Home() {
       </section>
 
       {/* ── Playlist ── */}
-      <section style={{ padding: '64px 0', background: 'var(--cream)' }}>
+      <section style={{ padding: '64px 0' }}>
         <div className="container-sm">
           <Reveal>
             <SectionHeader title={t('home.playlistTitle')} subtitle={t('home.playlistSubtitle')} />
             <SpotifyWidget title={t('home.playlistFrameTitle')} />
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── Storia ── */}
-      <section style={{ padding: '64px 0' }}>
-        <div className="container-sm" style={{ textAlign: 'center' }}>
-          <Reveal>
-            <SectionHeader title={t('home.storyTitle')} style={{ marginBottom: 14 }} />
-            <div style={{ width: 56, height: 1, background: 'var(--accent)', margin: '0 auto 22px' }} />
-            <p style={{ color: 'var(--ink-soft)', lineHeight: 1.8, fontSize: '1.08rem', fontFamily: 'var(--font-serif)', fontStyle: 'italic', maxWidth: 520, margin: '0 auto' }}>
-              "{t('home.storyQuote')}"
-            </p>
-            <p style={{ color: 'var(--warm-gray)', lineHeight: 1.7, fontSize: '.98rem', maxWidth: 480, margin: '18px auto 0' }}>
-              {t('home.storyText')}
-            </p>
-            <div style={{ marginTop: 36, display: 'flex', gap: 28, justifyContent: 'center', flexWrap: 'wrap' }}>
-              {t('home.timeline').map(s => (
-                <div key={s.year} style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.5rem', color: 'var(--rose-deep)' }}>{s.year}</div>
-                  <div style={{ fontSize: '.85rem', color: 'var(--warm-gray)', marginTop: 4 }}>{s.event}</div>
-                </div>
-              ))}
-            </div>
           </Reveal>
         </div>
       </section>
