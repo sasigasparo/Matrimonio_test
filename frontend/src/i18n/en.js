@@ -327,7 +327,7 @@ export const en = {
     weatherTitle: '🌤️ Weather forecast',
     weatherSubtitle: 'Zürich · updated in real time',
     playlistTitle: '🎵 Our playlist',
-    playlistSubtitle: 'The songs that tell our story',
+    playlistSubtitle: 'The songs that tell our story — add yours and help us build the perfect dance floor!',
     playlistComingSoon: "The playlist is being put together — check back soon!",
     playlistFrameTitle: 'Antonios & Petronia wedding playlist',
     sectionsDivider: 'Explore',

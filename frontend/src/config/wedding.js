@@ -113,7 +113,7 @@ export const WEDDING_CONFIG = {
   // ── Spotify ────────────────────────────────────────────────────────────────
   // Playlist condivisa separatamente dalla coppia — vuoto finché non arriva l'ID.
   spotify: {
-    playlistId: "",   // ID della playlist su open.spotify.com (es. "04hXZMm6GPheiarj7Ib9xo")
+    playlistId: "2KH71lpT8a9Kgna35fA1mp",   // ID della playlist su open.spotify.com (es. "04hXZMm6GPheiarj7Ib9xo")
   },
 
   // ── Supabase (storage foto/audio) ──────────────────────────────────────────

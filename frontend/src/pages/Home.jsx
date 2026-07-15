@@ -321,9 +321,9 @@ export default function Home() {
             color: '#fff', lineHeight: 1.04, marginBottom: 10,
             textShadow: '0 4px 30px rgba(0,0,0,.35)', letterSpacing: '-0.01em',
           }}>
-            {WEDDING_CONFIG.couple.bride}
-            <span style={{ color: 'var(--blush)', fontStyle: 'italic', fontWeight: 400, fontSize: '.6em', margin: '0 .26em', verticalAlign: 'middle' }}>&amp;</span>
             {WEDDING_CONFIG.couple.groom}
+            <span style={{ color: 'var(--blush)', fontStyle: 'italic', fontWeight: 400, fontSize: '.6em', margin: '0 .26em', verticalAlign: 'middle' }}>&amp;</span>
+            {WEDDING_CONFIG.couple.bride}
           </h1>
 
           <div style={{ width: 64, height: 1, background: 'rgba(255,255,255,.55)', margin: '14px 0 18px' }} />
