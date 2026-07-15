@@ -33,7 +33,7 @@ export function AdminGuests({
           {rsvpng ? t.sending : t.sendAllRsvp}
         </button>
         <button className="btn btn-outline" onClick={() => {
-          const emails = guests.map(g => g.email).join(', ')
+          const emails = guests.filter(g => g.email).map(g => g.email).join(', ')
           navigator.clipboard.writeText(emails)
           toast.success(t.emailsCopied)
         }}>
@@ -46,7 +46,7 @@ export function AdminGuests({
           <h3 style={{ fontFamily:'var(--font-serif)', marginBottom:20 }}>{t.newGuest}</h3>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:12 }}>
             <div><label>{t.fullName} *</label><input className="input" placeholder="John Smith" value={newGuest.name} onChange={e => setNewGuest(p=>({...p, name:e.target.value}))} /></div>
-            <div><label>{t.email} *</label><input className="input" placeholder="john@email.com" value={newGuest.email} onChange={e => setNewGuest(p=>({...p, email:e.target.value}))} /></div>
+            <div><label>{t.email}</label><input className="input" placeholder="john@email.com (optional)" value={newGuest.email} onChange={e => setNewGuest(p=>({...p, email:e.target.value}))} /></div>
             <div><label>{t.phone}</label><input className="input" placeholder="+41 79 123 45 67" value={newGuest.phone} onChange={e => setNewGuest(p=>({...p, phone:e.target.value}))} /></div>
             <div><label>{t.tableNumber}</label><input className="input" type="number" placeholder="(optional)" value={newGuest.table_num} onChange={e => setNewGuest(p=>({...p, table_num:e.target.value}))} /></div>
           </div>
@@ -55,6 +55,7 @@ export function AdminGuests({
               <input
                 type="checkbox"
                 checked={sendOnCreate}
+                disabled={!newGuest.email}
                 onChange={e => setSendOnCreate(e.target.checked)}
                 style={{ width:16, height:16, accentColor:'var(--rose)', cursor:'pointer' }}
               />
@@ -95,7 +96,9 @@ export function AdminGuests({
                   </div>
                 </td>
                 <td data-label="Email" style={{ padding:'10px 16px' }}>
-                  <a href={`mailto:${g.email}`} style={{ color:'var(--rose)', textDecoration:'none', fontSize:'.85rem' }}>{g.email}</a>
+                  {g.email
+                    ? <a href={`mailto:${g.email}`} style={{ color:'var(--rose)', textDecoration:'none', fontSize:'.85rem' }}>{g.email}</a>
+                    : <span style={{ color:'var(--warm-gray)', fontSize:'.85rem' }}>—</span>}
                 </td>
                 <td data-label="Table" style={{ padding:'10px 16px', color:'var(--warm-gray)' }}>{g.table_num || '—'}</td>
                 <td data-label="RSVP" style={{ padding:'10px 16px' }}><span className={`badge badge-${g.rsvp_status}`}>{g.rsvp_status}</span></td>
@@ -103,7 +106,7 @@ export function AdminGuests({
                   {g.invite_sent ? <span style={{ color:'var(--sage)', fontSize:'.85rem' }}>✓ {t.sent}</span> : <span style={{ color:'var(--warm-gray)', fontSize:'.85rem' }}>{t.notSent}</span>}
                 </td>
                 <td className="mbl-actions" style={{ padding:'10px 16px' }}>
-                  <button className="btn btn-sm btn-outline" onClick={() => sendInvite(g.id, g.name)}>📧</button>
+                  <button className="btn btn-sm btn-outline" onClick={() => sendInvite(g.id, g.name)} disabled={!g.email} title={g.email ? '' : 'No email yet'}>📧</button>
                   <button className="btn btn-sm btn-outline" onClick={() => openEdit(g)}>✏️</button>
                   <button className="btn btn-sm" style={{ background:'rgba(199,107,139,.15)', color:'var(--rose)', border:'none' }} onClick={() => deleteGuest(g.id, g.name)}>🗑</button>
                 </td>
@@ -128,7 +131,7 @@ export function AdminGuests({
             </h3>
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
               <div><label>{t.fullName} *</label><input className="input" value={editForm.name} onChange={e => setEditForm(p=>({...p, name:e.target.value}))} /></div>
-              <div><label>{t.email} *</label><input className="input" type="email" value={editForm.email} onChange={e => setEditForm(p=>({...p, email:e.target.value}))} /></div>
+              <div><label>{t.email}</label><input className="input" type="email" placeholder="(optional)" value={editForm.email} onChange={e => setEditForm(p=>({...p, email:e.target.value}))} /></div>
               <div><label>{t.phone}</label><input className="input" value={editForm.phone} onChange={e => setEditForm(p=>({...p, phone:e.target.value}))} /></div>
               <div><label>{t.tableNumber}</label><input className="input" type="number" placeholder="(optional)" value={editForm.table_num} onChange={e => setEditForm(p=>({...p, table_num:e.target.value}))} /></div>
             </div>
@@ -137,6 +140,7 @@ export function AdminGuests({
                 <input
                   type="checkbox"
                   checked={sendOnEdit}
+                  disabled={!editForm.email}
                   onChange={e => setSendOnEdit(e.target.checked)}
                   style={{ width:16, height:16, accentColor:'var(--rose)', cursor:'pointer' }}
                 />

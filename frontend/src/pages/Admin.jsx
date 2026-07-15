@@ -103,7 +103,7 @@ export default function Admin() {
   }
 
   const addGuest = async () => {
-    if (!newGuest.name || !newGuest.email) { toast.error('Name and email required'); return }
+    if (!newGuest.name) { toast.error('Name required'); return }
     setAdding(true)
     try {
       const tableNum = parseInt(newGuest.table_num, 10)
@@ -121,7 +121,13 @@ export default function Admin() {
   const sendInvite = async (id, name) => {
     try {
       const r = await api.sendInvite(id)
-      r.sent ? toast.success(`📧 Invite sent to ${name}`) : toast.error('SMTP not configured — set the email variables in .env')
+      if (r.sent) {
+        toast.success(`📧 Invite sent to ${name}`)
+      } else if (r.reason === 'no_email') {
+        toast.error(`${name} has no email yet — add one first`)
+      } else {
+        toast.error('SMTP not configured — set the email variables in .env')
+      }
       loadGuests()
     } catch(e) { toast.error('Error: ' + e.message) }
   }
@@ -149,11 +155,11 @@ export default function Admin() {
 
   const openEdit = (g) => {
     setEditGuest(g)
-    setEditForm({ name: g.name, email: g.email, phone: g.phone || '', table_num: g.table_num ?? '' })
+    setEditForm({ name: g.name, email: g.email || '', phone: g.phone || '', table_num: g.table_num ?? '' })
   }
 
   const saveEdit = async () => {
-    if (!editForm.name || !editForm.email) { toast.error('Name and email required'); return }
+    if (!editForm.name) { toast.error('Name required'); return }
     setSaving(true)
     try {
       const tableNum = parseInt(editForm.table_num, 10)

@@ -13,11 +13,13 @@ Uso:
      fittizi del vecchio demo "sofia-marco", id=1):
        python seed_guests.py --clear
 
-Nota: gli invitati senza email (Vasiliki Kontotoli, Jonathan Kauffmann) non
-possono accedere/fare il login autonomamente — vanno gestiti manualmente
-dal pannello Admin (RSVP inserito per loro conto) oppure aggiungi un'email
-prima di eseguire lo script. I due posti "TBU" (28, 29) non sono inclusi:
-aggiungili quando nome ed email saranno confermati.
+Nota: gli invitati senza email (Vasiliki Kontotoli, Jonathan Kauffmann) vengono
+comunque inseriti nel DB con email=None — compaiono nella lista invitati e
+possono ricevere un RSVP inserito per loro conto dal pannello Admin; l'email
+si può aggiungere in qualsiasi momento dal pannello Admin (modifica ospite),
+e da quel momento sarà possibile inviargli l'invito via email. I due posti
+"TBU" (28, 29) non sono inclusi: aggiungili quando nome ed email saranno
+confermati.
 """
 
 import os
@@ -109,17 +111,20 @@ def seed():
     skipped = 0
 
     for g in GUESTS:
-        if not g["email"]:
-            print(f"   ⚠  {g['name']} non ha email — salto (aggiungi a mano dal pannello Admin)")
-            skipped += 1
-            continue
-
-        # Controlla se l'email esiste già per QUESTO matrimonio
-        existing = db.table("guests").select("id").eq("email", g["email"]).eq("matrimonio_id", MATRIMONIO_ID).execute().data
-        if existing:
-            print(f"   ⚠  {g['name']} già presente — salto")
-            skipped += 1
-            continue
+        if g["email"]:
+            # Controlla se l'email esiste già per QUESTO matrimonio
+            existing = db.table("guests").select("id").eq("email", g["email"]).eq("matrimonio_id", MATRIMONIO_ID).execute().data
+            if existing:
+                print(f"   ⚠  {g['name']} già presente — salto")
+                skipped += 1
+                continue
+        else:
+            # Senza email non c'è modo di rilevare duplicati: controlla per nome
+            existing = db.table("guests").select("id").eq("name", g["name"]).eq("matrimonio_id", MATRIMONIO_ID).execute().data
+            if existing:
+                print(f"   ⚠  {g['name']} già presente — salto")
+                skipped += 1
+                continue
 
         db.table("guests").insert({
             "name":          g["name"],

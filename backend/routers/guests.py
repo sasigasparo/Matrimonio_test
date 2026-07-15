@@ -30,7 +30,7 @@ LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
 # ── Schemas ───────────────────────────────────────────────────────────────────
 class GuestCreate(BaseModel):
     name: str
-    email: str
+    email: Optional[str] = None
     phone: Optional[str] = None
     table_num: Optional[int] = None
     dietary: Optional[str] = None
@@ -60,6 +60,9 @@ class rsvpUpdate(BaseModel):
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def _send_invite_email(guest: dict) -> bool:
+    if not guest.get("email"):
+        logger.warning("Guest %s has no email, skipping invite", guest.get("name"))
+        return False
     if not SMTP_USER or not SMTP_PASSWORD:
         logger.warning("SMTP not configured, skipping email for %s", guest["email"])
         return False
@@ -126,29 +129,33 @@ async def list_guests(admin=Depends(require_admin), matrimonio_id: int = Depends
     guests = (
         db.table("guests").select("*")
         .eq("matrimonio_id", matrimonio_id)
-        .not_.in_("email", list(SYSTEM_EMAILS))
         .order("name")
         .execute().data or []
     )
-    return guests
+    # Filtrato in Python: un filtro SQL "not in" esclude anche le righe con
+    # email NULL (semantica NOT IN di Postgres), nascondendo gli ospiti senza email
+    return [g for g in guests if g.get("email") not in SYSTEM_EMAILS]
 
 
 @router.post("/")
 async def create_guest_endpoint(body: GuestCreate, request: Request, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
-    # Check duplicate email (scoped to this wedding)
-    existing = (
-        db.table("guests").select("id")
-        .eq("email", body.email.lower())
-        .eq("matrimonio_id", matrimonio_id)
-        .execute().data
-    )
-    if existing:
-        raise HTTPException(400, "Email already exists")
+    email = body.email.strip().lower() if body.email and body.email.strip() else None
+
+    if email:
+        # Check duplicate email (scoped to this wedding)
+        existing = (
+            db.table("guests").select("id")
+            .eq("email", email)
+            .eq("matrimonio_id", matrimonio_id)
+            .execute().data
+        )
+        if existing:
+            raise HTTPException(400, "Email already exists")
 
     guest_data = {
         "name":          body.name,
-        "email":         body.email.lower(),
+        "email":         email,
         "rsvp_status":   "pending",
         "invite_sent":   0,
         "matrimonio_id": matrimonio_id,
@@ -165,9 +172,9 @@ async def create_guest_endpoint(body: GuestCreate, request: Request, admin=Depen
         raise HTTPException(400, f"Error creating guest: {e}")
 
     guest = result.data[0]
-    audit(admin["email"], "create_guest", f"{body.name} ({body.email})", "",
+    audit(admin["email"], "create_guest", f"{body.name} ({email or 'no email'})", "",
           request.client.host if request.client else "", matrimonio_id)
-    logger.info("Guest created: %s (%s)", body.name, body.email)
+    logger.info("Guest created: %s (%s)", body.name, email or "no email")
     return guest
 
 
@@ -179,6 +186,9 @@ async def send_invite(guest_id: int, request: Request, admin=Depends(require_adm
         raise HTTPException(404, "Guest not found")
 
     guest = result.data[0]
+    if not guest.get("email"):
+        return {"sent": False, "reason": "no_email"}
+
     ok = _send_invite_email(guest)
     if ok:
         db.table("guests").update({"invite_sent": 1}).eq("id", guest_id).execute()
@@ -199,6 +209,7 @@ async def send_all_invites(request: Request, admin=Depends(require_admin), matri
         .eq("rsvp_status", "pending")
         .execute().data or []
     )
+    guests = [g for g in guests if g.get("email")]
 
     results = []
     for g in guests:
@@ -280,11 +291,12 @@ async def update_guest(guest_id: int, body: GuestUpdate, request: Request, admin
         raise HTTPException(404, "Guest not found")
 
     patch = {k: v for k, v in body.model_dump(exclude_unset=True).items()}
-    if "email" in patch and patch["email"]:
-        patch["email"] = patch["email"].lower()
-        dup = db.table("guests").select("id").eq("email", patch["email"]).eq("matrimonio_id", matrimonio_id).neq("id", guest_id).execute()
-        if dup.data:
-            raise HTTPException(400, "Email already in use by another guest")
+    if "email" in patch:
+        patch["email"] = patch["email"].strip().lower() if patch["email"] and patch["email"].strip() else None
+        if patch["email"]:
+            dup = db.table("guests").select("id").eq("email", patch["email"]).eq("matrimonio_id", matrimonio_id).neq("id", guest_id).execute()
+            if dup.data:
+                raise HTTPException(400, "Email already in use by another guest")
     if not patch:
         raise HTTPException(400, "No fields to update")
     patch["updated_at"] = datetime.utcnow().isoformat()
@@ -322,24 +334,27 @@ async def get_all_guests(user=Depends(get_current_guest), matrimonio_id: int = D
     """Get all guests list visible to any logged-in user."""
     db = get_db()
     guests = (
-        db.table("guests").select("id, name, rsvp_status")
+        db.table("guests").select("id, name, rsvp_status, email")
         .eq("matrimonio_id", matrimonio_id)
-        .not_.in_("email", list(SYSTEM_EMAILS))
         .order("name")
         .execute().data or []
     )
-    return guests
+    # email è selezionata solo per filtrare gli account di sistema, non va esposta
+    return [
+        {"id": g["id"], "name": g["name"], "rsvp_status": g["rsvp_status"]}
+        for g in guests if g.get("email") not in SYSTEM_EMAILS
+    ]
 
 
 @router.get("/stats")
 async def stats(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
     guests   = (
-        db.table("guests").select("rsvp_status, invite_sent")
+        db.table("guests").select("rsvp_status, invite_sent, email")
         .eq("matrimonio_id", matrimonio_id)
-        .not_.in_("email", list(SYSTEM_EMAILS))
         .execute().data or []
     )
+    guests = [g for g in guests if g.get("email") not in SYSTEM_EMAILS]
     photos   = db.table("photos").select("id").eq("matrimonio_id", matrimonio_id).execute().data or []
     messages = db.table("messages").select("id").eq("matrimonio_id", matrimonio_id).execute().data or []
 
