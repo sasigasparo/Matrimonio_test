@@ -7,12 +7,15 @@ from supabase import create_client, Client
 logger = logging.getLogger("wedding.db")
 
 # ── Supabase Configuration ─────────────────────────────────────────────────────
+# service_role bypassa RLS: usata qui perché questo backend è l'unico client
+# fidato che parla con Supabase (il frontend non ci accede mai direttamente).
+# Fallback su SUPABASE_KEY (anon) per compatibilità se la service key non è impostata.
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY") or os.getenv("SUPABASE_KEY", "")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
     raise ValueError(
-        "❌ SUPABASE_URL e SUPABASE_KEY devono essere impostati nelle variabili d'ambiente!\n"
+        "❌ SUPABASE_URL e SUPABASE_SERVICE_KEY (o SUPABASE_KEY) devono essere impostati nelle variabili d'ambiente!\n"
         "   Locale: aggiungi al file .env\n"
         "   Render: aggiungi in Environment Variables"
     )
