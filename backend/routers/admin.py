@@ -45,7 +45,7 @@ async def dashboard(user=Depends(require_admin), matrimonio_id: int = Depends(ge
     messages_count   = sum(1 for m in messages if m["type"] in ("text", "both"))
     audio_messages   = sum(1 for m in messages if m["type"] in ("audio", "both"))
 
-    email_configured = bool(os.getenv("SMTP_USER")) and bool(os.getenv("SMTP_PASSWORD"))
+    email_configured = bool(os.getenv("BREVO_API_KEY")) and bool(os.getenv("BREVO_SENDER_EMAIL"))
 
     stats = {
         "guests_total":      guests_total,

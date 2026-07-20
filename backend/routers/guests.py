@@ -1,11 +1,9 @@
 import logging
 import os
-import smtplib
 from datetime import datetime
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from typing import Optional, List
 
+import httpx
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 
@@ -16,10 +14,10 @@ from tenant import get_matrimonio_id
 router = APIRouter()
 logger = logging.getLogger("wedding.guests")
 
-SMTP_HOST      = os.getenv("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT      = int(os.getenv("SMTP_PORT", "587"))
-SMTP_USER      = os.getenv("SMTP_USER", "")
-SMTP_PASSWORD  = os.getenv("SMTP_PASSWORD", "")
+BREVO_API_KEY      = os.getenv("BREVO_API_KEY", "")
+BREVO_SENDER_EMAIL = os.getenv("BREVO_SENDER_EMAIL", "")
+BREVO_SENDER_NAME  = os.getenv("BREVO_SENDER_NAME", "")
+BREVO_API_URL      = "https://api.brevo.com/v3/smtp/email"
 COUPLE_NAMES   = os.getenv("COUPLE_NAMES", "Antonios & Petronia")
 WEDDING_DATE   = os.getenv("WEDDING_DATE", "17 October 2026")
 WEDDING_VENUE  = os.getenv("WEDDING_VENUE", "Estia Home of Taste, Zürich")
@@ -63,15 +61,10 @@ def _send_invite_email(guest: dict) -> bool:
     if not guest.get("email"):
         logger.warning("Guest %s has no email, skipping invite", guest.get("name"))
         return False
-    if not SMTP_USER or not SMTP_PASSWORD:
-        logger.warning("SMTP not configured, skipping email for %s", guest["email"])
+    if not BREVO_API_KEY or not BREVO_SENDER_EMAIL:
+        logger.warning("Brevo not configured, skipping email for %s", guest["email"])
         return False
     try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"💌 You're invited to {COUPLE_NAMES}'s wedding"
-        msg["From"]    = SMTP_USER
-        msg["To"]      = guest["email"]
-
         password_hint = (
             f'<div style="background:#fdf6f0;border:1.5px dashed #e8bfa0;border-radius:8px;padding:16px 20px;margin:20px 0;text-align:center">'
             f'<p style="margin:0 0 4px;color:#888;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em">Access password</p>'
@@ -108,11 +101,23 @@ def _send_invite_email(guest: dict) -> bool:
 </div>
 </body></html>"""
 
-        msg.attach(MIMEText(html, "html"))
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as s:
-            s.starttls()
-            s.login(SMTP_USER, SMTP_PASSWORD)
-            s.sendmail(SMTP_USER, guest["email"], msg.as_string())
+        payload = {
+            "sender": {"name": BREVO_SENDER_NAME, "email": BREVO_SENDER_EMAIL},
+            "to": [{"email": guest["email"], "name": guest["name"]}],
+            "subject": f"💌 You're invited to {COUPLE_NAMES}'s wedding",
+            "htmlContent": html,
+        }
+        resp = httpx.post(
+            BREVO_API_URL,
+            json=payload,
+            headers={
+                "api-key": BREVO_API_KEY,
+                "content-type": "application/json",
+                "accept": "application/json",
+            },
+            timeout=15,
+        )
+        resp.raise_for_status()
         logger.info("Invite sent to %s", guest["email"])
         return True
     except Exception as e:

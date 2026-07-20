@@ -15,5 +15,11 @@ services:
         sync: false
       - key: ADMIN_EMAILS
         sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_SENDER_EMAIL
+        sync: false
+      - key: BREVO_SENDER_NAME
+        sync: false
       - key: FRONTEND_URL
         value: https://sasigasparo.github.io/Matrimonio_test

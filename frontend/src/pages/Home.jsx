@@ -62,7 +62,7 @@ function WeatherWidget() {
     fetch(
       `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}` +
       `&q=${WEDDING_CONFIG.venue.weatherCoords}` +
-      '&days=3&lang=it&aqi=no&alerts=no'
+      '&days=3&lang=en&aqi=no&alerts=no'
     )
       .then(r => r.json())
       .then(data => {
