@@ -23,6 +23,7 @@ WEDDING_DATE   = os.getenv("WEDDING_DATE", "17 October 2026")
 WEDDING_VENUE  = os.getenv("WEDDING_VENUE", "Estia Home of Taste, Zürich")
 APP_URL        = os.getenv("APP_URL", "http://localhost:5173")
 LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
+INVITE_CARD_IMAGE_URL = f"{APP_URL}/foto_sfondo/invite-card.jpg"
 
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
@@ -65,47 +66,73 @@ def _send_invite_email(guest: dict) -> bool:
         logger.warning("Brevo not configured, skipping email for %s", guest["email"])
         return False
     try:
+        # Palette e font allineati ai token reali del brand (DESIGN.md):
+        # --rose #C76B8B, --rose-deep #A63D63 (testo, AA 5.7:1), --blush #FBDCE6,
+        # --cream #FCEDF2, --charcoal #1B1B1B, --warm-gray #6B7280 (AA su bianco).
+        # Playfair Display / Inter con fallback email-safe (Georgia/Helvetica) per
+        # mantenere il contrasto display-serif + body-sans anche dove i webfont
+        # non caricano (Outlook, alcuni client mobile).
         password_hint = (
-            f'<div style="background:#fdf6f0;border:1.5px dashed #e8bfa0;border-radius:8px;padding:16px 20px;margin:20px 0;text-align:center">'
-            f'<p style="margin:0 0 4px;color:#888;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em">Access password</p>'
-            f'<p style="margin:0;font-size:1.4rem;font-weight:700;color:#c8956c;letter-spacing:.12em">{LOGIN_PASSWORD}</p>'
+            f'<div style="background:#FBDCE6;border:1px solid rgba(199,107,139,.35);border-radius:8px;padding:16px 20px;margin:20px 0;text-align:center">'
+            f'<p style="margin:0 0 4px;color:#6B7280;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;font-family:\'Inter\',-apple-system,\'Segoe UI\',Helvetica,Arial,sans-serif">Access password</p>'
+            f'<p style="margin:0;font-size:1.4rem;font-weight:700;color:#A63D63;letter-spacing:.12em;font-family:\'Inter\',-apple-system,\'Segoe UI\',Helvetica,Arial,sans-serif">{LOGIN_PASSWORD}</p>'
             f'</div>'
         ) if LOGIN_PASSWORD else ""
 
         html = f"""
-<!DOCTYPE html><html><body style="font-family:Georgia,serif;background:#fdf6f0;margin:0;padding:0">
+<!DOCTYPE html><html><head>
+<style>@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap');</style>
+</head><body style="font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;background:#FCEDF2;margin:0;padding:0">
 <div style="max-width:600px;margin:40px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
-  <div style="background:linear-gradient(135deg,#c8956c,#e8bfa0);padding:48px;text-align:center">
-    <h1 style="color:#fff;font-size:2rem;margin:0;letter-spacing:.05em">{COUPLE_NAMES}</h1>
-    <p style="color:#fff8f3;margin:8px 0 0;font-size:1.1rem">{WEDDING_DATE}</p>
+  <div style="background:#FBDCE6;padding:44px 24px 64px;text-align:center">
+    <img src="{INVITE_CARD_IMAGE_URL}" alt="{COUPLE_NAMES} invitation card"
+         style="width:180px;max-width:50%;height:auto;display:inline-block;border:8px solid #fff;border-radius:6px;box-shadow:0 16px 32px rgba(0,0,0,.22);transform:rotate(-4deg)" />
   </div>
-  <div style="padding:40px 48px">
-    <p style="font-size:1.1rem;color:#333">Dear <strong>{guest['name']}</strong>,</p>
-    <p style="color:#555;line-height:1.7">
-      We're overjoyed to invite you to share the most beautiful day of our lives with us.
+  <div style="text-align:center;margin-top:-36px">
+    <h1 style="display:inline-block;background:#fff;padding:6px 24px;border-radius:6px;color:#A63D63;font-size:1.8rem;margin:0;letter-spacing:.02em;font-family:'Playfair Display',Georgia,'Times New Roman',serif">{COUPLE_NAMES}</h1>
+    <p style="color:#6B7280;margin:10px 0 0;font-size:1.05rem;letter-spacing:.03em">{WEDDING_DATE}</p>
+  </div>
+  <div style="padding:32px 48px 40px">
+    <p style="font-size:1.1rem;color:#1B1B1B">Dear <strong>{guest['name']}</strong>,</p>
+    <p style="color:#1B1B1B;line-height:1.7">
+      You're one of the first people we wanted to share this with — we're overjoyed to invite you
+      to celebrate the most beautiful day of our lives with us.
       The wedding will be celebrated at <strong>{WEDDING_VENUE}</strong>.
     </p>
     {password_hint}
     <div style="text-align:center;margin:32px 0">
-      <a href="{APP_URL}" style="background:#c8956c;color:#fff;padding:14px 36px;border-radius:50px;text-decoration:none;font-size:1rem;font-weight:600">
+      <a href="{APP_URL}" style="background:#C76B8B;color:#fff;padding:14px 36px;border-radius:50px;text-decoration:none;font-size:1rem;font-weight:600;font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">
         Visit the wedding website
       </a>
     </div>
-    <p style="color:#888;font-size:.9rem;text-align:center">
+    <p style="color:#6B7280;font-size:.9rem;text-align:center">
       Use the password above to log in, confirm your attendance, leave messages, and upload photos.
     </p>
   </div>
-  <div style="background:#fdf6f0;padding:24px;text-align:center">
-    <p style="color:#bbb;font-size:.8rem;margin:0">{COUPLE_NAMES} · {WEDDING_DATE} · {WEDDING_VENUE}</p>
+  <div style="background:#FCEDF2;padding:24px;text-align:center">
+    <p style="color:#6B7280;font-size:.8rem;margin:0">{COUPLE_NAMES} · {WEDDING_DATE} · {WEDDING_VENUE}</p>
   </div>
 </div>
 </body></html>"""
+
+        text_content = (
+            f"{COUPLE_NAMES}\n{WEDDING_DATE}\n\n"
+            f"Dear {guest['name']},\n\n"
+            f"You're one of the first people we wanted to share this with — we're overjoyed to "
+            f"invite you to celebrate the most beautiful day of our lives with us. The wedding "
+            f"will be celebrated at {WEDDING_VENUE}.\n\n"
+            + (f"Access password: {LOGIN_PASSWORD}\n\n" if LOGIN_PASSWORD else "")
+            + f"Visit the wedding website: {APP_URL}\n\n"
+            f"Use the password above to log in, confirm your attendance, leave messages, and upload photos.\n\n"
+            f"{COUPLE_NAMES} · {WEDDING_DATE} · {WEDDING_VENUE}"
+        )
 
         payload = {
             "sender": {"name": BREVO_SENDER_NAME, "email": BREVO_SENDER_EMAIL},
             "to": [{"email": guest["email"], "name": guest["name"]}],
             "subject": f"💌 You're invited to {COUPLE_NAMES}'s wedding",
             "htmlContent": html,
+            "textContent": text_content,
         }
         resp = httpx.post(
             BREVO_API_URL,
