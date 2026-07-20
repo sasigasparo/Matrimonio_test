@@ -117,7 +117,12 @@ def _send_invite_email(guest: dict) -> bool:
             },
             timeout=15,
         )
-        resp.raise_for_status()
+        if resp.status_code >= 400:
+            logger.error(
+                "Brevo error for %s: status=%d body=%s",
+                guest["email"], resp.status_code, resp.text,
+            )
+            return False
         logger.info("Invite sent to %s", guest["email"])
         return True
     except Exception as e:
