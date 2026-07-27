@@ -21,6 +21,7 @@ BREVO_API_URL      = "https://api.brevo.com/v3/smtp/email"
 COUPLE_NAMES   = os.getenv("COUPLE_NAMES", "Antonios & Petronia")
 WEDDING_DATE   = os.getenv("WEDDING_DATE", "17 October 2026")
 WEDDING_VENUE  = os.getenv("WEDDING_VENUE", "Estia Home of Taste, Zürich")
+WEDDING_LOCATION = os.getenv("WEDDING_LOCATION", "Stadthaus, Zürich")
 APP_URL        = os.getenv("APP_URL", "http://localhost:5173")
 LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
 INVITE_CARD_IMAGE_URL = f"{APP_URL}/foto_sfondo/invite-card.jpg"
@@ -97,7 +98,8 @@ def _send_invite_email(guest: dict) -> bool:
     <p style="color:#1B1B1B;line-height:1.7">
       You're one of the first people we wanted to share this with — we're overjoyed to invite you
       to celebrate the most beautiful day of our lives with us.
-      The wedding will be celebrated at <strong>{WEDDING_VENUE}</strong>.
+      The ceremony will take place at <strong>{WEDDING_LOCATION}</strong>, followed by the celebration
+      at <strong>{WEDDING_VENUE}</strong>.
     </p>
     {password_hint}
     <div style="text-align:center;margin:32px 0">
@@ -119,8 +121,8 @@ def _send_invite_email(guest: dict) -> bool:
             f"{COUPLE_NAMES}\n{WEDDING_DATE}\n\n"
             f"Dear {guest['name']},\n\n"
             f"You're one of the first people we wanted to share this with — we're overjoyed to "
-            f"invite you to celebrate the most beautiful day of our lives with us. The wedding "
-            f"will be celebrated at {WEDDING_VENUE}.\n\n"
+            f"invite you to celebrate the most beautiful day of our lives with us. The ceremony "
+            f"will take place at {WEDDING_LOCATION}, followed by the celebration at {WEDDING_VENUE}.\n\n"
             + (f"Access password: {LOGIN_PASSWORD}\n\n" if LOGIN_PASSWORD else "")
             + f"Visit the wedding website: {APP_URL}\n\n"
             f"Use the password above to log in, confirm your attendance, leave messages, and upload photos.\n\n"
