@@ -3,6 +3,7 @@ import { Minus, Plus, Users, Baby } from 'lucide-react'
 import { api } from '../utils/api'
 import { useToast, ToastContainer } from '../hooks/useToast'
 import { useLanguage } from '../hooks/useLanguage'
+import { useAuth } from '../hooks/useAuth'
 import Skeleton from '../components/Skeleton'
 import { burstConfetti } from '../utils/confetti'
 
@@ -38,6 +39,7 @@ function Stepper({ icon, label, hint, value, onChange, max = 10 }) {
 export default function Rsvp() {
   const toast = useToast()
   const { t } = useLanguage()
+  const { user } = useAuth()
   const [allGuests, setAllGuests] = useState([])
   const [selectedGuestId, setSelectedGuestId] = useState('')
   const [guest, setGuest] = useState(null)
@@ -466,8 +468,8 @@ export default function Rsvp() {
           )}
         </div>
 
-        {/* Guest list */}
-        {allGuests.length > 0 && (
+        {/* Guest list — visibile solo all'admin */}
+        {user?.is_admin && allGuests.length > 0 && (
           <div style={{ marginTop: 48 }}>
             <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', color: 'var(--charcoal)', marginBottom: 16 }}>
               {t('rsvp.guestListTitle')}
