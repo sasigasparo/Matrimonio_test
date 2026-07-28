@@ -54,8 +54,10 @@ export const api = {
   me: () => request('GET', '/auth/me'),
 
   // Guests
-  listGuests:  ()      => request('GET',    '/guests/'),
-  allGuests:   ()      => request('GET',    '/guests/all-guests'),
+  listGuests:      ()   => request('GET',    '/guests/'),
+  allGuests:       ()   => request('GET',    '/guests/all-guests'),
+  guestNames:      ()   => request('GET',    '/guests/names'),
+  guestRsvpInfo:   (id) => request('GET',    `/guests/${id}/rsvp-info`),
   createGuest: (body)  => request('POST',   '/guests/', body),
   deleteGuest: (id)    => request('DELETE', `/guests/${id}`),
   updateGuest: (id, b) => request('PUT',    `/guests/${id}`, b),

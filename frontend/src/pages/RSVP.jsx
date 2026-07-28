@@ -52,6 +52,8 @@ export default function Rsvp() {
   const [children, setChildren] = useState(0)
   const [editingCompanion, setEditingCompanion] = useState(null)
   const [companionForm, setCompanionForm] = useState({ name: '', dietary: '', special_requests: '' })
+  const [guestQuery, setGuestQuery] = useState('')
+  const [showSuggestions, setShowSuggestions] = useState(false)
   const dietaryRef = useRef(null)
 
   // Chi entra con un link personale è già identificato: niente elenco di tutti
@@ -74,11 +76,15 @@ export default function Rsvp() {
         .finally(() => setLoading(false))
       return
     }
-    api.allGuests()
+    // L'admin vede l'elenco completo (con stato) per la tabella riepilogativa in
+    // fondo alla pagina; chiunque altro cerca solo per nome, senza mai vedere
+    // se un altro invitato ha già confermato o rifiutato.
+    const fetchGuests = user?.is_admin ? api.allGuests() : api.guestNames()
+    fetchGuests
       .then(guests => setAllGuests(guests || []))
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [isPersonalGuest])
+  }, [isPersonalGuest, user?.is_admin])
 
   // Scroll to dietary section if arriving from FAQ link
   useEffect(() => {
@@ -89,20 +95,52 @@ export default function Rsvp() {
     }
   }, [loading])
 
-  const handleGuestSelect = (e) => {
-    const id = e.target.value
+  const applyGuestInfo = (info) => {
+    setGuest(info)
+    setRsvpStatus(info.rsvp_status === 'declined' ? 'declined' : 'confirmed')
+    setDietary(info.dietary || '')
+    setSpecialRequests(info.special_requests || '')
+    setCompanions(Array.isArray(info.companions) ? info.companions : [])
+    setChildren(Number(info.children) || 0)
+  }
+
+  // Selezione esplicita per nome: solo a questo punto si legge lo stato RSVP
+  // di quella singola persona, mai in blocco con quello di tutti gli altri.
+  const handleGuestSelect = async (id) => {
     setSelectedGuestId(id)
     if (!id) { setGuest(null); return }
-    const selected = allGuests.find(g => String(g.id) === id)
-    if (selected) {
-      setGuest(selected)
-      setRsvpStatus(selected.rsvp_status === 'declined' ? 'declined' : 'confirmed')
-      setDietary(selected.dietary || '')
-      setSpecialRequests(selected.special_requests || '')
-      setCompanions(Array.isArray(selected.companions) ? selected.companions : [])
-      setChildren(Number(selected.children) || 0)
+    if (user?.is_admin) {
+      const selected = allGuests.find(g => String(g.id) === id)
+      if (selected) applyGuestInfo(selected)
+      return
+    }
+    try {
+      const info = await api.guestRsvpInfo(id)
+      applyGuestInfo(info)
+    } catch {
+      setGuest(null)
     }
   }
+
+  const selectGuestFromSearch = (g) => {
+    setGuestQuery(g.name)
+    setShowSuggestions(false)
+    handleGuestSelect(String(g.id))
+  }
+
+  const onGuestQueryChange = (e) => {
+    const value = e.target.value
+    setGuestQuery(value)
+    setShowSuggestions(true)
+    if (guest && value !== guest.name) {
+      setGuest(null)
+      setSelectedGuestId('')
+    }
+  }
+
+  const filteredGuests = guestQuery.trim()
+    ? allGuests.filter(g => g.name.toLowerCase().includes(guestQuery.trim().toLowerCase())).slice(0, 8)
+    : []
 
   const save = async () => {
     if (!guest) { toast.error(t('rsvp.toastSelectGuest')); return }
@@ -185,27 +223,53 @@ export default function Rsvp() {
         {/* Main card */}
         <div className="card" style={{ padding: 32 }}>
 
-          {/* Step 1 — Guest selector (solo per il vecchio accesso condiviso: chi ha
-              un link personale è già identificato e non vede gli altri invitati) */}
+          {/* Step 1 — Ricerca per nome (solo per il vecchio accesso condiviso: chi ha
+              un link personale è già identificato). La lista suggerita mostra solo
+              i nomi: lo stato RSVP di un invitato si vede solo dopo averlo scelto,
+              mai in blocco con quello di tutti gli altri. */}
           {!isPersonalGuest && (
-            <div style={{ marginBottom: 28 }}>
+            <div style={{ marginBottom: 28, position: 'relative' }}>
               <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
                 {t('rsvp.step1')}
               </label>
-              <select
-                className="select"
-                value={selectedGuestId}
-                onChange={handleGuestSelect}
-                style={{ fontSize: '1rem', padding: '12px 14px', width: '100%' }}
-              >
-                <option value="">{t('rsvp.choosePlaceholder')}</option>
-                {allGuests.map(g => (
-                  <option key={g.id} value={String(g.id)}>
-                    {g.name}
-                    {g.rsvp_status === 'confirmed' ? ' ✓' : g.rsvp_status === 'declined' ? ' ✕' : ''}
-                  </option>
-                ))}
-              </select>
+              <input
+                type="text"
+                className="input"
+                value={guestQuery}
+                onChange={onGuestQueryChange}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                placeholder={t('rsvp.choosePlaceholder')}
+                autoComplete="off"
+                style={{ fontSize: '1rem', padding: '12px 14px', width: '100%', boxSizing: 'border-box' }}
+              />
+              {showSuggestions && guestQuery.trim() && (
+                <div style={{
+                  position: 'absolute', zIndex: 20, top: '100%', left: 0, right: 0, marginTop: 4,
+                  background: '#fff', border: '1px solid var(--hairline)', borderRadius: 'var(--radius-md)',
+                  maxHeight: 220, overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,.1)',
+                }}>
+                  {filteredGuests.length === 0 && (
+                    <div style={{ padding: '10px 14px', color: 'var(--warm-gray)', fontSize: '.9rem' }}>
+                      {t('rsvp.noMatches')}
+                    </div>
+                  )}
+                  {filteredGuests.map(g => (
+                    <button
+                      key={g.id}
+                      type="button"
+                      onClick={() => selectGuestFromSearch(g)}
+                      style={{
+                        display: 'block', width: '100%', textAlign: 'left',
+                        padding: '10px 14px', border: 'none', background: 'transparent',
+                        cursor: 'pointer', fontSize: '.95rem', color: 'var(--charcoal)',
+                      }}
+                    >
+                      {g.name}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

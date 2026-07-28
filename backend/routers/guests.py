@@ -421,6 +421,54 @@ async def get_all_guests(user=Depends(get_current_guest), matrimonio_id: int = D
     ]
 
 
+@router.get("/names")
+async def list_guest_names(user=Depends(get_current_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
+    """Solo nome e id di tutti gli invitati, per la ricerca nella pagina RSVP.
+    Niente rsvp_status né altri dati: un invitato non deve vedere se gli altri
+    hanno confermato o meno finché non li seleziona esplicitamente per nome."""
+    db = get_db()
+    guests = (
+        db.table("guests").select("id, name, email")
+        .eq("matrimonio_id", matrimonio_id)
+        .order("name")
+        .execute().data or []
+    )
+    return [
+        {"id": g["id"], "name": g["name"]}
+        for g in guests if g.get("email") not in SYSTEM_EMAILS
+    ]
+
+
+@router.get("/{guest_id}/rsvp-info")
+async def guest_rsvp_info(guest_id: int, user=Depends(get_current_guest), matrimonio_id: int = Depends(get_matrimonio_id)):
+    """Dettagli RSVP di UN singolo invitato, richiesti solo dopo che è stato
+    scelto esplicitamente per nome nella ricerca (mai in blocco con gli altri)."""
+    db = get_db()
+    try:
+        result = (
+            db.table("guests")
+            .select("id, name, rsvp_status, dietary, special_requests, companions, children")
+            .eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
+        )
+    except Exception:
+        result = (
+            db.table("guests")
+            .select("id, name, rsvp_status, dietary")
+            .eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
+        )
+    if not result.data:
+        raise HTTPException(404, "Guest not found")
+
+    data = result.data[0]
+    if isinstance(data.get("companions"), str):
+        import json
+        try:
+            data["companions"] = json.loads(data["companions"])
+        except Exception:
+            data["companions"] = []
+    return data
+
+
 @router.get("/stats")
 async def stats(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()
