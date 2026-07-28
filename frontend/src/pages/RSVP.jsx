@@ -54,12 +54,31 @@ export default function Rsvp() {
   const [companionForm, setCompanionForm] = useState({ name: '', dietary: '', special_requests: '' })
   const dietaryRef = useRef(null)
 
+  // Chi entra con un link personale è già identificato: niente elenco di tutti
+  // gli invitati, si carica direttamente il proprio profilo.
+  const isPersonalGuest = !!user?.personal && !user?.is_admin
+
   useEffect(() => {
+    if (isPersonalGuest) {
+      api.me()
+        .then(me => {
+          setGuest(me)
+          setSelectedGuestId(String(me.id))
+          setRsvpStatus(me.rsvp_status === 'declined' ? 'declined' : 'confirmed')
+          setDietary(me.dietary || '')
+          setSpecialRequests(me.special_requests || '')
+          setCompanions(Array.isArray(me.companions) ? me.companions : [])
+          setChildren(Number(me.children) || 0)
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false))
+      return
+    }
     api.allGuests()
       .then(guests => setAllGuests(guests || []))
       .catch(() => {})
       .finally(() => setLoading(false))
-  }, [])
+  }, [isPersonalGuest])
 
   // Scroll to dietary section if arriving from FAQ link
   useEffect(() => {
@@ -166,26 +185,37 @@ export default function Rsvp() {
         {/* Main card */}
         <div className="card" style={{ padding: 32 }}>
 
-          {/* Step 1 — Guest selector */}
-          <div style={{ marginBottom: 28 }}>
-            <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
-              {t('rsvp.step1')}
-            </label>
-            <select
-              className="select"
-              value={selectedGuestId}
-              onChange={handleGuestSelect}
-              style={{ fontSize: '1rem', padding: '12px 14px', width: '100%' }}
-            >
-              <option value="">{t('rsvp.choosePlaceholder')}</option>
-              {allGuests.map(g => (
-                <option key={g.id} value={String(g.id)}>
-                  {g.name}
-                  {g.rsvp_status === 'confirmed' ? ' ✓' : g.rsvp_status === 'declined' ? ' ✕' : ''}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* Step 1 — Guest selector (solo per il vecchio accesso condiviso: chi ha
+              un link personale è già identificato e non vede gli altri invitati) */}
+          {!isPersonalGuest && (
+            <div style={{ marginBottom: 28 }}>
+              <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: 'var(--charcoal)', fontSize: '.9rem', textTransform: 'uppercase', letterSpacing: '.04em' }}>
+                {t('rsvp.step1')}
+              </label>
+              <select
+                className="select"
+                value={selectedGuestId}
+                onChange={handleGuestSelect}
+                style={{ fontSize: '1rem', padding: '12px 14px', width: '100%' }}
+              >
+                <option value="">{t('rsvp.choosePlaceholder')}</option>
+                {allGuests.map(g => (
+                  <option key={g.id} value={String(g.id)}>
+                    {g.name}
+                    {g.rsvp_status === 'confirmed' ? ' ✓' : g.rsvp_status === 'declined' ? ' ✕' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {isPersonalGuest && guest && (
+            <div style={{ marginBottom: 28, textAlign: 'center' }}>
+              <p style={{ fontSize: '1.05rem', color: 'var(--charcoal)' }}>
+                {t('rsvp.personalGreeting', { name: guest.name })}
+              </p>
+            </div>
+          )}
 
           {/* Steps 2 & 3 appear only after a guest is selected */}
           {guest && (

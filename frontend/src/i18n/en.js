@@ -244,6 +244,7 @@ export const en = {
     headerSubtitle: 'Choose your name to confirm your attendance',
     step1: '1 · Who are you?',
     choosePlaceholder: '— Choose your name —',
+    personalGreeting: 'Hi {{name}}! Let us know if you can make it.',
     alreadyConfirmed: '✓ Already confirmed',
     alreadyDeclined: '✕ You already declined',
     updateNote: 'You can update your answer below.',

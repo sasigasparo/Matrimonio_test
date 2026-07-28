@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useLanguage } from '../hooks/useLanguage'
 import { WEDDING_CONFIG } from '../config/wedding'
@@ -10,10 +10,38 @@ export default function Login() {
   const navigate = useNavigate()
   const { login } = useAuth()
   const { t } = useLanguage()
+  const [searchParams] = useSearchParams()
   const [password, setPassword]         = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading]           = useState(false)
   const [error, setError]               = useState('')
+  const [checkingLink, setCheckingLink]  = useState(!!searchParams.get('code'))
+
+  // Link personale (?code=...): identifica direttamente l'invitato, senza password
+  // né selezione da un elenco di nomi.
+  useEffect(() => {
+    const code = searchParams.get('code')
+    if (!code) return
+
+    ;(async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/auth/code-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Matrimonio-Slug': WEDDING_CONFIG.slug },
+          body: JSON.stringify({ code }),
+        })
+        if (!response.ok) throw new Error()
+        const data = await response.json()
+        localStorage.setItem('wedding_token', data.access_token)
+        login(data.guest)
+        navigate('/')
+      } catch {
+        setCheckingLink(false)
+        setError(t('login.invalidPassword'))
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -43,6 +71,12 @@ export default function Login() {
       setLoading(false)
     }
   }
+
+  if (checkingLink) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100dvh' }}>
+      <div className="spinner" />
+    </div>
+  )
 
   return (
     <div

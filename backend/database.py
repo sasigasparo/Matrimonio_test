@@ -81,6 +81,18 @@ def get_guest_by_email(email: str, matrimonio_id: Optional[int] = None) -> Optio
         return None
 
 
+def get_guest_by_login_code(code: str, matrimonio_id: Optional[int] = None) -> Optional[Dict]:
+    try:
+        q = supabase.table("guests").select("*").eq("login_code", code)
+        if matrimonio_id is not None:
+            q = q.eq("matrimonio_id", matrimonio_id)
+        result = q.execute()
+        return result.data[0] if result.data else None
+    except Exception as e:
+        logger.error("Error getting guest by login code: %s", e)
+        return None
+
+
 def get_guest_by_id(guest_id: int) -> Optional[Dict]:
     try:
         result = supabase.table("guests").select("*").eq("id", guest_id).execute()

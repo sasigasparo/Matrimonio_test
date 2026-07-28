@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
     }
     try {
       const me = await api.me()
-      setUser({ ...me, is_admin: payload.is_admin })
+      setUser({ ...me, is_admin: payload.is_admin, personal: !!payload.personal })
     } catch {
       clearToken()
     }

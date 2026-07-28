@@ -1,5 +1,6 @@
 import logging
 import os
+import secrets
 from datetime import datetime
 from typing import Optional, List
 
@@ -23,7 +24,6 @@ WEDDING_DATE   = os.getenv("WEDDING_DATE", "17 October 2026")
 WEDDING_VENUE  = os.getenv("WEDDING_VENUE", "Estia Home of Taste, Zürich")
 WEDDING_LOCATION = os.getenv("WEDDING_LOCATION", "Stadthaus, Zürich")
 APP_URL        = os.getenv("APP_URL", "http://localhost:5173")
-LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "")
 INVITE_CARD_IMAGE_URL = f"{APP_URL}/foto_sfondo/invite-card.jpg"
 
 
@@ -59,6 +59,41 @@ class rsvpUpdate(BaseModel):
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+def _generate_login_code(db) -> str:
+    """Codice personale univoco che identifica un invitato direttamente al login,
+    senza che debba scegliersi da un elenco con tutti gli altri invitati.
+    Richiede la colonna login_code sulla tabella guests (assente prima di questa
+    modifica): finché non viene creata, il codice viene generato ma non salvato
+    e l'invito continua a usare il vecchio link generico.
+    SQL to enable: ALTER TABLE guests ADD COLUMN login_code text UNIQUE;"""
+    for _ in range(5):
+        code = secrets.token_urlsafe(6)
+        try:
+            existing = db.table("guests").select("id").eq("login_code", code).execute().data
+        except Exception:
+            # Colonna login_code non ancora migrata: nessun controllo di unicità
+            # possibile, ma l'inserimento a valle fallirà comunque in modo
+            # innocuo e riproverà senza il codice (vedi _ensure_login_code).
+            return code
+        if not existing:
+            return code
+    return secrets.token_urlsafe(9)
+
+
+def _ensure_login_code(db, guest: dict) -> dict:
+    """Backfill lazy del codice personale per invitati creati prima della
+    colonna login_code (richiede la migrazione SQL, vedi README/DEPLOYMENT)."""
+    if guest.get("login_code"):
+        return guest
+    code = _generate_login_code(db)
+    try:
+        db.table("guests").update({"login_code": code}).eq("id", guest["id"]).execute()
+        guest["login_code"] = code
+    except Exception as e:
+        logger.warning("Impossibile salvare login_code (colonna assente?): %s", e)
+    return guest
+
+
 def _send_invite_email(guest: dict) -> bool:
     if not guest.get("email"):
         logger.warning("Guest %s has no email, skipping invite", guest.get("name"))
@@ -73,12 +108,7 @@ def _send_invite_email(guest: dict) -> bool:
         # Playfair Display / Inter con fallback email-safe (Georgia/Helvetica) per
         # mantenere il contrasto display-serif + body-sans anche dove i webfont
         # non caricano (Outlook, alcuni client mobile).
-        password_hint = (
-            f'<div style="background:#FBDCE6;border:1px solid rgba(199,107,139,.35);border-radius:8px;padding:16px 20px;margin:20px 0;text-align:center">'
-            f'<p style="margin:0 0 4px;color:#6B7280;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;font-family:\'Inter\',-apple-system,\'Segoe UI\',Helvetica,Arial,sans-serif">Access password</p>'
-            f'<p style="margin:0;font-size:1.4rem;font-weight:700;color:#A63D63;letter-spacing:.12em;font-family:\'Inter\',-apple-system,\'Segoe UI\',Helvetica,Arial,sans-serif">{LOGIN_PASSWORD}</p>'
-            f'</div>'
-        ) if LOGIN_PASSWORD else ""
+        login_url = f"{APP_URL}/login?code={guest['login_code']}" if guest.get("login_code") else APP_URL
 
         html = f"""
 <!DOCTYPE html><html><head>
@@ -101,14 +131,13 @@ def _send_invite_email(guest: dict) -> bool:
       The ceremony will take place at <strong>{WEDDING_LOCATION}</strong>, followed by the celebration
       at <strong>{WEDDING_VENUE}</strong>.
     </p>
-    {password_hint}
     <div style="text-align:center;margin:32px 0">
-      <a href="{APP_URL}" style="background:#C76B8B;color:#fff;padding:14px 36px;border-radius:50px;text-decoration:none;font-size:1rem;font-weight:600;font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">
+      <a href="{login_url}" style="background:#C76B8B;color:#fff;padding:14px 36px;border-radius:50px;text-decoration:none;font-size:1rem;font-weight:600;font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">
         Visit the wedding website
       </a>
     </div>
     <p style="color:#6B7280;font-size:.9rem;text-align:center">
-      Use the password above to log in, confirm your attendance, leave messages, and upload photos.
+      Tap the button above — it will sign you in automatically so you can confirm your attendance, leave messages, and upload photos.
     </p>
   </div>
   <div style="background:#FCEDF2;padding:24px;text-align:center">
@@ -123,9 +152,9 @@ def _send_invite_email(guest: dict) -> bool:
             f"You're one of the first people we wanted to share this with — we're overjoyed to "
             f"invite you to celebrate the most beautiful day of our lives with us. The ceremony "
             f"will take place at {WEDDING_LOCATION}, followed by the celebration at {WEDDING_VENUE}.\n\n"
-            + (f"Access password: {LOGIN_PASSWORD}\n\n" if LOGIN_PASSWORD else "")
-            + f"Visit the wedding website: {APP_URL}\n\n"
-            f"Use the password above to log in, confirm your attendance, leave messages, and upload photos.\n\n"
+            f"Visit the wedding website: {login_url}\n\n"
+            f"This personal link signs you in automatically so you can confirm your attendance, "
+            f"leave messages, and upload photos.\n\n"
             f"{COUPLE_NAMES} · {WEDDING_DATE} · {WEDDING_VENUE}"
         )
 
@@ -205,10 +234,15 @@ async def create_guest_endpoint(body: GuestCreate, request: Request, admin=Depen
     if body.table_num: guest_data["table_num"] = body.table_num
     if body.dietary:   guest_data["dietary"]   = body.dietary
 
+    guest_data_with_code = {**guest_data, "login_code": _generate_login_code(db)}
     try:
-        result = db.table("guests").insert(guest_data).execute()
-    except Exception as e:
-        raise HTTPException(400, f"Error creating guest: {e}")
+        result = db.table("guests").insert(guest_data_with_code).execute()
+    except Exception:
+        logger.warning("guests.login_code column missing, creating guest without it")
+        try:
+            result = db.table("guests").insert(guest_data).execute()
+        except Exception as e:
+            raise HTTPException(400, f"Error creating guest: {e}")
 
     guest = result.data[0]
     audit(admin["email"], "create_guest", f"{body.name} ({email or 'no email'})", "",
@@ -228,6 +262,7 @@ async def send_invite(guest_id: int, request: Request, admin=Depends(require_adm
     if not guest.get("email"):
         return {"sent": False, "reason": "no_email"}
 
+    guest = _ensure_login_code(db, guest)
     ok = _send_invite_email(guest)
     if ok:
         db.table("guests").update({"invite_sent": 1}).eq("id", guest_id).execute()
@@ -252,6 +287,7 @@ async def send_all_invites(request: Request, admin=Depends(require_admin), matri
 
     results = []
     for g in guests:
+        g = _ensure_login_code(db, g)
         ok = _send_invite_email(g)
         if ok:
             db.table("guests").update({"invite_sent": 1}).eq("id", g["id"]).execute()

@@ -4,7 +4,7 @@ from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 from pydantic import BaseModel
 
 from auth_config import create_access_token
-from database import get_guest_by_email, get_guest_by_id, create_guest, audit
+from database import get_guest_by_email, get_guest_by_id, get_guest_by_login_code, create_guest, audit
 from tenant import resolve_matrimonio_id, HEADER_NAME
 
 LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "Sasi")
@@ -35,6 +35,10 @@ class TokenOut(BaseModel):
 
 class SimpleLoginRequest(BaseModel):
     password: str
+
+
+class CodeLoginRequest(BaseModel):
+    code: str
 
 
 @router.get("/me")
@@ -93,6 +97,45 @@ def simple_login(req: SimpleLoginRequest, request: Request, background_tasks: Ba
             "email":    email,
             "name":     guest["name"],
             "is_admin": is_admin,
-            "avatar":   guest.get("avatar_url") or ""
+            "avatar":   guest.get("avatar_url") or "",
+            "personal": False,
+        }
+    )
+
+
+@router.post("/code-login")
+def code_login(req: CodeLoginRequest, request: Request, background_tasks: BackgroundTasks):
+    """Login via link personale: il codice identifica direttamente l'invitato,
+    senza che debba scegliersi da un elenco di tutti gli invitati."""
+    matrimonio_id = resolve_matrimonio_id(request.headers.get(HEADER_NAME))
+    guest = get_guest_by_login_code(req.code.strip(), matrimonio_id)
+    if not guest:
+        raise HTTPException(401, "Invalid or expired link")
+
+    guest_id = guest["id"]
+    token = create_access_token({
+        "sub":      str(guest_id),
+        "email":    guest.get("email") or "",
+        "name":     guest["name"],
+        "avatar":   guest.get("avatar_url") or "",
+        "is_admin": False,
+        "personal": True,
+        "mid":      matrimonio_id,
+    })
+
+    client_ip = request.client.host if request.client else ""
+    background_tasks.add_task(audit, guest.get("email") or guest["name"], "login", f"guest:{guest_id}",
+                              "Personal link login", client_ip, matrimonio_id)
+    logger.info("Guest logged in via personal link (guest:%s)", guest_id)
+
+    return TokenOut(
+        access_token=token,
+        guest={
+            "id":       guest_id,
+            "email":    guest.get("email"),
+            "name":     guest["name"],
+            "is_admin": False,
+            "avatar":   guest.get("avatar_url") or "",
+            "personal": True,
         }
     )
