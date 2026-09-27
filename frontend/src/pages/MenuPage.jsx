@@ -239,13 +239,18 @@ function MenuCountdownGate({ diff, onUnlock }) {
 
 /* ── Course icon map ──────────────────────────────────────────────── */
 const COURSE_ICONS = {
-  'Benvenuto': { icon: '🥂', color: '#C76B8B', bg: 'rgba(199,107,139,.1)' },
-  'Antipasto': { icon: '🥗', color: '#43A047', bg: 'rgba(67,160,71,.1)' },
-  'Primo':     { icon: '🍝', color: '#C9A36A', bg: 'rgba(200,169,106,.1)' },
-  'Secondo':   { icon: '🥩', color: '#a05840', bg: 'rgba(160,88,64,.1)'   },
-  'Dessert':   { icon: '🎂', color: '#C76B8B', bg: 'rgba(199,107,139,.1)' },
-  'Drink':     { icon: '🍷', color: '#43A047', bg: 'rgba(67,160,71,.1)' },
+  'Benvenuto':   { icon: '🥂', color: '#C76B8B', bg: 'rgba(199,107,139,.1)' },
+  'Antipasto':   { icon: '🥗', color: '#43A047', bg: 'rgba(67,160,71,.1)' },
+  'Starter':     { icon: '🥗', color: '#43A047', bg: 'rgba(67,160,71,.1)' },
+  'Primo':       { icon: '🍝', color: '#C9A36A', bg: 'rgba(200,169,106,.1)' },
+  'Secondo':     { icon: '🥩', color: '#a05840', bg: 'rgba(160,88,64,.1)'   },
+  'Main Course': { icon: '🥩', color: '#a05840', bg: 'rgba(160,88,64,.1)'   },
+  'Dessert':     { icon: '🎂', color: '#C76B8B', bg: 'rgba(199,107,139,.1)' },
+  'Drink':       { icon: '🍷', color: '#43A047', bg: 'rgba(67,160,71,.1)' },
 }
+
+/* Courses where the guest must pick exactly one item */
+const CHOICE_COURSES = new Set(['Secondo', 'Main Course'])
 
 function DietBadge({ isVegan, isGlutenFree }) {
   const { t } = useLanguage()
@@ -272,8 +277,10 @@ export default function MenuPage() {
 
   const [menu, setMenu]     = useState({ courses: {}, items: [] })
   const [loading, setLoading] = useState(true)
+  const [selectedId, setSelectedId] = useState(null)
+  const [saving, setSaving] = useState(false)
 
-  useEffect(() => { loadMenu() }, [])
+  useEffect(() => { loadMenu(); loadMyChoice() }, [])
 
   const loadMenu = async () => {
     try {
@@ -283,7 +290,28 @@ export default function MenuPage() {
     setLoading(false)
   }
 
-  const courseOrder  = ['Benvenuto', 'Antipasto', 'Primo', 'Secondo', 'Dessert', 'Drink']
+  const loadMyChoice = async () => {
+    try {
+      const { item_ids } = await api.myChoices()
+      if (item_ids?.length) setSelectedId(item_ids[0])
+    } catch { /* guest not logged in yet or no choice saved */ }
+  }
+
+  const selectMainCourse = async (itemId) => {
+    const prev = selectedId
+    setSelectedId(itemId)
+    setSaving(true)
+    try {
+      await api.saveChoices([itemId])
+      toast.success(t('menu.choiceSaved'))
+    } catch {
+      setSelectedId(prev)
+      toast.error(t('menu.choiceSaveError'))
+    }
+    setSaving(false)
+  }
+
+  const courseOrder  = ['Benvenuto', 'Antipasto', 'Starter', 'Primo', 'Secondo', 'Main Course', 'Dessert', 'Drink']
   const visibleCourses = courseOrder.filter(c => menu.courses[c])
 
   return (
@@ -360,40 +388,69 @@ export default function MenuPage() {
                 </div>
               </div>
 
-              {/* Items — read only cards */}
+              {CHOICE_COURSES.has(course) && (
+                <p style={{ color: 'var(--warm-gray)', fontSize: '.85rem', fontStyle: 'italic', marginBottom: 16 }}>
+                  {t('menu.chooseOne')}
+                </p>
+              )}
+
+              {/* Items */}
               <div style={{ display: 'grid', gap: 12 }}>
-                {items.map(item => (
-                  <div
-                    key={item.id}
-                    style={{
-                      background: 'var(--white)',
-                      borderRadius: 'var(--radius-md)',
-                      border: '1.5px solid rgba(207,165,181,.15)',
-                      padding: '18px 20px',
-                      boxShadow: 'var(--shadow-sm)',
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
-                      <h3 style={{
-                        fontFamily: 'var(--font-serif)', fontSize: '1.15rem',
-                        color: 'var(--charcoal)', fontWeight: 400, margin: 0,
-                      }}>
-                        {item.name}
-                      </h3>
-                      <DietBadge isVegan={item.is_vegan} isGlutenFree={item.is_gluten_free} />
+                {items.map(item => {
+                  const isChoice  = CHOICE_COURSES.has(course)
+                  const isSelected = isChoice && selectedId === item.id
+                  return (
+                    <div
+                      key={item.id}
+                      role={isChoice ? 'button' : undefined}
+                      tabIndex={isChoice ? 0 : undefined}
+                      onClick={isChoice ? () => !saving && selectMainCourse(item.id) : undefined}
+                      onKeyDown={isChoice ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); !saving && selectMainCourse(item.id) } } : undefined}
+                      style={{
+                        background: 'var(--white)',
+                        borderRadius: 'var(--radius-md)',
+                        border: isSelected ? '1.5px solid var(--rose, #C76B8B)' : '1.5px solid rgba(207,165,181,.15)',
+                        padding: '18px 20px',
+                        boxShadow: 'var(--shadow-sm)',
+                        cursor: isChoice ? 'pointer' : 'default',
+                        display: 'flex', alignItems: 'flex-start', gap: 14,
+                        opacity: saving && isChoice ? 0.7 : 1,
+                        transition: 'border-color .2s',
+                      }}
+                    >
+                      {isChoice && (
+                        <div style={{
+                          width: 22, height: 22, borderRadius: '50%', flexShrink: 0, marginTop: 2,
+                          border: `2px solid ${isSelected ? 'var(--rose, #C76B8B)' : 'rgba(154,128,112,.4)'}`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                          {isSelected && <div style={{ width: 12, height: 12, borderRadius: '50%', background: 'var(--rose, #C76B8B)' }} />}
+                        </div>
+                      )}
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
+                          <h3 style={{
+                            fontFamily: 'var(--font-serif)', fontSize: '1.15rem',
+                            color: 'var(--charcoal)', fontWeight: 400, margin: 0,
+                          }}>
+                            {item.name}
+                          </h3>
+                          <DietBadge isVegan={item.is_vegan} isGlutenFree={item.is_gluten_free} />
+                        </div>
+                        {item.description && (
+                          <p style={{ color: 'var(--warm-gray)', fontSize: '.9rem', marginTop: 6, lineHeight: 1.6, margin: '6px 0 0' }}>
+                            {item.description}
+                          </p>
+                        )}
+                        {item.allergens && (
+                          <p style={{ color: 'var(--blush)', fontSize: '.78rem', marginTop: 6, margin: '6px 0 0' }}>
+                            {t('menu.allergens', { list: item.allergens })}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                    {item.description && (
-                      <p style={{ color: 'var(--warm-gray)', fontSize: '.9rem', marginTop: 6, lineHeight: 1.6, margin: '6px 0 0' }}>
-                        {item.description}
-                      </p>
-                    )}
-                    {item.allergens && (
-                      <p style={{ color: 'var(--blush)', fontSize: '.78rem', marginTop: 6, margin: '6px 0 0' }}>
-                        {t('menu.allergens', { list: item.allergens })}
-                      </p>
-                    )}
-                  </div>
-                ))}
+                  )
+                })}
               </div>
 
               {ci < visibleCourses.length - 1 && (

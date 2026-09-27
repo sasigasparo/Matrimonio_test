@@ -85,7 +85,7 @@ export const en = {
         domande: [
           {
             q: 'What time do the ceremony and reception start?',
-            a: "The ceremony will begin at 11:00 AM at the Stadthaus Zürich. Afterwards, we'll move to Estia Home of Taste, where dinner starts around 5:00 PM with drinks, food, and dancing into the night.",
+            a: "Please be at the Town Hall (Stadthaus Zürich) by 10:30 AM — the ceremony will begin at 11:00 AM. Afterwards, we'll move to Estia Home of Taste, where dinner starts around 5:00 PM with drinks, food, and dancing into the night.",
           },
           {
             q: 'Where can I park?',
@@ -134,10 +134,6 @@ export const en = {
         icon: '🎁',
         domande: [
           {
-            q: 'What can we give the couple as a gift?',
-            a: "Having you with us on our special day is already the most beautiful gift. For anyone who'd like to give us something, we've put together a wedding registry, and further details will be shared directly with guests.",
-          },
-          {
             q: 'Can we give a monetary gift instead?',
             a: 'Yes, it would be very welcome and will help us make our dream honeymoon a reality. Thank you so much for your love and support.',
           },
@@ -164,7 +160,7 @@ export const en = {
     ceremony: {
       nome: 'Stadthaus Zürich',
       orario: 'Saturday {{date}} · {{time}}',
-      note: 'Please arrive at least 15 minutes early.',
+      note: 'Please be at the Town Hall (Stadthaus) by 10:30 AM.',
     },
     reception: {
       nome: 'Estia Home of Taste',
@@ -211,11 +207,16 @@ export const en = {
     courses: {
       Benvenuto: 'Welcome',
       Antipasto: 'Starter',
+      Starter: 'Starters',
       Primo: 'First Course',
       Secondo: 'Main Course',
+      'Main Course': 'Main Course',
       Dessert: 'Dessert',
       Drink: 'Drinks',
     },
+    chooseOne: 'Please choose one',
+    choiceSaved: 'Your choice has been saved',
+    choiceSaveError: 'Error saving your choice',
   },
 
   notFound: {

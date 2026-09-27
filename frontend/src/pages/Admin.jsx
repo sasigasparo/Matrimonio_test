@@ -32,6 +32,7 @@ export default function Admin() {
   const [addOpen, setAddOpen]       = useState(false)
   const [adding, setAdding]         = useState(false)
   const [rsvpng, setrsvpng]         = useState(false)
+  const [remindingMenu, setRemindingMenu] = useState(false)
   const [sendOnCreate, setSendOnCreate] = useState(true)
 
   // Edit guest
@@ -141,6 +142,29 @@ export default function Admin() {
       loadGuests(); loadDashboard()
     } catch(e) { toast.error('Error: ' + e.message) }
     setrsvpng(false)
+  }
+
+  const sendMenuReminder = async (id, name) => {
+    try {
+      const r = await api.sendMenuReminder(id)
+      if (r.sent) {
+        toast.success(`🍽️ Menu reminder sent to ${name}`)
+      } else if (r.reason === 'no_email') {
+        toast.error(`${name} has no email yet — add one first`)
+      } else {
+        toast.error('SMTP not configured — set the email variables in .env')
+      }
+    } catch(e) { toast.error('Error: ' + e.message) }
+  }
+
+  const sendMenuReminderAll = async () => {
+    setRemindingMenu(true)
+    try {
+      const results = await api.sendMenuReminderAll()
+      const sent = results.filter(r => r.sent).length
+      toast.success(`🍽️ Menu reminder sent to ${sent} out of ${results.length} confirmed guests`)
+    } catch(e) { toast.error('Error: ' + e.message) }
+    setRemindingMenu(false)
   }
 
   const deleteGuest = async (id, name) => {
@@ -363,6 +387,7 @@ export default function Admin() {
             addOpen={addOpen} setAddOpen={setAddOpen} newGuest={newGuest} setNewGuest={setNewGuest}
             adding={adding} sendOnCreate={sendOnCreate} setSendOnCreate={setSendOnCreate}
             addGuest={addGuest} sendInvite={sendInvite} sendAll={sendAll} rsvpng={rsvpng}
+            sendMenuReminder={sendMenuReminder} sendMenuReminderAll={sendMenuReminderAll} remindingMenu={remindingMenu}
             deleteGuest={deleteGuest} editGuest={editGuest} setEditGuest={setEditGuest} openEdit={openEdit}
             editForm={editForm} setEditForm={setEditForm} saving={saving}
             sendOnEdit={sendOnEdit} setSendOnEdit={setSendOnEdit} saveEdit={saveEdit}

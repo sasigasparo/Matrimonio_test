@@ -34,7 +34,8 @@ export default function Login() {
         const data = await response.json()
         localStorage.setItem('wedding_token', data.access_token)
         login(data.guest)
-        navigate('/')
+        const redirect = searchParams.get('redirect')
+        navigate(redirect && redirect.startsWith('/') ? redirect : '/')
       } catch {
         setCheckingLink(false)
         setError(t('login.invalidPassword'))

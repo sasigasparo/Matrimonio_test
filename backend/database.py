@@ -48,17 +48,15 @@ def init_db():
 
 def _seed_menu():
     items = [
-        {"course": "Benvenuto",  "name": "Cocktail di benvenuto",      "description": "Prosecco, succhi freschi e stuzzichini misti",                           "allergens": "",                  "is_vegan": False, "is_gluten_free": False, "sort_order": 1},
-        {"course": "Antipasto",  "name": "Tagliere salumi e formaggi", "description": "Selezione di salumi locali, formaggi stagionati, miele e confetture",     "allergens": "",                  "is_vegan": False, "is_gluten_free": False, "sort_order": 2},
-        {"course": "Antipasto",  "name": "Burrata con pomodori",       "description": "Burrata fresca con pomodori datterini, basilico e olio EVO",              "allergens": "latte",             "is_vegan": True,  "is_gluten_free": True,  "sort_order": 3},
-        {"course": "Primo",      "name": "Risotto al tartufo",         "description": "Risotto Carnaroli con tartufo nero, parmigiano 36 mesi",                  "allergens": "latte, glutine",    "is_vegan": True,  "is_gluten_free": True,  "sort_order": 4},
-        {"course": "Primo",      "name": "Tagliolini al ragù",         "description": "Pasta fresca all'uovo con ragù di cinghiale e ginepro",                   "allergens": "glutine, uova",     "is_vegan": False, "is_gluten_free": False, "sort_order": 5},
-        {"course": "Secondo",    "name": "Filetto di manzo",           "description": "Filetto con riduzione al Barolo, patate fondenti e asparagi",             "allergens": "",                  "is_vegan": False, "is_gluten_free": True,  "sort_order": 6},
-        {"course": "Secondo",    "name": "Branzino al forno",          "description": "Branzino in crosta di erbe aromatiche con verdure di stagione",           "allergens": "pesce",             "is_vegan": False, "is_gluten_free": True,  "sort_order": 7},
-        {"course": "Dessert",    "name": "Torta degli sposi",          "description": "Torta nuziale a tre strati: vaniglia, fragola e cioccolato fondente",     "allergens": "latte, uova, glutine", "is_vegan": False, "is_gluten_free": False, "sort_order": 8},
-        {"course": "Dessert",    "name": "Gelato artigianale",         "description": "Selezione di gelati e sorbetti artigianali",                              "allergens": "latte, uova",       "is_vegan": False, "is_gluten_free": True,  "sort_order": 9},
-        {"course": "Drink",      "name": "Vino rosso",                 "description": "Barolo DOCG 2019",                                                        "allergens": "",                  "is_vegan": True,  "is_gluten_free": True,  "sort_order": 10},
-        {"course": "Drink",      "name": "Vino bianco",                "description": "Gavi di Gavi DOCG 2022",                                                  "allergens": "",                  "is_vegan": True,  "is_gluten_free": True,  "sort_order": 11},
+        {"course": "Starter",     "name": "Eggplant Involtini with Chèvre & Tomato Sauce",        "description": "",               "allergens": "latte",   "is_vegan": False, "is_gluten_free": True,  "sort_order": 1},
+        {"course": "Starter",     "name": "Oven-Roasted Portobello Mushrooms",                    "description": "",               "allergens": "",        "is_vegan": True,  "is_gluten_free": True,  "sort_order": 2},
+        {"course": "Starter",     "name": "Greek Village Salad with Dakos & Xynomyzithra Mousse",  "description": "",               "allergens": "latte, glutine", "is_vegan": False, "is_gluten_free": False, "sort_order": 3},
+        {"course": "Starter",     "name": "Ladenia – Greek Tomato & Onion Flatbread",              "description": "",               "allergens": "glutine", "is_vegan": True,  "is_gluten_free": False, "sort_order": 4},
+        {"course": "Starter",     "name": "Feta Saganaki – Crispy Filo or Breaded Feta",           "description": "",               "allergens": "latte, glutine", "is_vegan": False, "is_gluten_free": False, "sort_order": 5},
+        {"course": "Starter",     "name": "Kotokefedakia – Greek Chicken Meatballs",               "description": "",               "allergens": "glutine", "is_vegan": False, "is_gluten_free": False, "sort_order": 6},
+        {"course": "Main Course", "name": "Kleftiko – Slow-Cooked Greek Lamb with Potatoes",       "description": "",               "allergens": "",        "is_vegan": False, "is_gluten_free": True,  "sort_order": 7},
+        {"course": "Main Course", "name": "Bifteki with Oven-Roasted Potatoes",                    "description": "",               "allergens": "glutine", "is_vegan": False, "is_gluten_free": False, "sort_order": 8},
+        {"course": "Dessert",     "name": "Wedding Cake",                                          "description": "",               "allergens": "latte, uova, glutine", "is_vegan": False, "is_gluten_free": False, "sort_order": 9},
     ]
     try:
         for item in items:

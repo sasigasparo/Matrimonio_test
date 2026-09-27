@@ -4,7 +4,7 @@ import { useToast } from '../../hooks/useToast'
 export function AdminGuests({
   t, guests, dashboard, sortedGuests, splitName, sortField, sortDir, toggleSort,
   addOpen, setAddOpen, newGuest, setNewGuest, adding, sendOnCreate, setSendOnCreate,
-  addGuest, sendInvite, sendAll, rsvpng, deleteGuest,
+  addGuest, sendInvite, sendAll, rsvpng, sendMenuReminder, sendMenuReminderAll, remindingMenu, deleteGuest,
   editGuest, setEditGuest, openEdit, editForm, setEditForm, saving, sendOnEdit, setSendOnEdit, saveEdit
 }) {
   const toast = useToast()
@@ -31,6 +31,9 @@ export function AdminGuests({
         </button>
         <button className="btn btn-outline" onClick={sendAll} disabled={rsvpng}>
           {rsvpng ? t.sending : t.sendAllRsvp}
+        </button>
+        <button className="btn btn-outline" onClick={sendMenuReminderAll} disabled={remindingMenu}>
+          {remindingMenu ? t.sending : t.sendMenuReminder}
         </button>
         <button className="btn btn-outline" onClick={() => {
           const emails = guests.filter(g => g.email).map(g => g.email).join(', ')
@@ -107,6 +110,7 @@ export function AdminGuests({
                 </td>
                 <td className="mbl-actions" style={{ padding:'10px 16px' }}>
                   <button className="btn btn-sm btn-outline" onClick={() => sendInvite(g.id, g.name)} disabled={!g.email} title={g.email ? '' : 'No email yet'}>📧</button>
+                  <button className="btn btn-sm btn-outline" onClick={() => sendMenuReminder(g.id, g.name)} disabled={!g.email} title={g.email ? t.sendMenuReminder : 'No email yet'}>🍽️</button>
                   <button className="btn btn-sm btn-outline" onClick={() => openEdit(g)}>✏️</button>
                   <button className="btn btn-sm" style={{ background:'rgba(199,107,139,.15)', color:'var(--rose)', border:'none' }} onClick={() => deleteGuest(g.id, g.name)}>🗑</button>
                 </td>

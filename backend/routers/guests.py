@@ -272,6 +272,132 @@ async def send_invite(guest_id: int, request: Request, admin=Depends(require_adm
     return {"sent": ok}
 
 
+def _send_menu_reminder_email(guest: dict) -> bool:
+    if not guest.get("email"):
+        return False
+    if not BREVO_API_KEY or not BREVO_SENDER_EMAIL:
+        logger.warning("Brevo not configured, skipping menu reminder for %s", guest["email"])
+        return False
+    try:
+        menu_url = f"{APP_URL}/login?code={guest['login_code']}&redirect=/menu" if guest.get("login_code") else f"{APP_URL}/menu"
+
+        html = f"""
+<!DOCTYPE html><html><head>
+<style>@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600;700&display=swap');</style>
+</head><body style="font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;background:#FCEDF2;margin:0;padding:0">
+<div style="max-width:600px;margin:40px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
+  <div style="background:#FBDCE6;padding:32px 24px;text-align:center">
+    <div style="font-size:2.6rem;margin-bottom:8px">🍽️</div>
+    <h1 style="color:#A63D63;font-size:1.5rem;margin:0;letter-spacing:.02em;font-family:'Playfair Display',Georgia,'Times New Roman',serif">{COUPLE_NAMES}</h1>
+    <p style="color:#6B7280;margin:8px 0 0;font-size:1rem">{WEDDING_DATE}</p>
+  </div>
+  <div style="padding:32px 48px 40px">
+    <p style="font-size:1.1rem;color:#1B1B1B">Dear <strong>{guest['name']}</strong>,</p>
+    <p style="color:#1B1B1B;line-height:1.7">
+      Just a friendly reminder to choose your main course for the wedding dinner, so the kitchen
+      can prepare everything for you.
+    </p>
+    <div style="text-align:center;margin:32px 0">
+      <a href="{menu_url}" style="background:#C76B8B;color:#fff;padding:14px 36px;border-radius:50px;text-decoration:none;font-size:1rem;font-weight:600;font-family:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">
+        Choose your dish
+      </a>
+    </div>
+    <p style="color:#6B7280;font-size:.9rem;text-align:center">
+      Tap the button above to view the menu and pick between the two main course options.
+    </p>
+  </div>
+  <div style="background:#FCEDF2;padding:24px;text-align:center">
+    <p style="color:#6B7280;font-size:.8rem;margin:0">{COUPLE_NAMES} · {WEDDING_DATE} · {WEDDING_VENUE}</p>
+  </div>
+</div>
+</body></html>"""
+
+        text_content = (
+            f"{COUPLE_NAMES}\n{WEDDING_DATE}\n\n"
+            f"Dear {guest['name']},\n\n"
+            f"Just a friendly reminder to choose your main course for the wedding dinner, so the "
+            f"kitchen can prepare everything for you.\n\n"
+            f"Choose your dish: {menu_url}\n\n"
+            f"{COUPLE_NAMES} · {WEDDING_DATE} · {WEDDING_VENUE}"
+        )
+
+        payload = {
+            "sender": {"name": BREVO_SENDER_NAME, "email": BREVO_SENDER_EMAIL},
+            "to": [{"email": guest["email"], "name": guest["name"]}],
+            "subject": f"🍽️ Have you chosen your dish yet? — {COUPLE_NAMES}'s wedding",
+            "htmlContent": html,
+            "textContent": text_content,
+        }
+        resp = httpx.post(
+            BREVO_API_URL,
+            json=payload,
+            headers={
+                "api-key": BREVO_API_KEY,
+                "content-type": "application/json",
+                "accept": "application/json",
+            },
+            timeout=15,
+        )
+        if resp.status_code >= 400:
+            logger.error(
+                "Brevo error (menu reminder) for %s: status=%d body=%s",
+                guest["email"], resp.status_code, resp.text,
+            )
+            return False
+        logger.info("Menu reminder sent to %s", guest["email"])
+        return True
+    except Exception as e:
+        logger.error("Menu reminder email error for %s: %s", guest["email"], e)
+        return False
+
+
+@router.post("/{guest_id}/menu-reminder")
+async def send_menu_reminder(guest_id: int, request: Request, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
+    """Invia il reminder scelta menu a un singolo ospite (utile per un invio di prova)."""
+    db = get_db()
+    result = db.table("guests").select("*").eq("id", guest_id).eq("matrimonio_id", matrimonio_id).execute()
+    if not result.data:
+        raise HTTPException(404, "Guest not found")
+
+    guest = result.data[0]
+    if not guest.get("email"):
+        return {"sent": False, "reason": "no_email"}
+
+    guest = _ensure_login_code(db, guest)
+    ok = _send_menu_reminder_email(guest)
+
+    audit(admin["email"], "send_menu_reminder", f"{guest['name']} ({guest['email']})", "ok" if ok else "smtp non configurato",
+          request.client.host if request.client else "", matrimonio_id)
+    return {"sent": ok}
+
+
+@router.post("/menu-reminder-all")
+async def send_menu_reminder_all(request: Request, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
+    """Invia un reminder via email a tutti gli ospiti confermati per ricordare
+    di scegliere la portata principale, indipendentemente dal fatto che l'abbiano
+    già scelta o meno."""
+    db = get_db()
+    guests = (
+        db.table("guests")
+        .select("*")
+        .eq("matrimonio_id", matrimonio_id)
+        .eq("rsvp_status", "confirmed")
+        .execute().data or []
+    )
+    guests = [g for g in guests if g.get("email") and g.get("email") not in SYSTEM_EMAILS]
+
+    results = []
+    for g in guests:
+        g = _ensure_login_code(db, g)
+        ok = _send_menu_reminder_email(g)
+        results.append({"id": g["id"], "email": g["email"], "sent": ok})
+
+    sent_count = sum(1 for r in results if r["sent"])
+    audit(admin["email"], "send_menu_reminder_all", f"{sent_count}/{len(results)} inviati", "",
+          request.client.host if request.client else "", matrimonio_id)
+    return results
+
+
 @router.post("/invite-all")
 async def send_all_invites(request: Request, admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
     db = get_db()

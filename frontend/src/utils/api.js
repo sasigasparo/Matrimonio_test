@@ -64,6 +64,8 @@ export const api = {
   updatersvp:  (id, b) => request('PUT',    `/guests/${id}/rsvp`, b),
   sendInvite:  (id)    => request('POST',   `/guests/${id}/invite`),
   sendAll:     ()      => request('POST',   '/guests/invite-all'),
+  sendMenuReminder:    (id) => request('POST', `/guests/${id}/menu-reminder`),
+  sendMenuReminderAll: ()   => request('POST', '/guests/menu-reminder-all'),
   guestStats:  ()      => request('GET',    '/guests/stats'),
 
   // Photos
