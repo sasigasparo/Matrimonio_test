@@ -376,11 +376,15 @@ label {
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 .toast-container {
+  /* In alto, non in basso a destra: quell'angolo è occupato dal bottone
+     del chatbot (z-index 300, sempre sopra ai toast) che li copre. */
   position: fixed;
-  bottom: 20px;
+  top: calc(56px + env(safe-area-inset-top, 0px) + 12px);
   right: 20px;
+  left: 20px;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 12px;
   z-index: var(--z-toast);
   pointer-events: none;
@@ -395,6 +399,7 @@ label {
   box-shadow: var(--shadow-lg);
   animation: slideIn 0.3s var(--ease-out-quart);
   pointer-events: auto;
+  max-width: min(360px, 100%);
 }
 .toast-success { background: var(--sage); color: #fff; }
 .toast-error   { background: var(--rose); color: #fff; }
