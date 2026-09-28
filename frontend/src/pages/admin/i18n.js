@@ -75,6 +75,11 @@ export const i18n = {
     companions: 'acc.',
     dietaryNeeds: 'Riepilogo esigenze alimentari',
     noDietary: 'Nessuna esigenza alimentare registrata tra i confermati.',
+    menuChoicesSummary: 'Scelte menù — conteggio per piatto',
+    menuChoicesDetail: 'Scelte menù per ospite',
+    noMenuChoices: 'Nessun ospite ha ancora scelto il piatto.',
+    notChosenYet: 'Non ancora scelto',
+    chosenDish: 'Piatto scelto',
 
     // Photos
     photosCount: 'foto caricate',
@@ -221,6 +226,11 @@ export const i18n = {
     companions: 'comp.',
     dietaryNeeds: 'Dietary Requirements Summary',
     noDietary: 'No dietary requirements registered among confirmed guests.',
+    menuChoicesSummary: 'Menu Choices — Count per Dish',
+    menuChoicesDetail: 'Menu Choices per Guest',
+    noMenuChoices: 'No guest has chosen their dish yet.',
+    notChosenYet: 'Not chosen yet',
+    chosenDish: 'Chosen dish',
 
     // Photos
     photosCount: 'photos uploaded',

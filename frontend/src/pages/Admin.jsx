@@ -25,6 +25,8 @@ export default function Admin() {
   const [geoLoading, setGeoLoading]       = useState(false)
   const [rsvpTimeline, setRsvpTimeline]   = useState([])
   const [timelineLoading, setTimelineLoading] = useState(false)
+  const [menuChoices, setMenuChoices]     = useState({ counts: [], guests: [] })
+  const [menuChoicesLoading, setMenuChoicesLoading] = useState(false)
   const [loading, setLoading]     = useState(true)
 
   // New guest form
@@ -87,12 +89,19 @@ export default function Admin() {
     setTimelineLoading(false)
   }
 
+  const loadMenuChoices = async () => {
+    setMenuChoicesLoading(true)
+    try { setMenuChoices(await api.menuChoicesAll()) } catch { toast.error('Error loading menu choices') }
+    setMenuChoicesLoading(false)
+  }
+
   const switchTab = (id) => {
     setTab(id)
     if (id === 'logs')    loadLogs()
     if (id === 'photos')  loadPhotos()
     if (id === 'messages') loadMessages()
     if (id === 'stats')   loadGeoStats()
+    if (id === 'rsvp')    loadMenuChoices()
     if (id === 'analisi') { loadRsvpTimeline(); loadPhotos(); loadMessages() }
   }
 
@@ -396,7 +405,9 @@ export default function Admin() {
 
         {/* ── Diete & Posti ─────────────────────────────────────────────────── */}
         {tab === 'rsvp' && (
-          <AdminRsvp t={t} confirmed={confirmed} totalSeats={totalSeats} totalAdults={totalAdults} totalChildren={totalChildren} dietGroups={dietGroups} />
+          <AdminRsvp t={t} confirmed={confirmed} totalSeats={totalSeats} totalAdults={totalAdults} totalChildren={totalChildren} dietGroups={dietGroups}
+            menuChoices={menuChoices} menuChoicesLoading={menuChoicesLoading}
+          />
         )}
 
         {/* ── Foto ──────────────────────────────────────────────────────────── */}

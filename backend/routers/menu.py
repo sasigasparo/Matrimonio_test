@@ -98,16 +98,37 @@ async def my_choices(user=Depends(get_optional_guest)):
 
 @router.get("/choices/all")
 async def all_choices(admin=Depends(require_admin), matrimonio_id: int = Depends(get_matrimonio_id)):
+    """Resoconto per l'admin: conteggio per piatto e scelta per singolo ospite."""
     db = get_db()
-    # Fetch choices with menu item details via foreign key join
-    rows = db.table("menu_choices").select("item_id, menu_items(name, course)").eq("matrimonio_id", matrimonio_id).execute().data or []
+    # Fetch choices with menu item and guest details via foreign key join
+    rows = (
+        db.table("menu_choices")
+        .select("item_id, guest_id, menu_items(name, course), guests(name, rsvp_status)")
+        .eq("matrimonio_id", matrimonio_id)
+        .execute().data or []
+    )
 
     counts: dict = {}
+    guest_choices = []
     for r in rows:
         iid = r["item_id"]
+        mi = r.get("menu_items") or {}
         if iid not in counts:
-            mi = r.get("menu_items") or {}
             counts[iid] = {"item_id": iid, "name": mi.get("name"), "course": mi.get("course"), "count": 0}
         counts[iid]["count"] += 1
 
-    return sorted(counts.values(), key=lambda x: -x["count"])
+        gu = r.get("guests") or {}
+        guest_choices.append({
+            "guest_id":   r["guest_id"],
+            "guest_name": gu.get("name"),
+            "rsvp_status": gu.get("rsvp_status"),
+            "item_name":  mi.get("name"),
+            "course":     mi.get("course"),
+        })
+
+    guest_choices.sort(key=lambda x: (x["guest_name"] or "").lower())
+
+    return {
+        "counts": sorted(counts.values(), key=lambda x: -x["count"]),
+        "guests": guest_choices,
+    }

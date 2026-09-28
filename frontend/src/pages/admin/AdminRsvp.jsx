@@ -1,7 +1,7 @@
 import { StatCard } from './StatCard'
 import { DIET_LABELS } from './constants'
 
-export function AdminRsvp({ t, confirmed, totalSeats, totalAdults, totalChildren, dietGroups }) {
+export function AdminRsvp({ t, confirmed, totalSeats, totalAdults, totalChildren, dietGroups, menuChoices, menuChoicesLoading }) {
   return (
     <div>
       {/* Posti confermati */}
@@ -74,6 +74,63 @@ export function AdminRsvp({ t, confirmed, totalSeats, totalAdults, totalChildren
             </div>
           ))}
         </div>
+      )}
+
+      {/* Scelte menù */}
+      <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', margin:'36px 0 16px' }}>{t.menuChoicesSummary}</h3>
+      {menuChoicesLoading ? (
+        <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>…</div>
+      ) : !menuChoices?.counts?.length ? (
+        <div className="card" style={{ padding:32, textAlign:'center', color:'var(--warm-gray)' }}>
+          {t.noMenuChoices}
+        </div>
+      ) : (
+        <>
+          <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:36 }}>
+            {menuChoices.counts.map(c => (
+              <div key={c.item_id} className="card" style={{ padding:'16px 20px', display:'flex', gap:16, alignItems:'center' }}>
+                <div style={{
+                  minWidth:40, height:40, borderRadius:'var(--radius-sm)',
+                  background:'var(--blush)', display:'flex', alignItems:'center',
+                  justifyContent:'center', fontSize:'1.1rem', fontWeight:700,
+                  color:'var(--rose)', flexShrink:0,
+                }}>
+                  {c.count}
+                </div>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontWeight:600, color:'var(--charcoal)' }}>{c.name}</div>
+                  <div style={{ fontSize:'.8rem', color:'var(--warm-gray)' }}>{c.course}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h3 style={{ fontFamily:'var(--font-serif)', fontSize:'1.3rem', marginBottom:16 }}>{t.menuChoicesDetail}</h3>
+          <div className="card mbl-cards" style={{ overflow:'auto' }}>
+            <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'.85rem', minWidth:400 }}>
+              <thead>
+                <tr style={{ borderBottom:'2px solid var(--cream)', background:'var(--ivory)' }}>
+                  {[t.fullName, t.chosenDish].map(h => (
+                    <th key={h} style={{ padding:'12px 16px', textAlign:'left', color:'var(--warm-gray)', fontWeight:500, textTransform:'uppercase', letterSpacing:'.04em', fontSize:'.75rem' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {confirmed.map(g => {
+                  const choice = menuChoices.guests?.find(m => m.guest_id === g.id)
+                  return (
+                    <tr key={g.id} style={{ borderBottom:'1px solid var(--cream)' }}>
+                      <td data-label="Name" style={{ padding:'10px 16px', fontWeight:500, color:'var(--charcoal)' }}>{g.name}</td>
+                      <td data-label="Dish" style={{ padding:'10px 16px', color: choice ? 'var(--warm-gray)' : 'var(--gold)' }}>
+                        {choice ? choice.item_name : t.notChosenYet}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   )

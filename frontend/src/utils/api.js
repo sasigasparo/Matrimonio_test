@@ -82,6 +82,7 @@ export const api = {
   getMenu:     ()      => request('GET',  '/menu/'),
   myChoices:   ()      => request('GET',  '/menu/choices/me'),
   saveChoices: (ids)   => request('POST', '/menu/choices', { item_ids: ids }),
+  menuChoicesAll: ()   => request('GET',  '/menu/choices/all'),
 
   // Admin
   dashboard: () => request('GET', '/admin/dashboard'),
