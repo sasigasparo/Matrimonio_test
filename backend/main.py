@@ -29,7 +29,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from database import init_db
-from routers import auth, guests, messages, photos, menu, admin, tables, chatbot, quiz
+from routers import auth, guests, messages, photos, menu, admin, tables, chatbot, quiz, webhooks
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 LOG_DIR = BASE_DIR / "logs"
@@ -114,6 +114,7 @@ app.include_router(admin.router,    prefix="/api/admin",    tags=["Admin"])
 app.include_router(tables.router,   prefix="/api/tables",   tags=["Tables"])
 app.include_router(chatbot.router,  prefix="/api/chatbot",  tags=["Chatbot"])
 app.include_router(quiz.router,     prefix="/api/quiz",     tags=["Quiz"])
+app.include_router(webhooks.router, prefix="/api/webhooks", tags=["Webhooks"])
 
 @app.get("/")
 async def root():

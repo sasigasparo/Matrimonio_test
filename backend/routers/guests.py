@@ -26,6 +26,11 @@ WEDDING_LOCATION = os.getenv("WEDDING_LOCATION", "Stadthaus, Zürich")
 APP_URL        = os.getenv("APP_URL", "http://localhost:5173")
 INVITE_CARD_IMAGE_URL = f"{APP_URL}/foto_sfondo/invite-card.jpg"
 
+if BREVO_API_KEY and BREVO_SENDER_EMAIL:
+    logger.info("Brevo configurato: sender=%s (%s)", BREVO_SENDER_EMAIL, BREVO_SENDER_NAME)
+else:
+    logger.warning("Brevo NON configurato: BREVO_API_KEY o BREVO_SENDER_EMAIL mancanti")
+
 
 # ── Schemas ───────────────────────────────────────────────────────────────────
 class GuestCreate(BaseModel):
@@ -181,7 +186,8 @@ def _send_invite_email(guest: dict) -> bool:
                 guest["email"], resp.status_code, resp.text,
             )
             return False
-        logger.info("Invite sent to %s", guest["email"])
+        message_id = (resp.json() or {}).get("messageId", "") if resp.content else ""
+        logger.info("Invite sent to %s (messageId=%s)", guest["email"], message_id)
         return True
     except Exception as e:
         logger.error("Email error for %s: %s", guest["email"], e)
@@ -344,7 +350,8 @@ def _send_menu_reminder_email(guest: dict) -> bool:
                 guest["email"], resp.status_code, resp.text,
             )
             return False
-        logger.info("Menu reminder sent to %s", guest["email"])
+        message_id = (resp.json() or {}).get("messageId", "") if resp.content else ""
+        logger.info("Menu reminder sent to %s (messageId=%s)", guest["email"], message_id)
         return True
     except Exception as e:
         logger.error("Menu reminder email error for %s: %s", guest["email"], e)

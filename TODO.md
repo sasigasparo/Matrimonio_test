@@ -1,11 +1,10 @@
 # TODO
 
 ## 📧 Email / invii
-- [ ] **Creare nuovo account Brevo** per l'invio delle email (al momento il backend usa SMTP Gmail — `backend/routers/guests.py:19-22`, host `smtp.gmail.com`)
-  - Creare l'account su Brevo e generare una **SMTP key** dedicata
-  - Aggiornare `SMTP_HOST` (`smtp-relay.brevo.com`), `SMTP_PORT` (587), `SMTP_USER`, `SMTP_PASSWORD` nel `.env` locale
-  - Aggiungere le stesse variabili nelle **env vars di Render** (attualmente `render.yaml` non le dichiara — vanno impostate a mano nella dashboard Render, `sync: false`)
-  - Fare un invio di prova (a se stessi) prima di lanciare gli inviti veri, per verificare che arrivino e non finiscano in spam
+- [ ] **Le email via Brevo risultano "Bloccate" (90%) nelle statistiche**, nonostante l'API risponda 201 e la blocklist contatti sia vuota. Causa più probabile: dominio del sender non autenticato (SPF/DKIM) su Brevo → Settings → Senders, Domains & Dedicated IPs → verificare/autenticare il dominio di `BREVO_SENDER_EMAIL`.
+  - Aggiunto endpoint `/api/webhooks/brevo` per ricevere gli eventi reali di consegna (delivered/blocked/bounce/spam) con il motivo — da configurare su Brevo (Transactional → Settings → Webhooks) puntando a `{APP_URL}/api/webhooks/brevo?token=<BREVO_WEBHOOK_SECRET>`
+  - Impostare la env var `BREVO_WEBHOOK_SECRET` su Render (valore a piacere, usato per validare le chiamate in arrivo dal webhook)
+  - Una volta configurato il webhook, rifare un invio di prova e controllare i log per il motivo esatto del blocco
 
 ## 👥 Ospiti
 - [ ] Aggiungere manualmente dal pannello Admin i 2 ospiti senza email: **Vasiliki Kontotoli** e **Jonathan Kauffmann** (non possono fare login da soli, RSVP va gestito per loro conto)
