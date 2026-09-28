@@ -217,6 +217,10 @@ export const en = {
     chooseOne: 'Please choose one',
     choiceSaved: 'Your choice has been saved',
     choiceSaveError: 'Error saving your choice',
+    confirmChoice: 'Confirm your choice',
+    savingChoice: 'Saving…',
+    choiceConfirmed: 'Confirmed',
+    currentChoice: 'This is your confirmed choice',
   },
 
   notFound: {

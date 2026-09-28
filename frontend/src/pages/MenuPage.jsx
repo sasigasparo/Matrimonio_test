@@ -35,8 +35,10 @@ export default function MenuPage() {
 
   const [menu, setMenu]     = useState({ courses: {}, items: [] })
   const [loading, setLoading] = useState(true)
-  const [selectedId, setSelectedId] = useState(null)
-  const [saving, setSaving] = useState(false)
+  const [selectedId, setSelectedId] = useState(null) // scelta corrente nell'interfaccia, non ancora per forza salvata
+  const [savedId, setSavedId]       = useState(null) // ultima scelta confermata sul server
+  const [saving, setSaving]         = useState(false)
+  const [justSaved, setJustSaved]   = useState(false)
 
   useEffect(() => { loadMenu(); loadMyChoice() }, [])
 
@@ -51,19 +53,28 @@ export default function MenuPage() {
   const loadMyChoice = async () => {
     try {
       const { item_ids } = await api.myChoices()
-      if (item_ids?.length) setSelectedId(item_ids[0])
+      if (item_ids?.length) {
+        setSelectedId(item_ids[0])
+        setSavedId(item_ids[0])
+      }
     } catch { /* guest not logged in yet or no choice saved */ }
   }
 
-  const selectMainCourse = async (itemId) => {
-    const prev = selectedId
+  const pickMainCourse = (itemId) => {
+    if (saving) return
     setSelectedId(itemId)
+  }
+
+  const confirmChoice = async () => {
+    if (!selectedId || selectedId === savedId || saving) return
     setSaving(true)
     try {
-      await api.saveChoices([itemId])
+      await api.saveChoices([selectedId])
+      setSavedId(selectedId)
       toast.success(t('menu.choiceSaved'))
+      setJustSaved(true)
+      setTimeout(() => setJustSaved(false), 2500)
     } catch {
-      setSelectedId(prev)
       toast.error(t('menu.choiceSaveError'))
     }
     setSaving(false)
@@ -74,6 +85,8 @@ export default function MenuPage() {
 
   return (
     <div className="page-enter" style={{ paddingBottom: 100 }}>
+      <style>{`@keyframes menu-spin { to { transform: rotate(360deg); } }`}</style>
+
       {/* Hero */}
       <div style={{
         background: 'linear-gradient(135deg, var(--charcoal) 0%, #46243a 100%)',
@@ -144,8 +157,8 @@ export default function MenuPage() {
                       key={item.id}
                       role={isChoice ? 'button' : undefined}
                       tabIndex={isChoice ? 0 : undefined}
-                      onClick={isChoice ? () => !saving && selectMainCourse(item.id) : undefined}
-                      onKeyDown={isChoice ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); !saving && selectMainCourse(item.id) } } : undefined}
+                      onClick={isChoice ? () => pickMainCourse(item.id) : undefined}
+                      onKeyDown={isChoice ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickMainCourse(item.id) } } : undefined}
                       style={{
                         background: 'var(--white)',
                         borderRadius: 'var(--radius-md)',
@@ -192,6 +205,50 @@ export default function MenuPage() {
                   )
                 })}
               </div>
+
+              {CHOICE_COURSES.has(course) && (
+                <div style={{ marginTop: 18, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    onClick={confirmChoice}
+                    disabled={!selectedId || selectedId === savedId || saving}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '11px 24px', borderRadius: 99, border: 'none',
+                      fontSize: '.9rem', fontWeight: 600, fontFamily: 'inherit',
+                      cursor: (!selectedId || selectedId === savedId || saving) ? 'default' : 'pointer',
+                      background: justSaved
+                        ? 'var(--sage, #43A047)'
+                        : (!selectedId || selectedId === savedId)
+                          ? 'rgba(154,128,112,.25)'
+                          : 'var(--rose, #C76B8B)',
+                      color: '#fff',
+                      opacity: saving ? .8 : 1,
+                      transition: 'background .2s',
+                    }}
+                  >
+                    {saving ? (
+                      <>
+                        <span style={{
+                          width: 14, height: 14, borderRadius: '50%',
+                          border: '2px solid rgba(255,255,255,.4)', borderTopColor: '#fff',
+                          display: 'inline-block', animation: 'menu-spin .7s linear infinite',
+                        }} />
+                        {t('menu.savingChoice')}
+                      </>
+                    ) : justSaved ? (
+                      <>✓ {t('menu.choiceConfirmed')}</>
+                    ) : (
+                      t('menu.confirmChoice')
+                    )}
+                  </button>
+                  {savedId && selectedId === savedId && !justSaved && (
+                    <span style={{ color: 'var(--warm-gray)', fontSize: '.82rem' }}>
+                      ✓ {t('menu.currentChoice')}
+                    </span>
+                  )}
+                </div>
+              )}
 
               {ci < visibleCourses.length - 1 && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 32, opacity: .3 }}>
