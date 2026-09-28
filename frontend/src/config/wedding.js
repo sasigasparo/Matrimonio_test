@@ -125,7 +125,6 @@ export const WEDDING_CONFIG = {
   // ── Password di accesso sezioni protette ───────────────────────────────────
   admin: {
     tablePassword: "SPOSA",   // password pagina tavoli
-    menuPassword:  "menu",    // password per sbloccare il menù
   },
 
   // Nota: questi valori sono solo documentazione — i colori effettivi vivono
